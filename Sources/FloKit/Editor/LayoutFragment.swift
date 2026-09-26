@@ -210,6 +210,8 @@ final class FloLayoutFragment: NSTextLayoutFragment {
         path.fill()
     }
 
+    static let bulletLift: CGFloat = 1.5
+
     private func drawWidget(_ box: WidgetBox, at p: CharPos, lineLeft: CGFloat, theme: EditorTheme, trailingX: CGFloat? = nil) {
         let font = theme.font(size: theme.baseSize, weight: 400, mono: false)
         let unit = RenderPlanner.listUnitCh * theme.ch
@@ -219,7 +221,8 @@ final class FloLayoutFragment: NSTextLayoutFragment {
             let s = NSAttributedString(string: "\u{2022}", attributes: [.font: font, .foregroundColor: theme.mutedColor])
             let w = s.size().width
             let x = lineLeft + box.width + (unit - w) / 2
-            s.draw(at: CGPoint(x: x, y: p.textTop(font: font)))
+            // raised 1.5pt: at the plain text position the dot sat ~1.25pt below the x-height centre
+            s.draw(at: CGPoint(x: x, y: p.textTop(font: font) - Self.bulletLift))
         case .checkbox(_, let checked):
             // 18x18, 1.5px border, radius 5, left at markerOffset + (3ch - 28px)/2, v-centred
             let x = lineLeft + box.width + (unit - 28) / 2

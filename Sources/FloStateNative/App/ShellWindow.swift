@@ -701,6 +701,19 @@ final class ShellWindowController: NSWindowController, NSWindowDelegate {
         refreshScheduled.insert(key)
     }
 
+    /// Switching tabs puts the caret in the new tab's editor. Waits for the
+    /// file to load (no controller yet), and leaves an inline rename or the
+    /// palette alone.
+    private var focusedTabId: String?
+    private func focusEditorOnTabSwitch() {
+        guard let tab = root.area.activeTab else { focusedTabId = nil; return }
+        guard "\(tab.id)" != focusedTabId, let c = root.area.activeFilePane?.controller else { return }
+        focusedTabId = "\(tab.id)"
+        guard root.paletteOverlay == nil, let w = window else { return }
+        if let t = w.firstResponder as? NSText, t.isFieldEditor { return }
+        w.makeFirstResponder(c.textView)
+    }
+
     func flush() {
         let s = refreshScheduled
         refreshScheduled = []
@@ -725,6 +738,7 @@ final class ShellWindowController: NSWindowController, NSWindowDelegate {
             model.pendingAnchor = nil
             if !pane.scrollToSlug(slug) { model.anchorWarning = "Heading \"#\(slug)\" not found in this document" }
         }
+        focusEditorOnTabSwitch()
         window?.title = model.editor.windowTitle()
         positionTrafficLights()   // AppKit re-lays out the titlebar on title changes
         if root.paletteOverlay != nil { root.paletteOverlay?.reload(resetField: false) }
