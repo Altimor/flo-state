@@ -36,7 +36,7 @@ final class SettingsWindowTests: XCTestCase {
         XCTAssertFalse(w.styleMask.contains(.resizable))
         XCTAssertTrue(w.styleMask.contains(.titled) && w.styleMask.contains(.closable))
         XCTAssertEqual(w.toolbarStyle, .preference)
-        XCTAssertEqual(w.toolbar?.items.map { $0.label }, ["General", "Editor", "Appearance", "Theme", "Files", "Advanced"])
+        XCTAssertEqual(w.toolbar?.items.map { $0.label }, ["General", "Editor", "Appearance", "Theme", "Files"])
         XCTAssertNil(w.appearance, "follows the system light/dark")
         for p in SettingsPanes.all {
             wc.select(p.id)
@@ -73,15 +73,15 @@ final class SettingsWindowTests: XCTestCase {
                 }
             }
         }
-        XCTAssertEqual(Set(seen), Set(SettingsSchema.all.map { $0.key }))
+        XCTAssertEqual(Set(seen), Set(SettingsSchema.all.map { $0.key }).subtracting(SettingsPanes.hiddenKeys))
     }
 
     func testCheckboxWritesConfigAndBroadcasts() {
-        let c = pane("general").control("statusbar.show-words")!
+        let c = pane("appearance").control("appearance.sidebar-show-search")!
         XCTAssertEqual(c.checkbox?.state, .off)
         c.checkbox!.state = .on
         c.changed(c.checkbox)
-        XCTAssertTrue(config.contains("statusbar.show-words = true"))
+        XCTAssertTrue(config.contains("appearance.sidebar-show-search = true"))
         XCTAssertEqual(changes, 1)
     }
 
@@ -143,18 +143,18 @@ final class SettingsWindowTests: XCTestCase {
     func testRestoreDefaultsResetsOnlyThatPane() {
         let editor = pane("editor")
         let general = pane("general")
-        general.control("statusbar.show-words")!.checkbox!.state = .on
-        general.control("statusbar.show-words")!.changed(nil)
+        general.control("editor.auto-insert-daily-heading")!.checkbox!.state = .off
+        general.control("editor.auto-insert-daily-heading")!.changed(nil)
         editor.restoreDefaults()
         XCTAssertFalse(config.contains("editor.font-size"))
-        XCTAssertTrue(config.contains("statusbar.show-words = true"))
+        XCTAssertTrue(config.contains("editor.auto-insert-daily-heading = false"))
         XCTAssertEqual(editor.control("editor.font-size")?.field?.doubleValue, 16)
     }
 
     func testExternalChangesSync() {
-        let c = pane("appearance").control("appearance.sidebar-visible")!
+        let c = pane("appearance").control("appearance.sidebar-show-recents")!
         XCTAssertEqual(c.checkbox?.state, .on)
-        TFS.write(data + "/config", "appearance.sidebar-visible = false\n")
+        TFS.write(data + "/config", "appearance.sidebar-show-recents = false\n")
         backend.reloadFromDisk()
         wc.syncAll()
         XCTAssertEqual(c.checkbox?.state, .off)

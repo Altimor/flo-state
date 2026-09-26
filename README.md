@@ -38,7 +38,33 @@ INSTALL=1 scripts/bundle.sh                 # ...and install it as /Applications
 
 `scripts/bundle.sh` builds with `-j ${JOBS:-2}`; set `THROTTLE` to a wrapper
 command (for example `nice -n 10`) to lower its priority. The app is ad-hoc
-signed.
+signed unless `DEVELOPER_ID` is set (`scripts/sign.sh`).
+
+The version is `VERSION` (CFBundleShortVersionString); the build number
+(CFBundleVersion) is the git commit count.
+
+### Updates and releases
+
+In-app updates use [Sparkle 2](https://sparkle-project.org) (pinned in
+`Package.swift`, embedded in `Contents/Frameworks`). The feed is
+`https://flocrivello.com/flostate/appcast.xml`; checks run daily and from
+*Flo State → Check for Updates…*. Updates are verified with an EdDSA key whose
+private half lives in the release machine's login keychain (Sparkle
+`generate_keys --account flostate`); the public key is in `scripts/bundle.sh`.
+
+```sh
+scripts/test-update.sh     # headless end-to-end update against a local appcast (after bundle.sh)
+scripts/release.sh 0.2.0   # build, sign, zip, sign_update, GitHub release, appcast
+DRY_RUN=1 scripts/release.sh
+```
+
+For testing, `FLOSTATE_FEED_URL` (or `defaults write app.flostate.native
+FloStateFeedURL <url>`) overrides the feed.
+
+Notarization: set `DEVELOPER_ID="Developer ID Application: Name (TEAMID)"`
+and `NOTARY_PROFILE=<profile>` (created once with `xcrun notarytool
+store-credentials <profile>`). `release.sh` then signs with the hardened
+runtime, notarizes and staples before zipping.
 
 ## Testing
 

@@ -708,6 +708,7 @@ final class AppSessionAndRecentsTests: XCTestCase {
         var root: String? = "/ws"
         var enabled = true
         let saver = SessionAutosaver(editor: editor, store: store, scheduler: scheduler, root: { root }, restoreOpenFiles: { enabled })
+        saver.restoreFinished(complete: true)
         files.contents["/ws/a.md"] = "a"
         await editor.openFile("/ws/a.md")
         editor.openNewTab()
@@ -735,6 +736,38 @@ final class AppSessionAndRecentsTests: XCTestCase {
         saver.flush()
         XCTAssertEqual(saver.saveCount, 2, "no root (compact window): nothing saved")
         XCTAssertNil(SessionAutosaver.loadSession(store: store, root: "/ws", restoreOpenFiles: false))
+    }
+
+    /// Nothing is written before the workspace's restore finished, and an
+    /// unfaithful restore keeps the stored session until a real tab change.
+    func testAutosaverGatedOnRestore() async {
+        let scheduler = ManualScheduler()
+        let (editor, files) = makeEditor(scheduler)
+        let store = SessionStore(url: URL(fileURLWithPath: dir + "/sessions.json"))
+        let stored = [SessionTab(location: SerializedLocation(kind: "file", payload: [("path", .string("/ws/a.md"))]))]
+        try! store.save(root: "/ws", tabs: stored, activeIndex: 0)
+        let saver = SessionAutosaver(editor: editor, store: store, scheduler: scheduler, root: { "/ws" }, restoreOpenFiles: { true })
+        XCTAssertEqual(saver.state, .disarmed)
+        editor.ensureLauncherTab()
+        scheduler.advance(byMs: 1000)
+        saver.flush()
+        XCTAssertEqual(saver.saveCount, 0)
+        XCTAssertEqual(store.load(root: "/ws")?.tabs.count, 1, "launcher-only state before restore never deletes the session")
+        // restore with a file that fails to load: tabs dropped → launcher
+        let ok = await editor.restoreSession(stored, activeIndex: 0)
+        XCTAssertFalse(ok)
+        saver.restoreFinished(complete: ok)
+        saver.flush()
+        XCTAssertEqual(store.load(root: "/ws")?.tabs.count, 1, "partial restore keeps the stored session")
+        files.contents["/ws/b.md"] = "b"
+        await editor.openFile("/ws/b.md")
+        XCTAssertEqual(saver.state, .armed, "a real tab change arms saving")
+        saver.flush()
+        XCTAssertEqual(store.load(root: "/ws")?.tabs.map { $0.location.payload.first?.1 }, [.string("/ws/b.md")])
+        // a faithful restore reports complete
+        editor.reset()
+        let ok2 = await editor.restoreSession([SessionTab(location: SerializedLocation(kind: "file", payload: [("path", .string("/ws/b.md"))]))], activeIndex: 0)
+        XCTAssertTrue(ok2)
     }
 
     func testRecentWorkspaces() throws {

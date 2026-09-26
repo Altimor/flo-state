@@ -712,7 +712,10 @@ public final class EditorStore: SaveEngineHost {
 
     /// `restoreSession`: rebuild tabs (unknown kinds dropped), seed the
     /// prefetched active file, load the rest, and drop tabs whose files fail.
-    public func restoreSession(_ sessionTabs: [SessionTab], activeIndex: Int?, prefetchedActiveFile: FileContent? = nil) async {
+    /// Returns false when the result doesn't match the session (tabs of
+    /// unknown kinds dropped, or files that failed to load).
+    @discardableResult
+    public func restoreSession(_ sessionTabs: [SessionTab], activeIndex: Int?, prefetchedActiveFile: FileContent? = nil) async -> Bool {
         var restored: [Tab] = []
         for st in sessionTabs {
             guard let loc = TabLocation(serialized: st.location) else { continue }
@@ -723,7 +726,7 @@ public final class EditorStore: SaveEngineHost {
         if restored.isEmpty {
             reset()
             ensureLauncherTab()
-            return
+            return sessionTabs.isEmpty
         }
         var seen = Set<String>()
         let uniquePaths = restored.flatMap { $0.location.paths + $0.back.flatMap { $0.paths } + $0.forward.flatMap { $0.paths } }
@@ -752,7 +755,7 @@ public final class EditorStore: SaveEngineHost {
             }
             for await (p, ok) in group where !ok { failed.insert(p) }
         }
-        if failed.isEmpty { return }
+        if failed.isEmpty { return restored.count == sessionTabs.count }
         var needsLauncher = false
         mutate {
             let next = tabs.compactMap { tab in
@@ -766,6 +769,7 @@ public final class EditorStore: SaveEngineHost {
             activeFilePath = deriveActiveFilePath(next, nextActive)
         }
         if needsLauncher { ensureLauncherTab() }
+        return false
     }
 
     /// `getEditorSessionSnapshot`: launcher tabs omitted; `activeIndex` counts

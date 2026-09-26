@@ -206,7 +206,10 @@ enum MainMenu {
         }
     }
 
-    static func build(target: MenuRouter) -> NSMenu {
+    static let checkForUpdatesTitle = "Check for Updates…"
+
+    /// `updateItem`: "Check for Updates…" (AppUpdater) — only when this build has a feed.
+    static func build(target: MenuRouter, updateItem: NSMenuItem? = nil) -> NSMenu {
         let main = NSMenu()
         func sub(_ title: String, _ items: [NSMenuItem]) {
             let item = NSMenuItem(title: title, action: nil, keyEquivalent: "")
@@ -239,8 +242,7 @@ enum MainMenu {
         hideOthers.keyEquivalentModifierMask = [.command, .option]
         sub(appName, [
             NSMenuItem(title: "About \(appName)", action: #selector(NSApplication.orderFrontStandardAboutPanel(_:)), keyEquivalent: ""),
-            // Legacy's "Check for Updates…" drives the Tauri updater feed of the
-            // upstream app; this build has no feed, so the item is omitted.
+        ] + (updateItem.map { [$0] } ?? []) + [
             .separator(),
             prefs,
             CLIMenuItem(),

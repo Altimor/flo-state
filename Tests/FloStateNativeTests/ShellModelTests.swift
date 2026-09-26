@@ -811,14 +811,20 @@ final class ShellGeometryTests: XCTestCase {
     }
 
     func testSettingsPanesCoverEverySettingOnce() {
-        XCTAssertEqual(SettingsPanes.all.map { $0.title }, ["General", "Editor", "Appearance", "Theme", "Files", "Advanced"])
+        XCTAssertEqual(SettingsPanes.all.map { $0.title }, ["General", "Editor", "Appearance", "Theme", "Files"])
         let keys = SettingsPanes.allKeys
         XCTAssertEqual(keys.count, Set(keys).count, "no duplicates")
-        XCTAssertEqual(Set(keys), Set(SettingsSchema.all.map { $0.key }), "all \(SettingsSchema.all.count) schema keys")
+        XCTAssertTrue(Set(keys).isDisjoint(with: SettingsPanes.hiddenKeys))
+        XCTAssertEqual(Set(keys).union(SettingsPanes.hiddenKeys), Set(SettingsSchema.all.map { $0.key }),
+                       "every schema key is either shown or explicitly hidden")
         XCTAssertEqual(SettingControl.sentenceCase("Font Size"), "Font size")
         XCTAssertEqual(SettingControl.sentenceCase("UI font"), "UI font")
         XCTAssertEqual(SettingsPanes.optionTitle("appearance.theme", "system"), "Match System")
+        XCTAssertEqual(SettingsPanes.optionTitle("appearance.editor-width", "full"), "Wide")
+        XCTAssertEqual(SettingsPanes.presetTitle("Writer"), "Flo State")
+        XCTAssertEqual(SettingsPanes.presetName("Flo State"), "Writer")
     }
+
 
     func testTextWrapAndSVG() {
         let lines = TextWrap.lines("Font family and fallback stack used throughout the app", font: .systemFont(ofSize: 13), width: 250)
@@ -847,17 +853,17 @@ final class ShellGeometryTests: XCTestCase {
 }
 
 
-final class WriterCLITests: XCTestCase {
+final class FloStateCLITests: XCTestCase {
     func testParse() {
-        XCTAssertEqual(try WriterCLI.parse(["writer"]).get(), .open(nil))
-        XCTAssertEqual(try WriterCLI.parse(["writer", "-h"]).get(), .help)
-        XCTAssertEqual(try WriterCLI.parse(["writer", "--version"]).get(), .version)
-        XCTAssertEqual(try WriterCLI.parse(["writer", "notes"]).get(), .open("notes"))
-        if case .failure(let e) = WriterCLI.parse(["writer", "a", "b"]) { XCTAssertEqual(e, .tooManyArgs) } else { XCTFail() }
-        if case .failure(let e) = WriterCLI.parse(["writer", "--nope"]) { XCTAssertEqual(e, .unknownFlag("--nope")) } else { XCTFail() }
-        XCTAssertTrue(WriterCLI.isCLIInvocation("/usr/local/bin/writer"))
-        XCTAssertFalse(WriterCLI.isCLIInvocation("/Applications/Flo State.app/Contents/MacOS/FloStateNative"))
-        XCTAssertEqual(WriterCLI.bundlePath(forBinary: "/Applications/Flo State.app/Contents/MacOS/FloStateNative"), "/Applications/Flo State.app")
+        XCTAssertEqual(try FloStateCLI.parse(["flostate"]).get(), .open(nil))
+        XCTAssertEqual(try FloStateCLI.parse(["flostate", "-h"]).get(), .help)
+        XCTAssertEqual(try FloStateCLI.parse(["flostate", "--version"]).get(), .version)
+        XCTAssertEqual(try FloStateCLI.parse(["flostate", "notes"]).get(), .open("notes"))
+        if case .failure(let e) = FloStateCLI.parse(["flostate", "a", "b"]) { XCTAssertEqual(e, .tooManyArgs) } else { XCTFail() }
+        if case .failure(let e) = FloStateCLI.parse(["flostate", "--nope"]) { XCTAssertEqual(e, .unknownFlag("--nope")) } else { XCTFail() }
+        XCTAssertTrue(FloStateCLI.isCLIInvocation("/usr/local/bin/flostate"))
+        XCTAssertFalse(FloStateCLI.isCLIInvocation("/Applications/Flo State.app/Contents/MacOS/FloStateNative"))
+        XCTAssertEqual(FloStateCLI.bundlePath(forBinary: "/Applications/Flo State.app/Contents/MacOS/FloStateNative"), "/Applications/Flo State.app")
     }
 
     func testRunOpensTargetsInTheApp() {
@@ -865,50 +871,64 @@ final class WriterCLITests: XCTestCase {
         TFS.write(dir + "/n.md", "x")
         TFS.write(dir + "/img.png", "x")
         var launched: [[String]] = []
-        let env = ["WRITER_APP_PATH": "/Apps/Flo State.app"]
+        let env = ["FLOSTATE_APP_PATH": "/Apps/Flo State.app"]
         func run(_ a: [String]) -> Int32 {
-            WriterCLI.run(a, cwd: dir, out: { _ in }, err: { _ in }, env: env, launch: { launched.append($0); return true })
+            FloStateCLI.run(a, cwd: dir, out: { _ in }, err: { _ in }, env: env, launch: { launched.append($0); return true })
         }
-        XCTAssertEqual(run(["writer", "."]), 0)
+        XCTAssertEqual(run(["flostate", "."]), 0)
         XCTAssertEqual(launched.last, ["-a", "/Apps/Flo State.app", dir])
-        XCTAssertEqual(run(["writer", "n.md"]), 0)
+        XCTAssertEqual(run(["flostate", "n.md"]), 0)
         XCTAssertEqual(launched.last, ["-a", "/Apps/Flo State.app", dir + "/n.md"])
-        XCTAssertEqual(run(["writer"]), 0)
+        XCTAssertEqual(run(["flostate"]), 0)
         XCTAssertEqual(launched.last, ["-a", "/Apps/Flo State.app"])
-        XCTAssertEqual(run(["writer", "missing.md"]), 3)
-        XCTAssertEqual(run(["writer", "img.png"]), 3, "not a folder or markdown file")
-        XCTAssertEqual(run(["writer", "-x"]), 2)
+        XCTAssertEqual(run(["flostate", "missing.md"]), 3)
+        XCTAssertEqual(run(["flostate", "img.png"]), 3, "not a folder or markdown file")
+        XCTAssertEqual(run(["flostate", "-x"]), 2)
         XCTAssertEqual(launched.count, 3)
-        XCTAssertEqual(WriterCLI.run(["writer", "."], cwd: dir, out: { _ in }, err: { _ in }, env: env, launch: { _ in false }), 3)
+        XCTAssertEqual(FloStateCLI.run(["flostate", "."], cwd: dir, out: { _ in }, err: { _ in }, env: env, launch: { _ in false }), 3)
     }
 
     func testInstallUninstallInTempDir() throws {
         let dir = TFS.tempDir("clibin")
         let src = dir + "/app/FloStateNative"
         TFS.write(src, "bin")
-        let target = dir + "/bin/writer"
-        XCTAssertEqual(WriterCLI.state(target: target, source: src), .missing)
-        try WriterCLI.install(source: src, target: target, elevate: { _ in XCTFail("no elevation needed"); return false })
-        XCTAssertEqual(WriterCLI.state(target: target, source: src), .installed)
+        let target = dir + "/bin/flostate"
+        XCTAssertEqual(FloStateCLI.state(target: target, source: src), .missing)
+        try FloStateCLI.install(source: src, target: target, elevate: { _ in XCTFail("no elevation needed"); return false })
+        XCTAssertEqual(FloStateCLI.state(target: target, source: src), .installed)
         XCTAssertEqual(try FileManager.default.destinationOfSymbolicLink(atPath: target), src)
-        XCTAssertEqual(WriterCLI.state(target: target, source: dir + "/other"), .stale)
-        try WriterCLI.install(source: src, target: target)   // idempotent over our own link
-        try WriterCLI.uninstall(source: src, target: target)
-        XCTAssertEqual(WriterCLI.state(target: target, source: src), .missing)
+        XCTAssertEqual(FloStateCLI.state(target: target, source: dir + "/other"), .stale)
+        try FloStateCLI.install(source: src, target: target)   // idempotent over our own link
+        try FloStateCLI.uninstall(source: src, target: target)
+        XCTAssertEqual(FloStateCLI.state(target: target, source: src), .missing)
         TFS.write(target, "someone else's")
-        XCTAssertEqual(WriterCLI.state(target: target, source: src), .foreign)
-        XCTAssertThrowsError(try WriterCLI.install(source: src, target: target))
-        XCTAssertThrowsError(try WriterCLI.uninstall(source: src, target: target))
+        XCTAssertEqual(FloStateCLI.state(target: target, source: src), .foreign)
+        XCTAssertThrowsError(try FloStateCLI.install(source: src, target: target))
+        XCTAssertThrowsError(try FloStateCLI.uninstall(source: src, target: target))
         XCTAssertEqual(TFS.read(target), "someone else's", "never clobbers a foreign file")
     }
 
     @MainActor
-    func testMenuHasCLIItemAndNoDeadUpdateItem() {
+    func testMenuHasCLIItemAndUpdateItemOnlyWithAFeed() {
         let menu = MainMenu.build(target: MenuRouter())
         let titles = menu.items[0].submenu!.items.map { $0.title }
-        XCTAssertTrue(titles.contains(WriterCLI.installLabel) || titles.contains(WriterCLI.uninstallLabel))
+        XCTAssertTrue(titles.contains(FloStateCLI.installLabel) || titles.contains(FloStateCLI.uninstallLabel))
         XCTAssertFalse(titles.contains("Check for Updates…"), "no update feed: no dead item")
         let i = titles.firstIndex(of: "Settings…")!
-        XCTAssertTrue(titles[i + 1].contains("'writer' Command Line Tool"), "right after Settings… like legacy")
+        XCTAssertTrue(titles[i + 1].contains("'flostate' Command Line Tool"), "right after Settings… like legacy")
+        // with an updater (bundled app): right after About, like legacy
+        let item = NSMenuItem(title: MainMenu.checkForUpdatesTitle, action: nil, keyEquivalent: "")
+        let withUpdates = MainMenu.build(target: MenuRouter(), updateItem: item).items[0].submenu!.items.map { $0.title }
+        XCTAssertEqual(withUpdates[1], "Check for Updates…")
+        XCTAssertTrue(withUpdates[0].hasPrefix("About "))
+    }
+
+    func testUpdaterFeedOverrideAndConfiguration() {
+        let d = UserDefaults(suiteName: "flostate.test.\(UUID())")!
+        XCTAssertNil(AppUpdater.feedOverride(env: [:], defaults: d))
+        d.set("http://localhost:1/b.xml", forKey: AppUpdater.feedOverrideDefault)
+        XCTAssertEqual(AppUpdater.feedOverride(env: [:], defaults: d), "http://localhost:1/b.xml")
+        XCTAssertEqual(AppUpdater.feedOverride(env: [AppUpdater.feedOverrideEnv: "http://localhost:2/a.xml"], defaults: d), "http://localhost:2/a.xml")
+        XCTAssertFalse(AppUpdater.isConfigured(.main), "test runner is not an updatable app")
     }
 }

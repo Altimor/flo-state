@@ -20,7 +20,7 @@ rm -rf "$DST"
 cp -R "$SRC" "$DST"
 /usr/libexec/PlistBuddy -c "Set CFBundleName Flo State" "$DST/Contents/Info.plist"
 /usr/libexec/PlistBuddy -c "Set CFBundleDisplayName Flo State" "$DST/Contents/Info.plist"
-codesign --force --deep --sign - "$DST"
+scripts/sign.sh "$DST"
 /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -f "$DST" "$LEGACY" 2>/dev/null || true
 echo "installed: $DST (legacy: $LEGACY)"
 [[ $WAS_RUNNING == 1 ]] && open -a "$DST" || true

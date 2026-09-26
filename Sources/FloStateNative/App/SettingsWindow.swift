@@ -59,20 +59,20 @@ enum SettingsPanes {
     static let all: [Pane] = [
         Pane(id: "general", title: "General", symbol: "gearshape", groups: [
             ("Appearance", ["appearance.theme"]),
-            ("On launch", ["window.restore-workspace", "workspace.restore-open-files", "workspace.max-recent-workspaces"]),
+            ("On launch", ["window.restore-workspace", "workspace.restore-open-files"]),
+            (nil, ["workspace.max-recent-workspaces"]),
             ("Daily notes", ["editor.auto-insert-daily-heading", "editor.jump-to-bottom-after-minutes"]),
-            ("Status bar", ["statusbar.show-words", "statusbar.show-characters", "statusbar.show-paragraphs"]),
         ]),
         Pane(id: "editor", title: "Editor", symbol: "text.alignleft", groups: [
             ("Text", ["editor.font-size", "editor.line-height", "editor.tab-size", "appearance.editor-width"]),
             ("Spacing", ["editor.heading-space-before", "editor.heading-space-after", "editor.paragraph-spacing", "editor.bullet-spacing"]),
-            ("Headings", ["editor.subheading-color", "editor.show-heading-chevrons"]),
-            ("Outline", ["editor.show-outline", "editor.outline-indent-per-level"]),
+            (nil, ["editor.subheading-color"]),
+            ("Headings", ["editor.show-heading-chevrons"]),
+            ("Outline", ["editor.show-outline"]),
         ]),
         Pane(id: "appearance", title: "Appearance", symbol: "sidebar.left", groups: [
-            ("Sidebar", ["appearance.sidebar-visible", "appearance.sidebar-width", "appearance.sidebar-file-label",
-                         "appearance.sidebar-show-search", "appearance.sidebar-show-recents"]),
-            ("Fonts", ["fonts.ui", "fonts.editor", "fonts.mono"]),
+            ("Sidebar", ["appearance.sidebar-file-label", "appearance.sidebar-show-search", "appearance.sidebar-show-recents"]),
+            ("Fonts", ["fonts.editor", "fonts.mono"]),
         ]),
         Pane(id: "theme", title: "Theme", symbol: "paintpalette", groups: [
             ("Light", ["theme.light.preset", "theme.light.accent", "theme.light.background", "theme.light.foreground",
@@ -81,12 +81,23 @@ enum SettingsPanes {
                       "theme.dark.heading-color", "theme.dark.translucent", "theme.dark.contrast"]),
         ]),
         Pane(id: "files", title: "Files", symbol: "doc", groups: [
-            (nil, ["files.associations", "files.default-encoding", "files.insert-final-newline", "files.trim-trailing-whitespace"]),
-        ]),
-        Pane(id: "advanced", title: "Advanced", symbol: "gearshape.2", groups: [
-            ("Search", ["search.debounce-ms", "search.max-results"]),
+            (nil, ["files.associations"]),
         ]),
     ]
+
+    /// Settings that still work (defaults / config file) but aren't shown.
+    static let hiddenKeys: Set<String> = [
+        "statusbar.show-words", "statusbar.show-characters", "statusbar.show-paragraphs",  // footer right-click menu
+        "editor.outline-indent-per-level",
+        "appearance.sidebar-visible", "appearance.sidebar-width",  // Cmd-\ and the resize handle
+        "fonts.ui",
+        "files.default-encoding", "files.insert-final-newline", "files.trim-trailing-whitespace",
+        "search.debounce-ms", "search.max-results",
+    ]
+
+    /// Theme preset display names ("Writer" is the legacy preset id, kept in config).
+    static func presetTitle(_ name: String) -> String { name == "Writer" ? "Flo State" : name }
+    static func presetName(_ title: String) -> String { title == "Flo State" ? "Writer" : title }
 
     static var allKeys: [String] { all.flatMap { $0.groups.flatMap { $0.1 } } }
 
@@ -96,6 +107,7 @@ enum SettingsPanes {
         case ("appearance.theme", "system"): return "Match System"
         case ("appearance.sidebar-file-label", "title"): return "Document title"
         case ("appearance.sidebar-file-label", "filename"): return "File name"
+        case ("appearance.editor-width", "full"): return "Wide"   // not the full window width
         default: return option.prefix(1).uppercased() + option.dropFirst()
         }
     }
@@ -211,7 +223,7 @@ final class SettingControl: NSObject, NSTextFieldDelegate, NSTokenFieldDelegate 
             popup = p; built = p
         case .string where def.key.hasSuffix(".preset"):
             let p = NSPopUpButton(frame: .zero, pullsDown: false)
-            p.addItems(withTitles: ThemePreset.all.map { $0.name })
+            p.addItems(withTitles: ThemePreset.all.map { SettingsPanes.presetTitle($0.name) })
             p.target = self; p.action = #selector(changed(_:))
             popup = p; built = p
         case .string:
@@ -268,7 +280,11 @@ final class SettingControl: NSObject, NSTextFieldDelegate, NSTokenFieldDelegate 
             let t = NSTokenField()
             t.delegate = self
             t.tokenizingCharacterSet = CharacterSet(charactersIn: ", \n")
-            t.widthAnchor.constraint(equalToConstant: 260).isActive = true
+            // wrap onto more lines rather than clipping patterns off the end
+            t.cell?.wraps = true
+            t.cell?.isScrollable = false
+            t.widthAnchor.constraint(equalToConstant: 300).isActive = true
+            t.heightAnchor.constraint(greaterThanOrEqualToConstant: 44).isActive = true
             tokens = t; built = t
         }
         view = built
@@ -318,7 +334,7 @@ final class SettingControl: NSObject, NSTextFieldDelegate, NSTokenFieldDelegate 
             default:
                 // preset: the matching preset, else the stored name, else "Custom"
                 let mode = self.mode ?? .light
-                let name = ThemeResolver.matchingPreset(backend.values, mode: mode)?.name
+                let name = ThemeResolver.matchingPreset(backend.values, mode: mode).map { SettingsPanes.presetTitle($0.name) }
                 if let n = name { p.selectItem(withTitle: n) } else {
                     if p.item(withTitle: "Custom") == nil { p.addItem(withTitle: "Custom") }
                     p.selectItem(withTitle: "Custom")
@@ -344,7 +360,7 @@ final class SettingControl: NSObject, NSTextFieldDelegate, NSTokenFieldDelegate 
         case .font:
             if let fam = popup?.titleOfSelectedItem { backend.set(def.key, .string(FontStackEdit.stackWithFamily(fam, value.stringValue ?? ""))) }
         case .string where def.key.hasSuffix(".preset"):
-            if let n = popup?.titleOfSelectedItem, n != "Custom", let m = mode { backend.applyPreset(n, mode: m) }
+            if let n = popup?.titleOfSelectedItem, n != "Custom", let m = mode { backend.applyPreset(SettingsPanes.presetName(n), mode: m) }
         case .color:
             if let c = well?.color.usingColorSpace(.sRGB) {
                 backend.set(def.key, .string(RGBA(r: Double(c.redComponent), g: Double(c.greenComponent), b: Double(c.blueComponent)).hexString))

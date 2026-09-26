@@ -10,8 +10,8 @@ enum FloApp {
     static func run() {
         let args = CommandLine.arguments
         // Invoked through the `writer` symlink: act as the CLI and exit.
-        if let a0 = args.first, WriterCLI.isCLIInvocation(a0) {
-            exit(WriterCLI.run(args, cwd: FileManager.default.currentDirectoryPath))
+        if let a0 = args.first, FloStateCLI.isCLIInvocation(a0) {
+            exit(FloStateCLI.run(args, cwd: FileManager.default.currentDirectoryPath))
         }
         if args.contains("--settings-snapshot") {
             ShellSnapshot.runSettings(args)
@@ -25,6 +25,10 @@ enum FloApp {
             ShellSnapshot.run(args)
             exit(0)
         }
+        if args.contains("--sparkle-probe") {
+            UpdateProbe.run(args)
+        }
+        registerLaunchDefaults()
         let app = NSApplication.shared
         let d = AppDelegate(dataDir: AppDataDirectory(baseURL: AppDataDirectory.defaultBaseURL), launchPaths: launchPaths(args))
         if d.forwardToRunningInstance() { exit(0) }
@@ -32,6 +36,19 @@ enum FloApp {
         app.delegate = d
         app.setActivationPolicy(.regular)
         app.run()
+    }
+
+    /// AppKit's document-app launch behaviour (the Info.plist declares
+    /// document types): with no window at launch/reopen it would show its own
+    /// app-centric Open panel instead of an untitled document. Never.
+    static let launchDefaults: [String: Any] = [
+        "NSShowAppCentricOpenPanelInsteadOfUntitledFile": false,
+        // Our own session restore owns windows; no AppKit window restoration.
+        "NSQuitAlwaysKeepsWindows": false,
+    ]
+
+    static func registerLaunchDefaults(_ defaults: UserDefaults = .standard) {
+        defaults.register(defaults: launchDefaults)
     }
 
     /// Paths passed on the command line (ignoring `-NSDocument…`-style flags).
@@ -57,11 +74,30 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private(set) var windows: [ShellWindowController] = []
     private var launchPaths: [String]
     private var didFinishLaunching = false
+    /// Tests: windows are built offscreen and never ordered front.
+    let offscreen: Bool
+    /// Workspace/file opens still restoring (startup, reopen, Finder opens).
+    private var pendingOpens: [UUID: Task<Void, Never>] = [:]
+    var isOpening: Bool { !pendingOpens.isEmpty }
 
-    init(dataDir: AppDataDirectory, launchPaths: [String]) {
+    init(dataDir: AppDataDirectory, launchPaths: [String], offscreen: Bool = false) {
         self.dataDir = dataDir
         self.launchPaths = launchPaths
+        self.offscreen = offscreen
         super.init()
+    }
+
+    /// Wait for every in-flight open (tests; also used before quitting).
+    func waitForPendingOpens() async {
+        while let t = pendingOpens.values.first { await t.value }
+    }
+
+    private func track(_ work: @escaping @MainActor () async -> Void) {
+        let id = UUID()
+        pendingOpens[id] = Task { [weak self] in
+            await work()
+            self?.pendingOpens[id] = nil
+        }
     }
 
     /// Single instance: another copy running → hand it our paths and quit.
@@ -90,7 +126,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 }
             }
         }
-        NSApp.mainMenu = MainMenu.build(target: router)
+        if !offscreen, AppUpdater.shared == nil, AppUpdater.isConfigured() { AppUpdater.shared = AppUpdater() }
+        NSApp.mainMenu = MainMenu.build(target: router, updateItem: AppUpdater.shared?.menuItem())
         router.focusedModel = { [weak self] in self?.focusedController?.model }
         router.keyWindowIsForeign = { [weak self] in
             guard let key = NSApp.keyWindow, let self = self else { return false }
@@ -117,7 +154,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     /// `get_startup_state`: argv/Finder open → workspace/file; else last workspace; else welcome.
-    private func startup() {
+    /// Same path for a normal, background (`open -g`) or hidden (`open -j`) launch.
+    func startup() {
         let settings = AppSettings(globalConfigDir: dataDir.baseURL)
         try? dataDir.prepare()
         let recents = RecentWorkspacesStore(appData: dataDir).load()
@@ -183,7 +221,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private func makeController() -> ShellWindowController {
         let model = ShellModel(dataDir: dataDir)
         adopt(model: model)
-        let c = ShellWindowController(model: model)
+        let c = offscreen ? ShellWindowController(model: model, frame: NSRect(x: -10000, y: -10000, width: 1200, height: 800), offscreen: true)
+                          : ShellWindowController(model: model)
         model.openWorkspaceElsewhere = { [weak self] p in self?.openWorkspaceWindow(p, file: nil, keepSession: true) }
         model.openCompactWindow = { [weak self] p in self?.openCompactWindow(p) }
         model.openDroppedPaths = { [weak self] ps in self?.open(paths: ps) }
@@ -201,27 +240,32 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
         // Reuse an empty welcome window.
         let c = windows.first(where: { $0.model.root == nil && $0.model.editor.tabs.isEmpty }) ?? makeController()
-        Task {
+        track { [weak self] in
             await c.model.openWorkspace(canonical, openFile: file, keepSession: keepSession)
             c.flush()
-            if c.window?.isVisible != true { c.showAndFocus(secondary: self.windows.count > 1) }
+            if c.window?.isVisible != true { self?.show(c, secondary: (self?.windows.count ?? 0) > 1) }
             c.didActivate()
         }
     }
 
     func openCompactWindow(_ file: String) {
         let c = makeController()
-        Task {
+        track { [weak self] in
             await c.model.editor.openCompactFile(file)
             c.flush()
-            c.showAndFocus(secondary: self.windows.count > 1)
+            self?.show(c, secondary: (self?.windows.count ?? 0) > 1)
         }
     }
 
     func openWelcomeWindow() {
         let c = makeController()
         c.flush()
-        c.showAndFocus()
+        show(c)
+    }
+
+    private func show(_ c: ShellWindowController, secondary: Bool = false) {
+        guard !offscreen else { return }
+        c.showAndFocus(secondary: secondary)
     }
 
     func openFolderPanel() {
@@ -257,10 +301,40 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         open(paths: paths)
     }
 
+    /// Dock click / `open` of the running app. Returning false stops AppKit's
+    /// default (an untitled document, i.e. its Open panel).
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
-        if !flag { startup() }
-        return true
+        reopen(hasVisibleWindows: flag)
+        return false
     }
+
+    enum ReopenAction: Equatable { case none, showExisting, startup }
+
+    /// Hidden (`-j`), minimised or still-restoring windows are brought back,
+    /// never duplicated; only with no window at all is the last workspace reopened.
+    func reopenAction(hasVisibleWindows: Bool) -> ReopenAction {
+        if hasVisibleWindows { return .none }
+        return windows.isEmpty && !isOpening ? .startup : .showExisting
+    }
+
+    func reopen(hasVisibleWindows: Bool) {
+        switch reopenAction(hasVisibleWindows: hasVisibleWindows) {
+        case .none: break
+        case .startup: startup()
+        case .showExisting:
+            guard !offscreen else { return }
+            if NSApp.isHidden { NSApp.unhide(nil) }
+            for c in windows {
+                guard let w = c.window else { continue }
+                if w.isMiniaturized { w.deminiaturize(nil) } else if !w.isVisible, !isOpening { w.makeKeyAndOrderFront(nil) }
+            }
+        }
+    }
+
+    /// No AppKit untitled document / Open panel, at launch or on reopen:
+    /// startup() and reopen() decide which window to show.
+    func applicationShouldOpenUntitledFile(_ sender: NSApplication) -> Bool { false }
+    func applicationOpenUntitledFile(_ sender: NSApplication) -> Bool { true }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { false }
 

@@ -100,8 +100,37 @@ public final class SessionAutosaver {
         editor.observers.append { [weak self] change in
             guard let self = self, let editor = self.editor else { return }
             if editor.tabs == change.previousTabs && editor.activeTabId == change.previousActiveTabId { return }
+            if self.state == .armOnNextChange { self.state = .armed }
+            guard self.state == .armed else { return }
             self.schedule()
         }
+    }
+
+    /// Saving is gated on the workspace's session restore: until it has
+    /// finished, the editor holds a transient (empty / launcher-only /
+    /// half-restored) state that must never replace the stored session.
+    public enum State: Equatable {
+        /// Restore pending or in progress: nothing is written, flush included.
+        case disarmed
+        /// Restore didn't reproduce the stored session (tabs dropped because
+        /// files failed to load, or nothing was restored): keep the stored
+        /// session until the user changes the tab list.
+        case armOnNextChange
+        /// Restore finished: normal debounced saving.
+        case armed
+    }
+    public private(set) var state: State = .disarmed
+
+    /// A workspace is about to (re)load: stop saving and drop a pending save.
+    public func disarm() {
+        if let t = timer { scheduler.cancel(t); timer = nil }
+        state = .disarmed
+    }
+
+    /// The session restore for the current root finished. `complete`: the
+    /// editor now reflects the stored session (or there was none).
+    public func restoreFinished(complete: Bool) {
+        state = complete ? .armed : .armOnNextChange
     }
 
     public var hasPendingSave: Bool { timer != nil }
@@ -121,7 +150,7 @@ public final class SessionAutosaver {
     }
 
     public func saveNow() {
-        guard let root = root(), let editor = editor else { return }
+        guard state == .armed, let root = root(), let editor = editor else { return }
         guard restoreOpenFiles() else { return }
         let snap = editor.sessionSnapshot()
         try? store.save(root: root, tabs: snap.tabs, activeIndex: snap.activeIndex)

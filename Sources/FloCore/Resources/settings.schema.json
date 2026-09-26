@@ -66,7 +66,7 @@
     {
       "key": "editor.jump-to-bottom-after-minutes",
       "label": "Jump to bottom after (minutes)",
-      "description": "On returning to Writer after this long away, jump to the end of the document. 0 disables it.",
+      "description": "On returning to Flo State after this long away, jump to the end of the document. 0 disables it.",
       "category": "Editor",
       "type": "number",
       "default": 10

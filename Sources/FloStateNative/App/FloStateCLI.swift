@@ -1,16 +1,17 @@
 import AppKit
 import FloCore
 
-/// The `writer` shell command (port of `writer_cli.rs` + `shell_install.rs`).
-/// The app binary is itself the CLI: when invoked as `writer` (argv[0]
-/// basename), it opens its argument in the app and exits. "Install" symlinks
-/// /usr/local/bin/writer → the running binary inside the bundle.
-enum WriterCLI {
-    static let installTarget = "/usr/local/bin/writer"
+/// The `flostate` shell command (port of legacy's `writer_cli.rs` +
+/// `shell_install.rs`, renamed so it can coexist with the legacy app's
+/// `writer`). The app binary is itself the CLI: when invoked as `flostate`
+/// (argv[0] basename), it opens its argument in the app and exits. "Install"
+/// symlinks /usr/local/bin/flostate → the running binary inside the bundle.
+enum FloStateCLI {
+    static let installTarget = "/usr/local/bin/flostate"
     static let exitSuccess: Int32 = 0, exitUsage: Int32 = 2, exitRuntime: Int32 = 3
 
     static let usage = """
-    Usage: writer [PATH]
+    Usage: flostate [PATH]
 
     Open a folder or markdown file in the Flo State desktop app.
 
@@ -23,7 +24,7 @@ enum WriterCLI {
       -V, --version     Print version and exit.
 
     Environment:
-      WRITER_APP_PATH   Override the path to the app bundle (development builds).
+      FLOSTATE_APP_PATH   Override the path to the app bundle (development builds).
     """
 
     enum Parsed: Equatable { case help, version, open(String?) }
@@ -38,7 +39,7 @@ enum WriterCLI {
     }
 
     static func isCLIInvocation(_ argv0: String) -> Bool {
-        (argv0 as NSString).lastPathComponent == "writer"
+        (argv0 as NSString).lastPathComponent == "flostate"
     }
 
     static func parse(_ argv: [String]) -> Result<Parsed, ParseError> {
@@ -75,24 +76,24 @@ enum WriterCLI {
         switch parse(argv) {
         case .success(.help): out(usage); return exitSuccess
         case .success(.version):
-            out("writer \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.1")")
+            out("flostate \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.1")")
             return exitSuccess
         case let .failure(e):
-            err("writer: \(e)\n\n\(usage)")
+            err("flostate: \(e)\n\n\(usage)")
             return exitUsage
         case let .success(.open(path)):
             var target: String?
             if let p = path {
                 let abs = p.hasPrefix("/") ? p : (cwd as NSString).appendingPathComponent(p)
                 let std = (abs as NSString).standardizingPath
-                guard FileManager.default.fileExists(atPath: std) else { err("writer: no such file or directory: \(std)"); return exitRuntime }
-                guard let pending = PendingOpen.resolve(std) else { err("writer: not a folder or markdown file: \(std)"); return exitRuntime }
+                guard FileManager.default.fileExists(atPath: std) else { err("flostate: no such file or directory: \(std)"); return exitRuntime }
+                guard let pending = PendingOpen.resolve(std) else { err("flostate: not a folder or markdown file: \(std)"); return exitRuntime }
                 target = pending.file ?? pending.workspace
             }
-            let app = env["WRITER_APP_PATH"] ?? bundlePath(forBinary: argv.first.map(resolveArgv0) ?? "") ?? "Flo State"
+            let app = env["FLOSTATE_APP_PATH"] ?? bundlePath(forBinary: argv.first.map(resolveArgv0) ?? "") ?? "Flo State"
             var args = ["-a", app]
             if let t = target { args.append(t) }
-            guard launch(args) else { err("writer: could not launch Flo State (\(app)). Set WRITER_APP_PATH."); return exitRuntime }
+            guard launch(args) else { err("flostate: could not launch Flo State (\(app)). Set FLOSTATE_APP_PATH."); return exitRuntime }
             return exitSuccess
         }
     }
@@ -171,42 +172,42 @@ enum WriterCLI {
         return error == nil
     }
 
-    static let installLabel = "Install 'writer' Command Line Tool…"
-    static let uninstallLabel = "Uninstall 'writer' Command Line Tool…"
+    static let installLabel = "Install 'flostate' Command Line Tool…"
+    static let uninstallLabel = "Uninstall 'flostate' Command Line Tool…"
 }
 
 /// The app-menu item that toggles the CLI install (label follows the state).
 @MainActor
 final class CLIMenuItem: NSMenuItem {
     init() {
-        super.init(title: WriterCLI.installLabel, action: #selector(toggle), keyEquivalent: "")
+        super.init(title: FloStateCLI.installLabel, action: #selector(toggle), keyEquivalent: "")
         target = self
         refresh()
     }
     required init(coder: NSCoder) { fatalError() }
 
     func refresh() {
-        title = WriterCLI.state(source: WriterCLI.sourceBinary) == .installed ? WriterCLI.uninstallLabel : WriterCLI.installLabel
+        title = FloStateCLI.state(source: FloStateCLI.sourceBinary) == .installed ? FloStateCLI.uninstallLabel : FloStateCLI.installLabel
     }
 
     @objc func toggle() {
-        guard let src = WriterCLI.sourceBinary else { return }
-        let installed = WriterCLI.state(source: src) == .installed
+        guard let src = FloStateCLI.sourceBinary else { return }
+        let installed = FloStateCLI.state(source: src) == .installed
         let alert = NSAlert()
         do {
             if installed {
-                try WriterCLI.uninstall(source: src)
-                alert.messageText = "Writer CLI Removed"
-                alert.informativeText = "The `writer` command has been removed from \(WriterCLI.installTarget)."
+                try FloStateCLI.uninstall(source: src)
+                alert.messageText = "Command Line Tool Removed"
+                alert.informativeText = "The `flostate` command has been removed from \(FloStateCLI.installTarget)."
             } else {
-                try WriterCLI.install(source: src)
-                alert.messageText = "Writer CLI Installed"
-                alert.informativeText = "The `writer` command is now installed at \(WriterCLI.installTarget).\n\nRun `writer .` from any terminal to open the current folder."
+                try FloStateCLI.install(source: src)
+                alert.messageText = "Command Line Tool Installed"
+                alert.informativeText = "The `flostate` command is now installed at \(FloStateCLI.installTarget).\n\nRun `flostate .` from any terminal to open the current folder."
             }
         } catch {
             alert.alertStyle = .warning
-            alert.messageText = "Writer CLI"
-            alert.informativeText = (installed ? "Could not remove the writer command.\n\n" : "Could not install the writer command.\n\n") + "\(error)"
+            alert.messageText = "Flo State Command Line Tool"
+            alert.informativeText = (installed ? "Could not remove the flostate command.\n\n" : "Could not install the flostate command.\n\n") + "\(error)"
         }
         refresh()
         alert.runModal()

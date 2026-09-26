@@ -217,6 +217,10 @@ final class ShellModel {
             return
         }
         values = settings.values
+        // No session writes until this workspace's restore has finished: the
+        // editor is empty / half-restored until then (quit during startup,
+        // a hidden launch, a failed restore must keep the stored session).
+        sessionAutosaver.disarm()
         editor.reset()
         root = info.root
         ignore = WorkspaceIgnore.load(root: URL(fileURLWithPath: info.root))
@@ -230,17 +234,23 @@ final class ShellModel {
         startWatcher()
         notify(.settings)
         notify(.sidebar)
-        if let f = openFile {
-            if keepSession, let s = SessionAutosaver.loadSession(store: sessionStore, root: info.root, restoreOpenFiles: values.workspaceRestoreOpenFiles), !s.tabs.isEmpty {
-                await editor.restoreSession(s.tabs, activeIndex: s.activeIndex)
-                purgeSettingsTabs()
-            }
-            try? await editor.openFileInTabOrFocus(f)
-        } else if keepSession, let s = SessionAutosaver.loadSession(store: sessionStore, root: info.root, restoreOpenFiles: values.workspaceRestoreOpenFiles), !s.tabs.isEmpty {
-            await editor.restoreSession(s.tabs, activeIndex: s.activeIndex)
+        let stored = keepSession ? SessionAutosaver.loadSession(store: sessionStore, root: info.root, restoreOpenFiles: values.workspaceRestoreOpenFiles) : nil
+        var complete = true
+        if let s = stored, !s.tabs.isEmpty {
+            complete = await editor.restoreSession(s.tabs, activeIndex: s.activeIndex)
             purgeSettingsTabs()
+        }
+        // Another openWorkspace/closeWorkspace ran meanwhile: it owns the gate.
+        guard root == info.root else { return }
+        if let f = openFile {
+            // Arm first: the explicitly opened file is a real change to save.
+            sessionAutosaver.restoreFinished(complete: complete)
+            try? await editor.openFileInTabOrFocus(f)
         } else {
             editor.ensureLauncherTab()
+            // Only a faithful restore saves right away; a launcher-only or
+            // partial state waits for the user's next tab change.
+            sessionAutosaver.restoreFinished(complete: complete && stored.map { !$0.tabs.isEmpty } == true)
         }
         notify(.tabs)
     }
@@ -260,6 +270,7 @@ final class ShellModel {
     func closeWorkspace() {
         guard root != nil else { return }
         sessionAutosaver.flush()
+        sessionAutosaver.disarm()
         stopWatcher()
         editor.reset()
         root = nil

@@ -9,10 +9,14 @@ let package = Package(
         .library(name: "FloCore", targets: ["FloCore"]),
         .library(name: "FloKit", targets: ["FloKit"]),
     ],
+    dependencies: [
+        // In-app updates (pinned; bump deliberately — scripts/release.sh uses its bin/ tools).
+        .package(url: "https://github.com/sparkle-project/Sparkle", exact: "2.10.0"),
+    ],
     targets: [
         .target(name: "FloCore", resources: [.copy("Resources")], swiftSettings: [.swiftLanguageMode(.v5)]),
         .target(name: "FloKit", dependencies: ["FloCore"], swiftSettings: [.swiftLanguageMode(.v5)]),
-        .executableTarget(name: "FloStateNative", dependencies: ["FloKit"], swiftSettings: [.swiftLanguageMode(.v5)]),
+        .executableTarget(name: "FloStateNative", dependencies: ["FloKit", .product(name: "Sparkle", package: "Sparkle")], swiftSettings: [.swiftLanguageMode(.v5)]),
         // Shared test helpers (synthetic documents), no dependencies.
         .target(name: "FloTestSupport", path: "Tests/FloTestSupport", swiftSettings: [.swiftLanguageMode(.v5)]),
         .testTarget(name: "FloCoreTests", dependencies: ["FloCore", "FloTestSupport"], swiftSettings: [.swiftLanguageMode(.v5)]),
