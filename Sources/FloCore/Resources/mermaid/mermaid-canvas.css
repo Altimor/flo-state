@@ -1,0 +1,325 @@
+/* Mermaid canvas widget styles. Loaded once at module scope so the rules
+   apply both inside the CodeMirror editor (where the widget mounts) and
+   inside the fullscreen <dialog> (which lives in document.body, outside
+   the editor's theme scope). */
+
+.cm-mermaid-widget {
+  padding: 8px 0;
+}
+
+.cm-mermaid-canvas {
+  position: relative;
+  height: 480px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background-color: transparent;
+  overflow: hidden;
+  outline: none;
+}
+
+.cm-mermaid-canvas:focus,
+.cm-mermaid-canvas:focus-visible,
+.cm-mermaid-fullscreen:focus,
+.cm-mermaid-fullscreen:focus-visible {
+  outline: none;
+}
+
+.cm-mermaid-canvas-viewport {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+/* Inline source editor: hidden by default and revealed instantly on
+   `.is-editing`. Sits absolutely on the left half of the canvas; the viewport
+   shrinks to make room via the `.is-editing .cm-mermaid-canvas-viewport` rule. */
+.cm-mermaid-canvas-editor {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 33%;
+  border-right: 1px solid var(--border-color);
+  background-color: var(--surface-card);
+  overflow: hidden;
+  display: none;
+}
+
+.cm-mermaid-canvas.is-editing .cm-mermaid-canvas-editor {
+  display: block;
+}
+
+.cm-mermaid-canvas.is-editing .cm-mermaid-canvas-viewport {
+  left: 33%;
+}
+
+/* Inner CodeMirror fills the editor panel. */
+.cm-mermaid-canvas-editor .cm-editor {
+  height: 100%;
+}
+.cm-mermaid-canvas-editor .cm-scroller {
+  height: 100%;
+}
+
+/* Override the outer prosemark `.cm-editor .cm-content` rule, which sets a
+   ~4rem side inset + 40vh trailing pad meant for the document column. Inside
+   the small mermaid editor panel those values waste most of the horizontal
+   space and trail empty scroll below. The extra `.cm-mermaid-canvas` ancestor
+   bumps specificity past the prosemark rule. */
+.cm-mermaid-canvas .cm-mermaid-canvas-editor .cm-content {
+  padding: 8px 0;
+  max-width: none;
+  margin: 0;
+  font-family: var(--pm-code-font, var(--mono-font, "SF Mono", Menlo, Monaco, Consolas, monospace));
+  font-size: 12px;
+  line-height: 1.5;
+}
+.cm-mermaid-canvas .cm-mermaid-canvas-editor .cm-line {
+  padding: 0 8px;
+}
+
+/* Dark mode: tint the editor panel darker than the surrounding canvas so the
+   code surface reads as a recessed pane instead of a lifted card. The default
+   `--surface-card` lightens against the bg, which is wrong here. */
+[data-theme="dark"] .cm-mermaid-canvas-editor {
+  background-color: color-mix(in srgb, black calc(var(--contrast) * 24%), transparent);
+}
+
+/* Restore native scrolling on the inner scroller. The outer prosemark theme
+   forces `overflow: visible !important` + a `clip-path` inset (it relies on
+   an ancestor `EditorScrollContainer` to scroll the document column). Inside
+   the fixed-height mermaid panel we need the scroller itself to scroll, and
+   we don't want the document-column clip-path. The `!important` is required
+   to beat the outer rule's `!important` even at higher specificity. */
+.cm-mermaid-canvas .cm-mermaid-canvas-editor .cm-scroller {
+  overflow: auto !important;
+  clip-path: none;
+}
+
+/* Reset the outer prosemark theme's `.cm-selectionLayer` clip/contain
+   hack, which was scoped to the outer document column and would clip
+   drawSelection's painted rects inside the inner panel. */
+.cm-mermaid-canvas .cm-mermaid-canvas-editor .cm-selectionLayer {
+  clip-path: none;
+  width: auto;
+  height: auto;
+  contain: none;
+}
+
+/* The inner source editor mounts `drawSelection()`. Keep the browser-native
+   `::selection` layer invisible in this nested editor so only CodeMirror's
+   `.cm-selectionBackground` rects render. */
+.cm-mermaid-canvas .cm-mermaid-canvas-editor .cm-content::selection,
+.cm-mermaid-canvas .cm-mermaid-canvas-editor .cm-content ::selection,
+.cm-mermaid-canvas .cm-mermaid-canvas-editor .cm-line::selection,
+.cm-mermaid-canvas .cm-mermaid-canvas-editor .cm-line ::selection {
+  background-color: transparent !important;
+}
+
+.cm-mermaid-canvas-viewport.is-dragging {
+  cursor: grabbing;
+}
+
+.cm-mermaid-canvas-stage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+}
+
+.cm-mermaid-canvas-stage svg {
+  display: block;
+  max-width: none;
+}
+
+/* xychart series palette: keep all series close to the accent in hue and
+   lightness instead of the default rainbow shifts. beautiful-mermaid scopes
+   its own `--xychart-color-N` defaults to `svg { … }` (specificity 0,0,0,1);
+   this rule is 0,0,2,1 so it wins, and the derived `--xychart-bar-fill-N`
+   expressions (which read `--xychart-color-N` via color-mix) follow along
+   for free. */
+.cm-mermaid-canvas-stage svg[data-xychart-colors] {
+  --xychart-color-1: color-mix(in srgb, var(--accent) 45%, var(--fg-base) 55%);
+  --xychart-color-2: color-mix(in srgb, var(--accent) 20%, var(--fg-base) 80%);
+  --xychart-color-3: color-mix(in srgb, var(--accent) 8%, var(--fg-base) 92%);
+  --xychart-color-4: color-mix(in srgb, var(--accent) 4%, var(--fg-base) 96%);
+  --xychart-color-5: color-mix(in srgb, var(--accent) 2%, var(--fg-base) 98%);
+  --xychart-color-6: var(--fg-base);
+  --xychart-color-7: var(--fg-base);
+}
+
+.cm-mermaid-canvas-edit,
+.cm-mermaid-canvas-zoom-btn,
+.cm-mermaid-canvas-icon-btn {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background-color: var(--surface-card);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font: inherit;
+  line-height: 1;
+  opacity: 0;
+  transition:
+    opacity 120ms ease-out,
+    background-color 120ms ease-out,
+    color 120ms ease-out;
+}
+
+.cm-mermaid-canvas:hover .cm-mermaid-canvas-edit,
+.cm-mermaid-canvas:focus-within .cm-mermaid-canvas-edit,
+.cm-mermaid-canvas:hover .cm-mermaid-canvas-zoom-btn,
+.cm-mermaid-canvas:focus-within .cm-mermaid-canvas-zoom-btn,
+.cm-mermaid-canvas:hover .cm-mermaid-canvas-icon-btn,
+.cm-mermaid-canvas:focus-within .cm-mermaid-canvas-icon-btn {
+  opacity: 1;
+}
+
+.cm-mermaid-canvas-edit:hover,
+.cm-mermaid-canvas-zoom-btn:hover,
+.cm-mermaid-canvas-icon-btn:hover {
+  background-color: var(--surface-subtle);
+  color: var(--text-primary);
+}
+
+.cm-mermaid-canvas-top {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+}
+
+.cm-mermaid-canvas-edit {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.cm-mermaid-canvas-edit.is-active {
+  border-color: color-mix(in srgb, var(--accent) 24%, var(--border-color));
+  background-color: color-mix(in srgb, var(--accent) 6%, var(--surface-card));
+  color: color-mix(in srgb, var(--accent) 26%, var(--text-secondary));
+}
+
+.cm-mermaid-canvas-button-icon {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2;
+  flex: none;
+}
+
+.cm-mermaid-canvas-icon-btn {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  padding: 0;
+}
+
+.cm-mermaid-canvas-zoom {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cm-mermaid-canvas-zoom-btn {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  padding: 0;
+}
+
+/* Render errors inside the canvas stage so the surrounding frame + zoom
+   controls + (when open) the inline editor panel stay mounted. The user
+   can then fix the source in-place. */
+.cm-mermaid-canvas-error-msg {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5em 2em;
+  color: var(--text-error, #ff6b6b);
+  font-family: var(--pm-code-font, var(--mono-font, "SF Mono", Menlo, Monaco, Consolas, monospace));
+  font-size: 0.85em;
+  text-align: center;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+/* Fullscreen overlay: fixed-position div that fills the viewport and hosts
+   a fresh canvas. Plain div (not <dialog>) so layering and event handling
+   stay under our control. Controls inside the fullscreen canvas stay
+   visible regardless of hover/focus so the user has obvious affordances
+   on first paint.
+
+   Enter/exit animation: backdrop fades, canvas scales 0.95 → 1 and fades.
+   The base rule below is the closed state; `.is-open` (added one frame
+   after mount, removed before teardown) is the open state. JS waits for
+   the canvas's `transitionend` before removing the overlay from the DOM
+   so the exit animation has time to play. */
+.cm-mermaid-fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background-color: color-mix(in srgb, var(--bg-base) 92%, transparent);
+  backdrop-filter: blur(4px);
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 180ms ease-out;
+}
+
+.cm-mermaid-fullscreen.is-open {
+  opacity: 1;
+}
+
+.cm-mermaid-fullscreen-canvas {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 0;
+  background-color: transparent;
+  transform: scale(0.95);
+  opacity: 0;
+  transition:
+    transform 180ms ease-out,
+    opacity 180ms ease-out;
+}
+
+.cm-mermaid-fullscreen.is-open .cm-mermaid-fullscreen-canvas {
+  transform: scale(1);
+  opacity: 1;
+}
+
+/* Inset the button clusters further from the edges in fullscreen so they
+   don't crowd the viewport corners. */
+.cm-mermaid-fullscreen-canvas .cm-mermaid-canvas-top {
+  top: 16px;
+  right: 16px;
+}
+
+.cm-mermaid-fullscreen-canvas .cm-mermaid-canvas-zoom {
+  bottom: 16px;
+  right: 16px;
+}
+
+.cm-mermaid-fullscreen-canvas .cm-mermaid-canvas-icon-btn,
+.cm-mermaid-fullscreen-canvas .cm-mermaid-canvas-zoom-btn {
+  opacity: 1;
+}

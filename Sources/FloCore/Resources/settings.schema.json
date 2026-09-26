@@ -1,0 +1,440 @@
+{
+  "$comment": "Settings contract: keys, types, defaults, labels, descriptions, and CSS-var bindings. Read by Rust (apps/desktop/src-tauri/src/config.rs) via include_str! and by the frontend via a static import (lib/settings-schema.ts). Theme preset *values* are not part of the contract \u2014 they live in shared/themes/*.json, one file per preset. Per docs/consolidation.md: do not declare defaults, labels, or types anywhere else.",
+  "settings": [
+    {
+      "key": "editor.font-size",
+      "label": "Font Size",
+      "description": "Font size in pixels for the editor",
+      "category": "Editor",
+      "type": "number",
+      "default": 16,
+      "min": 10,
+      "max": 32,
+      "step": 1,
+      "cssVar": "--writer-editor-font-size",
+      "cssFormat": "px"
+    },
+    {
+      "key": "editor.line-height",
+      "label": "Line Height",
+      "description": "Line height multiplier for the editor",
+      "category": "Editor",
+      "type": "number",
+      "default": 1.5,
+      "cssVar": "--writer-editor-line-height"
+    },
+    {
+      "key": "editor.tab-size",
+      "label": "Tab Size",
+      "description": "Number of spaces per tab",
+      "category": "Editor",
+      "type": "number",
+      "default": 2
+    },
+    {
+      "key": "editor.auto-insert-daily-heading",
+      "label": "Insert today's date heading",
+      "description": "When opening a dated notebook, append a heading for today if it isn't there yet",
+      "category": "Editor",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "key": "editor.show-outline",
+      "label": "Show outline rail",
+      "description": "The tick marks at the right edge of the editor that expand into a document outline on hover",
+      "category": "Editor",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "key": "editor.show-heading-chevrons",
+      "label": "Show heading fold arrows",
+      "description": "The arrow beside each heading for collapsing its section. Headings can still be folded from the View menu when hidden",
+      "category": "Editor",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "key": "editor.outline-indent-per-level",
+      "label": "Outline indent per level",
+      "description": "Indent in the outline rail for each heading level below the second",
+      "category": "Editor",
+      "type": "number",
+      "default": 12
+    },
+    {
+      "key": "editor.jump-to-bottom-after-minutes",
+      "label": "Jump to bottom after (minutes)",
+      "description": "On returning to Writer after this long away, jump to the end of the document. 0 disables it.",
+      "category": "Editor",
+      "type": "number",
+      "default": 10
+    },
+    {
+      "key": "editor.heading-space-before",
+      "label": "Space before headings",
+      "description": "Extra vertical space above a heading",
+      "category": "Editor",
+      "type": "number",
+      "default": 0,
+      "cssFormat": "px",
+      "cssVar": "--writer-heading-space-before"
+    },
+    {
+      "key": "editor.heading-space-after",
+      "label": "Space after headings",
+      "description": "Extra vertical space below a heading",
+      "category": "Editor",
+      "type": "number",
+      "default": 8,
+      "cssFormat": "px",
+      "cssVar": "--writer-heading-space-after"
+    },
+    {
+      "key": "editor.subheading-color",
+      "label": "Subheading colour",
+      "description": "Colour for level 2 and 3 headings",
+      "category": "Editor",
+      "type": "color",
+      "default": "#3a3a3a",
+      "cssVar": "--writer-subheading-color"
+    },
+    {
+      "key": "editor.paragraph-spacing",
+      "label": "Paragraph spacing",
+      "description": "Vertical space between paragraphs",
+      "category": "Editor",
+      "type": "number",
+      "default": 0,
+      "cssFormat": "px",
+      "cssVar": "--writer-paragraph-spacing"
+    },
+    {
+      "key": "editor.bullet-spacing",
+      "label": "Bullet spacing",
+      "description": "Vertical space between list items",
+      "category": "Editor",
+      "type": "number",
+      "default": 12,
+      "cssFormat": "px",
+      "cssVar": "--writer-bullet-spacing"
+    },
+    {
+      "key": "statusbar.show-words",
+      "label": "Words",
+      "description": "Show the word count in the status bar",
+      "category": "Status Bar",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "key": "statusbar.show-characters",
+      "label": "Characters",
+      "description": "Show the character count in the status bar",
+      "category": "Status Bar",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "key": "statusbar.show-paragraphs",
+      "label": "Paragraphs",
+      "description": "Show the paragraph count in the status bar",
+      "category": "Status Bar",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "key": "appearance.theme",
+      "label": "Schema",
+      "description": "Light or dark color schema",
+      "category": "Appearance",
+      "type": "enum",
+      "options": ["system", "light", "dark"],
+      "default": "system"
+    },
+    {
+      "key": "appearance.sidebar-width",
+      "label": "Sidebar Width",
+      "description": "Default sidebar width in pixels",
+      "category": "Appearance",
+      "type": "number",
+      "default": 240
+    },
+    {
+      "key": "appearance.sidebar-visible",
+      "label": "Sidebar Visible",
+      "description": "Show the sidebar by default",
+      "category": "Appearance",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "key": "appearance.sidebar-file-label",
+      "label": "Sidebar File Label",
+      "description": "Show the document title or the filename for files in the sidebar",
+      "category": "Appearance",
+      "type": "enum",
+      "options": ["title", "filename"],
+      "default": "title"
+    },
+    {
+      "key": "appearance.sidebar-show-search",
+      "label": "Sidebar Search Button",
+      "description": "Show the Search button at the top of the sidebar",
+      "category": "Appearance",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "key": "appearance.sidebar-show-recents",
+      "label": "Sidebar Recents",
+      "description": "Show the Recents section in the sidebar",
+      "category": "Appearance",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "key": "appearance.editor-width",
+      "label": "Editor Width",
+      "description": "Editor content width mode",
+      "category": "Appearance",
+      "type": "enum",
+      "options": ["full", "narrow"],
+      "default": "full"
+    },
+    {
+      "key": "fonts.ui",
+      "label": "UI font",
+      "description": "Font family and fallback stack used throughout the app",
+      "category": "Typography",
+      "type": "font",
+      "cssVar": "--ui-font",
+      "default": "\"SF Pro\", -apple-system-body, ui-sans-serif, -apple-system, system-ui, \"Segoe UI\", Helvetica, \"Apple Color Emoji\", Arial, sans-serif, \"Segoe UI Emoji\", \"Segoe UI Symbol\""
+    },
+    {
+      "key": "fonts.editor",
+      "label": "Editor font",
+      "description": "Font family and fallback stack used for document text",
+      "category": "Typography",
+      "type": "font",
+      "cssVar": "--editor-font",
+      "default": "\"SF Pro\", -apple-system-body, ui-sans-serif, -apple-system, system-ui, \"Segoe UI\", Helvetica, \"Apple Color Emoji\", Arial, sans-serif, \"Segoe UI Emoji\", \"Segoe UI Symbol\""
+    },
+    {
+      "key": "fonts.mono",
+      "label": "Code font",
+      "description": "Font family and fallback stack used for code",
+      "category": "Typography",
+      "type": "font",
+      "cssVar": "--mono-font",
+      "default": "\"SF Mono\", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace"
+    },
+    {
+      "key": "theme.light.preset",
+      "label": "Preset",
+      "description": "Light theme preset",
+      "category": "Theme",
+      "$comment": "Valid values are populated at runtime from shared/themes/*.json plus the special \"custom\" sentinel; we intentionally don't enum-constrain the contract so adding a preset doesn't require a schema edit.",
+      "type": "string",
+      "default": "Writer"
+    },
+    {
+      "key": "theme.light.accent",
+      "label": "Accent",
+      "description": "Light theme accent color",
+      "category": "Theme",
+      "type": "color",
+      "cssVar": "--accent",
+      "default": "#FF6A00"
+    },
+    {
+      "key": "theme.light.background",
+      "label": "Background",
+      "description": "Light theme background color",
+      "category": "Theme",
+      "type": "color",
+      "cssVar": "--bg-base",
+      "default": "#FFFFFF"
+    },
+    {
+      "key": "theme.light.foreground",
+      "label": "Foreground",
+      "description": "Light theme foreground color",
+      "category": "Theme",
+      "type": "color",
+      "cssVar": "--fg-base",
+      "default": "#0D0D0D"
+    },
+    {
+      "key": "theme.light.heading-color",
+      "label": "Heading colour",
+      "description": "Light theme colour for level 1 headings",
+      "category": "Theme",
+      "type": "color",
+      "cssVar": "--writer-heading-color",
+      "default": "#191919"
+    },
+    {
+      "key": "theme.light.translucent",
+      "label": "Translucent",
+      "description": "Light theme translucency (0 = solid, 100 = max).",
+      "category": "Theme",
+      "type": "range",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 10
+    },
+    {
+      "key": "theme.light.contrast",
+      "label": "Contrast",
+      "description": "alpha multiplier on borders, cards, hover bgs.",
+      "category": "Theme",
+      "type": "range",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 20
+    },
+    {
+      "key": "theme.dark.preset",
+      "label": "Preset",
+      "description": "Dark theme preset",
+      "category": "Theme",
+      "$comment": "Valid values are populated at runtime from shared/themes/*.json plus the special \"custom\" sentinel; we intentionally don't enum-constrain the contract so adding a preset doesn't require a schema edit.",
+      "type": "string",
+      "default": "Writer"
+    },
+    {
+      "key": "theme.dark.accent",
+      "label": "Accent",
+      "description": "Dark theme accent color",
+      "category": "Theme",
+      "type": "color",
+      "cssVar": "--accent",
+      "default": "#FF6A00"
+    },
+    {
+      "key": "theme.dark.background",
+      "label": "Background",
+      "description": "Dark theme background color",
+      "category": "Theme",
+      "type": "color",
+      "cssVar": "--bg-base",
+      "default": "#111111"
+    },
+    {
+      "key": "theme.dark.foreground",
+      "label": "Foreground",
+      "description": "Dark theme foreground color",
+      "category": "Theme",
+      "type": "color",
+      "cssVar": "--fg-base",
+      "default": "#FCFCFC"
+    },
+    {
+      "key": "theme.dark.heading-color",
+      "label": "Heading colour",
+      "description": "Dark theme colour for level 1 headings",
+      "category": "Theme",
+      "type": "color",
+      "cssVar": "--writer-heading-color",
+      "default": "#F0F0F0"
+    },
+    {
+      "key": "theme.dark.translucent",
+      "label": "Translucent",
+      "description": "Dark theme translucency (0 = solid, 100 = max).",
+      "category": "Theme",
+      "type": "range",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 20
+    },
+    {
+      "key": "theme.dark.contrast",
+      "label": "Contrast",
+      "description": "alpha multiplier on borders, cards, hover bgs.",
+      "category": "Theme",
+      "type": "range",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 16
+    },
+    {
+      "key": "files.associations",
+      "label": "File Associations",
+      "description": "File patterns to include in the workspace",
+      "category": "Files",
+      "type": "list",
+      "default": ["*.md", "*.mdx", "*.markdown", "*.csv"]
+    },
+    {
+      "key": "files.default-encoding",
+      "label": "Default Encoding",
+      "description": "Default text encoding for files",
+      "category": "Files",
+      "type": "string",
+      "default": "utf-8"
+    },
+    {
+      "key": "files.insert-final-newline",
+      "label": "Insert Final Newline",
+      "description": "Ensure files end with a newline when saving",
+      "category": "Files",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "key": "files.trim-trailing-whitespace",
+      "label": "Trim Trailing Whitespace",
+      "description": "Remove trailing whitespace from lines when saving",
+      "category": "Files",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "key": "workspace.restore-open-files",
+      "label": "Restore Open Files",
+      "description": "Reopen previously open files when opening a workspace",
+      "category": "Workspace",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "key": "workspace.max-recent-workspaces",
+      "label": "Max Recent Workspaces",
+      "description": "Maximum number of recent workspaces to remember",
+      "category": "Workspace",
+      "type": "number",
+      "default": 10
+    },
+    {
+      "key": "window.restore-workspace",
+      "label": "Restore Workspace",
+      "description": "Automatically reopen the last workspace when the app starts",
+      "category": "Window",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "key": "search.debounce-ms",
+      "label": "Search Debounce",
+      "description": "Delay in milliseconds before performing search",
+      "category": "Search",
+      "type": "number",
+      "default": 150
+    },
+    {
+      "key": "search.max-results",
+      "label": "Max Search Results",
+      "description": "Maximum number of search results to return",
+      "category": "Search",
+      "type": "number",
+      "default": 50
+    }
+  ]
+}

@@ -1,0 +1,1879 @@
+{
+ "menus": {
+  "plain": {
+   "doc": "plain text here",
+   "pos": 3,
+   "items": [
+    [
+     "MenuItem",
+     "cut",
+     "Cut",
+     null
+    ],
+    [
+     "MenuItem",
+     "copy",
+     "Copy",
+     null
+    ],
+    [
+     "MenuItem",
+     "paste",
+     "Paste",
+     null
+    ],
+    [
+     "MenuItem",
+     "paste-plain",
+     "Paste as plain text",
+     null
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "fmt.bold",
+     "Bold",
+     "CmdOrCtrl+B"
+    ],
+    [
+     "MenuItem",
+     "fmt.italic",
+     "Italic",
+     "CmdOrCtrl+I"
+    ],
+    [
+     "MenuItem",
+     "fmt.strikethrough",
+     "Strikethrough",
+     "CmdOrCtrl+Shift+X"
+    ],
+    [
+     "MenuItem",
+     "fmt.code",
+     "Inline code",
+     "CmdOrCtrl+E"
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "fmt.link",
+     "Insert link…",
+     "CmdOrCtrl+K"
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "fmt.clear",
+     "Clear formatting",
+     null
+    ],
+    [
+     "MenuItem",
+     "para.h1",
+     "Heading 1",
+     "CmdOrCtrl+Alt+1"
+    ],
+    [
+     "MenuItem",
+     "para.h2",
+     "Heading 2",
+     "CmdOrCtrl+Alt+2"
+    ],
+    [
+     "MenuItem",
+     "para.h3",
+     "Heading 3",
+     "CmdOrCtrl+Alt+3"
+    ],
+    [
+     "MenuItem",
+     "para.h4",
+     "Heading 4",
+     "CmdOrCtrl+Alt+4"
+    ],
+    [
+     "MenuItem",
+     "para.h5",
+     "Heading 5",
+     "CmdOrCtrl+Alt+5"
+    ],
+    [
+     "MenuItem",
+     "para.h6",
+     "Heading 6",
+     "CmdOrCtrl+Alt+6"
+    ],
+    [
+     "MenuItem",
+     "para.paragraph",
+     "Paragraph",
+     "CmdOrCtrl+Alt+0"
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "para.bullet",
+     "Bullet list",
+     "CmdOrCtrl+Shift+8"
+    ],
+    [
+     "MenuItem",
+     "para.numbered",
+     "Numbered list",
+     "CmdOrCtrl+Shift+7"
+    ],
+    [
+     "MenuItem",
+     "para.task",
+     "Task list",
+     "CmdOrCtrl+Shift+Enter"
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "para.blockquote",
+     "Blockquote",
+     "CmdOrCtrl+Shift+."
+    ],
+    [
+     "MenuItem",
+     "para.codeblock",
+     "Code block",
+     null
+    ],
+    [
+     "MenuItem",
+     "ins.link",
+     "Link…",
+     "CmdOrCtrl+K"
+    ],
+    [
+     "MenuItem",
+     "ins.table",
+     "Table",
+     null
+    ],
+    [
+     "MenuItem",
+     "ins.hr",
+     "Horizontal rule",
+     null
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "ins.date",
+     "Current date",
+     null
+    ],
+    [
+     "MenuItem",
+     "ins.time",
+     "Current time",
+     null
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "select-all",
+     "Select all",
+     null
+    ],
+    [
+     "Submenu",
+     null,
+     "Format",
+     null
+    ],
+    [
+     "Submenu",
+     null,
+     "Paragraph",
+     null
+    ],
+    [
+     "Submenu",
+     null,
+     "Insert",
+     null
+    ],
+    [
+     "Menu",
+     null,
+     null,
+     null
+    ]
+   ]
+  },
+  "link": {
+   "doc": "see [site](https://x.com) end",
+   "pos": 6,
+   "items": [
+    [
+     "MenuItem",
+     "cut",
+     "Cut",
+     null
+    ],
+    [
+     "MenuItem",
+     "copy",
+     "Copy",
+     null
+    ],
+    [
+     "MenuItem",
+     "paste",
+     "Paste",
+     null
+    ],
+    [
+     "MenuItem",
+     "paste-plain",
+     "Paste as plain text",
+     null
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "fmt.bold",
+     "Bold",
+     "CmdOrCtrl+B"
+    ],
+    [
+     "MenuItem",
+     "fmt.italic",
+     "Italic",
+     "CmdOrCtrl+I"
+    ],
+    [
+     "MenuItem",
+     "fmt.strikethrough",
+     "Strikethrough",
+     "CmdOrCtrl+Shift+X"
+    ],
+    [
+     "MenuItem",
+     "fmt.code",
+     "Inline code",
+     "CmdOrCtrl+E"
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "fmt.link",
+     "Insert link…",
+     "CmdOrCtrl+K"
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "fmt.clear",
+     "Clear formatting",
+     null
+    ],
+    [
+     "MenuItem",
+     "para.h1",
+     "Heading 1",
+     "CmdOrCtrl+Alt+1"
+    ],
+    [
+     "MenuItem",
+     "para.h2",
+     "Heading 2",
+     "CmdOrCtrl+Alt+2"
+    ],
+    [
+     "MenuItem",
+     "para.h3",
+     "Heading 3",
+     "CmdOrCtrl+Alt+3"
+    ],
+    [
+     "MenuItem",
+     "para.h4",
+     "Heading 4",
+     "CmdOrCtrl+Alt+4"
+    ],
+    [
+     "MenuItem",
+     "para.h5",
+     "Heading 5",
+     "CmdOrCtrl+Alt+5"
+    ],
+    [
+     "MenuItem",
+     "para.h6",
+     "Heading 6",
+     "CmdOrCtrl+Alt+6"
+    ],
+    [
+     "MenuItem",
+     "para.paragraph",
+     "Paragraph",
+     "CmdOrCtrl+Alt+0"
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "para.bullet",
+     "Bullet list",
+     "CmdOrCtrl+Shift+8"
+    ],
+    [
+     "MenuItem",
+     "para.numbered",
+     "Numbered list",
+     "CmdOrCtrl+Shift+7"
+    ],
+    [
+     "MenuItem",
+     "para.task",
+     "Task list",
+     "CmdOrCtrl+Shift+Enter"
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "para.blockquote",
+     "Blockquote",
+     "CmdOrCtrl+Shift+."
+    ],
+    [
+     "MenuItem",
+     "para.codeblock",
+     "Code block",
+     null
+    ],
+    [
+     "MenuItem",
+     "ins.link",
+     "Link…",
+     "CmdOrCtrl+K"
+    ],
+    [
+     "MenuItem",
+     "ins.table",
+     "Table",
+     null
+    ],
+    [
+     "MenuItem",
+     "ins.hr",
+     "Horizontal rule",
+     null
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "ins.date",
+     "Current date",
+     null
+    ],
+    [
+     "MenuItem",
+     "ins.time",
+     "Current time",
+     null
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "select-all",
+     "Select all",
+     null
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "open-link",
+     "Open link",
+     null
+    ],
+    [
+     "MenuItem",
+     "copy-link",
+     "Copy link",
+     null
+    ],
+    [
+     "Submenu",
+     null,
+     "Format",
+     null
+    ],
+    [
+     "Submenu",
+     null,
+     "Paragraph",
+     null
+    ],
+    [
+     "Submenu",
+     null,
+     "Insert",
+     null
+    ],
+    [
+     "Menu",
+     null,
+     null,
+     null
+    ]
+   ]
+  },
+  "url": {
+   "doc": "go https://example.com/a now",
+   "pos": 8,
+   "items": [
+    [
+     "MenuItem",
+     "cut",
+     "Cut",
+     null
+    ],
+    [
+     "MenuItem",
+     "copy",
+     "Copy",
+     null
+    ],
+    [
+     "MenuItem",
+     "paste",
+     "Paste",
+     null
+    ],
+    [
+     "MenuItem",
+     "paste-plain",
+     "Paste as plain text",
+     null
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "fmt.bold",
+     "Bold",
+     "CmdOrCtrl+B"
+    ],
+    [
+     "MenuItem",
+     "fmt.italic",
+     "Italic",
+     "CmdOrCtrl+I"
+    ],
+    [
+     "MenuItem",
+     "fmt.strikethrough",
+     "Strikethrough",
+     "CmdOrCtrl+Shift+X"
+    ],
+    [
+     "MenuItem",
+     "fmt.code",
+     "Inline code",
+     "CmdOrCtrl+E"
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "fmt.link",
+     "Insert link…",
+     "CmdOrCtrl+K"
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "fmt.clear",
+     "Clear formatting",
+     null
+    ],
+    [
+     "MenuItem",
+     "para.h1",
+     "Heading 1",
+     "CmdOrCtrl+Alt+1"
+    ],
+    [
+     "MenuItem",
+     "para.h2",
+     "Heading 2",
+     "CmdOrCtrl+Alt+2"
+    ],
+    [
+     "MenuItem",
+     "para.h3",
+     "Heading 3",
+     "CmdOrCtrl+Alt+3"
+    ],
+    [
+     "MenuItem",
+     "para.h4",
+     "Heading 4",
+     "CmdOrCtrl+Alt+4"
+    ],
+    [
+     "MenuItem",
+     "para.h5",
+     "Heading 5",
+     "CmdOrCtrl+Alt+5"
+    ],
+    [
+     "MenuItem",
+     "para.h6",
+     "Heading 6",
+     "CmdOrCtrl+Alt+6"
+    ],
+    [
+     "MenuItem",
+     "para.paragraph",
+     "Paragraph",
+     "CmdOrCtrl+Alt+0"
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "para.bullet",
+     "Bullet list",
+     "CmdOrCtrl+Shift+8"
+    ],
+    [
+     "MenuItem",
+     "para.numbered",
+     "Numbered list",
+     "CmdOrCtrl+Shift+7"
+    ],
+    [
+     "MenuItem",
+     "para.task",
+     "Task list",
+     "CmdOrCtrl+Shift+Enter"
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "para.blockquote",
+     "Blockquote",
+     "CmdOrCtrl+Shift+."
+    ],
+    [
+     "MenuItem",
+     "para.codeblock",
+     "Code block",
+     null
+    ],
+    [
+     "MenuItem",
+     "ins.link",
+     "Link…",
+     "CmdOrCtrl+K"
+    ],
+    [
+     "MenuItem",
+     "ins.table",
+     "Table",
+     null
+    ],
+    [
+     "MenuItem",
+     "ins.hr",
+     "Horizontal rule",
+     null
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "ins.date",
+     "Current date",
+     null
+    ],
+    [
+     "MenuItem",
+     "ins.time",
+     "Current time",
+     null
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "select-all",
+     "Select all",
+     null
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "open-link",
+     "Open link",
+     null
+    ],
+    [
+     "MenuItem",
+     "copy-link",
+     "Copy link",
+     null
+    ],
+    [
+     "Submenu",
+     null,
+     "Format",
+     null
+    ],
+    [
+     "Submenu",
+     null,
+     "Paragraph",
+     null
+    ],
+    [
+     "Submenu",
+     null,
+     "Insert",
+     null
+    ],
+    [
+     "Menu",
+     null,
+     null,
+     null
+    ]
+   ]
+  },
+  "autolink": {
+   "doc": "a <https://e.com> b",
+   "pos": 5,
+   "items": [
+    [
+     "MenuItem",
+     "cut",
+     "Cut",
+     null
+    ],
+    [
+     "MenuItem",
+     "copy",
+     "Copy",
+     null
+    ],
+    [
+     "MenuItem",
+     "paste",
+     "Paste",
+     null
+    ],
+    [
+     "MenuItem",
+     "paste-plain",
+     "Paste as plain text",
+     null
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "fmt.bold",
+     "Bold",
+     "CmdOrCtrl+B"
+    ],
+    [
+     "MenuItem",
+     "fmt.italic",
+     "Italic",
+     "CmdOrCtrl+I"
+    ],
+    [
+     "MenuItem",
+     "fmt.strikethrough",
+     "Strikethrough",
+     "CmdOrCtrl+Shift+X"
+    ],
+    [
+     "MenuItem",
+     "fmt.code",
+     "Inline code",
+     "CmdOrCtrl+E"
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "fmt.link",
+     "Insert link…",
+     "CmdOrCtrl+K"
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "fmt.clear",
+     "Clear formatting",
+     null
+    ],
+    [
+     "MenuItem",
+     "para.h1",
+     "Heading 1",
+     "CmdOrCtrl+Alt+1"
+    ],
+    [
+     "MenuItem",
+     "para.h2",
+     "Heading 2",
+     "CmdOrCtrl+Alt+2"
+    ],
+    [
+     "MenuItem",
+     "para.h3",
+     "Heading 3",
+     "CmdOrCtrl+Alt+3"
+    ],
+    [
+     "MenuItem",
+     "para.h4",
+     "Heading 4",
+     "CmdOrCtrl+Alt+4"
+    ],
+    [
+     "MenuItem",
+     "para.h5",
+     "Heading 5",
+     "CmdOrCtrl+Alt+5"
+    ],
+    [
+     "MenuItem",
+     "para.h6",
+     "Heading 6",
+     "CmdOrCtrl+Alt+6"
+    ],
+    [
+     "MenuItem",
+     "para.paragraph",
+     "Paragraph",
+     "CmdOrCtrl+Alt+0"
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "para.bullet",
+     "Bullet list",
+     "CmdOrCtrl+Shift+8"
+    ],
+    [
+     "MenuItem",
+     "para.numbered",
+     "Numbered list",
+     "CmdOrCtrl+Shift+7"
+    ],
+    [
+     "MenuItem",
+     "para.task",
+     "Task list",
+     "CmdOrCtrl+Shift+Enter"
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "para.blockquote",
+     "Blockquote",
+     "CmdOrCtrl+Shift+."
+    ],
+    [
+     "MenuItem",
+     "para.codeblock",
+     "Code block",
+     null
+    ],
+    [
+     "MenuItem",
+     "ins.link",
+     "Link…",
+     "CmdOrCtrl+K"
+    ],
+    [
+     "MenuItem",
+     "ins.table",
+     "Table",
+     null
+    ],
+    [
+     "MenuItem",
+     "ins.hr",
+     "Horizontal rule",
+     null
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "ins.date",
+     "Current date",
+     null
+    ],
+    [
+     "MenuItem",
+     "ins.time",
+     "Current time",
+     null
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "select-all",
+     "Select all",
+     null
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "open-link",
+     "Open link",
+     null
+    ],
+    [
+     "MenuItem",
+     "copy-link",
+     "Copy link",
+     null
+    ],
+    [
+     "Submenu",
+     null,
+     "Format",
+     null
+    ],
+    [
+     "Submenu",
+     null,
+     "Paragraph",
+     null
+    ],
+    [
+     "Submenu",
+     null,
+     "Insert",
+     null
+    ],
+    [
+     "Menu",
+     null,
+     null,
+     null
+    ]
+   ]
+  },
+  "wiki": {
+   "doc": "a [[Note]] b",
+   "pos": 5,
+   "items": [
+    [
+     "MenuItem",
+     "cut",
+     "Cut",
+     null
+    ],
+    [
+     "MenuItem",
+     "copy",
+     "Copy",
+     null
+    ],
+    [
+     "MenuItem",
+     "paste",
+     "Paste",
+     null
+    ],
+    [
+     "MenuItem",
+     "paste-plain",
+     "Paste as plain text",
+     null
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "fmt.bold",
+     "Bold",
+     "CmdOrCtrl+B"
+    ],
+    [
+     "MenuItem",
+     "fmt.italic",
+     "Italic",
+     "CmdOrCtrl+I"
+    ],
+    [
+     "MenuItem",
+     "fmt.strikethrough",
+     "Strikethrough",
+     "CmdOrCtrl+Shift+X"
+    ],
+    [
+     "MenuItem",
+     "fmt.code",
+     "Inline code",
+     "CmdOrCtrl+E"
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "fmt.link",
+     "Insert link…",
+     "CmdOrCtrl+K"
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "fmt.clear",
+     "Clear formatting",
+     null
+    ],
+    [
+     "MenuItem",
+     "para.h1",
+     "Heading 1",
+     "CmdOrCtrl+Alt+1"
+    ],
+    [
+     "MenuItem",
+     "para.h2",
+     "Heading 2",
+     "CmdOrCtrl+Alt+2"
+    ],
+    [
+     "MenuItem",
+     "para.h3",
+     "Heading 3",
+     "CmdOrCtrl+Alt+3"
+    ],
+    [
+     "MenuItem",
+     "para.h4",
+     "Heading 4",
+     "CmdOrCtrl+Alt+4"
+    ],
+    [
+     "MenuItem",
+     "para.h5",
+     "Heading 5",
+     "CmdOrCtrl+Alt+5"
+    ],
+    [
+     "MenuItem",
+     "para.h6",
+     "Heading 6",
+     "CmdOrCtrl+Alt+6"
+    ],
+    [
+     "MenuItem",
+     "para.paragraph",
+     "Paragraph",
+     "CmdOrCtrl+Alt+0"
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "para.bullet",
+     "Bullet list",
+     "CmdOrCtrl+Shift+8"
+    ],
+    [
+     "MenuItem",
+     "para.numbered",
+     "Numbered list",
+     "CmdOrCtrl+Shift+7"
+    ],
+    [
+     "MenuItem",
+     "para.task",
+     "Task list",
+     "CmdOrCtrl+Shift+Enter"
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "para.blockquote",
+     "Blockquote",
+     "CmdOrCtrl+Shift+."
+    ],
+    [
+     "MenuItem",
+     "para.codeblock",
+     "Code block",
+     null
+    ],
+    [
+     "MenuItem",
+     "ins.link",
+     "Link…",
+     "CmdOrCtrl+K"
+    ],
+    [
+     "MenuItem",
+     "ins.table",
+     "Table",
+     null
+    ],
+    [
+     "MenuItem",
+     "ins.hr",
+     "Horizontal rule",
+     null
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "ins.date",
+     "Current date",
+     null
+    ],
+    [
+     "MenuItem",
+     "ins.time",
+     "Current time",
+     null
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "select-all",
+     "Select all",
+     null
+    ],
+    [
+     "Submenu",
+     null,
+     "Format",
+     null
+    ],
+    [
+     "Submenu",
+     null,
+     "Paragraph",
+     null
+    ],
+    [
+     "Submenu",
+     null,
+     "Insert",
+     null
+    ],
+    [
+     "Menu",
+     null,
+     null,
+     null
+    ]
+   ]
+  },
+  "link-edge": {
+   "doc": "[a](u)[b](v)",
+   "pos": 6,
+   "items": [
+    [
+     "MenuItem",
+     "cut",
+     "Cut",
+     null
+    ],
+    [
+     "MenuItem",
+     "copy",
+     "Copy",
+     null
+    ],
+    [
+     "MenuItem",
+     "paste",
+     "Paste",
+     null
+    ],
+    [
+     "MenuItem",
+     "paste-plain",
+     "Paste as plain text",
+     null
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "fmt.bold",
+     "Bold",
+     "CmdOrCtrl+B"
+    ],
+    [
+     "MenuItem",
+     "fmt.italic",
+     "Italic",
+     "CmdOrCtrl+I"
+    ],
+    [
+     "MenuItem",
+     "fmt.strikethrough",
+     "Strikethrough",
+     "CmdOrCtrl+Shift+X"
+    ],
+    [
+     "MenuItem",
+     "fmt.code",
+     "Inline code",
+     "CmdOrCtrl+E"
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "fmt.link",
+     "Insert link…",
+     "CmdOrCtrl+K"
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "fmt.clear",
+     "Clear formatting",
+     null
+    ],
+    [
+     "MenuItem",
+     "para.h1",
+     "Heading 1",
+     "CmdOrCtrl+Alt+1"
+    ],
+    [
+     "MenuItem",
+     "para.h2",
+     "Heading 2",
+     "CmdOrCtrl+Alt+2"
+    ],
+    [
+     "MenuItem",
+     "para.h3",
+     "Heading 3",
+     "CmdOrCtrl+Alt+3"
+    ],
+    [
+     "MenuItem",
+     "para.h4",
+     "Heading 4",
+     "CmdOrCtrl+Alt+4"
+    ],
+    [
+     "MenuItem",
+     "para.h5",
+     "Heading 5",
+     "CmdOrCtrl+Alt+5"
+    ],
+    [
+     "MenuItem",
+     "para.h6",
+     "Heading 6",
+     "CmdOrCtrl+Alt+6"
+    ],
+    [
+     "MenuItem",
+     "para.paragraph",
+     "Paragraph",
+     "CmdOrCtrl+Alt+0"
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "para.bullet",
+     "Bullet list",
+     "CmdOrCtrl+Shift+8"
+    ],
+    [
+     "MenuItem",
+     "para.numbered",
+     "Numbered list",
+     "CmdOrCtrl+Shift+7"
+    ],
+    [
+     "MenuItem",
+     "para.task",
+     "Task list",
+     "CmdOrCtrl+Shift+Enter"
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "para.blockquote",
+     "Blockquote",
+     "CmdOrCtrl+Shift+."
+    ],
+    [
+     "MenuItem",
+     "para.codeblock",
+     "Code block",
+     null
+    ],
+    [
+     "MenuItem",
+     "ins.link",
+     "Link…",
+     "CmdOrCtrl+K"
+    ],
+    [
+     "MenuItem",
+     "ins.table",
+     "Table",
+     null
+    ],
+    [
+     "MenuItem",
+     "ins.hr",
+     "Horizontal rule",
+     null
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "ins.date",
+     "Current date",
+     null
+    ],
+    [
+     "MenuItem",
+     "ins.time",
+     "Current time",
+     null
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "select-all",
+     "Select all",
+     null
+    ],
+    [
+     "Predefined",
+     "Separator",
+     null,
+     null
+    ],
+    [
+     "MenuItem",
+     "open-link",
+     "Open link",
+     null
+    ],
+    [
+     "MenuItem",
+     "copy-link",
+     "Copy link",
+     null
+    ],
+    [
+     "Submenu",
+     null,
+     "Format",
+     null
+    ],
+    [
+     "Submenu",
+     null,
+     "Paragraph",
+     null
+    ],
+    [
+     "Submenu",
+     null,
+     "Insert",
+     null
+    ],
+    [
+     "Menu",
+     null,
+     null,
+     null
+    ]
+   ]
+  }
+ },
+ "actions": [
+  {
+   "doc": "hello **bold** and *it* ~~s~~ `c`",
+   "anchor": 0,
+   "head": 33,
+   "pos": 3,
+   "item": "fmt.clear",
+   "fired": "ok",
+   "before": {
+    "doc": "hello **bold** and *it* ~~s~~ `c`",
+    "anchor": 0,
+    "head": 33
+   },
+   "after": {
+    "doc": "hello bold and it s c",
+    "anchor": 0,
+    "head": 21
+   },
+   "clipboard": null
+  },
+  {
+   "doc": "hello world",
+   "anchor": 6,
+   "head": 11,
+   "pos": 7,
+   "item": "fmt.bold",
+   "fired": "ok",
+   "before": {
+    "doc": "hello world",
+    "anchor": 6,
+    "head": 11
+   },
+   "after": {
+    "doc": "hello **world**",
+    "anchor": 8,
+    "head": 13
+   },
+   "clipboard": null
+  },
+  {
+   "doc": "hello world",
+   "anchor": 3,
+   "head": 3,
+   "pos": 3,
+   "item": "fmt.italic",
+   "fired": "ok",
+   "before": {
+    "doc": "hello world",
+    "anchor": 3,
+    "head": 3
+   },
+   "after": {
+    "doc": "*hello* world",
+    "anchor": 1,
+    "head": 6
+   },
+   "clipboard": null
+  },
+  {
+   "doc": "hello world",
+   "anchor": 0,
+   "head": 5,
+   "pos": 3,
+   "item": "fmt.strikethrough",
+   "fired": "ok",
+   "before": {
+    "doc": "hello world",
+    "anchor": 0,
+    "head": 5
+   },
+   "after": {
+    "doc": "~~hello~~ world",
+    "anchor": 2,
+    "head": 7
+   },
+   "clipboard": null
+  },
+  {
+   "doc": "hello world",
+   "anchor": 0,
+   "head": 5,
+   "pos": 3,
+   "item": "fmt.code",
+   "fired": "ok",
+   "before": {
+    "doc": "hello world",
+    "anchor": 0,
+    "head": 5
+   },
+   "after": {
+    "doc": "`hello` world",
+    "anchor": 1,
+    "head": 6
+   },
+   "clipboard": null
+  },
+  {
+   "doc": "hello world",
+   "anchor": 0,
+   "head": 5,
+   "pos": 3,
+   "item": "fmt.link",
+   "fired": "ok",
+   "before": {
+    "doc": "hello world",
+    "anchor": 0,
+    "head": 5
+   },
+   "after": {
+    "doc": "[hello](url) world",
+    "anchor": 8,
+    "head": 11
+   },
+   "clipboard": null
+  },
+  {
+   "doc": "hello world",
+   "anchor": 2,
+   "head": 2,
+   "pos": 3,
+   "item": "para.h2",
+   "fired": "threw: Position 14 is out of range for changeset of length 11",
+   "before": {
+    "doc": "hello world",
+    "anchor": 2,
+    "head": 2
+   },
+   "after": {
+    "doc": "hello world",
+    "anchor": 2,
+    "head": 2
+   },
+   "clipboard": null
+  },
+  {
+   "doc": "## hello",
+   "anchor": 5,
+   "head": 5,
+   "pos": 3,
+   "item": "para.paragraph",
+   "fired": "ok",
+   "before": {
+    "doc": "## hello",
+    "anchor": 5,
+    "head": 5
+   },
+   "after": {
+    "doc": "hello",
+    "anchor": 0,
+    "head": 5
+   },
+   "clipboard": null
+  },
+  {
+   "doc": "a\nb\nc",
+   "anchor": 0,
+   "head": 5,
+   "pos": 1,
+   "item": "para.bullet",
+   "fired": "ok",
+   "before": {
+    "doc": "a\nb\nc",
+    "anchor": 0,
+    "head": 5
+   },
+   "after": {
+    "doc": "- a\n- b\n- c",
+    "anchor": 0,
+    "head": 11
+   },
+   "clipboard": null
+  },
+  {
+   "doc": "a\nb\nc",
+   "anchor": 0,
+   "head": 5,
+   "pos": 1,
+   "item": "para.numbered",
+   "fired": "ok",
+   "before": {
+    "doc": "a\nb\nc",
+    "anchor": 0,
+    "head": 5
+   },
+   "after": {
+    "doc": "1. a\n2. b\n3. c",
+    "anchor": 0,
+    "head": 14
+   },
+   "clipboard": null
+  },
+  {
+   "doc": "a\nb",
+   "anchor": 0,
+   "head": 3,
+   "pos": 1,
+   "item": "para.task",
+   "fired": "ok",
+   "before": {
+    "doc": "a\nb",
+    "anchor": 0,
+    "head": 3
+   },
+   "after": {
+    "doc": "- [ ] a\n- [ ] b",
+    "anchor": 0,
+    "head": 15
+   },
+   "clipboard": null
+  },
+  {
+   "doc": "a\nb",
+   "anchor": 0,
+   "head": 3,
+   "pos": 1,
+   "item": "para.blockquote",
+   "fired": "ok",
+   "before": {
+    "doc": "a\nb",
+    "anchor": 0,
+    "head": 3
+   },
+   "after": {
+    "doc": "> a\n> b",
+    "anchor": 0,
+    "head": 7
+   },
+   "clipboard": null
+  },
+  {
+   "doc": "a\nb",
+   "anchor": 0,
+   "head": 3,
+   "pos": 1,
+   "item": "para.codeblock",
+   "fired": "ok",
+   "before": {
+    "doc": "a\nb",
+    "anchor": 0,
+    "head": 3
+   },
+   "after": {
+    "doc": "```\na\nb\n```",
+    "anchor": 0,
+    "head": 11
+   },
+   "clipboard": null
+  },
+  {
+   "doc": "```\na\n```",
+   "anchor": 0,
+   "head": 9,
+   "pos": 1,
+   "item": "para.codeblock",
+   "fired": "ok",
+   "before": {
+    "doc": "```\na\n```",
+    "anchor": 0,
+    "head": 9
+   },
+   "after": {
+    "doc": "a",
+    "anchor": 0,
+    "head": 1
+   },
+   "clipboard": null
+  },
+  {
+   "doc": "text",
+   "anchor": 4,
+   "head": 4,
+   "pos": 1,
+   "item": "ins.table",
+   "fired": "ok",
+   "before": {
+    "doc": "text",
+    "anchor": 4,
+    "head": 4
+   },
+   "after": {
+    "doc": "text| Column 1 | Column 2 | Column 3 |\n| --- | --- | --- |\n|  |  |  |",
+    "anchor": 61,
+    "head": 61
+   },
+   "clipboard": null
+  },
+  {
+   "doc": "text",
+   "anchor": 4,
+   "head": 4,
+   "pos": 1,
+   "item": "ins.hr",
+   "fired": "ok",
+   "before": {
+    "doc": "text",
+    "anchor": 4,
+    "head": 4
+   },
+   "after": {
+    "doc": "text\n---\n",
+    "anchor": 4,
+    "head": 4
+   },
+   "clipboard": null
+  },
+  {
+   "doc": "",
+   "anchor": 0,
+   "head": 0,
+   "pos": 0,
+   "item": "ins.hr",
+   "fired": "ok",
+   "before": {
+    "doc": "",
+    "anchor": 0,
+    "head": 0
+   },
+   "after": {
+    "doc": "---\n",
+    "anchor": 0,
+    "head": 0
+   },
+   "clipboard": null
+  },
+  {
+   "doc": "hello world",
+   "anchor": 0,
+   "head": 5,
+   "pos": 3,
+   "item": "cut",
+   "fired": "ok",
+   "before": {
+    "doc": "hello world",
+    "anchor": 0,
+    "head": 5
+   },
+   "after": {
+    "doc": " world",
+    "anchor": 0,
+    "head": 0
+   },
+   "clipboard": null
+  },
+  {
+   "doc": "hello world",
+   "anchor": 2,
+   "head": 2,
+   "pos": 3,
+   "item": "select-all",
+   "fired": "ok",
+   "before": {
+    "doc": "hello world",
+    "anchor": 2,
+    "head": 2
+   },
+   "after": {
+    "doc": "hello world",
+    "anchor": 0,
+    "head": 11
+   },
+   "clipboard": null
+  }
+ ]
+}

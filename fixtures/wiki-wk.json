@@ -1,0 +1,1456 @@
+[
+ {
+  "name": "single-char",
+  "doc": "x\n",
+  "caret": 2,
+  "typing": [
+   [
+    "[[m",
+    true
+   ]
+  ],
+  "keys": [],
+  "steps": [
+   {
+    "op": "type:[[m",
+    "doc": "x\n[[m",
+    "head": 5,
+    "options": [
+     {
+      "label": "<span class=\"cm-completionMatchedText\">M</span>aster notes",
+      "detail": null,
+      "selected": true
+     },
+     {
+      "label": "<span class=\"cm-completionMatchedText\">M</span>aster plan",
+      "detail": null,
+      "selected": false
+     }
+    ]
+   }
+  ],
+  "queries": [
+   "m"
+  ],
+  "results": {
+   "m": [
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Groceries.md",
+     "match_indices": [],
+     "filename": "Groceries.md",
+     "relative_path": "Groceries.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Master notes.md",
+     "match_indices": [],
+     "filename": "Master notes.md",
+     "relative_path": "Master notes.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Master plan.md",
+     "match_indices": [],
+     "filename": "Master plan.md",
+     "relative_path": "Master plan.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Journal.md",
+     "match_indices": [],
+     "filename": "Journal.md",
+     "relative_path": "Journal.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/__oracle.md",
+     "match_indices": [],
+     "filename": "__oracle.md",
+     "relative_path": "__oracle.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Project Alpha.md",
+     "match_indices": [],
+     "filename": "Project Alpha.md",
+     "relative_path": "Project Alpha.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Weekly sync.md",
+     "match_indices": [],
+     "filename": "Weekly sync.md",
+     "relative_path": "Weekly sync.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Notes.md",
+     "match_indices": [],
+     "filename": "Notes.md",
+     "relative_path": "Notes.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Formatting.md",
+     "match_indices": [],
+     "filename": "Formatting.md",
+     "relative_path": "Formatting.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Top ideas.md",
+     "match_indices": [],
+     "filename": "Top ideas.md",
+     "relative_path": "Top ideas.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/📓 Reading log.md",
+     "match_indices": [],
+     "filename": "📓 Reading log.md",
+     "relative_path": "📓 Reading log.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Archive/Old ideas.md",
+     "match_indices": [],
+     "filename": "Old ideas.md",
+     "relative_path": "Archive/Old ideas.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Archive/2023 review.md",
+     "match_indices": [],
+     "filename": "2023 review.md",
+     "relative_path": "Archive/2023 review.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Growth/Growth experiments.md",
+     "match_indices": [],
+     "filename": "Growth experiments.md",
+     "relative_path": "Growth/Growth experiments.md",
+     "score": 1
+    }
+   ]
+  }
+ },
+ {
+  "name": "slow-no",
+  "doc": "x\n",
+  "caret": 2,
+  "typing": [
+   [
+    "[[n",
+    true
+   ],
+   [
+    "o",
+    true
+   ],
+   [
+    "t",
+    true
+   ]
+  ],
+  "keys": [],
+  "steps": [
+   {
+    "op": "type:[[n",
+    "doc": "x\n[[n",
+    "head": 5,
+    "options": [
+     {
+      "label": "<span class=\"cm-completionMatchedText\">N</span>otes",
+      "detail": null,
+      "selected": true
+     }
+    ]
+   },
+   {
+    "op": "type:o",
+    "doc": "x\n[[no",
+    "head": 6,
+    "options": [
+     {
+      "label": "<span class=\"cm-completionMatchedText\">No</span>tes",
+      "detail": null,
+      "selected": true
+     },
+     {
+      "label": "Master <span class=\"cm-completionMatchedText\">no</span>tes",
+      "detail": null,
+      "selected": false
+     }
+    ]
+   },
+   {
+    "op": "type:t",
+    "doc": "x\n[[not",
+    "head": 7,
+    "options": [
+     {
+      "label": "<span class=\"cm-completionMatchedText\">Not</span>es",
+      "detail": null,
+      "selected": true
+     },
+     {
+      "label": "Master <span class=\"cm-completionMatchedText\">not</span>es",
+      "detail": null,
+      "selected": false
+     }
+    ]
+   }
+  ],
+  "queries": [
+   "n"
+  ],
+  "results": {
+   "n": [
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Master notes.md",
+     "match_indices": [],
+     "filename": "Master notes.md",
+     "relative_path": "Master notes.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Master plan.md",
+     "match_indices": [],
+     "filename": "Master plan.md",
+     "relative_path": "Master plan.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Journal.md",
+     "match_indices": [],
+     "filename": "Journal.md",
+     "relative_path": "Journal.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Weekly sync.md",
+     "match_indices": [],
+     "filename": "Weekly sync.md",
+     "relative_path": "Weekly sync.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Notes.md",
+     "match_indices": [],
+     "filename": "Notes.md",
+     "relative_path": "Notes.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Formatting.md",
+     "match_indices": [],
+     "filename": "Formatting.md",
+     "relative_path": "Formatting.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/📓 Reading log.md",
+     "match_indices": [],
+     "filename": "📓 Reading log.md",
+     "relative_path": "📓 Reading log.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Growth/Growth experiments.md",
+     "match_indices": [],
+     "filename": "Growth experiments.md",
+     "relative_path": "Growth/Growth experiments.md",
+     "score": 1
+    }
+   ]
+  }
+ },
+ {
+  "name": "fast-not",
+  "doc": "x\n",
+  "caret": 2,
+  "typing": [
+   [
+    "[[not",
+    false
+   ]
+  ],
+  "keys": [],
+  "steps": [
+   {
+    "op": "type:[[not",
+    "doc": "x\n[[not",
+    "head": 7,
+    "options": [
+     {
+      "label": "<span class=\"cm-completionMatchedText\">Not</span>es",
+      "detail": null,
+      "selected": true
+     },
+     {
+      "label": "Master <span class=\"cm-completionMatchedText\">not</span>es",
+      "detail": null,
+      "selected": false
+     }
+    ]
+   }
+  ],
+  "queries": [
+   "not"
+  ],
+  "results": {
+   "not": [
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Master notes.md",
+     "match_indices": [],
+     "filename": "Master notes.md",
+     "relative_path": "Master notes.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Notes.md",
+     "match_indices": [],
+     "filename": "Notes.md",
+     "relative_path": "Notes.md",
+     "score": 1
+    }
+   ]
+  }
+ },
+ {
+  "name": "fast-master",
+  "doc": "",
+  "caret": 0,
+  "typing": [
+   [
+    "[[master",
+    false
+   ]
+  ],
+  "keys": [
+   "ArrowDown",
+   "Enter"
+  ],
+  "steps": [
+   {
+    "op": "type:[[master",
+    "doc": "[[master",
+    "head": 8,
+    "options": [
+     {
+      "label": "<span class=\"cm-completionMatchedText\">Master</span> plan",
+      "detail": null,
+      "selected": true
+     },
+     {
+      "label": "<span class=\"cm-completionMatchedText\">Master</span> notes",
+      "detail": null,
+      "selected": false
+     }
+    ]
+   },
+   {
+    "op": "key:ArrowDown",
+    "doc": "[[master",
+    "head": 8,
+    "options": [
+     {
+      "label": "<span class=\"cm-completionMatchedText\">Master</span> plan",
+      "detail": null,
+      "selected": false
+     },
+     {
+      "label": "<span class=\"cm-completionMatchedText\">Master</span> notes",
+      "detail": null,
+      "selected": true
+     }
+    ]
+   },
+   {
+    "op": "key:Enter",
+    "doc": "[[Master notes]]",
+    "head": 16,
+    "options": null
+   }
+  ],
+  "queries": [
+   "master"
+  ],
+  "results": {
+   "master": [
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Master notes.md",
+     "match_indices": [],
+     "filename": "Master notes.md",
+     "relative_path": "Master notes.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Master plan.md",
+     "match_indices": [],
+     "filename": "Master plan.md",
+     "relative_path": "Master plan.md",
+     "score": 1
+    }
+   ]
+  }
+ },
+ {
+  "name": "accept-first",
+  "doc": "",
+  "caret": 0,
+  "typing": [
+   [
+    "[[top",
+    false
+   ]
+  ],
+  "keys": [
+   "Enter"
+  ],
+  "steps": [
+   {
+    "op": "type:[[top",
+    "doc": "[[top",
+    "head": 5,
+    "options": [
+     {
+      "label": "<span class=\"cm-completionMatchedText\">Top</span> ideas",
+      "detail": null,
+      "selected": true
+     }
+    ]
+   },
+   {
+    "op": "key:Enter",
+    "doc": "[[Top ideas]]",
+    "head": 13,
+    "options": null
+   }
+  ],
+  "queries": [
+   "top"
+  ],
+  "results": {
+   "top": [
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Top ideas.md",
+     "match_indices": [],
+     "filename": "Top ideas.md",
+     "relative_path": "Top ideas.md",
+     "score": 1
+    }
+   ]
+  }
+ },
+ {
+  "name": "consume-close",
+  "doc": "a [[]] b",
+  "caret": 4,
+  "typing": [
+   [
+    "to",
+    false
+   ]
+  ],
+  "keys": [
+   "Enter"
+  ],
+  "steps": [
+   {
+    "op": "type:to",
+    "doc": "a [[to]] b",
+    "head": 6,
+    "options": [
+     {
+      "label": "<span class=\"cm-completionMatchedText\">To</span>p ideas",
+      "detail": null,
+      "selected": true
+     }
+    ]
+   },
+   {
+    "op": "key:Enter",
+    "doc": "a [[Top ideas]] b",
+    "head": 15,
+    "options": null
+   }
+  ],
+  "queries": [
+   "to"
+  ],
+  "results": {
+   "to": [
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Top ideas.md",
+     "match_indices": [],
+     "filename": "Top ideas.md",
+     "relative_path": "Top ideas.md",
+     "score": 1
+    }
+   ]
+  }
+ },
+ {
+  "name": "ambiguous",
+  "doc": "",
+  "caret": 0,
+  "typing": [
+   [
+    "[[master note",
+    false
+   ]
+  ],
+  "keys": [
+   "Enter"
+  ],
+  "steps": [
+   {
+    "op": "type:[[master note",
+    "doc": "[[master note",
+    "head": 13,
+    "options": [
+     {
+      "label": "<span class=\"cm-completionMatchedText\">Master note</span>s",
+      "detail": null,
+      "selected": true
+     }
+    ]
+   },
+   {
+    "op": "key:Enter",
+    "doc": "[[Master notes]]",
+    "head": 16,
+    "options": null
+   }
+  ],
+  "queries": [
+   "master note"
+  ],
+  "results": {
+   "master note": [
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Master notes.md",
+     "match_indices": [],
+     "filename": "Master notes.md",
+     "relative_path": "Master notes.md",
+     "score": 1
+    }
+   ]
+  }
+ },
+ {
+  "name": "ambiguous-2",
+  "doc": "",
+  "caret": 0,
+  "typing": [
+   [
+    "[[master note",
+    false
+   ]
+  ],
+  "keys": [
+   "ArrowDown",
+   "Enter"
+  ],
+  "steps": [
+   {
+    "op": "type:[[master note",
+    "doc": "[[master note",
+    "head": 13,
+    "options": [
+     {
+      "label": "<span class=\"cm-completionMatchedText\">Master note</span>s",
+      "detail": null,
+      "selected": true
+     }
+    ]
+   },
+   {
+    "op": "key:ArrowDown",
+    "doc": "[[master note",
+    "head": 13,
+    "options": [
+     {
+      "label": "<span class=\"cm-completionMatchedText\">Master note</span>s",
+      "detail": null,
+      "selected": true
+     }
+    ]
+   },
+   {
+    "op": "key:Enter",
+    "doc": "[[Master notes]]",
+    "head": 16,
+    "options": null
+   }
+  ],
+  "queries": [
+   "master note"
+  ],
+  "results": {
+   "master note": [
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Master notes.md",
+     "match_indices": [],
+     "filename": "Master notes.md",
+     "relative_path": "Master notes.md",
+     "score": 1
+    }
+   ]
+  }
+ },
+ {
+  "name": "dir-detail",
+  "doc": "",
+  "caret": 0,
+  "typing": [
+   [
+    "[[growth",
+    false
+   ]
+  ],
+  "keys": [],
+  "steps": [
+   {
+    "op": "type:[[growth",
+    "doc": "[[growth",
+    "head": 8,
+    "options": [
+     {
+      "label": "<span class=\"cm-completionMatchedText\">Growth</span> experiments",
+      "detail": "Growth",
+      "selected": true
+     }
+    ]
+   }
+  ],
+  "queries": [
+   "growth"
+  ],
+  "results": {
+   "growth": [
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Growth/Growth experiments.md",
+     "match_indices": [],
+     "filename": "Growth experiments.md",
+     "relative_path": "Growth/Growth experiments.md",
+     "score": 1
+    }
+   ]
+  }
+ },
+ {
+  "name": "wrap-up",
+  "doc": "",
+  "caret": 0,
+  "typing": [
+   [
+    "[[e",
+    false
+   ]
+  ],
+  "keys": [
+   "ArrowUp"
+  ],
+  "steps": [
+   {
+    "op": "type:[[e",
+    "doc": "[[e",
+    "head": 3,
+    "options": null
+   },
+   {
+    "op": "key:ArrowUp",
+    "doc": "[[e",
+    "head": 0,
+    "options": null
+   }
+  ],
+  "queries": [
+   "e"
+  ],
+  "results": {
+   "e": [
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Groceries.md",
+     "match_indices": [],
+     "filename": "Groceries.md",
+     "relative_path": "Groceries.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Master notes.md",
+     "match_indices": [],
+     "filename": "Master notes.md",
+     "relative_path": "Master notes.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Master plan.md",
+     "match_indices": [],
+     "filename": "Master plan.md",
+     "relative_path": "Master plan.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/__oracle.md",
+     "match_indices": [],
+     "filename": "__oracle.md",
+     "relative_path": "__oracle.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Project Alpha.md",
+     "match_indices": [],
+     "filename": "Project Alpha.md",
+     "relative_path": "Project Alpha.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Weekly sync.md",
+     "match_indices": [],
+     "filename": "Weekly sync.md",
+     "relative_path": "Weekly sync.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Notes.md",
+     "match_indices": [],
+     "filename": "Notes.md",
+     "relative_path": "Notes.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Top ideas.md",
+     "match_indices": [],
+     "filename": "Top ideas.md",
+     "relative_path": "Top ideas.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/📓 Reading log.md",
+     "match_indices": [],
+     "filename": "📓 Reading log.md",
+     "relative_path": "📓 Reading log.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Archive/Old ideas.md",
+     "match_indices": [],
+     "filename": "Old ideas.md",
+     "relative_path": "Archive/Old ideas.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Archive/2023 review.md",
+     "match_indices": [],
+     "filename": "2023 review.md",
+     "relative_path": "Archive/2023 review.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Growth/Growth experiments.md",
+     "match_indices": [],
+     "filename": "Growth experiments.md",
+     "relative_path": "Growth/Growth experiments.md",
+     "score": 1
+    }
+   ]
+  }
+ },
+ {
+  "name": "escape",
+  "doc": "",
+  "caret": 0,
+  "typing": [
+   [
+    "[[top",
+    false
+   ]
+  ],
+  "keys": [
+   "Escape"
+  ],
+  "steps": [
+   {
+    "op": "type:[[top",
+    "doc": "[[top",
+    "head": 5,
+    "options": [
+     {
+      "label": "<span class=\"cm-completionMatchedText\">Top</span> ideas",
+      "detail": null,
+      "selected": true
+     }
+    ]
+   },
+   {
+    "op": "key:Escape",
+    "doc": "[[top",
+    "head": 5,
+    "options": null
+   }
+  ],
+  "queries": [
+   "top"
+  ],
+  "results": {
+   "top": [
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Top ideas.md",
+     "match_indices": [],
+     "filename": "Top ideas.md",
+     "relative_path": "Top ideas.md",
+     "score": 1
+    }
+   ]
+  }
+ },
+ {
+  "name": "space-only",
+  "doc": "",
+  "caret": 0,
+  "typing": [
+   [
+    "[[ ",
+    false
+   ]
+  ],
+  "keys": [],
+  "steps": [
+   {
+    "op": "type:[[ ",
+    "doc": "[[ ",
+    "head": 3,
+    "options": null
+   }
+  ],
+  "queries": [],
+  "results": {}
+ },
+ {
+  "name": "hash-stops",
+  "doc": "",
+  "caret": 0,
+  "typing": [
+   [
+    "[[top#",
+    false
+   ]
+  ],
+  "keys": [],
+  "steps": [
+   {
+    "op": "type:[[top#",
+    "doc": "[[top#",
+    "head": 6,
+    "options": null
+   }
+  ],
+  "queries": [],
+  "results": {}
+ },
+ {
+  "name": "in-code",
+  "doc": "`x ",
+  "caret": 3,
+  "typing": [
+   [
+    "[[top",
+    false
+   ]
+  ],
+  "keys": [],
+  "steps": [
+   {
+    "op": "type:[[top",
+    "doc": "`x [[top",
+    "head": 8,
+    "options": [
+     {
+      "label": "<span class=\"cm-completionMatchedText\">Top</span> ideas",
+      "detail": null,
+      "selected": true
+     }
+    ]
+   }
+  ],
+  "queries": [
+   "top"
+  ],
+  "results": {
+   "top": [
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Top ideas.md",
+     "match_indices": [],
+     "filename": "Top ideas.md",
+     "relative_path": "Top ideas.md",
+     "score": 1
+    }
+   ]
+  }
+ },
+ {
+  "name": "fenced",
+  "doc": "```\n",
+  "caret": 4,
+  "typing": [
+   [
+    "[[top",
+    false
+   ]
+  ],
+  "keys": [],
+  "steps": [
+   {
+    "op": "type:[[top",
+    "doc": "```\n[[top",
+    "head": 9,
+    "options": null
+   }
+  ],
+  "queries": [],
+  "results": {}
+ },
+ {
+  "name": "upper",
+  "doc": "",
+  "caret": 0,
+  "typing": [
+   [
+    "[[TOP",
+    false
+   ]
+  ],
+  "keys": [],
+  "steps": [
+   {
+    "op": "type:[[TOP",
+    "doc": "[[TOP",
+    "head": 5,
+    "options": [
+     {
+      "label": "<span class=\"cm-completionMatchedText\">Top</span> ideas",
+      "detail": null,
+      "selected": true
+     }
+    ]
+   }
+  ],
+  "queries": [
+   "TOP"
+  ],
+  "results": {
+   "TOP": [
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Top ideas.md",
+     "match_indices": [],
+     "filename": "Top ideas.md",
+     "relative_path": "Top ideas.md",
+     "score": 1
+    }
+   ]
+  }
+ },
+ {
+  "name": "fuzzy-gap",
+  "doc": "",
+  "caret": 0,
+  "typing": [
+   [
+    "[[a",
+    true
+   ],
+   [
+    "r",
+    true
+   ],
+   [
+    "c",
+    true
+   ]
+  ],
+  "keys": [],
+  "steps": [
+   {
+    "op": "type:[[a",
+    "doc": "[[a",
+    "head": 3,
+    "options": null
+   },
+   {
+    "op": "type:r",
+    "doc": "[[ar",
+    "head": 4,
+    "options": null
+   },
+   {
+    "op": "type:c",
+    "doc": "[[arc",
+    "head": 5,
+    "options": null
+   }
+  ],
+  "queries": [
+   "a",
+   "ar",
+   "arc"
+  ],
+  "results": {
+   "a": [
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Master notes.md",
+     "match_indices": [],
+     "filename": "Master notes.md",
+     "relative_path": "Master notes.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Master plan.md",
+     "match_indices": [],
+     "filename": "Master plan.md",
+     "relative_path": "Master plan.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Journal.md",
+     "match_indices": [],
+     "filename": "Journal.md",
+     "relative_path": "Journal.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/__oracle.md",
+     "match_indices": [],
+     "filename": "__oracle.md",
+     "relative_path": "__oracle.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Project Alpha.md",
+     "match_indices": [],
+     "filename": "Project Alpha.md",
+     "relative_path": "Project Alpha.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Formatting.md",
+     "match_indices": [],
+     "filename": "Formatting.md",
+     "relative_path": "Formatting.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Top ideas.md",
+     "match_indices": [],
+     "filename": "Top ideas.md",
+     "relative_path": "Top ideas.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/📓 Reading log.md",
+     "match_indices": [],
+     "filename": "📓 Reading log.md",
+     "relative_path": "📓 Reading log.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Archive/Old ideas.md",
+     "match_indices": [],
+     "filename": "Old ideas.md",
+     "relative_path": "Archive/Old ideas.md",
+     "score": 1
+    }
+   ],
+   "ar": [],
+   "arc": []
+  }
+ },
+ {
+  "name": "slow-e-i",
+  "doc": "",
+  "caret": 0,
+  "typing": [
+   [
+    "[[e",
+    true
+   ],
+   [
+    "i",
+    true
+   ]
+  ],
+  "keys": [],
+  "steps": [
+   {
+    "op": "type:[[e",
+    "doc": "[[e",
+    "head": 3,
+    "options": null
+   },
+   {
+    "op": "type:i",
+    "doc": "[[ei",
+    "head": 4,
+    "options": null
+   }
+  ],
+  "queries": [
+   "e",
+   "ei"
+  ],
+  "results": {
+   "e": [
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Groceries.md",
+     "match_indices": [],
+     "filename": "Groceries.md",
+     "relative_path": "Groceries.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Master notes.md",
+     "match_indices": [],
+     "filename": "Master notes.md",
+     "relative_path": "Master notes.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Master plan.md",
+     "match_indices": [],
+     "filename": "Master plan.md",
+     "relative_path": "Master plan.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/__oracle.md",
+     "match_indices": [],
+     "filename": "__oracle.md",
+     "relative_path": "__oracle.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Project Alpha.md",
+     "match_indices": [],
+     "filename": "Project Alpha.md",
+     "relative_path": "Project Alpha.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Weekly sync.md",
+     "match_indices": [],
+     "filename": "Weekly sync.md",
+     "relative_path": "Weekly sync.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Notes.md",
+     "match_indices": [],
+     "filename": "Notes.md",
+     "relative_path": "Notes.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Top ideas.md",
+     "match_indices": [],
+     "filename": "Top ideas.md",
+     "relative_path": "Top ideas.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/📓 Reading log.md",
+     "match_indices": [],
+     "filename": "📓 Reading log.md",
+     "relative_path": "📓 Reading log.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Archive/Old ideas.md",
+     "match_indices": [],
+     "filename": "Old ideas.md",
+     "relative_path": "Archive/Old ideas.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Archive/2023 review.md",
+     "match_indices": [],
+     "filename": "2023 review.md",
+     "relative_path": "Archive/2023 review.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Growth/Growth experiments.md",
+     "match_indices": [],
+     "filename": "Growth experiments.md",
+     "relative_path": "Growth/Growth experiments.md",
+     "score": 1
+    }
+   ],
+   "ei": []
+  }
+ },
+ {
+  "name": "backspace",
+  "doc": "",
+  "caret": 0,
+  "typing": [
+   [
+    "[[fo",
+    false
+   ]
+  ],
+  "keys": [
+   "Backspace"
+  ],
+  "steps": [
+   {
+    "op": "type:[[fo",
+    "doc": "[[fo",
+    "head": 4,
+    "options": [
+     {
+      "label": "<span class=\"cm-completionMatchedText\">Fo</span>rmatting",
+      "detail": null,
+      "selected": true
+     }
+    ]
+   },
+   {
+    "op": "key:Backspace",
+    "doc": "[[f",
+    "head": 3,
+    "options": [
+     {
+      "label": "<span class=\"cm-completionMatchedText\">F</span>ormatting",
+      "detail": null,
+      "selected": true
+     }
+    ]
+   }
+  ],
+  "queries": [
+   "fo"
+  ],
+  "results": {
+   "fo": [
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Formatting.md",
+     "match_indices": [],
+     "filename": "Formatting.md",
+     "relative_path": "Formatting.md",
+     "score": 1
+    }
+   ]
+  }
+ },
+ {
+  "name": "backspace-all",
+  "doc": "",
+  "caret": 0,
+  "typing": [
+   [
+    "[[f",
+    false
+   ]
+  ],
+  "keys": [
+   "Backspace"
+  ],
+  "steps": [
+   {
+    "op": "type:[[f",
+    "doc": "[[f",
+    "head": 3,
+    "options": [
+     {
+      "label": "<span class=\"cm-completionMatchedText\">F</span>ormatting",
+      "detail": null,
+      "selected": true
+     }
+    ]
+   },
+   {
+    "op": "key:Backspace",
+    "doc": "[[",
+    "head": 2,
+    "options": null
+   }
+  ],
+  "queries": [
+   "f"
+  ],
+  "results": {
+   "f": [
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Formatting.md",
+     "match_indices": [],
+     "filename": "Formatting.md",
+     "relative_path": "Formatting.md",
+     "score": 1
+    }
+   ]
+  }
+ },
+ {
+  "name": "emoji",
+  "doc": "",
+  "caret": 0,
+  "typing": [
+   [
+    "[[📓",
+    false
+   ]
+  ],
+  "keys": [
+   "Enter"
+  ],
+  "steps": [
+   {
+    "op": "type:[[📓",
+    "doc": "[[📓",
+    "head": 4,
+    "options": [
+     {
+      "label": "<span class=\"cm-completionMatchedText\">📓</span> Reading log",
+      "detail": null,
+      "selected": true
+     }
+    ]
+   },
+   {
+    "op": "key:Enter",
+    "doc": "[[📓 Reading log]]",
+    "head": 18,
+    "options": null
+   }
+  ],
+  "queries": [
+   "📓"
+  ],
+  "results": {
+   "📓": [
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/📓 Reading log.md",
+     "match_indices": [],
+     "filename": "📓 Reading log.md",
+     "relative_path": "📓 Reading log.md",
+     "score": 1
+    }
+   ]
+  }
+ },
+ {
+  "name": "pageup",
+  "doc": "",
+  "caret": 0,
+  "typing": [
+   [
+    "[[a",
+    false
+   ]
+  ],
+  "keys": [
+   "PageDown",
+   "PageDown",
+   "PageUp"
+  ],
+  "steps": [
+   {
+    "op": "type:[[a",
+    "doc": "[[a",
+    "head": 3,
+    "options": null
+   },
+   {
+    "op": "key:PageDown",
+    "doc": "[[a",
+    "head": 3,
+    "options": null
+   },
+   {
+    "op": "key:PageDown",
+    "doc": "[[a",
+    "head": 3,
+    "options": null
+   },
+   {
+    "op": "key:PageUp",
+    "doc": "[[a",
+    "head": 0,
+    "options": null
+   }
+  ],
+  "queries": [
+   "a"
+  ],
+  "results": {
+   "a": [
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Master notes.md",
+     "match_indices": [],
+     "filename": "Master notes.md",
+     "relative_path": "Master notes.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Master plan.md",
+     "match_indices": [],
+     "filename": "Master plan.md",
+     "relative_path": "Master plan.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Journal.md",
+     "match_indices": [],
+     "filename": "Journal.md",
+     "relative_path": "Journal.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/__oracle.md",
+     "match_indices": [],
+     "filename": "__oracle.md",
+     "relative_path": "__oracle.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Project Alpha.md",
+     "match_indices": [],
+     "filename": "Project Alpha.md",
+     "relative_path": "Project Alpha.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Formatting.md",
+     "match_indices": [],
+     "filename": "Formatting.md",
+     "relative_path": "Formatting.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Top ideas.md",
+     "match_indices": [],
+     "filename": "Top ideas.md",
+     "relative_path": "Top ideas.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/📓 Reading log.md",
+     "match_indices": [],
+     "filename": "📓 Reading log.md",
+     "relative_path": "📓 Reading log.md",
+     "score": 1
+    },
+    {
+     "path": "/private/tmp/fsn-pub/oracle/sandbox/Sample/Archive/Old ideas.md",
+     "match_indices": [],
+     "filename": "Old ideas.md",
+     "relative_path": "Archive/Old ideas.md",
+     "score": 1
+    }
+   ]
+  }
+ }
+]

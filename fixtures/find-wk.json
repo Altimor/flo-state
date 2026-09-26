@@ -1,0 +1,2765 @@
+[
+ {
+  "name": "basic",
+  "doc": "foo bar foo\nbaz FOO\n",
+  "anchor": 0,
+  "head": 0,
+  "query": "foo",
+  "replace": "",
+  "ops": [
+   "next",
+   "next",
+   "next",
+   "next",
+   "prev",
+   "prev"
+  ],
+  "steps": [
+   {
+    "op": "open",
+    "doc": "foo bar foo\nbaz FOO\n",
+    "anchor": 0,
+    "ticks": 0,
+    "open": true,
+    "hl": [],
+    "head": 0,
+    "query": "",
+    "counter": null
+   },
+   {
+    "op": "query",
+    "doc": "foo bar foo\nbaz FOO\n",
+    "anchor": 0,
+    "ticks": 3,
+    "open": true,
+    "hl": [
+     [
+      0,
+      3,
+      0
+     ],
+     [
+      8,
+      11,
+      0
+     ],
+     [
+      16,
+      19,
+      0
+     ]
+    ],
+    "head": 0,
+    "query": "foo",
+    "counter": "1/3"
+   },
+   {
+    "op": "next",
+    "doc": "foo bar foo\nbaz FOO\n",
+    "anchor": 0,
+    "ticks": 3,
+    "open": true,
+    "hl": [
+     [
+      0,
+      3,
+      1
+     ],
+     [
+      8,
+      11,
+      0
+     ],
+     [
+      16,
+      19,
+      0
+     ]
+    ],
+    "head": 3,
+    "query": "foo",
+    "counter": "1/3"
+   },
+   {
+    "op": "next",
+    "doc": "foo bar foo\nbaz FOO\n",
+    "anchor": 8,
+    "ticks": 3,
+    "open": true,
+    "hl": [
+     [
+      0,
+      3,
+      0
+     ],
+     [
+      8,
+      11,
+      1
+     ],
+     [
+      16,
+      19,
+      0
+     ]
+    ],
+    "head": 11,
+    "query": "foo",
+    "counter": "2/3"
+   },
+   {
+    "op": "next",
+    "doc": "foo bar foo\nbaz FOO\n",
+    "anchor": 16,
+    "ticks": 3,
+    "open": true,
+    "hl": [
+     [
+      0,
+      3,
+      0
+     ],
+     [
+      8,
+      11,
+      0
+     ],
+     [
+      16,
+      19,
+      1
+     ]
+    ],
+    "head": 19,
+    "query": "foo",
+    "counter": "3/3"
+   },
+   {
+    "op": "next",
+    "doc": "foo bar foo\nbaz FOO\n",
+    "anchor": 0,
+    "ticks": 3,
+    "open": true,
+    "hl": [
+     [
+      0,
+      3,
+      1
+     ],
+     [
+      8,
+      11,
+      0
+     ],
+     [
+      16,
+      19,
+      0
+     ]
+    ],
+    "head": 3,
+    "query": "foo",
+    "counter": "1/3"
+   },
+   {
+    "op": "prev",
+    "doc": "foo bar foo\nbaz FOO\n",
+    "anchor": 16,
+    "ticks": 3,
+    "open": true,
+    "hl": [
+     [
+      0,
+      3,
+      0
+     ],
+     [
+      8,
+      11,
+      0
+     ],
+     [
+      16,
+      19,
+      1
+     ]
+    ],
+    "head": 19,
+    "query": "foo",
+    "counter": "3/3"
+   },
+   {
+    "op": "prev",
+    "doc": "foo bar foo\nbaz FOO\n",
+    "anchor": 8,
+    "ticks": 3,
+    "open": true,
+    "hl": [
+     [
+      0,
+      3,
+      0
+     ],
+     [
+      8,
+      11,
+      1
+     ],
+     [
+      16,
+      19,
+      0
+     ]
+    ],
+    "head": 11,
+    "query": "foo",
+    "counter": "2/3"
+   }
+  ]
+ },
+ {
+  "name": "prefill",
+  "doc": "hello world\nfoo bar foo\n",
+  "anchor": 12,
+  "head": 15,
+  "query": null,
+  "replace": "",
+  "ops": [
+   "next",
+   "next"
+  ],
+  "steps": [
+   {
+    "op": "open",
+    "doc": "hello world\nfoo bar foo\n",
+    "anchor": 12,
+    "ticks": 2,
+    "open": true,
+    "hl": [
+     [
+      12,
+      15,
+      1
+     ],
+     [
+      20,
+      23,
+      0
+     ]
+    ],
+    "head": 15,
+    "query": "foo",
+    "counter": "1/2"
+   },
+   {
+    "op": "next",
+    "doc": "hello world\nfoo bar foo\n",
+    "anchor": 20,
+    "ticks": 2,
+    "open": true,
+    "hl": [
+     [
+      12,
+      15,
+      0
+     ],
+     [
+      20,
+      23,
+      1
+     ]
+    ],
+    "head": 23,
+    "query": "foo",
+    "counter": "2/2"
+   },
+   {
+    "op": "next",
+    "doc": "hello world\nfoo bar foo\n",
+    "anchor": 12,
+    "ticks": 2,
+    "open": true,
+    "hl": [
+     [
+      12,
+      15,
+      1
+     ],
+     [
+      20,
+      23,
+      0
+     ]
+    ],
+    "head": 15,
+    "query": "foo",
+    "counter": "1/2"
+   }
+  ]
+ },
+ {
+  "name": "prefill-multiline",
+  "doc": "ab\ncd ab\n",
+  "anchor": 0,
+  "head": 4,
+  "query": null,
+  "replace": "",
+  "ops": [],
+  "steps": [
+   {
+    "op": "open",
+    "doc": "ab\ncd ab\n",
+    "anchor": 0,
+    "ticks": 0,
+    "open": true,
+    "hl": [],
+    "head": 4,
+    "query": "foo",
+    "counter": "No matches"
+   }
+  ]
+ },
+ {
+  "name": "overlap",
+  "doc": "aaaa aaa",
+  "anchor": 0,
+  "head": 0,
+  "query": "aa",
+  "replace": "",
+  "ops": [
+   "next",
+   "next",
+   "next",
+   "next",
+   "prev",
+   "prev",
+   "prev"
+  ],
+  "steps": [
+   {
+    "op": "open",
+    "doc": "aaaa aaa",
+    "anchor": 0,
+    "ticks": 0,
+    "open": true,
+    "hl": [],
+    "head": 0,
+    "query": "foo",
+    "counter": "No matches"
+   },
+   {
+    "op": "query",
+    "doc": "aaaa aaa",
+    "anchor": 0,
+    "ticks": 3,
+    "open": true,
+    "hl": [
+     [
+      0,
+      2,
+      0
+     ],
+     [
+      2,
+      4,
+      0
+     ],
+     [
+      5,
+      7,
+      0
+     ]
+    ],
+    "head": 0,
+    "query": "aa",
+    "counter": "1/3"
+   },
+   {
+    "op": "next",
+    "doc": "aaaa aaa",
+    "anchor": 0,
+    "ticks": 3,
+    "open": true,
+    "hl": [
+     [
+      0,
+      2,
+      1
+     ],
+     [
+      2,
+      4,
+      0
+     ],
+     [
+      5,
+      7,
+      0
+     ]
+    ],
+    "head": 2,
+    "query": "aa",
+    "counter": "1/3"
+   },
+   {
+    "op": "next",
+    "doc": "aaaa aaa",
+    "anchor": 2,
+    "ticks": 3,
+    "open": true,
+    "hl": [
+     [
+      0,
+      2,
+      0
+     ],
+     [
+      2,
+      4,
+      1
+     ],
+     [
+      5,
+      7,
+      0
+     ]
+    ],
+    "head": 4,
+    "query": "aa",
+    "counter": "2/3"
+   },
+   {
+    "op": "next",
+    "doc": "aaaa aaa",
+    "anchor": 5,
+    "ticks": 3,
+    "open": true,
+    "hl": [
+     [
+      0,
+      2,
+      0
+     ],
+     [
+      2,
+      4,
+      0
+     ],
+     [
+      5,
+      7,
+      1
+     ]
+    ],
+    "head": 7,
+    "query": "aa",
+    "counter": "3/3"
+   },
+   {
+    "op": "next",
+    "doc": "aaaa aaa",
+    "anchor": 0,
+    "ticks": 3,
+    "open": true,
+    "hl": [
+     [
+      0,
+      2,
+      1
+     ],
+     [
+      2,
+      4,
+      0
+     ],
+     [
+      5,
+      7,
+      0
+     ]
+    ],
+    "head": 2,
+    "query": "aa",
+    "counter": "1/3"
+   },
+   {
+    "op": "prev",
+    "doc": "aaaa aaa",
+    "anchor": 6,
+    "ticks": 3,
+    "open": true,
+    "hl": [
+     [
+      0,
+      2,
+      0
+     ],
+     [
+      2,
+      4,
+      0
+     ],
+     [
+      5,
+      7,
+      0
+     ]
+    ],
+    "head": 8,
+    "query": "aa",
+    "counter": "1/3"
+   },
+   {
+    "op": "prev",
+    "doc": "aaaa aaa",
+    "anchor": 2,
+    "ticks": 3,
+    "open": true,
+    "hl": [
+     [
+      0,
+      2,
+      0
+     ],
+     [
+      2,
+      4,
+      1
+     ],
+     [
+      5,
+      7,
+      0
+     ]
+    ],
+    "head": 4,
+    "query": "aa",
+    "counter": "2/3"
+   },
+   {
+    "op": "prev",
+    "doc": "aaaa aaa",
+    "anchor": 0,
+    "ticks": 3,
+    "open": true,
+    "hl": [
+     [
+      0,
+      2,
+      1
+     ],
+     [
+      2,
+      4,
+      0
+     ],
+     [
+      5,
+      7,
+      0
+     ]
+    ],
+    "head": 2,
+    "query": "aa",
+    "counter": "1/3"
+   }
+  ]
+ },
+ {
+  "name": "case",
+  "doc": "Straße STRASSE strasse",
+  "anchor": 0,
+  "head": 0,
+  "query": "strasse",
+  "replace": "",
+  "ops": [
+   "next",
+   "next",
+   "next"
+  ],
+  "steps": [
+   {
+    "op": "open",
+    "doc": "Straße STRASSE strasse",
+    "anchor": 0,
+    "ticks": 0,
+    "open": true,
+    "hl": [],
+    "head": 0,
+    "query": "aa",
+    "counter": "No matches"
+   },
+   {
+    "op": "query",
+    "doc": "Straße STRASSE strasse",
+    "anchor": 0,
+    "ticks": 2,
+    "open": true,
+    "hl": [
+     [
+      7,
+      14,
+      0
+     ],
+     [
+      15,
+      22,
+      0
+     ]
+    ],
+    "head": 0,
+    "query": "strasse",
+    "counter": "1/2"
+   },
+   {
+    "op": "next",
+    "doc": "Straße STRASSE strasse",
+    "anchor": 7,
+    "ticks": 2,
+    "open": true,
+    "hl": [
+     [
+      7,
+      14,
+      1
+     ],
+     [
+      15,
+      22,
+      0
+     ]
+    ],
+    "head": 14,
+    "query": "strasse",
+    "counter": "1/2"
+   },
+   {
+    "op": "next",
+    "doc": "Straße STRASSE strasse",
+    "anchor": 15,
+    "ticks": 2,
+    "open": true,
+    "hl": [
+     [
+      7,
+      14,
+      0
+     ],
+     [
+      15,
+      22,
+      1
+     ]
+    ],
+    "head": 22,
+    "query": "strasse",
+    "counter": "2/2"
+   },
+   {
+    "op": "next",
+    "doc": "Straße STRASSE strasse",
+    "anchor": 7,
+    "ticks": 2,
+    "open": true,
+    "hl": [
+     [
+      7,
+      14,
+      1
+     ],
+     [
+      15,
+      22,
+      0
+     ]
+    ],
+    "head": 14,
+    "query": "strasse",
+    "counter": "1/2"
+   }
+  ]
+ },
+ {
+  "name": "unicode",
+  "doc": "Café café CAFÉ ﬁle file",
+  "anchor": 0,
+  "head": 0,
+  "query": "café",
+  "replace": "",
+  "ops": [
+   "next",
+   "next",
+   "next",
+   "next"
+  ],
+  "steps": [
+   {
+    "op": "open",
+    "doc": "Café café CAFÉ ﬁle file",
+    "anchor": 0,
+    "ticks": 0,
+    "open": true,
+    "hl": [],
+    "head": 0,
+    "query": "strasse",
+    "counter": "No matches"
+   },
+   {
+    "op": "query",
+    "doc": "Café café CAFÉ ﬁle file",
+    "anchor": 0,
+    "ticks": 3,
+    "open": true,
+    "hl": [
+     [
+      0,
+      4,
+      0
+     ],
+     [
+      5,
+      10,
+      0
+     ],
+     [
+      11,
+      15,
+      0
+     ]
+    ],
+    "head": 0,
+    "query": "café",
+    "counter": "1/3"
+   },
+   {
+    "op": "next",
+    "doc": "Café café CAFÉ ﬁle file",
+    "anchor": 0,
+    "ticks": 3,
+    "open": true,
+    "hl": [
+     [
+      0,
+      4,
+      1
+     ],
+     [
+      5,
+      10,
+      0
+     ],
+     [
+      11,
+      15,
+      0
+     ]
+    ],
+    "head": 4,
+    "query": "café",
+    "counter": "1/3"
+   },
+   {
+    "op": "next",
+    "doc": "Café café CAFÉ ﬁle file",
+    "anchor": 5,
+    "ticks": 3,
+    "open": true,
+    "hl": [
+     [
+      0,
+      4,
+      0
+     ],
+     [
+      5,
+      10,
+      1
+     ],
+     [
+      11,
+      15,
+      0
+     ]
+    ],
+    "head": 10,
+    "query": "café",
+    "counter": "2/3"
+   },
+   {
+    "op": "next",
+    "doc": "Café café CAFÉ ﬁle file",
+    "anchor": 11,
+    "ticks": 3,
+    "open": true,
+    "hl": [
+     [
+      0,
+      4,
+      0
+     ],
+     [
+      5,
+      10,
+      0
+     ],
+     [
+      11,
+      15,
+      1
+     ]
+    ],
+    "head": 15,
+    "query": "café",
+    "counter": "3/3"
+   },
+   {
+    "op": "next",
+    "doc": "Café café CAFÉ ﬁle file",
+    "anchor": 0,
+    "ticks": 3,
+    "open": true,
+    "hl": [
+     [
+      0,
+      4,
+      1
+     ],
+     [
+      5,
+      10,
+      0
+     ],
+     [
+      11,
+      15,
+      0
+     ]
+    ],
+    "head": 4,
+    "query": "café",
+    "counter": "1/3"
+   }
+  ]
+ },
+ {
+  "name": "ligature",
+  "doc": "ﬁle file FILE",
+  "anchor": 0,
+  "head": 0,
+  "query": "fi",
+  "replace": "X",
+  "ops": [
+   "replace",
+   "replace",
+   "replace",
+   "replace"
+  ],
+  "steps": [
+   {
+    "op": "open",
+    "doc": "ﬁle file FILE",
+    "anchor": 0,
+    "ticks": 0,
+    "open": true,
+    "hl": [],
+    "head": 0,
+    "query": "café",
+    "counter": "No matches"
+   },
+   {
+    "op": "query",
+    "doc": "ﬁle file FILE",
+    "anchor": 0,
+    "ticks": 3,
+    "open": true,
+    "hl": [
+     [
+      0,
+      1,
+      0
+     ],
+     [
+      4,
+      6,
+      0
+     ],
+     [
+      9,
+      11,
+      0
+     ]
+    ],
+    "head": 0,
+    "query": "fi",
+    "counter": "1/3"
+   },
+   {
+    "op": "replace",
+    "doc": "ﬁle file FILE",
+    "anchor": 0,
+    "ticks": 3,
+    "open": true,
+    "hl": [
+     [
+      0,
+      1,
+      1
+     ],
+     [
+      4,
+      6,
+      0
+     ],
+     [
+      9,
+      11,
+      0
+     ]
+    ],
+    "head": 1,
+    "query": "fi",
+    "counter": "1/3"
+   },
+   {
+    "op": "replace",
+    "doc": "Xle file FILE",
+    "anchor": 0,
+    "ticks": 2,
+    "open": true,
+    "hl": [
+     [
+      4,
+      6,
+      0
+     ],
+     [
+      9,
+      11,
+      0
+     ]
+    ],
+    "head": 1,
+    "query": "fi",
+    "counter": "1/2"
+   },
+   {
+    "op": "replace",
+    "doc": "Xle file FILE",
+    "anchor": 4,
+    "ticks": 2,
+    "open": true,
+    "hl": [
+     [
+      4,
+      6,
+      1
+     ],
+     [
+      9,
+      11,
+      0
+     ]
+    ],
+    "head": 6,
+    "query": "fi",
+    "counter": "1/2"
+   },
+   {
+    "op": "replace",
+    "doc": "Xle Xle FILE",
+    "anchor": 4,
+    "ticks": 1,
+    "open": true,
+    "hl": [
+     [
+      8,
+      10,
+      0
+     ]
+    ],
+    "head": 5,
+    "query": "fi",
+    "counter": "1/1"
+   },
+   {
+    "op": "undo",
+    "doc": "Xle file FILE",
+    "anchor": 4,
+    "ticks": 2,
+    "open": true,
+    "hl": [
+     [
+      4,
+      6,
+      1
+     ],
+     [
+      9,
+      11,
+      0
+     ]
+    ],
+    "head": 6,
+    "query": "fi",
+    "counter": "1/2"
+   }
+  ]
+ },
+ {
+  "name": "emoji",
+  "doc": "a😀b a😀b",
+  "anchor": 0,
+  "head": 0,
+  "query": "😀b",
+  "replace": "",
+  "ops": [
+   "next",
+   "next",
+   "prev"
+  ],
+  "steps": [
+   {
+    "op": "open",
+    "doc": "a😀b a😀b",
+    "anchor": 0,
+    "ticks": 0,
+    "open": true,
+    "hl": [],
+    "head": 0,
+    "query": "fi",
+    "counter": "No matches"
+   },
+   {
+    "op": "query",
+    "doc": "a😀b a😀b",
+    "anchor": 0,
+    "ticks": 2,
+    "open": true,
+    "hl": [
+     [
+      1,
+      4,
+      0
+     ],
+     [
+      6,
+      9,
+      0
+     ]
+    ],
+    "head": 0,
+    "query": "😀b",
+    "counter": "1/2"
+   },
+   {
+    "op": "next",
+    "doc": "a😀b a😀b",
+    "anchor": 1,
+    "ticks": 2,
+    "open": true,
+    "hl": [
+     [
+      1,
+      4,
+      1
+     ],
+     [
+      6,
+      9,
+      0
+     ]
+    ],
+    "head": 4,
+    "query": "😀b",
+    "counter": "1/2"
+   },
+   {
+    "op": "next",
+    "doc": "a😀b a😀b",
+    "anchor": 6,
+    "ticks": 2,
+    "open": true,
+    "hl": [
+     [
+      1,
+      4,
+      0
+     ],
+     [
+      6,
+      9,
+      1
+     ]
+    ],
+    "head": 9,
+    "query": "😀b",
+    "counter": "2/2"
+   },
+   {
+    "op": "prev",
+    "doc": "a😀b a😀b",
+    "anchor": 1,
+    "ticks": 2,
+    "open": true,
+    "hl": [
+     [
+      1,
+      4,
+      1
+     ],
+     [
+      6,
+      9,
+      0
+     ]
+    ],
+    "head": 4,
+    "query": "😀b",
+    "counter": "1/2"
+   }
+  ]
+ },
+ {
+  "name": "escape-n",
+  "doc": "one\ntwo\none\\ntwo",
+  "anchor": 0,
+  "head": 0,
+  "query": "one\\ntwo",
+  "replace": "1\\t2",
+  "ops": [
+   "next",
+   "next",
+   "replace",
+   "replace"
+  ],
+  "steps": [
+   {
+    "op": "open",
+    "doc": "one\ntwo\none\\ntwo",
+    "anchor": 0,
+    "ticks": 0,
+    "open": true,
+    "hl": [],
+    "head": 0,
+    "query": "😀b",
+    "counter": "No matches"
+   },
+   {
+    "op": "query",
+    "doc": "one\ntwo\none\\ntwo",
+    "anchor": 0,
+    "ticks": 1,
+    "open": true,
+    "hl": [
+     [
+      0,
+      3,
+      0
+     ],
+     [
+      4,
+      7,
+      0
+     ]
+    ],
+    "head": 0,
+    "query": "one\\ntwo",
+    "counter": "1/1"
+   },
+   {
+    "op": "next",
+    "doc": "one\ntwo\none\\ntwo",
+    "anchor": 0,
+    "ticks": 1,
+    "open": true,
+    "hl": [
+     [
+      0,
+      3,
+      1
+     ],
+     [
+      4,
+      7,
+      1
+     ]
+    ],
+    "head": 7,
+    "query": "one\\ntwo",
+    "counter": "1/1"
+   },
+   {
+    "op": "next",
+    "doc": "one\ntwo\none\\ntwo",
+    "anchor": 0,
+    "ticks": 1,
+    "open": true,
+    "hl": [
+     [
+      0,
+      3,
+      1
+     ],
+     [
+      4,
+      7,
+      1
+     ]
+    ],
+    "head": 7,
+    "query": "one\\ntwo",
+    "counter": "1/1"
+   },
+   {
+    "op": "replace",
+    "doc": "1\t2\none\\ntwo",
+    "anchor": 0,
+    "ticks": 1,
+    "open": true,
+    "hl": [],
+    "head": 3,
+    "query": "one\\ntwo",
+    "counter": "1/1"
+   },
+   {
+    "op": "replace",
+    "doc": "1\t2\none\\ntwo",
+    "anchor": 0,
+    "ticks": 1,
+    "open": true,
+    "hl": [],
+    "head": 3,
+    "query": "one\\ntwo",
+    "counter": "1/1"
+   },
+   {
+    "op": "undo",
+    "doc": "one\ntwo\none\\ntwo",
+    "anchor": 0,
+    "ticks": 1,
+    "open": true,
+    "hl": [
+     [
+      0,
+      3,
+      1
+     ],
+     [
+      4,
+      7,
+      1
+     ]
+    ],
+    "head": 7,
+    "query": "one\\ntwo",
+    "counter": "1/1"
+   }
+  ]
+ },
+ {
+  "name": "replace-basic",
+  "doc": "cat dog cat dog cat",
+  "anchor": 0,
+  "head": 0,
+  "query": "cat",
+  "replace": "bird",
+  "ops": [
+   "replace",
+   "replace",
+   "replace",
+   "replace",
+   "replace"
+  ],
+  "steps": [
+   {
+    "op": "open",
+    "doc": "cat dog cat dog cat",
+    "anchor": 0,
+    "ticks": 0,
+    "open": true,
+    "hl": [],
+    "head": 0,
+    "query": "one\\ntwo",
+    "counter": "No matches"
+   },
+   {
+    "op": "query",
+    "doc": "cat dog cat dog cat",
+    "anchor": 0,
+    "ticks": 3,
+    "open": true,
+    "hl": [
+     [
+      0,
+      3,
+      0
+     ],
+     [
+      8,
+      11,
+      0
+     ],
+     [
+      16,
+      19,
+      0
+     ]
+    ],
+    "head": 0,
+    "query": "cat",
+    "counter": "1/3"
+   },
+   {
+    "op": "replace",
+    "doc": "cat dog cat dog cat",
+    "anchor": 0,
+    "ticks": 3,
+    "open": true,
+    "hl": [
+     [
+      0,
+      3,
+      1
+     ],
+     [
+      8,
+      11,
+      0
+     ],
+     [
+      16,
+      19,
+      0
+     ]
+    ],
+    "head": 3,
+    "query": "cat",
+    "counter": "1/3"
+   },
+   {
+    "op": "replace",
+    "doc": "bird dog cat dog cat",
+    "anchor": 0,
+    "ticks": 2,
+    "open": true,
+    "hl": [
+     [
+      9,
+      12,
+      0
+     ],
+     [
+      17,
+      20,
+      0
+     ]
+    ],
+    "head": 4,
+    "query": "cat",
+    "counter": "1/2"
+   },
+   {
+    "op": "replace",
+    "doc": "bird dog cat dog cat",
+    "anchor": 9,
+    "ticks": 2,
+    "open": true,
+    "hl": [
+     [
+      9,
+      12,
+      1
+     ],
+     [
+      17,
+      20,
+      0
+     ]
+    ],
+    "head": 12,
+    "query": "cat",
+    "counter": "1/2"
+   },
+   {
+    "op": "replace",
+    "doc": "bird dog bird dog cat",
+    "anchor": 9,
+    "ticks": 1,
+    "open": true,
+    "hl": [
+     [
+      18,
+      21,
+      0
+     ]
+    ],
+    "head": 13,
+    "query": "cat",
+    "counter": "1/1"
+   },
+   {
+    "op": "replace",
+    "doc": "bird dog bird dog cat",
+    "anchor": 18,
+    "ticks": 1,
+    "open": true,
+    "hl": [
+     [
+      18,
+      21,
+      1
+     ]
+    ],
+    "head": 21,
+    "query": "cat",
+    "counter": "1/1"
+   },
+   {
+    "op": "undo",
+    "doc": "bird dog cat dog cat",
+    "anchor": 9,
+    "ticks": 2,
+    "open": true,
+    "hl": [
+     [
+      9,
+      12,
+      1
+     ],
+     [
+      17,
+      20,
+      0
+     ]
+    ],
+    "head": 12,
+    "query": "cat",
+    "counter": "1/2"
+   }
+  ]
+ },
+ {
+  "name": "replace-contains",
+  "doc": "aa aa",
+  "anchor": 0,
+  "head": 0,
+  "query": "a",
+  "replace": "aa",
+  "ops": [
+   "replace",
+   "replace",
+   "replace",
+   "replace"
+  ],
+  "steps": [
+   {
+    "op": "open",
+    "doc": "aa aa",
+    "anchor": 0,
+    "ticks": 0,
+    "open": true,
+    "hl": [],
+    "head": 0,
+    "query": "cat",
+    "counter": "No matches"
+   },
+   {
+    "op": "query",
+    "doc": "aa aa",
+    "anchor": 0,
+    "ticks": 4,
+    "open": true,
+    "hl": [
+     [
+      0,
+      1,
+      0
+     ],
+     [
+      1,
+      2,
+      0
+     ],
+     [
+      3,
+      4,
+      0
+     ],
+     [
+      4,
+      5,
+      0
+     ]
+    ],
+    "head": 0,
+    "query": "a",
+    "counter": "1/4"
+   },
+   {
+    "op": "replace",
+    "doc": "aa aa",
+    "anchor": 0,
+    "ticks": 4,
+    "open": true,
+    "hl": [
+     [
+      0,
+      1,
+      1
+     ],
+     [
+      1,
+      2,
+      0
+     ],
+     [
+      3,
+      4,
+      0
+     ],
+     [
+      4,
+      5,
+      0
+     ]
+    ],
+    "head": 1,
+    "query": "a",
+    "counter": "1/4"
+   },
+   {
+    "op": "replace",
+    "doc": "aaa aa",
+    "anchor": 0,
+    "ticks": 5,
+    "open": true,
+    "hl": [
+     [
+      0,
+      1,
+      0
+     ],
+     [
+      1,
+      2,
+      0
+     ],
+     [
+      2,
+      3,
+      0
+     ],
+     [
+      4,
+      5,
+      0
+     ],
+     [
+      5,
+      6,
+      0
+     ]
+    ],
+    "head": 2,
+    "query": "a",
+    "counter": "2/5"
+   },
+   {
+    "op": "replace",
+    "doc": "aaa aa",
+    "anchor": 0,
+    "ticks": 5,
+    "open": true,
+    "hl": [
+     [
+      0,
+      1,
+      1
+     ],
+     [
+      1,
+      2,
+      0
+     ],
+     [
+      2,
+      3,
+      0
+     ],
+     [
+      4,
+      5,
+      0
+     ],
+     [
+      5,
+      6,
+      0
+     ]
+    ],
+    "head": 1,
+    "query": "a",
+    "counter": "1/5"
+   },
+   {
+    "op": "replace",
+    "doc": "aaaa aa",
+    "anchor": 0,
+    "ticks": 6,
+    "open": true,
+    "hl": [
+     [
+      0,
+      1,
+      0
+     ],
+     [
+      1,
+      2,
+      0
+     ],
+     [
+      2,
+      3,
+      0
+     ],
+     [
+      3,
+      4,
+      0
+     ],
+     [
+      5,
+      6,
+      0
+     ],
+     [
+      6,
+      7,
+      0
+     ]
+    ],
+    "head": 2,
+    "query": "a",
+    "counter": "2/6"
+   },
+   {
+    "op": "undo",
+    "doc": "aaa aa",
+    "anchor": 0,
+    "ticks": 5,
+    "open": true,
+    "hl": [
+     [
+      0,
+      1,
+      1
+     ],
+     [
+      1,
+      2,
+      0
+     ],
+     [
+      2,
+      3,
+      0
+     ],
+     [
+      4,
+      5,
+      0
+     ],
+     [
+      5,
+      6,
+      0
+     ]
+    ],
+    "head": 1,
+    "query": "a",
+    "counter": "1/5"
+   }
+  ]
+ },
+ {
+  "name": "replace-all",
+  "doc": "x1 X1 x1x1\nx1",
+  "anchor": 3,
+  "head": 3,
+  "query": "x1",
+  "replace": "y",
+  "ops": [
+   "all"
+  ],
+  "steps": [
+   {
+    "op": "open",
+    "doc": "x1 X1 x1x1\nx1",
+    "anchor": 3,
+    "ticks": 0,
+    "open": true,
+    "hl": [],
+    "head": 3,
+    "query": "a",
+    "counter": "No matches"
+   },
+   {
+    "op": "query",
+    "doc": "x1 X1 x1x1\nx1",
+    "anchor": 3,
+    "ticks": 5,
+    "open": true,
+    "hl": [
+     [
+      0,
+      2,
+      0
+     ],
+     [
+      3,
+      5,
+      0
+     ],
+     [
+      6,
+      8,
+      0
+     ],
+     [
+      8,
+      10,
+      0
+     ],
+     [
+      11,
+      13,
+      0
+     ]
+    ],
+    "head": 3,
+    "query": "x1",
+    "counter": "2/5"
+   },
+   {
+    "op": "all",
+    "doc": "y y yy\ny",
+    "anchor": 2,
+    "ticks": 0,
+    "open": true,
+    "hl": [],
+    "head": 2,
+    "query": "x1",
+    "counter": "No matches"
+   },
+   {
+    "op": "undo",
+    "doc": "x1 X1 x1x1\nx1",
+    "anchor": 3,
+    "ticks": 5,
+    "open": true,
+    "hl": [
+     [
+      0,
+      2,
+      0
+     ],
+     [
+      3,
+      5,
+      0
+     ],
+     [
+      6,
+      8,
+      0
+     ],
+     [
+      8,
+      10,
+      0
+     ],
+     [
+      11,
+      13,
+      0
+     ]
+    ],
+    "head": 3,
+    "query": "x1",
+    "counter": "2/5"
+   }
+  ]
+ },
+ {
+  "name": "replace-all-empty",
+  "doc": "remove me and remove me",
+  "anchor": 0,
+  "head": 0,
+  "query": "remove ",
+  "replace": "",
+  "ops": [
+   "all"
+  ],
+  "steps": [
+   {
+    "op": "open",
+    "doc": "remove me and remove me",
+    "anchor": 0,
+    "ticks": 0,
+    "open": true,
+    "hl": [],
+    "head": 0,
+    "query": "x1",
+    "counter": "No matches"
+   },
+   {
+    "op": "query",
+    "doc": "remove me and remove me",
+    "anchor": 0,
+    "ticks": 2,
+    "open": true,
+    "hl": [
+     [
+      0,
+      7,
+      0
+     ],
+     [
+      14,
+      21,
+      0
+     ]
+    ],
+    "head": 0,
+    "query": "remove ",
+    "counter": "1/2"
+   },
+   {
+    "op": "all",
+    "doc": "me and me",
+    "anchor": 0,
+    "ticks": 0,
+    "open": true,
+    "hl": [],
+    "head": 0,
+    "query": "remove ",
+    "counter": "No matches"
+   },
+   {
+    "op": "undo",
+    "doc": "remove me and remove me",
+    "anchor": 0,
+    "ticks": 2,
+    "open": true,
+    "hl": [
+     [
+      0,
+      7,
+      0
+     ],
+     [
+      14,
+      21,
+      0
+     ]
+    ],
+    "head": 0,
+    "query": "remove ",
+    "counter": "1/2"
+   }
+  ]
+ },
+ {
+  "name": "replace-all-none",
+  "doc": "abc",
+  "anchor": 0,
+  "head": 0,
+  "query": "zz",
+  "replace": "y",
+  "ops": [
+   "all"
+  ],
+  "steps": [
+   {
+    "op": "open",
+    "doc": "abc",
+    "anchor": 0,
+    "ticks": 0,
+    "open": true,
+    "hl": [],
+    "head": 0,
+    "query": "remove ",
+    "counter": "No matches"
+   },
+   {
+    "op": "query",
+    "doc": "abc",
+    "anchor": 0,
+    "ticks": 0,
+    "open": true,
+    "hl": [],
+    "head": 0,
+    "query": "zz",
+    "counter": "No matches"
+   },
+   {
+    "op": "all",
+    "doc": "abc",
+    "anchor": 0,
+    "ticks": 0,
+    "open": true,
+    "hl": [],
+    "head": 0,
+    "query": "zz",
+    "counter": "No matches"
+   },
+   {
+    "op": "undo",
+    "doc": "remove me and remove me",
+    "anchor": 0,
+    "ticks": 0,
+    "open": true,
+    "hl": [],
+    "head": 0,
+    "query": "zz",
+    "counter": "No matches"
+   }
+  ]
+ },
+ {
+  "name": "nomatch",
+  "doc": "abc",
+  "anchor": 1,
+  "head": 1,
+  "query": "zz",
+  "replace": "",
+  "ops": [
+   "next",
+   "prev"
+  ],
+  "steps": [
+   {
+    "op": "open",
+    "doc": "abc",
+    "anchor": 1,
+    "ticks": 0,
+    "open": true,
+    "hl": [],
+    "head": 1,
+    "query": "zz",
+    "counter": "No matches"
+   },
+   {
+    "op": "query",
+    "doc": "abc",
+    "anchor": 1,
+    "ticks": 0,
+    "open": true,
+    "hl": [],
+    "head": 1,
+    "query": "zz",
+    "counter": "No matches"
+   },
+   {
+    "op": "next",
+    "doc": "abc",
+    "anchor": 1,
+    "ticks": 0,
+    "open": true,
+    "hl": [],
+    "head": 1,
+    "query": "zz",
+    "counter": "No matches"
+   },
+   {
+    "op": "prev",
+    "doc": "abc",
+    "anchor": 1,
+    "ticks": 0,
+    "open": true,
+    "hl": [],
+    "head": 1,
+    "query": "zz",
+    "counter": "No matches"
+   }
+  ]
+ },
+ {
+  "name": "wrap-at-end",
+  "doc": "foo x foo",
+  "anchor": 9,
+  "head": 9,
+  "query": "foo",
+  "replace": "",
+  "ops": [
+   "next",
+   "prev",
+   "prev"
+  ],
+  "steps": [
+   {
+    "op": "open",
+    "doc": "foo x foo",
+    "anchor": 9,
+    "ticks": 0,
+    "open": true,
+    "hl": [],
+    "head": 9,
+    "query": "zz",
+    "counter": "No matches"
+   },
+   {
+    "op": "query",
+    "doc": "foo x foo",
+    "anchor": 9,
+    "ticks": 2,
+    "open": true,
+    "hl": [
+     [
+      0,
+      3,
+      0
+     ],
+     [
+      6,
+      9,
+      0
+     ]
+    ],
+    "head": 9,
+    "query": "foo",
+    "counter": "2/2"
+   },
+   {
+    "op": "next",
+    "doc": "foo x foo",
+    "anchor": 0,
+    "ticks": 2,
+    "open": true,
+    "hl": [
+     [
+      0,
+      3,
+      1
+     ],
+     [
+      6,
+      9,
+      0
+     ]
+    ],
+    "head": 3,
+    "query": "foo",
+    "counter": "1/2"
+   },
+   {
+    "op": "prev",
+    "doc": "foo x foo",
+    "anchor": 6,
+    "ticks": 2,
+    "open": true,
+    "hl": [
+     [
+      0,
+      3,
+      0
+     ],
+     [
+      6,
+      9,
+      1
+     ]
+    ],
+    "head": 9,
+    "query": "foo",
+    "counter": "2/2"
+   },
+   {
+    "op": "prev",
+    "doc": "foo x foo",
+    "anchor": 0,
+    "ticks": 2,
+    "open": true,
+    "hl": [
+     [
+      0,
+      3,
+      1
+     ],
+     [
+      6,
+      9,
+      0
+     ]
+    ],
+    "head": 3,
+    "query": "foo",
+    "counter": "1/2"
+   }
+  ]
+ },
+ {
+  "name": "caret-inside",
+  "doc": "abcdef abc",
+  "anchor": 2,
+  "head": 2,
+  "query": "abcd",
+  "replace": "",
+  "ops": [
+   "next"
+  ],
+  "steps": [
+   {
+    "op": "open",
+    "doc": "abcdef abc",
+    "anchor": 2,
+    "ticks": 0,
+    "open": true,
+    "hl": [],
+    "head": 2,
+    "query": "foo",
+    "counter": "No matches"
+   },
+   {
+    "op": "query",
+    "doc": "abcdef abc",
+    "anchor": 2,
+    "ticks": 1,
+    "open": true,
+    "hl": [
+     [
+      0,
+      4,
+      0
+     ]
+    ],
+    "head": 2,
+    "query": "abcd",
+    "counter": "1/1"
+   },
+   {
+    "op": "next",
+    "doc": "abcdef abc",
+    "anchor": 0,
+    "ticks": 1,
+    "open": true,
+    "hl": [
+     [
+      0,
+      4,
+      1
+     ]
+    ],
+    "head": 4,
+    "query": "abcd",
+    "counter": "1/1"
+   }
+  ]
+ },
+ {
+  "name": "modg",
+  "doc": "k1 k2 k3",
+  "anchor": 0,
+  "head": 0,
+  "query": "k",
+  "replace": "",
+  "ops": [
+   "modg",
+   "modg",
+   "modshiftg"
+  ],
+  "steps": [
+   {
+    "op": "open",
+    "doc": "k1 k2 k3",
+    "anchor": 0,
+    "ticks": 0,
+    "open": true,
+    "hl": [],
+    "head": 0,
+    "query": "abcd",
+    "counter": "No matches"
+   },
+   {
+    "op": "query",
+    "doc": "k1 k2 k3",
+    "anchor": 0,
+    "ticks": 3,
+    "open": true,
+    "hl": [
+     [
+      0,
+      1,
+      0
+     ],
+     [
+      3,
+      4,
+      0
+     ],
+     [
+      6,
+      7,
+      0
+     ]
+    ],
+    "head": 0,
+    "query": "k",
+    "counter": "1/3"
+   },
+   {
+    "op": "modg",
+    "doc": "k1 k2 k3",
+    "anchor": 0,
+    "ticks": 3,
+    "open": true,
+    "hl": [
+     [
+      0,
+      1,
+      1
+     ],
+     [
+      3,
+      4,
+      0
+     ],
+     [
+      6,
+      7,
+      0
+     ]
+    ],
+    "head": 1,
+    "query": "k",
+    "counter": "1/3"
+   },
+   {
+    "op": "modg",
+    "doc": "k1 k2 k3",
+    "anchor": 3,
+    "ticks": 3,
+    "open": true,
+    "hl": [
+     [
+      0,
+      1,
+      0
+     ],
+     [
+      3,
+      4,
+      1
+     ],
+     [
+      6,
+      7,
+      0
+     ]
+    ],
+    "head": 4,
+    "query": "k",
+    "counter": "2/3"
+   },
+   {
+    "op": "modshiftg",
+    "doc": "k1 k2 k3",
+    "anchor": 0,
+    "ticks": 3,
+    "open": true,
+    "hl": [
+     [
+      0,
+      1,
+      1
+     ],
+     [
+      3,
+      4,
+      0
+     ],
+     [
+      6,
+      7,
+      0
+     ]
+    ],
+    "head": 1,
+    "query": "k",
+    "counter": "1/3"
+   }
+  ]
+ },
+ {
+  "name": "selection-counter",
+  "doc": "ab ab ab",
+  "anchor": 4,
+  "head": 4,
+  "query": "ab",
+  "replace": "",
+  "ops": [],
+  "steps": [
+   {
+    "op": "open",
+    "doc": "ab ab ab",
+    "anchor": 4,
+    "ticks": 0,
+    "open": true,
+    "hl": [],
+    "head": 4,
+    "query": "k",
+    "counter": "No matches"
+   },
+   {
+    "op": "query",
+    "doc": "ab ab ab",
+    "anchor": 4,
+    "ticks": 3,
+    "open": true,
+    "hl": [
+     [
+      0,
+      2,
+      0
+     ],
+     [
+      3,
+      5,
+      0
+     ],
+     [
+      6,
+      8,
+      0
+     ]
+    ],
+    "head": 4,
+    "query": "ab",
+    "counter": "2/3"
+   }
+  ]
+ },
+ {
+  "name": "markdown",
+  "doc": "# Head **bold** text\n- item bold\n",
+  "anchor": 0,
+  "head": 0,
+  "query": "bold",
+  "replace": "B",
+  "ops": [
+   "next",
+   "replace",
+   "all"
+  ],
+  "steps": [
+   {
+    "op": "open",
+    "doc": "# Head **bold** text\n- item bold\n",
+    "anchor": 2,
+    "ticks": 0,
+    "open": true,
+    "hl": [],
+    "head": 2,
+    "query": "ab",
+    "counter": "No matches"
+   },
+   {
+    "op": "query",
+    "doc": "# Head **bold** text\n- item bold\n",
+    "anchor": 2,
+    "ticks": 2,
+    "open": true,
+    "hl": [
+     [
+      9,
+      13,
+      0
+     ],
+     [
+      28,
+      32,
+      0
+     ]
+    ],
+    "head": 2,
+    "query": "bold",
+    "counter": "1/2"
+   },
+   {
+    "op": "next",
+    "doc": "# Head **bold** text\n- item bold\n",
+    "anchor": 9,
+    "ticks": 2,
+    "open": true,
+    "hl": [
+     [
+      9,
+      13,
+      1
+     ],
+     [
+      28,
+      32,
+      0
+     ]
+    ],
+    "head": 13,
+    "query": "bold",
+    "counter": "1/2"
+   },
+   {
+    "op": "replace",
+    "doc": "# Head **B** text\n- item bold\n",
+    "anchor": 9,
+    "ticks": 1,
+    "open": true,
+    "hl": [
+     [
+      25,
+      29,
+      0
+     ]
+    ],
+    "head": 10,
+    "query": "bold",
+    "counter": "1/1"
+   },
+   {
+    "op": "all",
+    "doc": "# Head **B** text\n- item B\n",
+    "anchor": 9,
+    "ticks": 0,
+    "open": true,
+    "hl": [],
+    "head": 10,
+    "query": "bold",
+    "counter": "No matches"
+   },
+   {
+    "op": "undo",
+    "doc": "# Head **B** text\n- item bold\n",
+    "anchor": 9,
+    "ticks": 1,
+    "open": true,
+    "hl": [
+     [
+      25,
+      29,
+      0
+     ]
+    ],
+    "head": 10,
+    "query": "bold",
+    "counter": "1/1"
+   }
+  ]
+ },
+ {
+  "name": "empty-query",
+  "doc": "abc",
+  "anchor": 0,
+  "head": 0,
+  "query": "",
+  "replace": "",
+  "ops": [
+   "next",
+   "all"
+  ],
+  "steps": [
+   {
+    "op": "open",
+    "doc": "abc",
+    "anchor": 0,
+    "ticks": 0,
+    "open": true,
+    "hl": [],
+    "head": 0,
+    "query": "bold",
+    "counter": "No matches"
+   },
+   {
+    "op": "query",
+    "doc": "abc",
+    "anchor": 0,
+    "ticks": 0,
+    "open": true,
+    "hl": [],
+    "head": 0,
+    "query": "",
+    "counter": null
+   },
+   {
+    "op": "next",
+    "doc": "abc",
+    "anchor": 0,
+    "ticks": 0,
+    "open": true,
+    "hl": [],
+    "head": 0,
+    "query": "",
+    "counter": null
+   },
+   {
+    "op": "all",
+    "doc": "abc",
+    "anchor": 0,
+    "ticks": 0,
+    "open": true,
+    "hl": [],
+    "head": 0,
+    "query": "",
+    "counter": null
+   },
+   {
+    "op": "undo",
+    "doc": "# Head **B** text\n- item bold\n",
+    "anchor": 2,
+    "ticks": 0,
+    "open": true,
+    "hl": [],
+    "head": 2,
+    "query": "",
+    "counter": null
+   }
+  ]
+ },
+ {
+  "name": "dotted-i",
+  "doc": "İstanbul istanbul ISTANBUL",
+  "anchor": 0,
+  "head": 0,
+  "query": "i",
+  "replace": "",
+  "ops": [
+   "next",
+   "next",
+   "next",
+   "next"
+  ],
+  "steps": [
+   {
+    "op": "open",
+    "doc": "İstanbul istanbul ISTANBUL",
+    "anchor": 0,
+    "ticks": 0,
+    "open": true,
+    "hl": [],
+    "head": 0,
+    "query": "",
+    "counter": null
+   },
+   {
+    "op": "query",
+    "doc": "İstanbul istanbul ISTANBUL",
+    "anchor": 0,
+    "ticks": 3,
+    "open": true,
+    "hl": [
+     [
+      0,
+      1,
+      0
+     ],
+     [
+      9,
+      10,
+      0
+     ],
+     [
+      18,
+      19,
+      0
+     ]
+    ],
+    "head": 0,
+    "query": "i",
+    "counter": "1/3"
+   },
+   {
+    "op": "next",
+    "doc": "İstanbul istanbul ISTANBUL",
+    "anchor": 0,
+    "ticks": 3,
+    "open": true,
+    "hl": [
+     [
+      0,
+      1,
+      1
+     ],
+     [
+      9,
+      10,
+      0
+     ],
+     [
+      18,
+      19,
+      0
+     ]
+    ],
+    "head": 1,
+    "query": "i",
+    "counter": "1/3"
+   },
+   {
+    "op": "next",
+    "doc": "İstanbul istanbul ISTANBUL",
+    "anchor": 9,
+    "ticks": 3,
+    "open": true,
+    "hl": [
+     [
+      0,
+      1,
+      0
+     ],
+     [
+      9,
+      10,
+      1
+     ],
+     [
+      18,
+      19,
+      0
+     ]
+    ],
+    "head": 10,
+    "query": "i",
+    "counter": "2/3"
+   },
+   {
+    "op": "next",
+    "doc": "İstanbul istanbul ISTANBUL",
+    "anchor": 18,
+    "ticks": 3,
+    "open": true,
+    "hl": [
+     [
+      0,
+      1,
+      0
+     ],
+     [
+      9,
+      10,
+      0
+     ],
+     [
+      18,
+      19,
+      1
+     ]
+    ],
+    "head": 19,
+    "query": "i",
+    "counter": "3/3"
+   },
+   {
+    "op": "next",
+    "doc": "İstanbul istanbul ISTANBUL",
+    "anchor": 0,
+    "ticks": 3,
+    "open": true,
+    "hl": [
+     [
+      0,
+      1,
+      1
+     ],
+     [
+      9,
+      10,
+      0
+     ],
+     [
+      18,
+      19,
+      0
+     ]
+    ],
+    "head": 1,
+    "query": "i",
+    "counter": "1/3"
+   }
+  ]
+ },
+ {
+  "name": "sigma",
+  "doc": "ΣΑΣ σας",
+  "anchor": 0,
+  "head": 0,
+  "query": "σας",
+  "replace": "",
+  "ops": [
+   "next",
+   "next"
+  ],
+  "steps": [
+   {
+    "op": "open",
+    "doc": "ΣΑΣ σας",
+    "anchor": 0,
+    "ticks": 0,
+    "open": true,
+    "hl": [],
+    "head": 0,
+    "query": "i",
+    "counter": "No matches"
+   },
+   {
+    "op": "query",
+    "doc": "ΣΑΣ σας",
+    "anchor": 0,
+    "ticks": 1,
+    "open": true,
+    "hl": [
+     [
+      4,
+      7,
+      0
+     ]
+    ],
+    "head": 0,
+    "query": "σας",
+    "counter": "1/1"
+   },
+   {
+    "op": "next",
+    "doc": "ΣΑΣ σας",
+    "anchor": 4,
+    "ticks": 1,
+    "open": true,
+    "hl": [
+     [
+      4,
+      7,
+      1
+     ]
+    ],
+    "head": 7,
+    "query": "σας",
+    "counter": "1/1"
+   },
+   {
+    "op": "next",
+    "doc": "ΣΑΣ σας",
+    "anchor": 4,
+    "ticks": 1,
+    "open": true,
+    "hl": [
+     [
+      4,
+      7,
+      1
+     ]
+    ],
+    "head": 7,
+    "query": "σας",
+    "counter": "1/1"
+   }
+  ]
+ }
+]

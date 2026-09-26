@@ -1,0 +1,15 @@
+# SwiftPM build dirs (may be symlinks: no trailing slash)
+.build*
+.iso
+.swiftpm
+build
+# Python / Node
+.venv
+__pycache__
+node_modules
+# oracle: generated sandbox workspace, compiled WebKit helper
+oracle/sandbox
+oracle/wk/wkoracle
+# local-only files
+.DS_Store
+*.local.*

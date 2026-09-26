@@ -1,0 +1,283 @@
+[
+ {
+  "name": "plain",
+  "doc": "ab",
+  "anchor": 1,
+  "head": 1,
+  "plain": "XY",
+  "html": null,
+  "image": null,
+  "result": {
+   "anchor": 3,
+   "doc": "aXYb",
+   "prevented": true,
+   "head": 3
+  },
+  "frontmatterPanel": null
+ },
+ {
+  "name": "plain-replace",
+  "doc": "hello world",
+  "anchor": 0,
+  "head": 5,
+  "plain": "bye",
+  "html": null,
+  "image": null,
+  "result": {
+   "anchor": 3,
+   "doc": "bye world",
+   "prevented": true,
+   "head": 3
+  },
+  "frontmatterPanel": null
+ },
+ {
+  "name": "plain-crlf",
+  "doc": "",
+  "anchor": 0,
+  "head": 0,
+  "plain": "a\r\nb\rc",
+  "html": null,
+  "image": null,
+  "result": {
+   "anchor": 5,
+   "doc": "a\nb\nc",
+   "prevented": true,
+   "head": 5
+  },
+  "frontmatterPanel": null
+ },
+ {
+  "name": "plain-multiline",
+  "doc": "x",
+  "anchor": 1,
+  "head": 1,
+  "plain": "l1\nl2\n",
+  "html": null,
+  "image": null,
+  "result": {
+   "anchor": 7,
+   "doc": "xl1\nl2\n",
+   "prevented": true,
+   "head": 7
+  },
+  "frontmatterPanel": null
+ },
+ {
+  "name": "html-bold",
+  "doc": "",
+  "anchor": 0,
+  "head": 0,
+  "plain": "bold text",
+  "html": "<b>bold</b> text",
+  "image": null,
+  "result": {
+   "anchor": 13,
+   "doc": "**bold** text",
+   "prevented": true,
+   "head": 13
+  },
+  "frontmatterPanel": null
+ },
+ {
+  "name": "html-list",
+  "doc": "p ",
+  "anchor": 2,
+  "head": 2,
+  "plain": "one\ntwo",
+  "html": "<ul><li>one</li><li>two</li></ul>",
+  "image": null,
+  "result": {
+   "anchor": 13,
+   "doc": "p - one\n- two",
+   "prevented": true,
+   "head": 13
+  },
+  "frontmatterPanel": null
+ },
+ {
+  "name": "html-plain-only",
+  "doc": "",
+  "anchor": 0,
+  "head": 0,
+  "plain": "just text",
+  "html": "<span>just text</span>",
+  "image": null,
+  "result": {
+   "anchor": 9,
+   "doc": "just text",
+   "prevented": true,
+   "head": 9
+  },
+  "frontmatterPanel": null
+ },
+ {
+  "name": "html-same",
+  "doc": "",
+  "anchor": 0,
+  "head": 0,
+  "plain": "*a*",
+  "html": "<em>a</em>",
+  "image": null,
+  "result": {
+   "anchor": 3,
+   "doc": "*a*",
+   "prevented": true,
+   "head": 3
+  },
+  "frontmatterPanel": null
+ },
+ {
+  "name": "html-link",
+  "doc": "",
+  "anchor": 0,
+  "head": 0,
+  "plain": "site",
+  "html": "<a href=\"https://x.com/a b\">site</a>",
+  "image": null,
+  "result": {
+   "anchor": 25,
+   "doc": "[site](https://x.com/a b)",
+   "prevented": true,
+   "head": 25
+  },
+  "frontmatterPanel": null
+ },
+ {
+  "name": "html-table",
+  "doc": "",
+  "anchor": 0,
+  "head": 0,
+  "plain": "a b",
+  "html": "<table><tr><th>a</th><th>b</th></tr><tr><td>1</td><td>2</td></tr></table>",
+  "image": null,
+  "result": {
+   "anchor": 33,
+   "doc": "| a | b |\n| --- | --- |\n| 1 | 2 |",
+   "prevented": true,
+   "head": 33
+  },
+  "frontmatterPanel": null
+ },
+ {
+  "name": "html-code",
+  "doc": "",
+  "anchor": 0,
+  "head": 0,
+  "plain": "x = 1",
+  "html": "<pre><code class=\"language-py\">x = 1</code></pre>",
+  "image": null,
+  "result": {
+   "anchor": 15,
+   "doc": "```py\nx = 1\n```",
+   "prevented": true,
+   "head": 15
+  },
+  "frontmatterPanel": null
+ },
+ {
+  "name": "image",
+  "doc": "before after",
+  "anchor": 7,
+  "head": 7,
+  "plain": null,
+  "html": null,
+  "image": [
+   "image.png",
+   "image/png"
+  ],
+  "result": {
+   "anchor": 57,
+   "doc": "before ![image.png](attachments/pasted-1790389339848.png)after",
+   "prevented": true,
+   "head": 57
+  },
+  "frontmatterPanel": null
+ },
+ {
+  "name": "image-over-html",
+  "doc": "",
+  "anchor": 0,
+  "head": 0,
+  "plain": "t",
+  "html": "<b>t</b>",
+  "image": [
+   "shot.png",
+   "image/png"
+  ],
+  "result": {
+   "anchor": 49,
+   "doc": "![shot.png](attachments/pasted-1790389340729.png)",
+   "prevented": true,
+   "head": 49
+  },
+  "frontmatterPanel": null
+ },
+ {
+  "name": "image-jpeg",
+  "doc": "",
+  "anchor": 0,
+  "head": 0,
+  "plain": null,
+  "html": null,
+  "image": [
+   "photo.jpeg",
+   "image/jpeg"
+  ],
+  "result": {
+   "anchor": 52,
+   "doc": "![photo.jpeg](attachments/pasted-1790389341611.jpeg)",
+   "prevented": true,
+   "head": 52
+  },
+  "frontmatterPanel": null
+ },
+ {
+  "name": "frontmatter",
+  "doc": "body",
+  "anchor": 4,
+  "head": 4,
+  "plain": "---\ntitle: X\n---\nhello",
+  "html": null,
+  "image": null,
+  "result": {
+   "anchor": 9,
+   "doc": "bodyhello",
+   "prevented": true,
+   "head": 9
+  },
+  "frontmatterPanel": "\nAdd property\n"
+ },
+ {
+  "name": "frontmatter-again",
+  "doc": "body",
+  "anchor": 4,
+  "head": 4,
+  "plain": "---\ntitle: Y\n---\nagain",
+  "html": null,
+  "image": null,
+  "result": {
+   "anchor": 26,
+   "doc": "body---\ntitle: Y\n---\nagain",
+   "prevented": true,
+   "head": 26
+  },
+  "frontmatterPanel": "\nAdd property\n"
+ },
+ {
+  "name": "frontmatter-only",
+  "doc": "",
+  "anchor": 0,
+  "head": 0,
+  "plain": "---\na: 1\n---\n",
+  "html": null,
+  "image": null,
+  "result": {
+   "anchor": 13,
+   "doc": "---\na: 1\n---\n",
+   "prevented": true,
+   "head": 13
+  },
+  "frontmatterPanel": "\nAdd property\n"
+ }
+]
