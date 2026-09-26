@@ -23,4 +23,7 @@ cp -R "$SRC" "$DST"
 scripts/sign.sh "$DST"
 /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -f "$DST" "$LEGACY" 2>/dev/null || true
 echo "installed: $DST (legacy: $LEGACY)"
-[[ $WAS_RUNNING == 1 ]] && open -a "$DST" || true
+# RELAUNCH=0: leave it quit; RELAUNCH=bg: reopen without taking focus
+if [[ $WAS_RUNNING == 1 && "${RELAUNCH:-1}" != 0 ]]; then
+  if [[ "${RELAUNCH:-1}" == bg ]]; then open -g -a "$DST"; else open -a "$DST"; fi
+fi
