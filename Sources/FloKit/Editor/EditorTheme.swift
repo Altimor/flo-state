@@ -24,7 +24,7 @@ public final class EditorTheme {
     public init(baseSize: CGFloat = 18, lineHeight: CGFloat = 1.5, headingSpaceBefore: CGFloat = 0,
                 headingSpaceAfter: CGFloat = 8, paragraphSpacing: CGFloat = 0, bulletSpacing: CGFloat = 12,
                 fontFamilies: [String] = ["Proxima Nova"], foreground: NSColor = NSColor(hex: "#0D0D0D"),
-                accent: NSColor = NSColor(hex: "#0433FF"), headingColor: NSColor = NSColor(hex: "#191919"),
+                accent: NSColor = .controlAccentColor, headingColor: NSColor = NSColor(hex: "#191919"),
                 subheadingColor: NSColor = NSColor(hex: "#4A86E8"), contrast: CGFloat = 0.36,
                 background: NSColor = NSColor(hex: "#F9F9F9")) {
         self.baseSize = baseSize
@@ -49,7 +49,8 @@ public final class EditorTheme {
     public var mutedColor: NSColor { foreground.withAlphaComponent(0.54) }
     public var codeBackground: NSColor { foreground.withAlphaComponent(contrast * 0.16) }
     public var blockquoteBar: NSColor { foreground.withAlphaComponent(contrast * 0.58) }
-    public var selectionColor: NSColor { accent.withAlphaComponent(0.3) }
+    /// System highlight colour (System Settings → Appearance).
+    public var selectionColor: NSColor { .selectedTextBackgroundColor }
 
     public func color(_ role: ColorRole) -> NSColor {
         switch role {

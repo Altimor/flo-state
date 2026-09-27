@@ -75,9 +75,9 @@ enum SettingsPanes {
             ("Fonts", ["fonts.editor", "fonts.mono"]),
         ]),
         Pane(id: "theme", title: "Theme", symbol: "paintpalette", groups: [
-            ("Light", ["theme.light.preset", "theme.light.accent", "theme.light.background", "theme.light.foreground",
+            ("Light", ["theme.light.preset", "theme.light.background", "theme.light.foreground",
                        "theme.light.heading-color", "theme.light.translucent", "theme.light.contrast"]),
-            ("Dark", ["theme.dark.preset", "theme.dark.accent", "theme.dark.background", "theme.dark.foreground",
+            ("Dark", ["theme.dark.preset", "theme.dark.background", "theme.dark.foreground",
                       "theme.dark.heading-color", "theme.dark.translucent", "theme.dark.contrast"]),
         ]),
         Pane(id: "files", title: "Files", symbol: "doc", groups: [
@@ -93,6 +93,7 @@ enum SettingsPanes {
         "fonts.ui",
         "files.default-encoding", "files.insert-final-newline", "files.trim-trailing-whitespace",
         "search.debounce-ms", "search.max-results",
+        "theme.light.accent", "theme.dark.accent",  // unused: accents follow the system accent colour
     ]
 
     /// Theme preset display names ("Writer" is the legacy preset id, kept in config).

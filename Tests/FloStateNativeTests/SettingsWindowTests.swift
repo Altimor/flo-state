@@ -106,10 +106,11 @@ final class SettingsWindowTests: XCTestCase {
         XCTAssertTrue(config.contains("appearance.theme = dark"))
 
         let t = pane("theme")
-        let accent = t.control("theme.light.accent")!
-        accent.well!.color = NSColor(srgbRed: 1, green: 0, blue: 0, alpha: 1)
-        accent.changed(accent.well)
-        XCTAssertTrue(config.contains("theme.light.accent = #FF0000"))
+        XCTAssertNil(t.control("theme.light.accent"), "accent colour is the system's, not a setting")
+        let bg = t.control("theme.light.background")!
+        bg.well!.color = NSColor(srgbRed: 1, green: 0, blue: 0, alpha: 1)
+        bg.changed(bg.well)
+        XCTAssertTrue(config.contains("theme.light.background = #FF0000"))
         XCTAssertEqual(t.control("theme.light.preset")!.popup?.titleOfSelectedItem, "Custom", "no preset matches now")
         let slider = t.control("theme.dark.translucent")!
         slider.slider!.doubleValue = 42.4

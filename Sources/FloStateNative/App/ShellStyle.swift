@@ -20,7 +20,8 @@ struct ShellPalette {
     var textSecondary: NSColor { tokens.textSecondary.ns }
     var textMuted: NSColor { tokens.textMuted.ns }
     var textIconMuted: NSColor { tokens.textIconMuted.ns }
-    var accent: NSColor { tokens.accent.ns }
+    /// The system accent (blue by default): accent colour is no longer a theme setting.
+    var accent: NSColor { .controlAccentColor }
     var sidebarFloatBg: NSColor { tokens.sidebarFloatBg.ns }
     var sidebarFloatBorder: NSColor { tokens.sidebarFloatBorder.ns }
     var surfaceSubtle: NSColor { tokens.surfaceSubtle.ns }
@@ -203,7 +204,7 @@ extension EditorTheme {
             baseSize: CGFloat(v.editorFontSize), lineHeight: CGFloat(v.editorLineHeight),
             headingSpaceBefore: CGFloat(v.editorHeadingSpaceBefore), headingSpaceAfter: CGFloat(v.editorHeadingSpaceAfter),
             paragraphSpacing: CGFloat(v.editorParagraphSpacing), bulletSpacing: CGFloat(v.editorBulletSpacing),
-            fontFamilies: FontStack.editorFamilies(v.fontsEditor), foreground: t.fgBase.ns, accent: t.accent.ns,
+            fontFamilies: FontStack.editorFamilies(v.fontsEditor), foreground: t.fgBase.ns, accent: .controlAccentColor,
             headingColor: t.headingColor.ns, subheadingColor: NSColor(hex: v.editorSubheadingColor),
             contrast: CGFloat(t.contrast), background: t.bgBase.mixedWithTransparent(t.bgOpacity).ns)
     }

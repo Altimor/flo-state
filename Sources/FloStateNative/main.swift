@@ -189,7 +189,7 @@ if let i = args.firstIndex(of: "--snapshot") {
     let w = CGFloat(Double(opt("--width") ?? "1400") ?? 1400), h = CGFloat(Double(opt("--height") ?? "900") ?? 900)
     // --dark: the schema's default dark theme (Writer preset)
     let theme = args.contains("--dark")
-        ? EditorTheme(foreground: NSColor(hex: "#FCFCFC"), accent: NSColor(hex: "#FF6A00"), headingColor: NSColor(hex: "#F0F0F0"),
+        ? EditorTheme(foreground: NSColor(hex: "#FCFCFC"), headingColor: NSColor(hex: "#F0F0F0"),
                       subheadingColor: NSColor(hex: "#3a3a3a"), contrast: 0.328, background: NSColor(hex: "#111111"))
         : EditorTheme()
     let result = MainActor.assumeIsolated { Snapshot.render(text: text, caret: caret, width: w, height: h, theme: theme,
