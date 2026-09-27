@@ -226,6 +226,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         model.openWorkspaceElsewhere = { [weak self] p in self?.openWorkspaceWindow(p, file: nil, keepSession: true) }
         model.openCompactWindow = { [weak self] p in self?.openCompactWindow(p) }
         model.openDroppedPaths = { [weak self] ps in self?.open(paths: ps) }
+        model.closeWindow = { [weak c] in c?.window?.close() }
         c.onClose = { [weak self] wc in self?.windows.removeAll { $0 === wc } }
         windows.append(c)
         return c

@@ -120,9 +120,18 @@ final class IconButton: FlippedView {
     }
     override func mouseEntered(with event: NSEvent) { hovering = true }
     override func mouseExited(with event: NSEvent) { hovering = false }
-    override func mouseDown(with event: NSEvent) {}
-    override func mouseUp(with event: NSEvent) {
-        if bounds.contains(convert(event.locationInWindow, from: nil)) { action?() }
+    /// Track the click here like NSButton: in the title-bar strip AppKit never
+    /// delivers the mouse-up to the view (it treats the press as a possible window drag).
+    override func mouseDown(with event: NSEvent) {
+        guard let w = window else { return }
+        var inside = true
+        w.trackEvents(matching: [.leftMouseUp, .leftMouseDragged], timeout: NSEvent.foreverDuration, mode: .eventTracking) { e, stop in
+            guard let e = e else { stop.pointee = true; return }
+            inside = bounds.contains(convert(e.locationInWindow, from: nil))
+            hovering = inside
+            if e.type == .leftMouseUp { stop.pointee = true }
+        }
+        if inside { action?() }
     }
 
     override func draw(_ dirtyRect: NSRect) {

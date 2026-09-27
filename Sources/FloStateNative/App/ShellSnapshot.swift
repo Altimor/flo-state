@@ -2,7 +2,7 @@ import AppKit
 import FloCore
 import FloKit
 
-/// Welcome screen (no workspace): "Add Folder" / "Open File".
+/// Welcome screen (no workspace): asks "a folder of notes, or a single file?" → "Open Folder" / "Open File".
 final class WelcomeView: FlippedView {
     unowned let model: ShellModel
     var onAddFolder: (() -> Void)?
@@ -12,19 +12,19 @@ final class WelcomeView: FlippedView {
 
     private var buttons: [(String, CGRect)] {
         let f = UIFonts.ui(model.values, weight: .medium)
-        let w1 = TextStyle(font: f, color: .black).width("Add Folder") + 32
+        let w1 = TextStyle(font: f, color: .black).width("Open Folder") + 32
         let w2 = TextStyle(font: f, color: .black).width("Open File") + 32
         let total = w1 + 12 + w2
         let y = bounds.height / 2 + 4
         let x = (bounds.width - total) / 2
-        return [("Add Folder", CGRect(x: x, y: y, width: w1, height: 35.5)), ("Open File", CGRect(x: x + w1 + 12, y: y, width: w2, height: 35.5))]
+        return [("Open Folder", CGRect(x: x, y: y, width: w1, height: 35.5)), ("Open File", CGRect(x: x + w1 + 12, y: y, width: w2, height: 35.5))]
     }
 
     override func draw(_ dirtyRect: NSRect) {
         guard let ctx = NSGraphicsContext.current?.cgContext else { return }
         let p = model.palette_
         p.bg.setFill(); bounds.fill(using: .sourceOver)
-        let msg = "Add a folder with your specs, docs, notes, or any markdown files."
+        let msg = "Open a folder of notes, or a single file?"
         let style = TextStyle(font: UIFonts.ui(model.values), color: p.textMuted)
         let lines = TextWrap.lines(msg, font: style.font, width: 252)
         var y = bounds.height / 2 - 24 - CGFloat(lines.count) * 21.125

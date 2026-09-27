@@ -159,6 +159,7 @@ enum MainMenu {
         nil,
         Entry(title: "Go to Today", key: "d", modifiers: [.command, .shift], action: .goToToday),
         Entry(title: "Search…", key: "k", modifiers: [.command], action: .search),
+        Entry(title: "Search in All Notes…", key: "f", modifiers: [.command, .shift], action: .searchContents),
         nil,
         Entry(title: "Close Tab", key: "w", modifiers: [.command], action: .closeTab),
     ]

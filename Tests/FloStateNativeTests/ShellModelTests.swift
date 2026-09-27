@@ -569,7 +569,7 @@ final class ShellPaletteTests: XCTestCase {
         let f = ShellFixture(files: ["Master Journal.md": "", "notes/master-plan.md": "", "other.md": ""])
         await f.open()
         XCTAssertEqual(f.model.paletteCommands().map { $0.title },
-                       ["Toggle Sidebar", "Create New File", "Close Current Tab", "Close All Tabs", "Open Workspace",
+                       ["Toggle Sidebar", "Search in All Notes", "Create New File", "Close Current Tab", "Close All Tabs", "Open Workspace",
                         "Close Workspace", "Toggle Dark Mode", "Settings"])
         try! await f.model.editor.openFileInTabOrFocus(f.p("other.md"))
         XCTAssertTrue(f.model.paletteCommands().map { $0.title }.contains("Open File in Compact Window"))
@@ -670,7 +670,7 @@ final class ShellMenuAndKeyTests: XCTestCase {
         let menu = MainMenu.build(target: router)
         XCTAssertEqual(menu.items.map { $0.title }, ["Flo State", "File", "Edit", "View", "Window"])
         func items(_ i: Int) -> [String] { menu.items[i].submenu!.items.map { $0.isSeparatorItem ? "-" : $0.title } }
-        XCTAssertEqual(items(1), ["New Note", "New Tab", "Go to File…", "-", "Go to Today", "Search…", "-", "Close Tab"])
+        XCTAssertEqual(items(1), ["New Note", "New Tab", "Go to File…", "-", "Go to Today", "Search…", "Search in All Notes…", "-", "Close Tab"])
         XCTAssertEqual(items(3), ["Toggle Sidebar", "Toggle Sidebar", "Toggle Typewriter Scrolling", "-", "Increase Font Size", "Decrease Font Size",
                                   "Reset Font Size", "-", "Collapse All Headings", "Expand All Headings", "-", "Back", "Forward",
                                   "-", "Previous File", "Next File"])
@@ -682,7 +682,7 @@ final class ShellMenuAndKeyTests: XCTestCase {
         XCTAssertTrue(items(0).contains("Settings…"), "macOS 13+ naming")
         XCTAssertFalse(items(0).contains("Preferences…"))
         let keys = menu.items[1].submenu!.items.filter { !$0.isSeparatorItem }.map { "\($0.keyEquivalentModifierMask.contains(.shift) ? "⇧" : "")\($0.keyEquivalent)" }
-        XCTAssertEqual(keys, ["n", "t", "o", "⇧d", "k", "w"])
+        XCTAssertEqual(keys, ["n", "t", "o", "⇧d", "k", "⇧f", "w"])
         let back = menu.items[3].submenu!.items.first { $0.title == "Back" }!
         XCTAssertEqual(back.keyEquivalent, "", "Alt-←/→ stay with the editor")
     }

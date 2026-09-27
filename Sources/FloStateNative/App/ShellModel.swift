@@ -12,6 +12,7 @@ enum ShellAction: Equatable {
     case back, forward
     // web-view shortcuts (use-keyboard-shortcuts.ts)
     case openFileSearch            // Cmd-O
+    case searchContents            // Cmd-Shift-F
     case previousTab, nextTab      // Cmd-Shift-[ ], Ctrl-(Shift-)Tab
     case selectTab(Int)            // Cmd-1…9 (1-based)
     case stepFile(Int)             // Cmd-Alt-↑/↓
@@ -21,7 +22,7 @@ enum ShellAction: Equatable {
 
 /// Command palette state (`ui-store.ts` + `command-palette/index.tsx`).
 struct PaletteState: Equatable {
-    enum Intent: String { case search, createFile = "create-file" }
+    enum Intent: String { case search, createFile = "create-file", fullText = "full-text" }
     var intent: Intent
     var query: String = ""
     var selected: Int = 0
@@ -29,7 +30,7 @@ struct PaletteState: Equatable {
 
 /// A palette row.
 struct PaletteItem: Equatable {
-    enum Kind: Equatable { case command(String), file(String), create(String) }
+    enum Kind: Equatable { case command(String), file(String), create(String), hit(path: String, offset: Int, length: Int) }
     var kind: Kind
     var title: String
     var subtitle: String?
@@ -67,8 +68,18 @@ final class ShellModel {
     // View state
     var windowWidth: CGFloat = 1200 { didSet { if oldValue != windowWidth { notify(.layout) } } }
     var typewriterScrolling = true
-    var palette: PaletteState? { didSet { notify(.palette) } }
+    var palette: PaletteState? {
+        didSet {
+            // full-text search keeps note text only while it's open
+            if palette?.intent != .fullText { contentSearch.clear(); contentResults = [] }
+            notify(.palette)
+        }
+    }
     var paletteResults: [SearchResult] = []
+    var contentResults: [ContentHit] = []
+    let contentSearch = ContentSearch()
+    /// Text range to select after opening a note from full-text search.
+    var pendingReveal: (path: String, offset: Int, length: Int)?
     var renamingPath: String? { didSet { notify(.sidebar) } }
     var selectedPaths: Set<String> = [] { didSet { notify(.sidebar) } }
     var selectionAnchor: String?
@@ -618,6 +629,7 @@ final class ShellModel {
         case .goToToday: editorCommand(.goToToday)
         case .search: palette = PaletteState(intent: .search)
         case .openFileSearch: if root != nil { palette = PaletteState(intent: .search) }
+        case .searchContents: if root != nil && !isCompact { palette = PaletteState(intent: .fullText) }
         case .closeTab: if editor.activeTabId != nil && !isCompact { editor.closeActiveTab() }
         case .toggleSidebar: toggleSidebar()
         case .toggleTypewriter: typewriterScrolling.toggle(); notify(.layout)
@@ -746,6 +758,15 @@ final class ShellModel {
     /// Paths from a Finder drop that are not images (folders / notes to open).
     var openDroppedPaths: ([String]) -> Void = { _ in }
 
+    /// Welcome screen "Open File…": the note opens on its own (compact window), like a
+    /// Finder open. Its folder is NOT opened as a workspace: no scan, no sidebar, not
+    /// added to recent workspaces (a note in ~/Downloads used to pull in the whole folder).
+    var closeWindow: () -> Void = {}
+    func openPickedFile(_ path: String) {
+        openDroppedPaths([path])
+        if root == nil && editor.tabs.isEmpty { closeWindow() }
+    }
+
     // MARK: palette (command-palette/index.tsx)
 
     /// A standalone (compact) file window: no workspace, one file tab.
@@ -756,6 +777,7 @@ final class ShellModel {
         func add(_ id: String, _ label: String, _ desc: String = "Command") { out.append(PaletteItem(kind: .command(id), title: label, subtitle: desc)) }
         let compact = isCompact
         if root != nil && !compact { add("toggle-sidebar", "Toggle Sidebar") }
+        if root != nil && !compact { add("search-contents", "Search in All Notes") }
         if root != nil || (compact && editor.activeFilePath != nil) { add("new-file", "Create New File") }
         if root != nil && editor.activeFilePath != nil { add("open-in-compact-window", "Open File in Compact Window") }
         if editor.activeTabId != nil && !compact { add("close-tab", "Close Current Tab") }
@@ -787,6 +809,18 @@ final class ShellModel {
                                items: [PaletteItem(kind: .create(path), title: "Create: \(LinkPaths.getFileName(path))")],
                                placeholder: "Create a new note...")
         }
+        if p.intent == .fullText {
+            let items = contentResults.map {
+                PaletteItem(kind: .hit(path: $0.path, offset: $0.offset, length: $0.length),
+                            title: "\(LinkPaths.getFileStem(LinkPaths.getFileName($0.path)))  ·  line \($0.line)",
+                            subtitle: $0.snippet, highlights: $0.highlights)
+            }
+            if items.isEmpty {
+                let empty = q.count < 2 ? "Type at least two characters to search inside your notes." : (isIndexing ? "Indexing workspace..." : "No notes contain \"\(q)\".")
+                return PaletteView(heading: nil, empty: empty, items: [], placeholder: "Search in all notes...")
+            }
+            return PaletteView(heading: "In notes", empty: nil, items: items, placeholder: "Search in all notes...")
+        }
         let cmds = q.isEmpty ? paletteCommands() : paletteCommands().filter { $0.title.lowercased().contains(q.lowercased()) }
         var files = q.isEmpty || isCompact ? [] : paletteResults.map {
             PaletteItem(kind: .file($0.path), title: LinkPaths.getFileName($0.path), subtitle: $0.relativePath,
@@ -813,7 +847,13 @@ final class ShellModel {
         guard var p = palette else { return }
         p.query = q
         p.selected = 0
-        if p.intent == .search, !q.trimmingCharacters(in: .whitespaces).isEmpty {
+        if p.intent == .fullText {
+            let open = Dictionary(editor.tabs.compactMap { t -> (String, String)? in
+                guard let path = t.location.primaryPath, let f = editor.file(path), !f.isLoading else { return nil }
+                return (path, f.content)
+            }, uniquingKeysWith: { a, _ in a })
+            contentResults = contentSearch.search(q, in: index?.files ?? [], overrides: open)
+        } else if p.intent == .search, !q.trimmingCharacters(in: .whitespaces).isEmpty {
             paletteResults = index?.fuzzySearch(q, limit: 20) ?? []
         } else {
             paletteResults = []
@@ -832,6 +872,10 @@ final class ShellModel {
         case let .file(path):
             palette = nil
             if isCompact { Task { await editor.openCompactFile(path) } } else { Task { try? await editor.openFileInTabOrFocus(path) } }
+        case let .hit(path, offset, length):
+            palette = nil
+            pendingReveal = (path, offset, length)
+            Task { try? await editor.openFileInTabOrFocus(path); notify(.content) }
         case let .create(path):
             palette = nil
             Task {
@@ -845,6 +889,7 @@ final class ShellModel {
         case let .command(id):
             switch id {
             case "toggle-sidebar": palette = nil; toggleSidebar()
+            case "search-contents": palette = PaletteState(intent: .fullText); contentResults = []
             case "new-file": palette = PaletteState(intent: .createFile)
             case "open-in-compact-window": palette = nil; perform(.openInCompactWindow)
             case "close-tab": palette = nil; perform(.closeTab)

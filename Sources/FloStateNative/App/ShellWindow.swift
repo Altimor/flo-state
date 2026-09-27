@@ -328,7 +328,10 @@ final class ShellRootView: FlippedView {
         addSubview(collapsedToggle)
         addSubview(tabs)
         dragRegion.passThrough = { [unowned self] in
-            self.sidebar.isHidden ? [] : [self.sidebar.toggle.convert(self.sidebar.toggle.bounds, to: self)]
+            var r: [CGRect] = []
+            if !self.sidebar.isHidden { r.append(self.sidebar.toggle.convert(self.sidebar.toggle.bounds, to: self)) }
+            if !self.collapsedToggle.isHidden { r.append(self.collapsedToggle.frame) }
+            return r
         }
         resizeHandle.onDrag = { [unowned self] w in self.draftSidebarWidth = w; self.needsLayout = true }
         addSubview(welcome)
@@ -338,7 +341,7 @@ final class ShellRootView: FlippedView {
             p.canChooseFiles = true
             p.canChooseDirectories = false
             guard p.runModal() == .OK, let url = p.url, let m = model else { return }
-            Task { await m.openWorkspace(LinkPaths.getParentDir(url.path), openFile: url.path, keepSession: true) }
+            m.openPickedFile(url.path)
         }
         registerForDraggedTypes([.fileURL])
         collapsedToggle.action = { [weak model] in model?.toggleSidebar() }
@@ -644,7 +647,9 @@ final class ShellWindowController: NSWindowController, NSWindowDelegate {
         applyTheme()
         if !offscreen {
             keyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] e in
-                MainActor.assumeIsolated { self?.handleKey(e) ?? e }
+                // nil = handled (swallow). `self?.handleKey(e) ?? e` turned every nil back into
+                // the event, so AppKit dispatched menu shortcuts a second time (Cmd-\ toggled twice).
+                MainActor.assumeIsolated { guard let self = self else { return e }; return self.handleKey(e) }
             }
         }
     }
@@ -732,6 +737,11 @@ final class ShellWindowController: NSWindowController, NSWindowDelegate {
                 root.compactHeader.needsDisplay = true
             }
             if s.contains("sidebar") || s.contains("content") { root.sidebar.reload() }
+        }
+        if let r = model.pendingReveal, model.editor.activeFilePath == r.path,
+           let pane = root.area.activeFilePane, pane.controller != nil {
+            model.pendingReveal = nil
+            pane.reveal(offset: r.offset, length: r.length)
         }
         if let (path, slug) = model.pendingAnchor, model.editor.activeFilePath == path,
            let pane = root.area.activeFilePane, pane.controller != nil {

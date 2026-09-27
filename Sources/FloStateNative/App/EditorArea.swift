@@ -313,6 +313,16 @@ final class EditorPaneView: FlippedView {
         scrollBy(top - 24)
     }
 
+    /// Select a text range (a full-text search hit), put it a third of the way down, and focus the editor.
+    func reveal(offset: Int, length: Int) {
+        guard let c = controller else { return }
+        let n = c.state.doc.length
+        let from = min(max(0, offset), n), to = min(from + max(0, length), n)
+        c.run { t in t.dispatch(TransactionSpec(selection: .single(from, to), scrollIntoView: false)); return true }
+        if let top = c.lineTop(forPosition: from, in: self) { scrollBy(top - bounds.height / 3) }
+        window?.makeFirstResponder(c.textView)
+    }
+
     /// Scroll to the heading with GFM slug `slug` (duplicates -2, -3…); false if missing.
     @discardableResult
     func scrollToSlug(_ slug: String) -> Bool {
