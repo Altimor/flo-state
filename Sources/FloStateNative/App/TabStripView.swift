@@ -26,7 +26,7 @@ enum TabGeometry {
 
 final class TabButtonView: FlippedView {
     let tab: Tab
-    unowned let model: ShellModel
+    let model: ShellModel   // strong: AppKit can still lay a view out after its window controller (the other owner) is gone
     var title = ""
     var isActive = false
     var isLoading = false
@@ -94,7 +94,7 @@ final class TabButtonView: FlippedView {
 }
 
 final class PlusButtonView: FlippedView {
-    unowned let model: ShellModel
+    let model: ShellModel   // strong: AppKit can still lay a view out after its window controller (the other owner) is gone
     private var hovering = false { didSet { needsDisplay = true } }
     init(model: ShellModel) { self.model = model; super.init(frame: .zero); toolTip = L("New tab") }
     required init?(coder: NSCoder) { fatalError() }
@@ -116,7 +116,7 @@ final class PlusButtonView: FlippedView {
 
 /// The tab bar (horizontal scroll strip + "+").
 final class TabStripView: FlippedView {
-    unowned let model: ShellModel
+    let model: ShellModel   // strong: AppKit can still lay a view out after its window controller (the other owner) is gone
     let scroll = NSScrollView()
     let strip = FlippedView()
     let plus: PlusButtonView

@@ -7,7 +7,7 @@ import FloCore
 /// by a native menu.
 @MainActor
 final class CompactHeaderView: FlippedView {
-    unowned let model: ShellModel
+    let model: ShellModel   // strong: AppKit can still lay a view out after its window controller (the other owner) is gone
     private var hover: Int? { didSet { needsDisplay = true } }
     var openFile: (String) -> Void = { _ in }
 

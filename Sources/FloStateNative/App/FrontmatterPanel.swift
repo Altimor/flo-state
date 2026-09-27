@@ -77,7 +77,7 @@ final class FrontmatterField: NSTextField {
 /// inside the text view so it scrolls with the document.
 @MainActor
 final class FrontmatterPanelView: FlippedView, NSTextFieldDelegate {
-    unowned let model: ShellModel
+    let model: ShellModel   // strong: AppKit can still lay a view out after its window controller (the other owner) is gone
     let path: String
     var rows: FrontmatterRows
     private var fields: [(FrontmatterField, FrontmatterField)] = []

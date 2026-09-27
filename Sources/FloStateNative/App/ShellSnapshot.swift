@@ -4,7 +4,7 @@ import FloKit
 
 /// Welcome screen (no workspace): "Open Folder" / "Open File" / "Start from Scratch" (a new ~/Documents/Notebook with a Welcome note).
 final class WelcomeView: FlippedView {
-    unowned let model: ShellModel
+    let model: ShellModel   // strong: AppKit can still lay a view out after its window controller (the other owner) is gone
     var onAddFolder: (() -> Void)?
     var onOpenFile: (() -> Void)?
     var onStartFromScratch: (() -> Void)?

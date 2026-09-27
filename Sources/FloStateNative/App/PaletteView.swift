@@ -33,7 +33,7 @@ final class PaletteInputField: NSTextField {
 
 /// Full-window overlay: click outside closes; the card holds input + list.
 final class PaletteOverlayView: FlippedView, NSTextFieldDelegate {
-    unowned let model: ShellModel
+    let model: ShellModel   // strong: AppKit can still lay a view out after its window controller (the other owner) is gone
     let card = PaletteCardView()
     let shadowView = PaletteShadowView()
     /// Live blur behind the card (CSS backdrop-filter: blur(16px)).

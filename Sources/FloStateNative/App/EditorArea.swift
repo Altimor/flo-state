@@ -49,7 +49,7 @@ extension EditorController {
 @MainActor
 final class EditorPaneView: FlippedView {
     let path: String
-    unowned let model: ShellModel
+    let model: ShellModel   // strong: AppKit can still lay a view out after its window controller (the other owner) is gone
     private(set) var controller: EditorController?  // read by menu commands
     private var loadedReloadVersion = -1
     private var spinner: NSTextField?
@@ -389,7 +389,7 @@ final class EditorPaneView: FlippedView {
 // MARK: - Launcher ("New tab")
 
 final class LauncherView: FlippedView {
-    unowned let model: ShellModel
+    let model: ShellModel   // strong: AppKit can still lay a view out after its window controller (the other owner) is gone
     private var buttons: [(String, String, CGRect, () -> Void)] = []
     private var hovered: Int? { didSet { needsDisplay = true } }
     init(model: ShellModel) { self.model = model; super.init(frame: .zero) }
@@ -478,7 +478,7 @@ enum FooterMetrics {
 }
 
 final class StatusBarView: FlippedView {
-    unowned let model: ShellModel
+    let model: ShellModel   // strong: AppKit can still lay a view out after its window controller (the other owner) is gone
     var metrics: [FooterMetrics.Metric] = [] { didSet { needsDisplay = true } }
     init(model: ShellModel) { self.model = model; super.init(frame: .zero) }
     required init?(coder: NSCoder) { fatalError() }
@@ -539,7 +539,7 @@ enum RailGeometry {
 }
 
 final class OutlineRailView: FlippedView {
-    unowned let model: ShellModel
+    let model: ShellModel   // strong: AppKit can still lay a view out after its window controller (the other owner) is gone
     var headings: [DocumentHeading] = [] { didSet { needsDisplay = true } }
     var activeIndex: Int? { didSet { if oldValue != activeIndex { needsDisplay = true; popover?.needsDisplay = true } } }
     var onSelect: ((DocumentHeading) -> Void)?

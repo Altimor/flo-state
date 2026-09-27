@@ -57,7 +57,7 @@ struct UIStateStore {
 
 /// `anchor-warning-banner.tsx`: click to dismiss.
 final class AnchorBannerView: FlippedView {
-    unowned let model: ShellModel
+    let model: ShellModel   // strong: AppKit can still lay a view out after its window controller (the other owner) is gone
     init(model: ShellModel) { self.model = model; super.init(frame: .zero) }
     required init?(coder: NSCoder) { fatalError() }
     var style: TextStyle { TextStyle(font: UIFonts.ui(model.values), color: model.palette_.textSecondary, kern: -0.13) }
@@ -78,7 +78,7 @@ final class AnchorBannerView: FlippedView {
 /// Editor area: one pane per kept-alive tab (+ launcher), footer, outline rail.
 @MainActor
 final class EditorAreaView: FlippedView {
-    unowned let model: ShellModel
+    let model: ShellModel   // strong: AppKit can still lay a view out after its window controller (the other owner) is gone
     private(set) var panes: [String: NSView] = [:]
     let footer: StatusBarView
     let rail: OutlineRailView
@@ -226,7 +226,7 @@ final class DragRegionView: NSView {
 /// Sidebar resize handle: 8px hit area centred on the sidebar edge; a 2px
 /// #2a6fd6 line on hover/drag; clamp 220…min(420, max(280, 35% viewport)).
 final class SidebarResizeHandle: FlippedView {
-    unowned let model: ShellModel
+    let model: ShellModel   // strong: AppKit can still lay a view out after its window controller (the other owner) is gone
     var onDrag: ((CGFloat?) -> Void)?
     private var hovering = false { didSet { needsDisplay = true } }
     private var dragStart: (x: CGFloat, width: CGFloat)?
@@ -267,7 +267,7 @@ final class SidebarResizeHandle: FlippedView {
 /// chrome, collapsed toggle, palette overlay (`app-layout.tsx`).
 @MainActor
 final class ShellRootView: FlippedView {
-    unowned let model: ShellModel
+    let model: ShellModel   // strong: AppKit can still lay a view out after its window controller (the other owner) is gone
     let effect = NSVisualEffectView()
     /// The sidebar column: its width animates (web: `width 140ms ease-out`,
     /// overflow hidden) while the panel inside keeps its full width.

@@ -264,7 +264,7 @@ final class SectionHeaderView: FlippedView {
 
 /// The floating sidebar panel (`sidebar/index.tsx`).
 final class SidebarView: FlippedView, NSTextFieldDelegate {
-    unowned let model: ShellModel
+    let model: ShellModel   // strong: AppKit can still lay a view out after its window controller (the other owner) is gone
     let toggle = IconButton(icon: .sidebarLeft)
     let scroll = NSScrollView()
     let document = FlippedView()

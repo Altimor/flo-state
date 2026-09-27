@@ -24,6 +24,28 @@ final class ShellViewTests: XCTestCase {
         wc = nil
     }
 
+    /// Crash report (0.1.8): AppKit laid a window out after its controller, the model's other owner, was
+    /// released; the root view's `unowned` model then aborted in `setWindowActive` during `layout()`.
+    func testRootViewOutlivingItsControllerCanStillLayOut() {
+        let data = TFS.tempDir("data")
+        var root: ShellRootView?
+        var window: NSWindow?
+        autoreleasepool {
+            let model = ShellModel(dataDir: AppDataDirectory(baseURL: URL(fileURLWithPath: data)), importLegacy: false)
+            model.systemIsDark = { false }
+            let c = ShellWindowController(model: model, frame: NSRect(x: -10000, y: -10000, width: 900, height: 600), offscreen: true)
+            root = c.root
+            window = c.window
+            c.window?.close()
+        }
+        // the controller (and its reference to the model) is gone; the window and its views are not
+        root?.needsLayout = true
+        root?.layout()
+        root?.setWindowActive(true)
+        XCTAssertNotNil(root?.model)
+        window = nil
+    }
+
     func refresh() {
         wc.flush()
         wc.root.layoutSubtreeIfNeeded()
