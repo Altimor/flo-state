@@ -43,7 +43,7 @@ public final class EditorController: NSObject, NSTextViewDelegate, NSTextLayoutM
             if n.name == "URL" && n.from <= pos && pos < n.to {
                 found = .href(LinkPaths.normalizeMarkdownDestination(self.state.doc.slice(n.from, n.to))); return false
             }
-            if n.name == "Link", let url = n.children.first(where: { $0.name == "URL" }) {
+            if n.name == "Link", let url = n.children.last(where: { $0.name == "URL" }) {  // last: autolinks in the text are URL children too
                 found = .href(LinkPaths.normalizeMarkdownDestination(self.state.doc.slice(url.from, url.to))); return false
             }
             if n.name == "Autolink" || n.name == "URL" {
@@ -274,6 +274,16 @@ public final class EditorController: NSObject, NSTextViewDelegate, NSTextLayoutM
         set { applier.images.workspaceRoot = newValue }
     }
     /// Drop cached image sizes (an attachment changed on disk).
+    /// Last drawn rect of each image widget (keyed by source position); see ImageResize.swift.
+    var imageRects: [Int: ImageHit] = [:]
+    lazy var imageOverlay: ImageResizeOverlay = {
+        let o = ImageResizeOverlay()
+        o.controller = self
+        o.isHidden = true
+        textView.addSubview(o)
+        return o
+    }()
+
     public func reloadImages() { applier.images.invalidate(); lineSigs = []; render(force: true) }
 
     // MARK: rendering
@@ -616,6 +626,7 @@ public final class FloTextView: NSTextView {
 
     public override func cursorUpdate(with event: NSEvent) {
         if chromeRect.contains(convert(event.locationInWindow, from: nil)) { NSCursor.arrow.set() }
+        else if let c = controller, c.imageOverlay.handleContains(convert(event.locationInWindow, from: nil)) { NSCursor.resizeLeftRight.set() }
         else if let c = controller, c.features.pointerOverLink(event) { NSCursor.pointingHand.set() }
         else { super.cursorUpdate(with: event) }
     }
@@ -701,6 +712,11 @@ public final class FloTextView: NSTextView {
     }
 
     public override func mouseMoved(with event: NSEvent) {
+        // on an image's resize handle: keep the resize cursor (super would reset the I-beam every move)
+        if let c = controller, c.imageOverlay.handleContains(convert(event.locationInWindow, from: nil)) {
+            NSCursor.resizeLeftRight.set()
+            return
+        }
         super.mouseMoved(with: event)
         if chromeRect.contains(convert(event.locationInWindow, from: nil)) { NSCursor.arrow.set(); return }
         if let c = controller, c.features.pointerOverLink(event) { NSCursor.pointingHand.set() }
@@ -710,12 +726,15 @@ public final class FloTextView: NSTextView {
         let line = i == NSNotFound ? nil : c.state.doc.lineAt(i).number
         c.hoverLine = line.flatMap { c.foldSections[$0] != nil ? $0 : nil }
         c.hoverChevron = chevronLine(at: p) != nil
+        let img = c.image(at: p, slop: ImageResizeOverlay.handle)
+        if img != c.imageOverlay.hit { c.imageOverlay.show(img) }
     }
 
     public override func mouseExited(with event: NSEvent) {
         super.mouseExited(with: event)
         controller?.hoverLine = nil
         controller?.hoverChevron = false
+        controller?.imageOverlay.show(nil)
     }
 
     public override func updateTrackingAreas() {
@@ -784,7 +803,13 @@ public final class FloTextView: NSTextView {
     }
 
     public override func menu(for event: NSEvent) -> NSMenu? {
-        controller?.features.contextMenu(for: event) ?? super.menu(for: event)
+        let base = controller?.features.contextMenu(for: event) ?? super.menu(for: event)
+        guard let c = controller, let hit = c.image(at: convert(event.locationInWindow, from: nil)) else { return base }
+        let menu = base ?? NSMenu()
+        let items = c.imageSizeMenuItems(for: hit)
+        if !menu.items.isEmpty { menu.insertItem(.separator(), at: 0) }
+        for it in items.reversed() { menu.insertItem(it, at: 0) }
+        return menu
     }
 
     /// NSTextView's own completion popup (Esc / F5) is replaced by the wiki autocomplete.

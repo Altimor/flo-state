@@ -151,6 +151,9 @@ final class KeysParityTests: XCTestCase {
             """
             if !ok && r.visualGeometry { layoutFails += 1; excluded.append("[layout] " + detail); continue }
             if !ok && r.domEdit { domFails += 1; excluded.append("[dom-edit] " + detail); continue }
+            // Intentional divergence: Tab on a numbered item nests it and renumbers (1. / 1. / 2.);
+            // the web app left numbered items alone.
+            if !ok && c.name.hasPrefix("list ctx '1. a") && c.keys.contains("Tab") { excluded.append("[intentional] " + detail); continue }
             total += 1
             if ok { pass += 1 }
             for tag in c.tags {

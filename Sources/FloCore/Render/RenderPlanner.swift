@@ -372,8 +372,10 @@ struct Planner {
                 let count = n.to - n.from
                 if !touched, count == 2 || count == 3 { replace(n.from, n.to, .dash(count == 2 ? "\u{2013}" : "\u{2014}")) }
             case "Image":
-                // fold/image.ts: needs a URL child; block when alone on its line
-                guard let url = n.children.first(where: { $0.name == "URL" }) else { break }
+                // fold/image.ts: needs a URL child; block when alone on its line. The destination is
+                // the LAST URL child: GFM autolinks inside the alt text ("… PM@2x.png" reads as an
+                // email) are URL children too, and used to become the image path (image not shown).
+                guard let url = n.children.last(where: { $0.name == "URL" }) else { break }
                 let src = LinkPaths.normalizeMarkdownDestination(doc.slice(url.from, url.to))
                 let line = doc.lineAt(n.from)
                 let block = n.from == line.from && n.to == line.to

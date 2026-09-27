@@ -624,7 +624,12 @@ final class ShellModel {
     func perform(_ action: ShellAction) {
         switch action {
         case .openPreferences: openSettingsWindow()
-        case .newNote: if root != nil && !isCompact { palette = PaletteState(intent: .createFile) }
+        case .newNote:
+            if root != nil && !isCompact || isCompact && editor.activeFilePath != nil {
+                palette = PaletteState(intent: .createFile)   // compact: created next to the open file
+            } else if root == nil {
+                newNoteWithoutFolder()
+            }
         case .newTab: if root != nil && !isCompact { editor.openNewTab() }
         case .goToToday: editorCommand(.goToToday)
         case .search: palette = PaletteState(intent: .search)
@@ -757,6 +762,37 @@ final class ShellModel {
 
     /// Paths from a Finder drop that are not images (folders / notes to open).
     var openDroppedPaths: ([String]) -> Void = { _ in }
+
+    /// New Note with nothing open: ask where to save it (Documents, "Untitled.md"), create it, open it on its own.
+    var chooseNewNotePath: () -> String? = {
+        let p = NSSavePanel()
+        p.title = "New Note"
+        p.nameFieldStringValue = "Untitled.md"
+        p.allowedContentTypes = [.init(filenameExtension: "md")!]
+        p.directoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
+        return p.runModal() == .OK ? p.url?.path : nil
+    }
+    func newNoteWithoutFolder() {
+        guard let path = chooseNewNotePath() else { return }
+        do {
+            if !FileManager.default.fileExists(atPath: path) { try Data().write(to: URL(fileURLWithPath: path)) }
+        } catch {
+            alert("Couldn't create the note: \(error.localizedDescription)")
+            return
+        }
+        openPickedFile(path)
+    }
+
+    /// Welcome screen "Start from Scratch": a new ~/Documents/Notebook with Welcome.md, opened.
+    var documentsDirectory: () -> URL = { FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0] }
+    func startFromScratch() {
+        do {
+            let (dir, note) = try StarterNotebook.create(documents: documentsDirectory())
+            Task { await openWorkspace(dir, openFile: note, keepSession: false) }
+        } catch {
+            alert("Couldn't create a notebook in Documents: \(error.localizedDescription)")
+        }
+    }
 
     /// Welcome screen "Open File…": the note opens on its own (compact window), like a
     /// Finder open. Its folder is NOT opened as a workspace: no scan, no sidebar, not

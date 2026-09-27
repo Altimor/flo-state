@@ -2,29 +2,30 @@ import AppKit
 import FloCore
 import FloKit
 
-/// Welcome screen (no workspace): asks "a folder of notes, or a single file?" → "Open Folder" / "Open File".
+/// Welcome screen (no workspace): "Open Folder" / "Open File" / "Start from Scratch" (a new ~/Documents/Notebook with a Welcome note).
 final class WelcomeView: FlippedView {
     unowned let model: ShellModel
     var onAddFolder: (() -> Void)?
     var onOpenFile: (() -> Void)?
+    var onStartFromScratch: (() -> Void)?
     init(model: ShellModel) { self.model = model; super.init(frame: .zero) }
     required init?(coder: NSCoder) { fatalError() }
 
+    private static let titles = ["Open Folder", "Open File", "Start from Scratch"]
     private var buttons: [(String, CGRect)] {
         let f = UIFonts.ui(model.values, weight: .medium)
-        let w1 = TextStyle(font: f, color: .black).width("Open Folder") + 32
-        let w2 = TextStyle(font: f, color: .black).width("Open File") + 32
-        let total = w1 + 12 + w2
+        let widths = Self.titles.map { TextStyle(font: f, color: .black).width($0) + 32 }
+        let total = widths.reduce(0, +) + 12 * CGFloat(widths.count - 1)
         let y = bounds.height / 2 + 4
-        let x = (bounds.width - total) / 2
-        return [("Open Folder", CGRect(x: x, y: y, width: w1, height: 35.5)), ("Open File", CGRect(x: x + w1 + 12, y: y, width: w2, height: 35.5))]
+        var x = (bounds.width - total) / 2
+        return zip(Self.titles, widths).map { t, w in defer { x += w + 12 }; return (t, CGRect(x: x, y: y, width: w, height: 35.5)) }
     }
 
     override func draw(_ dirtyRect: NSRect) {
         guard let ctx = NSGraphicsContext.current?.cgContext else { return }
         let p = model.palette_
         p.bg.setFill(); bounds.fill(using: .sourceOver)
-        let msg = "Open a folder of notes, or a single file?"
+        let msg = "Open a folder of notes or a single file, or start from scratch."
         let style = TextStyle(font: UIFonts.ui(model.values), color: p.textMuted)
         let lines = TextWrap.lines(msg, font: style.font, width: 252)
         var y = bounds.height / 2 - 24 - CGFloat(lines.count) * 21.125
@@ -45,7 +46,7 @@ final class WelcomeView: FlippedView {
     override func mouseUp(with event: NSEvent) {
         let pt = convert(event.locationInWindow, from: nil)
         let b = buttons
-        if b[0].1.contains(pt) { onAddFolder?() } else if b[1].1.contains(pt) { onOpenFile?() }
+        if b[0].1.contains(pt) { onAddFolder?() } else if b[1].1.contains(pt) { onOpenFile?() } else if b[2].1.contains(pt) { onStartFromScratch?() }
     }
 }
 

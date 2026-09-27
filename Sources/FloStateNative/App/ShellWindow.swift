@@ -336,6 +336,7 @@ final class ShellRootView: FlippedView {
         resizeHandle.onDrag = { [unowned self] w in self.draftSidebarWidth = w; self.needsLayout = true }
         addSubview(welcome)
         welcome.onAddFolder = { [weak model] in model?.perform(.openWorkspacePanel) }
+        welcome.onStartFromScratch = { [weak model] in model?.startFromScratch() }
         welcome.onOpenFile = { [weak model] in
             let p = NSOpenPanel()
             p.canChooseFiles = true

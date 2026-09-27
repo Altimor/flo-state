@@ -77,14 +77,19 @@ extension EditorFeatures {
         return true
     }
 
-    /// `handleImagePaste`: save under `attachments/`, insert `![name](dest)`, caret after.
+    /// `handleImagePaste`: save under `attachments/`, insert `![name](dest)` on its own
+    /// line and put the caret on the next line, so the image renders right away
+    /// (with the caret on its line it would stay as source).
     func pasteImage(_ data: Data, format: String, name: String) {
         guard data.count <= maxPasteImageSize, let doc = editor.documentPath else { return }
         guard let saved = try? WorkspaceFS.saveClipboardImage(markdownFilePath: doc, data: data, format: format.isEmpty ? "png" : format) else { return }
         let md = "![\(name)](\(LinkPaths.formatMarkdownDestination(saved.relativePath)))"
         editor.run { t in
-            let cursor = t.state.selection.main.head
-            t.dispatch(TransactionSpec(changes: [Change(from: cursor, insert: md)], selection: .cursor(cursor + md.utf16.count)))
+            let sel = t.state.selection.main
+            let lineStart = t.state.doc.lineAt(sel.from).from == sel.from
+            let insert = (lineStart ? "" : "\n") + md + "\n"
+            t.dispatch(TransactionSpec(changes: [Change(from: sel.from, to: sel.to, insert: insert)],
+                                       selection: .cursor(sel.from + insert.utf16.count), userEvent: "input.paste"))
             return true
         }
         editor.reloadImages()

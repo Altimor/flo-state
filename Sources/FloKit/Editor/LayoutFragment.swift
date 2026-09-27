@@ -16,7 +16,11 @@ final class FloLayoutFragment: NSTextLayoutFragment {
         return super.renderingSurfaceBounds.union(full).insetBy(dx: -120, dy: -4)
     }
 
+    /// The point passed to draw(at:): widget rects are drawn relative to it.
+    private var drawOrigin: CGPoint = .zero
+
     override func draw(at point: CGPoint, in context: CGContext) {
+        drawOrigin = point
         guard let para = paragraph, let editor = editor else {
             super.draw(at: point, in: context)
             return
@@ -269,6 +273,7 @@ final class FloLayoutFragment: NSTextLayoutFragment {
             let rect = CGRect(x: x, y: p.lineTop + box.yOffset, width: box.size.width, height: box.size.height)
             img.draw(in: rect, from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true,
                      hints: [.interpolation: NSImageInterpolation.high.rawValue])
+            if case .image = box.widget.kind { editor?.noteImageDrawn(rect.offsetBy(dx: layoutFragmentFrame.minX - drawOrigin.x, dy: layoutFragmentFrame.minY - drawOrigin.y), widget: box.widget) }
         case .math(_, let display):
             guard let m = box.math else { return }
             let rect: CGRect

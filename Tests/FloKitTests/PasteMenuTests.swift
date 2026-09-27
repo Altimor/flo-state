@@ -60,13 +60,22 @@ final class PasteMenuTests: XCTestCase {
             if hadImage {
                 XCTAssertNotNil(got.range(of: #"attachments/\d{8}-\d{6}-[0-9a-f]{4}\.(png|jpg)"#, options: .regularExpression), "\(name): Rust naming \(got)")
                 exp = norm(exp); got = norm(got)
+                // intentional divergence from the web app: the image goes on its own line and the
+                // caret moves below it (so it renders at once). Apply that rule to the expectation.
+                let mdRE = try! NSRegularExpression(pattern: #"!\[[^\]]*\]\(attachments/IMG\)"#)
+                if let m = mdRE.firstMatch(in: exp, range: NSRange(location: 0, length: (exp as NSString).length)) {
+                    let e = exp as NSString
+                    let before = e.substring(to: m.range.location), md = e.substring(with: m.range), after = e.substring(from: NSMaxRange(m.range))
+                    let lead = before.isEmpty || before.hasSuffix("\n") ? "" : "\n"
+                    exp = before + lead + md + "\n" + after
+                }
             }
             XCTAssertEqual(got, exp, name)
             if !hadImage {
                 XCTAssertEqual(c.state.selection.main.anchor, res["anchor"] as! Int, "\(name) anchor")
                 XCTAssertEqual(c.state.selection.main.head, res["head"] as! Int, "\(name) head")
             } else {
-                XCTAssertEqual(c.state.selection.main.head, c.state.doc.string.utf16.count - ((cs["doc"] as! String).utf16.count - (cs["anchor"] as! Int)), "\(name): caret after the image")
+                XCTAssertEqual(c.state.selection.main.head, c.state.doc.string.utf16.count - ((cs["doc"] as! String).utf16.count - (cs["head"] as! Int)), "\(name): caret on the line after the image")
             }
             XCTAssertEqual(r.viewText, c.text, name)
             if got == exp { ok += 1 }
@@ -86,6 +95,11 @@ final class PasteMenuTests: XCTestCase {
         let file = tmp.appendingPathComponent(String(rel))
         XCTAssertEqual(try Data(contentsOf: file), Self.png1px)
         XCTAssertTrue(doc.hasPrefix("a") && doc.hasSuffix("b"))
+        // the image gets its own line and the caret moves below it, so it renders at once
+        let lines = doc.components(separatedBy: "\n")
+        XCTAssertEqual(lines.count, 3); XCTAssertEqual(lines[0], "a"); XCTAssertEqual(lines[2], "b")
+        XCTAssertTrue(lines[1].hasPrefix("![image.png](attachments/"))
+        XCTAssertEqual(c.state.selection.main.head, (doc as NSString).length - 1, "caret at the start of the next line")
         _ = c.handleKey("Mod-z")
         XCTAssertEqual(c.text, "ab")
         // over 5 MB: ignored (and nothing else is pasted)

@@ -54,6 +54,8 @@ public enum Keymap {
         bind("Backspace", ListCommands.listBackspace)
         bind("Mod-Backspace", ListCommands.listDeleteToContentStart)
         bind("Enter", ListCommands.listEnter)
+        bind("Tab", OrderedListIndent.indent)
+        bind("Shift-Tab", OrderedListIndent.outdent)
         bind("Tab", ListCommands.listIndent)
         bind("Shift-Tab", ListCommands.listOutdent)
         bind("ArrowLeft", AppCommands.escapeHashLeft)

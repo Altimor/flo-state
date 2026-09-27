@@ -49,4 +49,39 @@ final class OpenSingleFileTests: XCTestCase {
         XCTAssertEqual(RecentWorkspacesStore(appData: AppDataDirectory(baseURL: URL(fileURLWithPath: f.data))).load(), [])
         for c in app.windows { c.window?.close() }
     }
+
+    /// Live bug (0.1.2): New Note did nothing when no folder was open.
+    func testNewNoteWithNothingOpenAsksWhereAndOpensIt() async {
+        let f = ShellFixture()
+        let app = AppDelegate(dataDir: AppDataDirectory(baseURL: URL(fileURLWithPath: f.data)), launchPaths: [], offscreen: true)
+        app.startup()
+        await app.waitForPendingOpens()
+        let target = f.p("Untitled.md")
+        app.windows[0].model.chooseNewNotePath = { target }
+        app.windows[0].model.perform(.newNote)
+        await app.waitForPendingOpens()
+        for _ in 0..<20 { await Task.yield() }
+        XCTAssertTrue(TFS.exists(target))
+        XCTAssertEqual(app.windows.count, 1)
+        XCTAssertEqual(app.windows[0].model.editor.tabs.map(\.location), [.file(target)])
+        XCTAssertNil(app.windows[0].model.root)
+        for c in app.windows { c.window?.close() }
+    }
+
+    func testNewNoteInCompactWindowCreatesNextToTheFile() async {
+        let f = ShellFixture(files: ["note.md": "# Note\n"])
+        let app = AppDelegate(dataDir: AppDataDirectory(baseURL: URL(fileURLWithPath: f.data)), launchPaths: [f.p("note.md")], offscreen: true)
+        app.startup()
+        await app.waitForPendingOpens()
+        let m = app.windows[0].model
+        XCTAssertTrue(m.isCompact)
+        m.perform(.newNote)
+        XCTAssertEqual(m.palette?.intent, .createFile)
+        m.setPaletteQuery("Second")
+        m.runSelectedPaletteItem()
+        await app.waitForPendingOpens()
+        for _ in 0..<20 { await Task.yield() }
+        XCTAssertTrue(TFS.exists(f.p("Second.md")))
+        for c in app.windows { c.window?.close() }
+    }
 }
