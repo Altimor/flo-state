@@ -807,6 +807,10 @@ final class ShellWindowController: NSWindowController, NSWindowDelegate {
         case .autoInsertDaily: pane.autoInsertDaily()
         case .collapseAll: _ = pane.controller?.collapseAllHeadings()
         case .expandAll: _ = pane.controller?.expandAllHeadings()
+        case let .key(chord):
+            guard let c = pane.controller else { return }
+            window?.makeFirstResponder(c.textView)
+            _ = c.handleKey(chord)
         }
     }
 

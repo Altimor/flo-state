@@ -73,6 +73,8 @@ public enum Keymap {
         bind("Mod-Shift-7", Formatting.toggleNumberedList)
         bind("Mod-Shift-.", Formatting.toggleBlockquote)
         bind("Mod-Shift-Enter", Formatting.toggleTaskList)
+        bind("Mod-Shift-9", Formatting.toggleCheckboxList)
+        bind("Mod-.", Formatting.toggleTaskDone)
         for level in 1...6 { bind("Mod-Alt-\(level)", Formatting.setHeading(level)) }
         bind("Mod-Alt-0", Formatting.setParagraph)
         // --- default ---

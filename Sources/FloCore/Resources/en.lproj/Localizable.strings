@@ -900,3 +900,39 @@
 
 /* Theme preset name; App / theme name: keep "Flo State" untranslated. */
 "Flo State" = "Flo State";
+
+/* ShellMenus.swift (Format menu) */
+"Inline Code" = "Inline Code";
+
+/* ShellMenus.swift (Format menu) */
+"Insert Link" = "Insert Link";
+
+/* ShellMenus.swift (Format menu) */
+"Body Text" = "Body Text";
+
+/* ShellMenus.swift (Format menu) */
+"Bulleted List" = "Bulleted List";
+
+/* ShellMenus.swift (Format menu) */
+"Numbered List" = "Numbered List";
+
+/* ShellMenus.swift (Format menu) */
+"Checkbox" = "Checkbox";
+
+/* ShellMenus.swift (Format menu) */
+"Mark as Done" = "Mark as Done";
+
+/* ShellMenus.swift (Format menu) */
+"Quote" = "Quote";
+
+/* ShellMenus.swift (Format menu) */
+"Indent" = "Indent";
+
+/* ShellMenus.swift (Format menu) */
+"Outdent" = "Outdent";
+
+/* ShellMenus.swift (Format menu) */
+"Move Line Up" = "Move Line Up";
+
+/* ShellMenus.swift (Format menu) */
+"Move Line Down" = "Move Line Down";

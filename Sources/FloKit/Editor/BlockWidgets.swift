@@ -105,3 +105,24 @@ extension EditorController {
         asyncWidgetsReady()
     }
 }
+
+extension EditorController {
+    /// A click on a rendered task checkbox (the area left of the item's text on a `- [ ]` line)
+    /// toggles it. Returns true when the click was on a checkbox.
+    func toggleCheckbox(at point: NSPoint) -> Bool {
+        let i = textView.characterIndexForInsertion(at: point)
+        guard i != NSNotFound, let plan = currentPlan, let win = textView.window else { return false }
+        let line = state.doc.lineAt(min(i, state.doc.length))
+        for w in plan.widgetsOverlapping(line.from, line.to) {
+            guard case .checkbox = w.kind, w.from >= line.from, w.to <= line.to else { continue }
+            // the text starts at w.to; the box is drawn in the ~2em just before it
+            let screen = textView.firstRect(forCharacterRange: NSRange(location: w.to, length: 0), actualRange: nil)
+            let r = textView.convert(win.convertFromScreen(screen), from: nil)
+            let box = CGRect(x: r.minX - 34, y: r.minY - 4, width: 34, height: r.height + 8)
+            guard box.contains(point), let spec = ListCommands.checkboxToggle(state, at: w.from) else { continue }
+            run { t in t.dispatch(spec); return true }
+            return true
+        }
+        return false
+    }
+}

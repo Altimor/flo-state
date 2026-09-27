@@ -698,22 +698,23 @@ final class ShellMenuAndKeyTests: XCTestCase {
     func testMenuStructure() {
         let router = MenuRouter()
         let menu = MainMenu.build(target: router)
-        XCTAssertEqual(menu.items.map { $0.title }, ["Flo State", "File", "Edit", "View", "Window"])
+        XCTAssertEqual(menu.items.map { $0.title }, ["Flo State", "File", "Edit", "Format", "View", "Window"])
         func items(_ i: Int) -> [String] { menu.items[i].submenu!.items.map { $0.isSeparatorItem ? "-" : $0.title } }
         XCTAssertEqual(items(1), ["New Note", "New Tab", "Go to File…", "-", "Go to Today", "Search…", "Search in All Notes…", "-", "Close Tab"])
-        XCTAssertEqual(items(3), ["Toggle Sidebar", "Toggle Sidebar", "Toggle Typewriter Scrolling", "-", "Increase Font Size", "Decrease Font Size",
+        XCTAssertEqual(items(3), ["Bold", "Italic", "Strikethrough", "Inline Code", "Insert Link", "-", "Heading 1", "Heading 2", "Heading 3", "Body Text",
+                                  "-", "Bulleted List", "Numbered List", "Checkbox", "Mark as Done", "Quote", "-", "Indent", "Outdent", "Move Line Up", "Move Line Down"])
+        XCTAssertEqual(items(4), ["Toggle Sidebar", "Toggle Typewriter Scrolling", "-", "Increase Font Size", "Decrease Font Size",
                                   "Reset Font Size", "-", "Collapse All Headings", "Expand All Headings", "-", "Back", "Forward",
                                   "-", "Previous File", "Next File"])
-        XCTAssertTrue(menu.items[3].submenu!.items[1].isHidden, "Cmd-. is a hidden alternate")
         XCTAssertEqual(items(2), ["Undo", "Redo", "-", "Cut", "Copy", "Paste", "Select All", "-", "Substitutions"])
-        XCTAssertEqual(items(4), ["Minimize", "Enter Full Screen", "-", "Show Previous Tab", "Show Next Tab", "Show Previous Tab",
+        XCTAssertEqual(items(5), ["Minimize", "Enter Full Screen", "-", "Show Previous Tab", "Show Next Tab", "Show Previous Tab",
                                   "Show Next Tab", "Go to Tab", "-", "Close Window"])
-        XCTAssertEqual(menu.items[4].submenu!.items.first { $0.title == "Go to Tab" }!.submenu!.items.map { $0.keyEquivalent }, (1...9).map { "\($0)" })
+        XCTAssertEqual(menu.items[5].submenu!.items.first { $0.title == "Go to Tab" }!.submenu!.items.map { $0.keyEquivalent }, (1...9).map { "\($0)" })
         XCTAssertTrue(items(0).contains("Settings…"), "macOS 13+ naming")
         XCTAssertFalse(items(0).contains("Preferences…"))
         let keys = menu.items[1].submenu!.items.filter { !$0.isSeparatorItem }.map { "\($0.keyEquivalentModifierMask.contains(.shift) ? "⇧" : "")\($0.keyEquivalent)" }
         XCTAssertEqual(keys, ["n", "t", "o", "⇧d", "k", "⇧f", "w"])
-        let back = menu.items[3].submenu!.items.first { $0.title == "Back" }!
+        let back = menu.items.first { $0.title == "View" }!.submenu!.items.first { $0.title == "Back" }!
         XCTAssertEqual(back.keyEquivalent, "", "Alt-←/→ stay with the editor")
     }
 
@@ -723,7 +724,7 @@ final class ShellMenuAndKeyTests: XCTestCase {
         let router = MenuRouter()
         router.focusedModel = { f.model }
         let menu = MainMenu.build(target: router)
-        let view = menu.items[3].submenu!
+        let view = menu.items.first { $0.title == "View" }!.submenu!
         router.menuAction(view.items.first { $0.title == "Toggle Typewriter Scrolling" }!)
         XCTAssertFalse(f.model.typewriterScrolling)
         router.menuAction(view.items.first { $0.title == "Increase Font Size" }!)

@@ -297,6 +297,60 @@ public enum Formatting {
         return "- [ ] " + line
     }
 
+    // MARK: checkboxes (Cmd-Shift-9 / Cmd-.)
+
+    /// Any list/plain line → `- [ ] ` (bullets and numbered items keep their indent and text);
+    /// when every selected line is already a task, they go back to plain bullets.
+    static let LIST_PREFIX_RE = try! NSRegularExpression(pattern: #"^([ \t]*)(?:[-+*] \[[ xX]\] |[-+*] |\d{1,9}[.)] )?"#)
+    static let TASK_LINE_RE = try! NSRegularExpression(pattern: #"^[ \t]*[-+*] \[([ xX])\] "#)
+
+    static func selectedLines(_ state: EditorState) -> [Line] {
+        var seen = Set<Int>(), out: [Line] = []
+        for r in state.selection.ranges {
+            let a = state.doc.lineAt(r.from).number, b = state.doc.lineAt(r.empty ? r.to : max(r.from, r.to - 1)).number
+            for n in a...b where seen.insert(n).inserted { out.append(state.doc.line(n)) }
+        }
+        return out.sorted { $0.number < $1.number }
+    }
+
+    public static let toggleCheckboxList: Command = { t in
+        let state = t.state
+        let lines = selectedLines(state)
+        let isTask = { (l: Line) in TASK_LINE_RE.firstMatch(in: l.text, range: NSRange(location: 0, length: (l.text as NSString).length)) != nil }
+        let allTasks = lines.allSatisfy(isTask)
+        var changes: [Change] = []
+        for l in lines {
+            let ns = l.text as NSString
+            guard let m = LIST_PREFIX_RE.firstMatch(in: l.text, range: NSRange(location: 0, length: ns.length)) else { continue }
+            let indent = m.range(at: 1).length
+            let insert = allTasks ? "- " : "- [ ] "
+            let from = l.from + indent, to = l.from + m.range.length
+            if state.doc.slice(from, to) != insert { changes.append(Change(from: from, to: to, insert: insert)) }
+        }
+        if changes.isEmpty { return true }
+        let cs = state.changes(changes)
+        let sel = EditorSelection(ranges: state.selection.ranges.map { SelectionRange.range(cs.mapPos($0.anchor, assoc: 1), cs.mapPos($0.head, assoc: 1)) },
+                                  mainIndex: state.selection.mainIndex)
+        t.dispatch(TransactionSpec(changes: changes, selection: sel, userEvent: "input.format.taskList"))
+        return true
+    }
+
+    /// Check (or, when all are checked, uncheck) the task items on the selected lines.
+    public static let toggleTaskDone: Command = { t in
+        let state = t.state
+        var boxes: [(pos: Int, checked: Bool)] = []
+        for l in selectedLines(state) {
+            let ns = l.text as NSString
+            guard let m = TASK_LINE_RE.firstMatch(in: l.text, range: NSRange(location: 0, length: ns.length)) else { continue }
+            boxes.append((l.from + m.range(at: 1).location, ns.substring(with: m.range(at: 1)).lowercased() == "x"))
+        }
+        if boxes.isEmpty { return false }
+        let check = !boxes.allSatisfy(\.checked)
+        let changes = boxes.filter { $0.checked != check }.map { Change(from: $0.pos, to: $0.pos + 1, insert: check ? "x" : " ") }
+        t.dispatch(TransactionSpec(changes: changes, selection: state.selection, userEvent: "input.toggle-checkbox"))
+        return true
+    }
+
     // MARK: clear formatting / code block / inserts
 
     static func regexReplaceAll(_ text: String, _ pattern: String) -> String {

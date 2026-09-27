@@ -166,7 +166,6 @@ enum MainMenu {
 
     static let viewEntries: [Entry?] = [
         Entry(title: "Toggle Sidebar", key: "\\", modifiers: [.command], action: .toggleSidebar),
-        Entry(title: "Toggle Sidebar", key: ".", modifiers: [.command], action: .toggleSidebar, hidden: true),
         Entry(title: "Toggle Typewriter Scrolling", key: "c", modifiers: [.command, .option], action: .toggleTypewriter),
         nil,
         Entry(title: "Increase Font Size", key: "=", modifiers: [.command], action: .fontSizeIncrease),
@@ -181,6 +180,32 @@ enum MainMenu {
         nil,
         Entry(title: "Previous File", key: String(UnicodeScalar(NSUpArrowFunctionKey)!), modifiers: [.command, .option], action: .stepFile(-1)),
         Entry(title: "Next File", key: String(UnicodeScalar(NSDownArrowFunctionKey)!), modifiers: [.command, .option], action: .stepFile(1)),
+    ]
+
+    /// Format menu: the editor's formatting shortcuts, so they're discoverable. The editor
+    /// keymap handles the keys when it has focus; the menu item runs the same chord.
+    static let formatEntries: [Entry?] = [
+        Entry(title: "Bold", key: "b", modifiers: [.command], action: .editorKey("Mod-b")),
+        Entry(title: "Italic", key: "i", modifiers: [.command], action: .editorKey("Mod-i")),
+        Entry(title: "Strikethrough", key: "x", modifiers: [.command, .shift], action: .editorKey("Mod-Shift-x")),
+        Entry(title: "Inline Code", key: "e", modifiers: [.command], action: .editorKey("Mod-e")),
+        Entry(title: "Insert Link", key: "", modifiers: [], action: .editorKey("Mod-k")),
+        nil,
+        Entry(title: "Heading 1", key: "1", modifiers: [.command, .option], action: .editorKey("Mod-Alt-1")),
+        Entry(title: "Heading 2", key: "2", modifiers: [.command, .option], action: .editorKey("Mod-Alt-2")),
+        Entry(title: "Heading 3", key: "3", modifiers: [.command, .option], action: .editorKey("Mod-Alt-3")),
+        Entry(title: "Body Text", key: "0", modifiers: [.command, .option], action: .editorKey("Mod-Alt-0")),
+        nil,
+        Entry(title: "Bulleted List", key: "8", modifiers: [.command, .shift], action: .editorKey("Mod-Shift-8")),
+        Entry(title: "Numbered List", key: "7", modifiers: [.command, .shift], action: .editorKey("Mod-Shift-7")),
+        Entry(title: "Checkbox", key: "9", modifiers: [.command, .shift], action: .editorKey("Mod-Shift-9")),
+        Entry(title: "Mark as Done", key: ".", modifiers: [.command], action: .editorKey("Mod-.")),
+        Entry(title: "Quote", key: ".", modifiers: [.command, .shift], action: .editorKey("Mod-Shift-.")),
+        nil,
+        Entry(title: "Indent", key: "]", modifiers: [.command], action: .editorKey("Mod-]")),
+        Entry(title: "Outdent", key: "[", modifiers: [.command], action: .editorKey("Mod-[")),
+        Entry(title: "Move Line Up", key: String(UnicodeScalar(NSUpArrowFunctionKey)!), modifiers: [.option], action: .editorKey("Alt-ArrowUp")),
+        Entry(title: "Move Line Down", key: String(UnicodeScalar(NSDownArrowFunctionKey)!), modifiers: [.option], action: .editorKey("Alt-ArrowDown")),
     ]
 
     /// Window-menu tab navigation (web: use-keyboard-shortcuts.ts), as menu
@@ -285,6 +310,7 @@ enum MainMenu {
             .separator(),
             subs,
         ])
+        sub("Format", routed(formatEntries))
         sub("View", routed(viewEntries))
         let fullscreen = NSMenuItem(title: L("Enter Full Screen"), action: #selector(NSWindow.toggleFullScreen(_:)), keyEquivalent: "f")
         fullscreen.keyEquivalentModifierMask = [.command, .control]

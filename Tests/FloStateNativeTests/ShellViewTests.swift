@@ -171,8 +171,8 @@ final class ShellViewTests: XCTestCase {
         XCTAssertEqual(f.model.palette?.intent, .search)
         XCTAssertNil(wc.handleKey(key("\u{1b}", code: 53, flags: [])), "Esc closes the palette")
         XCTAssertNil(f.model.palette)
-        XCTAssertTrue(press(".", 47, .command))
-        XCTAssertFalse(f.model.sidebarPreferenceVisible, "Cmd-. (hidden alternate) toggles the sidebar")
+        XCTAssertTrue(press("\\", 42, .command))
+        XCTAssertFalse(f.model.sidebarPreferenceVisible, "Cmd-\\ toggles the sidebar")
         // Alt-← outside the editor is not a menu item: the monitor handles it
         wc.window!.makeFirstResponder(nil)
         XCTAssertNil(wc.handleKey(key("", code: 123, flags: .option)))

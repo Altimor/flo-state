@@ -18,6 +18,8 @@ enum ShellAction: Equatable {
     case stepFile(Int)             // Cmd-Alt-↑/↓
     // palette commands
     case closeAllTabs, openWorkspacePanel, closeWorkspace, toggleTheme, openInCompactWindow
+    // Format menu: run an editor key chord (e.g. "Mod-b") in the active editor
+    case editorKey(String)
 }
 
 /// Command palette state (`ui-store.ts` + `command-palette/index.tsx`).
@@ -114,7 +116,7 @@ final class ShellModel {
     var observers: [(Change) -> Void] = []
     private var notifying = false
 
-    enum EditorCommandRequest: Equatable { case goToToday, autoInsertDaily, collapseAll, expandAll }
+    enum EditorCommandRequest: Equatable { case goToToday, autoInsertDaily, collapseAll, expandAll, key(String) }
 
     init(dataDir: AppDataDirectory, scheduler: AppScheduler? = nil, importLegacy: Bool = true) {
         self.dataDir = dataDir
@@ -671,6 +673,7 @@ final class ShellModel {
         case .fontSizeReset: resetSetting("editor.font-size")
         case .collapseHeadings: editorCommand(.collapseAll)
         case .expandHeadings: editorCommand(.expandAll)
+        case let .editorKey(chord): editorCommand(.key(chord))
         case .back: Task { await editor.navigateBack() }
         case .forward: Task { await editor.navigateForward() }
         case .previousTab: editor.cycleTab(by: -1)

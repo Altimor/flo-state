@@ -4,7 +4,7 @@ import Foundation
 // Mod-Backspace / Tab / Shift-Tab, prefix arrow keys, atomic ranges, and the
 // checkbox toggle.
 
-enum ListCommands {
+public enum ListCommands {
     static let LIST_INDENT_SPACES = 2
     static let PREV_LIST_LOOKBACK = 256
 

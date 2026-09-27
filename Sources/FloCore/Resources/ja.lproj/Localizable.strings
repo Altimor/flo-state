@@ -900,3 +900,39 @@
 
 /* Theme preset name; App / theme name: keep "Flo State" untranslated. */
 "Flo State" = "Flo State";
+
+/* ShellMenus.swift (Format menu) */
+"Inline Code" = "インラインコード";
+
+/* ShellMenus.swift (Format menu) */
+"Insert Link" = "リンクを挿入";
+
+/* ShellMenus.swift (Format menu) */
+"Body Text" = "本文";
+
+/* ShellMenus.swift (Format menu) */
+"Bulleted List" = "箇条書き";
+
+/* ShellMenus.swift (Format menu) */
+"Numbered List" = "番号付きリスト";
+
+/* ShellMenus.swift (Format menu) */
+"Checkbox" = "チェックボックス";
+
+/* ShellMenus.swift (Format menu) */
+"Mark as Done" = "完了にする";
+
+/* ShellMenus.swift (Format menu) */
+"Quote" = "引用";
+
+/* ShellMenus.swift (Format menu) */
+"Indent" = "インデント";
+
+/* ShellMenus.swift (Format menu) */
+"Outdent" = "インデント解除";
+
+/* ShellMenus.swift (Format menu) */
+"Move Line Up" = "行を上へ移動";
+
+/* ShellMenus.swift (Format menu) */
+"Move Line Down" = "行を下へ移動";

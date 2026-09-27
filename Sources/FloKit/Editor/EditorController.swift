@@ -762,6 +762,8 @@ public final class FloTextView: NSTextView {
     private var imageClick: (url: URL, selection: [NSValue])?
 
     public override func mouseDown(with event: NSEvent) {
+        if let c = controller, event.clickCount == 1, !event.modifierFlags.contains(.shift),
+           c.toggleCheckbox(at: convert(event.locationInWindow, from: nil)) { return }
         if let c = controller, let line = chevronLine(at: convert(event.locationInWindow, from: nil)) {
             c.toggleFold(line: line)
             return

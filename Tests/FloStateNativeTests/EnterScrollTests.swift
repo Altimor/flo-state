@@ -26,9 +26,11 @@ final class EnterScrollTests: XCTestCase {
         wc.window!.ignoresMouseEvents = true
         wc.window!.orderFrontRegardless()
         defer { wc.window?.close() }
+        print("progress: EnterScroll opening workspace"); fflush(stdout)
         await f.open()
         if !typewriter { f.model.typewriterScrolling = false }
         try await f.model.editor.openFileInTabOrFocus(f.p("big.md"))
+        print("progress: EnterScroll note open"); fflush(stdout)
         await f.settle()
         wc.flush(); wc.root.layoutSubtreeIfNeeded()
         guard let pane = wc.root.area.activeFilePane, let c = pane.controller else { return XCTFail("no editor") }
@@ -53,7 +55,7 @@ final class EnterScrollTests: XCTestCase {
         c.textView.setSelectedRange(NSRange(location: (c.textView.string as NSString).length, length: 0))
         c.textView.scrollRangeToVisible(c.textView.selectedRange()); await settle()
         lastY = c.scrollView.contentView.bounds.origin.y; jumps = []
-        for i in 0..<6 { c.textView.keyDown(with: enterEvent(wc.window!)); await settle(); check("end, return #\(i + 1)") }
+        for i in 0..<6 { c.textView.keyDown(with: enterEvent(wc.window!)); await settle(); check("end, return #\(i + 1)"); print("progress: EnterScroll end return #\(i + 1)"); fflush(stdout) }
         XCTAssertEqual(jumps, [], "no scroll jumps while pressing Return at the end")
         jumps = []
         // in the middle of the document
@@ -62,7 +64,7 @@ final class EnterScrollTests: XCTestCase {
         c.textView.scrollRangeToVisible(c.textView.selectedRange()); await settle()
         let before = c.scrollView.contentView.bounds.origin.y
         lastY = c.scrollView.contentView.bounds.origin.y; jumps = []
-        for _ in 0..<3 { c.textView.keyDown(with: enterEvent(wc.window!)); await settle() }
+        for i in 0..<3 { c.textView.keyDown(with: enterEvent(wc.window!)); await settle(); print("progress: EnterScroll middle return #\(i + 1)"); fflush(stdout) }
         check("middle")
         XCTAssertEqual(jumps, [], "no scroll jumps while pressing Return in the middle")
         if !typewriter {

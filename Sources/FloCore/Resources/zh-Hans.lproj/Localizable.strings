@@ -900,3 +900,39 @@
 
 /* Theme preset name; App / theme name: keep "Flo State" untranslated. */
 "Flo State" = "Flo State";
+
+/* ShellMenus.swift (Format menu) */
+"Inline Code" = "行内代码";
+
+/* ShellMenus.swift (Format menu) */
+"Insert Link" = "插入链接";
+
+/* ShellMenus.swift (Format menu) */
+"Body Text" = "正文";
+
+/* ShellMenus.swift (Format menu) */
+"Bulleted List" = "项目符号列表";
+
+/* ShellMenus.swift (Format menu) */
+"Numbered List" = "编号列表";
+
+/* ShellMenus.swift (Format menu) */
+"Checkbox" = "复选框";
+
+/* ShellMenus.swift (Format menu) */
+"Mark as Done" = "标记为完成";
+
+/* ShellMenus.swift (Format menu) */
+"Quote" = "引用";
+
+/* ShellMenus.swift (Format menu) */
+"Indent" = "增加缩进";
+
+/* ShellMenus.swift (Format menu) */
+"Outdent" = "减少缩进";
+
+/* ShellMenus.swift (Format menu) */
+"Move Line Up" = "上移行";
+
+/* ShellMenus.swift (Format menu) */
+"Move Line Down" = "下移行";

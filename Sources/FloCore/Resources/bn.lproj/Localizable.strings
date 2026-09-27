@@ -900,3 +900,39 @@
 
 /* Theme preset name; App / theme name: keep "Flo State" untranslated. */
 "Flo State" = "Flo State";
+
+/* ShellMenus.swift (Format menu) */
+"Inline Code" = "ইনলাইন কোড";
+
+/* ShellMenus.swift (Format menu) */
+"Insert Link" = "লিংক যোগ করুন";
+
+/* ShellMenus.swift (Format menu) */
+"Body Text" = "সাধারণ লেখা";
+
+/* ShellMenus.swift (Format menu) */
+"Bulleted List" = "বুলেট তালিকা";
+
+/* ShellMenus.swift (Format menu) */
+"Numbered List" = "সংখ্যাযুক্ত তালিকা";
+
+/* ShellMenus.swift (Format menu) */
+"Checkbox" = "চেকবক্স";
+
+/* ShellMenus.swift (Format menu) */
+"Mark as Done" = "সম্পন্ন হিসেবে চিহ্নিত করুন";
+
+/* ShellMenus.swift (Format menu) */
+"Quote" = "উদ্ধৃতি";
+
+/* ShellMenus.swift (Format menu) */
+"Indent" = "ইনডেন্ট বাড়ান";
+
+/* ShellMenus.swift (Format menu) */
+"Outdent" = "ইনডেন্ট কমান";
+
+/* ShellMenus.swift (Format menu) */
+"Move Line Up" = "লাইন উপরে সরান";
+
+/* ShellMenus.swift (Format menu) */
+"Move Line Down" = "লাইন নিচে সরান";

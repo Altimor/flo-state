@@ -900,3 +900,39 @@
 
 /* Theme preset name; App / theme name: keep "Flo State" untranslated. */
 "Flo State" = "Flo State";
+
+/* ShellMenus.swift (Format menu) */
+"Inline Code" = "شيفرة مضمّنة";
+
+/* ShellMenus.swift (Format menu) */
+"Insert Link" = "إدراج رابط";
+
+/* ShellMenus.swift (Format menu) */
+"Body Text" = "نص عادي";
+
+/* ShellMenus.swift (Format menu) */
+"Bulleted List" = "قائمة نقطية";
+
+/* ShellMenus.swift (Format menu) */
+"Numbered List" = "قائمة مرقّمة";
+
+/* ShellMenus.swift (Format menu) */
+"Checkbox" = "مربع اختيار";
+
+/* ShellMenus.swift (Format menu) */
+"Mark as Done" = "وضع علامة كمكتمل";
+
+/* ShellMenus.swift (Format menu) */
+"Quote" = "اقتباس";
+
+/* ShellMenus.swift (Format menu) */
+"Indent" = "زيادة المسافة البادئة";
+
+/* ShellMenus.swift (Format menu) */
+"Outdent" = "إنقاص المسافة البادئة";
+
+/* ShellMenus.swift (Format menu) */
+"Move Line Up" = "نقل السطر لأعلى";
+
+/* ShellMenus.swift (Format menu) */
+"Move Line Down" = "نقل السطر لأسفل";
