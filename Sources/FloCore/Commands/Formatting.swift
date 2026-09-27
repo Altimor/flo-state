@@ -273,17 +273,10 @@ public enum Formatting {
         return line
     }
 
-    public static let toggleBulletList = lineCommand("input.format.bulletList") { line, _, all in
-        if all.allSatisfy({ BULLET_RE.test($0) }) { return replaceFirst(BULLET_RE, line) }
-        if BULLET_RE.test(line) { return line }
-        return "- " + line
-    }
-
-    public static let toggleNumberedList = lineCommand("input.format.numberedList") { line, idx, all in
-        if all.allSatisfy({ NUMBERED_RE.test($0) }) { return replaceFirst(NUMBERED_RE, line) }
-        if NUMBERED_RE.test(line) { return line }
-        return "\(idx + 1). " + line
-    }
+    /// Cmd-Shift-8 / Cmd-Shift-7: any list or plain line (checkbox, bullet, numbered) becomes a
+    /// bullet / numbered item, keeping its indent; when every line already is one, the prefix goes.
+    public static let toggleBulletList = convertList(numbered: false, "input.format.bulletList")
+    public static let toggleNumberedList = convertList(numbered: true, "input.format.numberedList")
 
     public static let toggleBlockquote = lineCommand("input.format.blockquote") { line, _, all in
         if all.allSatisfy({ BLOCKQUOTE_RE.test($0) }) { return replaceFirst(BLOCKQUOTE_RE, line) }
@@ -313,25 +306,46 @@ public enum Formatting {
         return out.sorted { $0.number < $1.number }
     }
 
-    public static let toggleCheckboxList: Command = { t in
+    static let BULLET_LINE_RE = try! NSRegularExpression(pattern: #"^[ \t]*[-+*] (?!\[[ xX]\] )"#)
+    static let NUMBERED_LINE_RE = try! NSRegularExpression(pattern: #"^[ \t]*\d{1,9}[.)] "#)
+
+    static func matches(_ re: NSRegularExpression, _ l: Line) -> Bool {
+        re.firstMatch(in: l.text, range: NSRange(location: 0, length: (l.text as NSString).length)) != nil
+    }
+
+    /// Replace each selected line's list prefix (after its indent) with `prefix(i)`.
+    static func replaceListPrefixes(_ t: CommandTarget, _ lines: [Line], userEvent: String, _ prefix: (Int) -> String) {
         let state = t.state
-        let lines = selectedLines(state)
-        let isTask = { (l: Line) in TASK_LINE_RE.firstMatch(in: l.text, range: NSRange(location: 0, length: (l.text as NSString).length)) != nil }
-        let allTasks = lines.allSatisfy(isTask)
         var changes: [Change] = []
-        for l in lines {
+        for (i, l) in lines.enumerated() {
             let ns = l.text as NSString
             guard let m = LIST_PREFIX_RE.firstMatch(in: l.text, range: NSRange(location: 0, length: ns.length)) else { continue }
-            let indent = m.range(at: 1).length
-            let insert = allTasks ? "- " : "- [ ] "
-            let from = l.from + indent, to = l.from + m.range.length
+            let from = l.from + m.range(at: 1).length, to = l.from + m.range.length
+            let insert = prefix(i)
             if state.doc.slice(from, to) != insert { changes.append(Change(from: from, to: to, insert: insert)) }
         }
-        if changes.isEmpty { return true }
+        if changes.isEmpty { return }
         let cs = state.changes(changes)
         let sel = EditorSelection(ranges: state.selection.ranges.map { SelectionRange.range(cs.mapPos($0.anchor, assoc: 1), cs.mapPos($0.head, assoc: 1)) },
                                   mainIndex: state.selection.mainIndex)
-        t.dispatch(TransactionSpec(changes: changes, selection: sel, userEvent: "input.format.taskList"))
+        t.dispatch(TransactionSpec(changes: changes, selection: sel, userEvent: userEvent))
+    }
+
+    static func convertList(numbered: Bool, _ userEvent: String) -> Command {
+        let kind = numbered ? NUMBERED_LINE_RE : BULLET_LINE_RE
+        let isKind = { (l: String) in kind.firstMatch(in: l, range: NSRange(location: 0, length: (l as NSString).length)) != nil }
+        return lineCommand(userEvent) { line, idx, all in
+            let ns = line as NSString
+            guard let m = LIST_PREFIX_RE.firstMatch(in: line, range: NSRange(location: 0, length: ns.length)) else { return line }
+            let prefix = all.allSatisfy(isKind) ? "" : numbered ? "\(idx + 1). " : "- "
+            return ns.substring(with: m.range(at: 1)) + prefix + ns.substring(from: m.range.length)
+        }
+    }
+
+    public static let toggleCheckboxList: Command = { t in
+        let lines = selectedLines(t.state)
+        let allTasks = lines.allSatisfy { matches(TASK_LINE_RE, $0) }
+        replaceListPrefixes(t, lines, userEvent: "input.format.taskList") { _ in allTasks ? "- " : "- [ ] " }
         return true
     }
 

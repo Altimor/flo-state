@@ -16,6 +16,16 @@ final class CheckboxCommandTests: XCTestCase {
         XCTAssertEqual(run("|", ["Mod-Shift-9"]), "- [ ] |")
         XCTAssertEqual(run("- [ ] task|", ["Mod-Shift-9"]), "- task|", "toggles back to a bullet")
     }
+    func testCmdShift8And7ConvertAnyListLine() {
+        XCTAssertEqual(run("- [ ] task|", ["Mod-Shift-8"]), "- task|")
+        XCTAssertEqual(run("  - [x] done|", ["Mod-Shift-8"]), "  - done|")
+        XCTAssertEqual(run("2. item|", ["Mod-Shift-8"]), "- item|")
+        XCTAssertEqual(run("- bul|let", ["Mod-Shift-8"]), "bullet|", "toggles off (the line ends up selected)")
+        XCTAssertEqual(run("plain|", ["Mod-Shift-8"]), "- plain|")
+        XCTAssertEqual(run("- [ ] task|", ["Mod-Shift-7"]), "1. task|")
+        XCTAssertEqual(run("  - bullet|", ["Mod-Shift-7"]), "  1. bullet|")
+        XCTAssertEqual(run("1. item|", ["Mod-Shift-7"]), "item|", "toggles off")
+    }
     func testCmdDotMarksDone() {
         XCTAssertEqual(run("- [ ] a|", ["Mod-."]), "- [x] a|")
         XCTAssertEqual(run("- [x] a|", ["Mod-."]), "- [ ] a|")

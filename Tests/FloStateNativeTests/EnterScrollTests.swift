@@ -16,7 +16,7 @@ final class EnterScrollTests: XCTestCase {
     }
 
     func run(typewriter: Bool) async throws {
-        let big = SyntheticNotebook.journal()
+        let big = SyntheticNotebook.journal(bytes: 25_000)   // ~8 screens: enough for viewport layout, 4× faster than 110 KB
         let f = ShellFixture(files: ["big.md": big + "\n## 2026.09.26\n\nBefore pressing the return key"],
                              config: "editor.jump-to-bottom-after-minutes = 0\n")
         // A real on-screen window (fully transparent, never key): the live bug

@@ -154,6 +154,9 @@ final class KeysParityTests: XCTestCase {
             // Intentional divergence: Tab on a numbered item nests it and renumbers (1. / 1. / 2.);
             // the web app left numbered items alone.
             if !ok && c.name.hasPrefix("list ctx '1. a") && c.keys.contains("Tab") { excluded.append("[intentional] " + detail); continue }
+            // Intentional divergence: Cmd-Shift-7/8 convert list lines (checkbox/bullet/numbered) and keep
+            // the indent; the web app stacked prefixes ("1. - a") or stripped half a checkbox ("[ ] a").
+            if !ok && c.keys.contains(where: { $0 == "Mod-Shift-7" || $0 == "Mod-Shift-8" }) { excluded.append("[intentional] " + detail); continue }
             total += 1
             if ok { pass += 1 }
             for tag in c.tags {
