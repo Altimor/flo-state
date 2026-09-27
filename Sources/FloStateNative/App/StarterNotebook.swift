@@ -1,26 +1,38 @@
 import Foundation
+import FloCore
 
-/// "Start from Scratch": a new notebook folder in ~/Documents with a Welcome note.
+/// "Start from Scratch": a new notebook folder in ~/Documents with a Welcome note
+/// (folder name, note name and content in the UI language).
 enum StarterNotebook {
+    static var folderName: String { L("Notebook") }
+    static var noteName: String { L("Welcome.md") }
+
+    /// The note in the UI language: `<lang>.lproj/Welcome.md`, else the English `welcome`.
+    static var localizedWelcome: String {
+        guard let url = L10n.bundle.url(forResource: "Welcome", withExtension: "md"),
+              let s = try? String(contentsOf: url, encoding: .utf8) else { return welcome }
+        return s
+    }
+
     /// ~/Documents/Notebook, or "Notebook 2", "Notebook 3"… when that name is taken
     /// by a non-empty folder (an empty one is reused).
     static func folder(documents: URL) -> URL {
         let fm = FileManager.default
         for i in 1...999 {
-            let url = documents.appendingPathComponent(i == 1 ? "Notebook" : "Notebook \(i)")
+            let url = documents.appendingPathComponent(i == 1 ? folderName : "\(folderName) \(i)")
             var isDir: ObjCBool = false
             if !fm.fileExists(atPath: url.path, isDirectory: &isDir) { return url }
             if isDir.boolValue, ((try? fm.contentsOfDirectory(atPath: url.path)) ?? []).filter({ !$0.hasPrefix(".") }).isEmpty { return url }
         }
-        return documents.appendingPathComponent("Notebook \(UUID().uuidString.prefix(4))")
+        return documents.appendingPathComponent("\(folderName) \(UUID().uuidString.prefix(4))")
     }
 
     /// Creates the folder and Welcome.md; returns (folder, note).
     static func create(documents: URL) throws -> (String, String) {
         let dir = folder(documents: documents)
         try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
-        let note = dir.appendingPathComponent("Welcome.md")
-        try Data(welcome.utf8).write(to: note, options: .withoutOverwriting)
+        let note = dir.appendingPathComponent(noteName)
+        try Data(localizedWelcome.utf8).write(to: note, options: .withoutOverwriting)
         return (dir.path, note.path)
     }
 

@@ -11,14 +11,16 @@ struct ImageHit: Equatable {
     var rect: CGRect
     var from: Int
     var to: Int
+    /// The image file drawn (double-click opens it).
+    var url: URL? = nil
 }
 
 extension EditorController {
-    /// Called by the layout fragment each time it draws an image widget.
-    /// `rect` is in text-container coordinates.
-    func noteImageDrawn(_ rect: CGRect, widget: Widget) {
+    /// Called by the layout fragment each time it draws an image widget or a
+    /// `![[embed]]` image. `rect` is in text-container coordinates.
+    func noteImageDrawn(_ rect: CGRect, widget: Widget, url: URL?) {
         let o = textView.textContainerOrigin
-        let hit = ImageHit(rect: rect.offsetBy(dx: o.x, dy: o.y), from: widget.from, to: widget.to)
+        let hit = ImageHit(rect: rect.offsetBy(dx: o.x, dy: o.y), from: widget.from, to: widget.to, url: url)
         imageRects[widget.from] = hit
         // the image moved/resized (sidebar toggle, window resize, edit): keep the hover box on it
         if let shown = imageOverlay.hit, shown.from == hit.from, shown != hit { imageOverlay.show(hit) }
@@ -38,7 +40,7 @@ extension EditorController {
         return (line.from + start.location, from)
     }
 
-    /// The image under a view point, if its widget is still in the current plan.
+    /// The (resizable) `![](src)` image under a view point, if its widget is still in the current plan.
     func image(at point: NSPoint, slop: CGFloat = 0) -> ImageHit? {
         guard let plan = currentPlan else { return nil }
         for hit in imageRects.values where hit.rect.insetBy(dx: -slop, dy: -slop).contains(point) {
@@ -47,6 +49,21 @@ extension EditorController {
                 return false
             }
             if live { return hit }
+        }
+        return nil
+    }
+
+    /// The image file under a view point: `![](src)` images and `![[embed]]` images.
+    func imageFileURL(at point: NSPoint) -> URL? {
+        guard let plan = currentPlan else { return nil }
+        for hit in imageRects.values where hit.url != nil && hit.rect.contains(point) {
+            let live = plan.widgets.contains { w in
+                switch w.kind {
+                case .image, .wikiLink(_, true): return w.from == hit.from && w.to == hit.to
+                default: return false
+                }
+            }
+            if live { return hit.url }
         }
         return nil
     }
@@ -83,7 +100,7 @@ extension EditorController {
         let presets: [(String, Int?)] = [("Small", Int((maxW * 0.25).rounded())), ("Medium", Int((maxW * 0.5).rounded())),
                                          ("Large", Int((maxW * 0.75).rounded())), ("Full Width", Int(maxW.rounded())), ("Original Size", nil)]
         return presets.map { title, w in
-            ImageMenuItem(title: "Image Size: \(title)") { [weak self] in self?.setImageWidth(from: hit.from, to: hit.to, width: w) }
+            ImageMenuItem(title: L("Image Size: %@", L(title))) { [weak self] in self?.setImageWidth(from: hit.from, to: hit.to, width: w) }
         }
     }
 }
@@ -106,6 +123,14 @@ final class ImageResizeOverlay: NSView {
     private(set) var hit: ImageHit?
     private var previewWidth: CGFloat?
     static let handle: CGFloat = 12
+
+    /// The diagonal (↖↘) resize cursor for the bottom-right corner handle.
+    static var diagonalCursor: NSCursor {
+        if #available(macOS 15.0, *) { return NSCursor.frameResize(position: .bottomRight, directions: .all) }
+        let sel = NSSelectorFromString("_windowResizeNorthWestSouthEastCursor")
+        if NSCursor.responds(to: sel), let c = NSCursor.perform(sel)?.takeUnretainedValue() as? NSCursor { return c }
+        return .crosshair
+    }
     override var isFlipped: Bool { true }
 
     func show(_ h: ImageHit?) {
@@ -141,7 +166,7 @@ final class ImageResizeOverlay: NSView {
     }
 
     override func resetCursorRects() {
-        addCursorRect(handleRect.insetBy(dx: -4, dy: -4), cursor: NSCursor.resizeLeftRight)
+        addCursorRect(handleRect.insetBy(dx: -4, dy: -4), cursor: Self.diagonalCursor)
     }
 
     override func draw(_ dirtyRect: NSRect) {

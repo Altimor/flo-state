@@ -34,6 +34,19 @@ for b in "$BIN_DIR"/*.bundle(N); do
   cp -R "$b" "$APP/Contents/Resources/"
 done
 [[ -f "$ICON_SRC" ]] && cp "$ICON_SRC" "$APP/Contents/Resources/AppIcon.icns"
+# Localization: the UI strings live in the FloCore bundle's Resources/<lang>.lproj; the app
+# bundle gets matching <lang>.lproj (InfoPlist.strings: document-type names) so
+# AppKit, Sparkle and System Settings' per-app language see the same languages.
+# Binary .strings load faster than the text source.
+LANGS=()
+for d in "$ROOT"/Sources/FloCore/Resources/*.lproj(N); do LANGS+=("${${d:t}%.lproj}"); done
+for l in $LANGS; do
+  mkdir -p "$APP/Contents/Resources/$l.lproj"
+  if [[ -f "$ROOT/Resources/$l.lproj/InfoPlist.strings" ]]; then cp "$ROOT/Resources/$l.lproj/InfoPlist.strings" "$APP/Contents/Resources/$l.lproj/"; fi
+done
+for f in "$APP"/Contents/Resources/**/*.strings(N); do plutil -convert binary1 "$f"; done
+LOCALIZATIONS=""
+for l in $LANGS; do LOCALIZATIONS+="<string>$l</string>"; done
 
 # CFBundleShortVersionString from VERSION; CFBundleVersion = git commit count
 # (monotonic, what Sparkle compares).
@@ -47,6 +60,8 @@ cat > "$APP/Contents/Info.plist" <<PLIST
 <plist version="1.0">
 <dict>
   <key>CFBundleName</key><string>${APP_NAME}</string>
+  <key>CFBundleDevelopmentRegion</key><string>en</string>
+  <key>CFBundleLocalizations</key><array>${LOCALIZATIONS}</array>
   <key>CFBundleDisplayName</key><string>${APP_NAME}</string>
   <key>CFBundleIdentifier</key><string>app.flostate.native</string>
   <key>CFBundleExecutable</key><string>FloStateNative</string>

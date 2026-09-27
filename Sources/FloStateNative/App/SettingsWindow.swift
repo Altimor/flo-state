@@ -104,18 +104,18 @@ enum SettingsPanes {
     /// Menu titles for enum options.
     static func optionTitle(_ key: String, _ option: String) -> String {
         switch (key, option) {
-        case ("appearance.theme", "system"): return "Match System"
-        case ("appearance.sidebar-file-label", "title"): return "Document title"
-        case ("appearance.sidebar-file-label", "filename"): return "File name"
-        case ("appearance.editor-width", "full"): return "Wide"   // not the full window width
-        default: return option.prefix(1).uppercased() + option.dropFirst()
+        case ("appearance.theme", "system"): return L("Match System")
+        case ("appearance.sidebar-file-label", "title"): return L("Document title")
+        case ("appearance.sidebar-file-label", "filename"): return L("File name")
+        case ("appearance.editor-width", "full"): return L("Wide")   // not the full window width
+        default: return L(option.prefix(1).uppercased() + option.dropFirst())
         }
     }
 
     static func unit(_ def: SettingDef) -> String? {
-        if def.cssFormat == "px" || def.key == "appearance.sidebar-width" || def.key == "editor.outline-indent-per-level" { return "px" }
-        if def.key.hasSuffix("-minutes") { return "min" }
-        if def.key.hasSuffix("-ms") { return "ms" }
+        if def.cssFormat == "px" || def.key == "appearance.sidebar-width" || def.key == "editor.outline-indent-per-level" { return L("px") }
+        if def.key.hasSuffix("-minutes") { return L("min") }
+        if def.key.hasSuffix("-ms") { return L("ms") }
         return nil
     }
 
@@ -197,7 +197,7 @@ final class SettingControl: NSObject, NSTextFieldDelegate, NSTokenFieldDelegate 
         // Descriptions are tooltips (like native Settings panes); inline help
         // only where the control alone doesn't explain the behaviour.
         help = def.description.isEmpty || !SettingControl.inlineHelp.contains(def.key) ? nil : {
-            let h = NSTextField(wrappingLabelWithString: def.description)
+            let h = NSTextField(wrappingLabelWithString: L(def.description))
             h.font = .systemFont(ofSize: NSFont.smallSystemFontSize)
             h.textColor = .secondaryLabelColor
             h.preferredMaxLayoutWidth = 300
@@ -223,7 +223,10 @@ final class SettingControl: NSObject, NSTextFieldDelegate, NSTokenFieldDelegate 
             popup = p; built = p
         case .string where def.key.hasSuffix(".preset"):
             let p = NSPopUpButton(frame: .zero, pullsDown: false)
-            p.addItems(withTitles: ThemePreset.all.map { SettingsPanes.presetTitle($0.name) })
+            for t in ThemePreset.all {
+                p.addItem(withTitle: L(SettingsPanes.presetTitle(t.name)))
+                p.lastItem?.representedObject = t.name
+            }
             p.target = self; p.action = #selector(changed(_:))
             popup = p; built = p
         case .string:
@@ -288,8 +291,8 @@ final class SettingControl: NSObject, NSTextFieldDelegate, NSTokenFieldDelegate 
             tokens = t; built = t
         }
         view = built
-        view.toolTip = def.description
-        label.toolTip = def.description
+        view.toolTip = def.description.isEmpty ? nil : L(def.description)
+        label.toolTip = view.toolTip
         sync()
     }
 
@@ -301,14 +304,14 @@ final class SettingControl: NSObject, NSTextFieldDelegate, NSTokenFieldDelegate 
     /// Native wording where the schema label reads oddly in a Settings window.
     static func displayLabel(_ def: SettingDef) -> String {
         switch def.key {
-        case "appearance.theme": return "Appearance"
-        case "appearance.sidebar-width": return "Default width"
-        case "appearance.sidebar-file-label": return "File labels"
-        case "appearance.editor-width": return "Editor width"
-        case "appearance.sidebar-visible": return "Show sidebar"
-        case "appearance.sidebar-show-search": return "Show search button"
-        case "appearance.sidebar-show-recents": return "Show recents"
-        default: return sentenceCase(def.label)
+        case "appearance.theme": return L("Appearance")
+        case "appearance.sidebar-width": return L("Default width")
+        case "appearance.sidebar-file-label": return L("File labels")
+        case "appearance.editor-width": return L("Editor width")
+        case "appearance.sidebar-visible": return L("Show sidebar")
+        case "appearance.sidebar-show-search": return L("Show search button")
+        case "appearance.sidebar-show-recents": return L("Show recents")
+        default: return L(sentenceCase(def.label))
         }
     }
 
@@ -334,10 +337,10 @@ final class SettingControl: NSObject, NSTextFieldDelegate, NSTokenFieldDelegate 
             default:
                 // preset: the matching preset, else the stored name, else "Custom"
                 let mode = self.mode ?? .light
-                let name = ThemeResolver.matchingPreset(backend.values, mode: mode).map { SettingsPanes.presetTitle($0.name) }
-                if let n = name { p.selectItem(withTitle: n) } else {
-                    if p.item(withTitle: "Custom") == nil { p.addItem(withTitle: "Custom") }
-                    p.selectItem(withTitle: "Custom")
+                let name = ThemeResolver.matchingPreset(backend.values, mode: mode)?.name
+                if let n = name, let i = p.itemArray.firstIndex(where: { $0.representedObject as? String == n }) { p.selectItem(at: i) } else {
+                    if p.itemArray.last?.representedObject != nil { p.addItem(withTitle: L("Custom")) }
+                    p.selectItem(at: p.numberOfItems - 1)
                 }
             }
         }
@@ -360,7 +363,7 @@ final class SettingControl: NSObject, NSTextFieldDelegate, NSTokenFieldDelegate 
         case .font:
             if let fam = popup?.titleOfSelectedItem { backend.set(def.key, .string(FontStackEdit.stackWithFamily(fam, value.stringValue ?? ""))) }
         case .string where def.key.hasSuffix(".preset"):
-            if let n = popup?.titleOfSelectedItem, n != "Custom", let m = mode { backend.applyPreset(SettingsPanes.presetName(n), mode: m) }
+            if let n = popup?.selectedItem?.representedObject as? String, let m = mode { backend.applyPreset(n, mode: m) }
         case .color:
             if let c = well?.color.usingColorSpace(.sRGB) {
                 backend.set(def.key, .string(RGBA(r: Double(c.redComponent), g: Double(c.greenComponent), b: Double(c.blueComponent)).hexString))
@@ -412,13 +415,13 @@ final class SettingsPaneController: NSViewController {
     let pane: SettingsPanes.Pane
     unowned let backend: SettingsBackend
     private(set) var controls: [SettingControl] = []
-    let restoreButton = NSButton(title: "Restore Defaults", target: nil, action: nil)
+    let restoreButton = NSButton(title: L("Restore Defaults"), target: nil, action: nil)
 
     init(pane: SettingsPanes.Pane, backend: SettingsBackend) {
         self.pane = pane
         self.backend = backend
         super.init(nibName: nil, bundle: nil)
-        title = pane.title
+        title = L(pane.title)
     }
     required init?(coder: NSCoder) { fatalError() }
 
@@ -438,7 +441,7 @@ final class SettingsPaneController: NSViewController {
                     controls.append(c)
                     // classic Settings layout: a group's checkboxes hang off the group label
                     if def.type == .boolean, !headingUsed, let h = group.0 {
-                        c.label.stringValue = h + ":"
+                        c.label.stringValue = L(h) + ":"
                         headingUsed = true
                     }
                     let row = grid.addRow(with: [c.label, c.view])
@@ -477,7 +480,7 @@ final class SettingsPaneController: NSViewController {
     /// Theme pane: one row per primary, Light and Dark side by side.
     private func buildThemeGrid(_ grid: NSGridView) {
         let light = pane.groups[0].1, dark = pane.groups[1].1
-        let head = [NSGridCell.emptyContentView, NSTextField(labelWithString: "Light"), NSTextField(labelWithString: "Dark")]
+        let head = [NSGridCell.emptyContentView, NSTextField(labelWithString: L("Light")), NSTextField(labelWithString: L("Dark"))]
         (head[1] as! NSTextField).font = .boldSystemFont(ofSize: NSFont.systemFontSize)
         (head[2] as! NSTextField).font = .boldSystemFont(ofSize: NSFont.systemFontSize)
         grid.addRow(with: head)
@@ -522,9 +525,9 @@ final class SettingsWindowController: NSWindowController, NSWindowDelegate {
             let vc = SettingsPaneController(pane: p, backend: backend)
             panes.append(vc)
             let item = NSTabViewItem(viewController: vc)
-            item.label = p.title
+            item.label = L(p.title)
             item.identifier = p.id
-            item.image = NSImage(systemSymbolName: p.symbol, accessibilityDescription: p.title)
+            item.image = NSImage(systemSymbolName: p.symbol, accessibilityDescription: item.label)
             tabs.addTabViewItem(item)
         }
         let w = NSWindow(contentViewController: tabs)
@@ -554,7 +557,7 @@ final class SettingsWindowController: NSWindowController, NSWindowDelegate {
     }
 
     private func updateTitle() {
-        window?.title = selectedPane.pane.title
+        window?.title = L(selectedPane.pane.title)
         resizeToPane(animate: window?.isVisible == true)
         // the outgoing pane can still constrain the frame this turn
         DispatchQueue.main.async { [weak self] in MainActor.assumeIsolated { self?.resizeToPane(animate: false) } }

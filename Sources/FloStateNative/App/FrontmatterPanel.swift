@@ -123,7 +123,7 @@ final class FrontmatterPanelView: FlippedView, NSTextFieldDelegate {
                 f.focusRingType = .none
                 f.font = font
                 f.textColor = key ? p.textMuted : p.textPrimary
-                f.placeholderAttributedString = NSAttributedString(string: key ? "key" : "value",
+                f.placeholderAttributedString = NSAttributedString(string: key ? L("key") : L("value"),
                                                                    attributes: [.font: font, .foregroundColor: p.textMuted.withAlphaComponent(p.textMuted.alphaComponent * 0.7)])
                 f.delegate = self
                 f.cell?.usesSingleLineMode = true
@@ -146,7 +146,7 @@ final class FrontmatterPanelView: FlippedView, NSTextFieldDelegate {
     func rowRect(_ i: Int) -> CGRect { CGRect(x: -12, y: CGFloat(i) * 38, width: bounds.width + 24, height: 32) }
     var addRect: CGRect {
         let y = CGFloat(rows.entries.count) * 38 - (rows.entries.isEmpty ? 0 : 6) + 12
-        return CGRect(x: 0, y: y, width: 16 + TextStyle(font: UIFonts.ui(model.values), color: .black).width("Add property"), height: 14.95)
+        return CGRect(x: 0, y: y, width: 16 + TextStyle(font: UIFonts.ui(model.values), color: .black).width(L("Add property")), height: 14.95)
     }
 
     override func layout() {
@@ -182,7 +182,7 @@ final class FrontmatterPanelView: FlippedView, NSTextFieldDelegate {
         ctx.move(to: CGPoint(x: a.minX + 2, y: a.midY)); ctx.addLine(to: CGPoint(x: a.minX + 10, y: a.midY))
         ctx.strokePath()
         ctx.restoreGState()
-        TextStyle(font: UIFonts.ui(model.values), color: p.textMuted).draw("Add property", x: a.minX + 16, lineTop: a.minY, lineHeight: 14.95, in: ctx)
+        TextStyle(font: UIFonts.ui(model.values), color: p.textMuted).draw(L("Add property"), x: a.minX + 16, lineTop: a.minY, lineHeight: 14.95, in: ctx)
     }
 
     override func updateTrackingAreas() {

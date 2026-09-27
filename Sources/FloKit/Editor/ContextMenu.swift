@@ -136,11 +136,11 @@ extension EditorFeatures {
                 switch e {
                 case .separator: m.addItem(.separator())
                 case .submenu(let t, let items):
-                    let it = NSMenuItem(title: t, action: nil, keyEquivalent: "")
-                    it.submenu = make(items, title: t)
+                    let it = NSMenuItem(title: L(t), action: nil, keyEquivalent: "")
+                    it.submenu = make(items, title: L(t))
                     m.addItem(it)
                 case .item(let id, let t, let key):
-                    let it = NSMenuItem(title: t, action: #selector(MenuTarget.fire(_:)), keyEquivalent: "")
+                    let it = NSMenuItem(title: L(t), action: #selector(MenuTarget.fire(_:)), keyEquivalent: "")
                     if let k = key { let (ke, mods) = Self.keyEquivalent(k); it.keyEquivalent = ke; it.keyEquivalentModifierMask = mods }
                     it.representedObject = id
                     it.target = menuTarget

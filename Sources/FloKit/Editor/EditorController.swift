@@ -287,6 +287,8 @@ public final class EditorController: NSObject, NSTextViewDelegate, NSTextLayoutM
     /// Drop cached image sizes (an attachment changed on disk).
     /// Last drawn rect of each image widget (keyed by source position); see ImageResize.swift.
     var imageRects: [Int: ImageHit] = [:]
+    /// Double-clicking a rendered image opens its file (default: the user's image app, e.g. Preview).
+    public var openImageFile: (URL) -> Void = { NSWorkspace.shared.open($0) }
     lazy var imageOverlay: ImageResizeOverlay = {
         let o = ImageResizeOverlay()
         o.controller = self
@@ -637,7 +639,7 @@ public final class FloTextView: NSTextView {
 
     public override func cursorUpdate(with event: NSEvent) {
         if chromeRect.contains(convert(event.locationInWindow, from: nil)) { NSCursor.arrow.set() }
-        else if let c = controller, c.imageOverlay.handleContains(convert(event.locationInWindow, from: nil)) { NSCursor.resizeLeftRight.set() }
+        else if let c = controller, c.imageOverlay.handleContains(convert(event.locationInWindow, from: nil)) { ImageResizeOverlay.diagonalCursor.set() }
         else if let c = controller, c.features.pointerOverLink(event) { NSCursor.pointingHand.set() }
         else { super.cursorUpdate(with: event) }
     }
@@ -725,7 +727,7 @@ public final class FloTextView: NSTextView {
     public override func mouseMoved(with event: NSEvent) {
         // on an image's resize handle: keep the resize cursor (super would reset the I-beam every move)
         if let c = controller, c.imageOverlay.handleContains(convert(event.locationInWindow, from: nil)) {
-            NSCursor.resizeLeftRight.set()
+            ImageResizeOverlay.diagonalCursor.set()
             return
         }
         super.mouseMoved(with: event)
@@ -755,10 +757,25 @@ public final class FloTextView: NSTextView {
                                        owner: self, userInfo: ["flo": true]))
     }
 
+    /// First click of a possible double-click on an image: the image and the
+    /// selection before that click (the single click selects the image source).
+    private var imageClick: (url: URL, selection: [NSValue])?
+
     public override func mouseDown(with event: NSEvent) {
         if let c = controller, let line = chevronLine(at: convert(event.locationInWindow, from: nil)) {
             c.toggleFold(line: line)
             return
+        }
+        // Double-click on a rendered image: open the file, and undo the first click's
+        // source selection (the image may have moved under the revealed source line).
+        if let c = controller, !event.modifierFlags.contains(.shift) {
+            if event.clickCount == 2, let first = imageClick {
+                imageClick = nil
+                setSelectedRanges(first.selection, affinity: .downstream, stillSelecting: false)
+                c.openImageFile(first.url)
+                return
+            }
+            imageClick = event.clickCount == 1 ? c.imageFileURL(at: convert(event.locationInWindow, from: nil)).map { ($0, selectedRanges) } : nil
         }
         if let c = controller, event.clickCount == 1, !event.modifierFlags.contains(.shift),
            c.onLinkClick != nil, let link = linkUnder(event) {

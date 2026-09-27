@@ -29,8 +29,8 @@ public enum TabLocation: Equatable, Hashable {
     public var fallbackTitle: String {
         switch self {
         case let .file(p): return LinkPaths.getFileName(p)
-        case .launcher: return "New tab"
-        case .settings: return "Settings"
+        case .launcher: return L("New tab")
+        case .settings: return L("Settings")
         }
     }
 
@@ -881,8 +881,8 @@ public final class EditorStore: SaveEngineHost {
         guard let tab = activeTab else { return "Flo State" }
         switch tab.location {
         case .file: return tabTitle(tab)
-        case .launcher: return "New Tab"
-        case .settings: return "Settings"
+        case .launcher: return L("New Tab")
+        case .settings: return L("Settings")
         }
     }
 

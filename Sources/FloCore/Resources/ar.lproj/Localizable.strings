@@ -1,0 +1,902 @@
+/* Flo State UI strings. Key = English source text (base language).
+ * Generated from the sources; translations live in <lang>.lproj/Localizable.strings. */
+
+/* EditorModel.swift; TabStripView.swift; Tab title / tooltip of the + button (new empty tab). */
+"New tab" = "علامة تبويب جديدة";
+
+/* EditorModel.swift; ShellModel.swift (command palette command) */
+"Settings" = "الإعدادات";
+
+/* EditorModel.swift; ShellMenus.swift (menu bar); Window title of an empty tab (title case where the language uses it). */
+"New Tab" = "علامة تبويب جديدة";
+
+/* WorkspaceFS.swift */
+"IO error: %@" = "خطأ في الإدخال/الإخراج: %@";
+
+/* WorkspaceFS.swift */
+"Not found: %@" = "غير موجود: %@";
+
+/* WorkspaceFS.swift */
+"Already exists: %@" = "موجود بالفعل: %@";
+
+/* WorkspaceFS.swift */
+"No workspace is open" = "لا توجد مساحة عمل مفتوحة";
+
+/* WorkspaceFS.swift; ShellModel.swift; Default name of a new note file (".md" is appended). Use the word macOS uses for untitled documents. */
+"Untitled" = "بلا عنوان";
+
+/* WorkspaceFS.swift; Default name of a new folder, as in Finder. */
+"Untitled Folder" = "مجلد بلا عنوان";
+
+/* WorkspaceFS.swift; Finder-style duplicate name suffix: "note copy.md", "note copy 2.md". Use the word Finder uses in this language. */
+"copy" = "نسخة";
+
+/* ContextMenu.swift (editor right-click menu); ShellMenus.swift */
+"Cut" = "قص";
+
+/* ContextMenu.swift (editor right-click menu); ShellMenus.swift */
+"Copy" = "نسخ";
+
+/* ContextMenu.swift (editor right-click menu); ShellMenus.swift */
+"Paste" = "لصق";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Paste as plain text" = "لصق كنص عادي";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Format" = "تنسيق";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Bold" = "غامق";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Italic" = "مائل";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Strikethrough" = "يتوسطه خط";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Inline code" = "كود مضمّن";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Insert link…" = "إدراج رابط…";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Clear formatting" = "مسح التنسيق";
+
+/* ContextMenu.swift (editor right-click menu); Editor context menu: submenu with block types; also item that turns a heading back into a normal paragraph. */
+"Paragraph" = "فقرة";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 1" = "عنوان ١";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 2" = "عنوان ٢";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 3" = "عنوان ٣";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 4" = "عنوان ٤";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 5" = "عنوان ٥";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 6" = "عنوان ٦";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Bullet list" = "قائمة نقطية";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Numbered list" = "قائمة مرقمة";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Task list" = "قائمة مهام";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Blockquote" = "اقتباس";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Code block" = "كتلة كود";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Insert" = "إدراج";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Link…" = "رابط…";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Table" = "جدول";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Horizontal rule" = "خط أفقي";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Current date" = "التاريخ الحالي";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Current time" = "الوقت الحالي";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Select all" = "تحديد الكل";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Open link" = "فتح الرابط";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Copy link" = "نسخ الرابط";
+
+/* FindOverlay.swift; Find bar: toggle/button to replace text; also the replace field placeholder. */
+"Replace" = "استبدال";
+
+/* FindOverlay.swift; Find bar button: Replace All (short, button). */
+"All" = "الكل";
+
+/* FindOverlay.swift; Find bar search field placeholder. */
+"Find" = "بحث";
+
+/* FindOverlay.swift; Find bar counter when nothing matches (keep short, ~12 chars). */
+"No matches" = "لا نتائج";
+
+/* ImageResize.swift; Image right-click menu: "Image Size: Small". */
+"Image Size: %@" = "حجم الصورة: %@";
+
+/* ImageResize.swift (image size preset, used in "Image Size: %@") */
+"Small" = "صغير";
+
+/* ImageResize.swift (image size preset, used in "Image Size: %@") */
+"Medium" = "متوسط";
+
+/* ImageResize.swift (image size preset, used in "Image Size: %@") */
+"Large" = "كبير";
+
+/* ImageResize.swift (image size preset, used in "Image Size: %@") */
+"Full Width" = "العرض الكامل";
+
+/* ImageResize.swift (image size preset, used in "Image Size: %@") */
+"Original Size" = "الحجم الأصلي";
+
+/* CompactHeader.swift */
+"Choose file" = "اختيار ملف";
+
+/* CompactHeader.swift; ShellMenus.swift; SidebarView.swift (sidebar section header); Sidebar section header: recently opened files. */
+"Recents" = "الأحدث";
+
+/* CompactHeader.swift */
+"No other recent files." = "لا توجد ملفات حديثة أخرى.";
+
+/* EditorArea.swift */
+"Create new note" = "إنشاء ملاحظة جديدة";
+
+/* EditorArea.swift; ShellMenus.swift; SidebarView.swift; Sidebar search button / new-tab launcher / sidebar right-click toggle. */
+"Search" = "بحث";
+
+/* EditorArea.swift; Status bar counter shown after a number: "1,234 words". Lowercase noun. */
+"words" = "كلمة";
+
+/* EditorArea.swift; Status bar counter shown after a number: "1,234 characters". */
+"characters" = "حرف";
+
+/* EditorArea.swift; Status bar counter shown after a number: "12 paragraphs". */
+"paragraphs" = "فقرة";
+
+/* EditorArea.swift */
+"Copy heading link" = "نسخ رابط العنوان";
+
+/* FloStateCLI.swift */
+"Command Line Tool Removed" = "تمت إزالة أداة سطر الأوامر";
+
+/* FloStateCLI.swift */
+"The `flostate` command has been removed from %@." = "تمت إزالة الأمر `flostate` من %@.";
+
+/* FloStateCLI.swift */
+"Command Line Tool Installed" = "تم تثبيت أداة سطر الأوامر";
+
+/* FloStateCLI.swift */
+"The `flostate` command is now installed at %@." = "تم تثبيت الأمر `flostate` في %@.";
+
+/* FloStateCLI.swift */
+"Run `flostate .` from any terminal to open the current folder." = "شغّل `flostate .` من أي طرفية لفتح المجلد الحالي.";
+
+/* FloStateCLI.swift */
+"Flo State Command Line Tool" = "أداة سطر الأوامر لـ Flo State";
+
+/* FloStateCLI.swift */
+"Could not remove the flostate command." = "تعذرت إزالة الأمر flostate.";
+
+/* FloStateCLI.swift */
+"Could not install the flostate command." = "تعذر تثبيت الأمر flostate.";
+
+/* FloStateCLI.swift (app menu; keep `flostate` as is) */
+"Install 'flostate' Command Line Tool…" = "تثبيت أداة سطر الأوامر 'flostate'…";
+
+/* FloStateCLI.swift (app menu; keep `flostate` as is) */
+"Uninstall 'flostate' Command Line Tool…" = "إلغاء تثبيت أداة سطر الأوامر 'flostate'…";
+
+/* FrontmatterPanel.swift; Placeholder in a frontmatter property name field. */
+"key" = "المفتاح";
+
+/* FrontmatterPanel.swift; Placeholder in a frontmatter property value field. */
+"value" = "القيمة";
+
+/* FrontmatterPanel.swift */
+"Add property" = "إضافة خاصية";
+
+/* SettingsWindow.swift */
+"Match System" = "مطابقة النظام";
+
+/* SettingsWindow.swift */
+"Document title" = "عنوان المستند";
+
+/* SettingsWindow.swift */
+"File name" = "اسم الملف";
+
+/* SettingsWindow.swift; Editor width option (vs Narrow). */
+"Wide" = "عريض";
+
+/* SettingsWindow.swift; Unit: pixels. */
+"px" = "px";
+
+/* SettingsWindow.swift; Unit: minutes (short). */
+"min" = "دقيقة";
+
+/* SettingsWindow.swift; Unit: milliseconds. */
+"ms" = "ms";
+
+/* SettingsWindow.swift; SettingsWindow.swift (Settings pane / toolbar tab); SettingsWindow.swift (Settings group label, shown with a colon) */
+"Appearance" = "المظهر";
+
+/* SettingsWindow.swift */
+"Default width" = "العرض الافتراضي";
+
+/* SettingsWindow.swift */
+"File labels" = "تسميات الملفات";
+
+/* SettingsWindow.swift */
+"Editor width" = "عرض المحرر";
+
+/* SettingsWindow.swift; ShellWindow.swift */
+"Show sidebar" = "إظهار الشريط الجانبي";
+
+/* SettingsWindow.swift */
+"Show search button" = "إظهار زر البحث";
+
+/* SettingsWindow.swift */
+"Show recents" = "إظهار الأحدث";
+
+/* SettingsWindow.swift; Theme preset popup: current colours match no preset. */
+"Custom" = "مخصص";
+
+/* SettingsWindow.swift */
+"Restore Defaults" = "استعادة الإعدادات الافتراضية";
+
+/* SettingsWindow.swift; SettingsWindow.swift (Settings group label, shown with a colon); Settings option (appearance.theme); Light appearance / light theme. */
+"Light" = "فاتح";
+
+/* SettingsWindow.swift; SettingsWindow.swift (Settings group label, shown with a colon); Settings option (appearance.theme); Dark appearance / dark theme. */
+"Dark" = "داكن";
+
+/* SettingsWindow.swift (Settings pane / toolbar tab) */
+"General" = "عام";
+
+/* SettingsWindow.swift (Settings pane / toolbar tab) */
+"Editor" = "المحرر";
+
+/* SettingsWindow.swift (Settings pane / toolbar tab) */
+"Theme" = "السمة";
+
+/* SettingsWindow.swift (Settings pane / toolbar tab) */
+"Files" = "الملفات";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"On launch" = "عند التشغيل";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Daily notes" = "الملاحظات اليومية";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Text" = "النص";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Spacing" = "التباعد";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Headings" = "العناوين";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Outline" = "المخطط";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Sidebar" = "الشريط الجانبي";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Fonts" = "الخطوط";
+
+/* ShellMenus.swift; ShellWindow.swift; Context menu item (open a file) and the open-panel confirm button. */
+"Open" = "فتح";
+
+/* ShellMenus.swift */
+"Open in new tab" = "فتح في علامة تبويب جديدة";
+
+/* ShellMenus.swift */
+"Failed to open in new tab: %@" = "تعذر الفتح في علامة تبويب جديدة: %@";
+
+/* ShellMenus.swift */
+"Unpin" = "إلغاء التثبيت";
+
+/* ShellMenus.swift */
+"Pin" = "تثبيت";
+
+/* ShellMenus.swift */
+"Duplicate" = "إنشاء نسخة مكررة";
+
+/* ShellMenus.swift */
+"Copy relative path" = "نسخ المسار النسبي";
+
+/* ShellMenus.swift */
+"Copy absolute path" = "نسخ المسار المطلق";
+
+/* ShellMenus.swift */
+"Reveal in Finder" = "إظهار في Finder";
+
+/* ShellMenus.swift */
+"Rename..." = "إعادة تسمية...";
+
+/* ShellMenus.swift; ShellWindow.swift */
+"Delete" = "حذف";
+
+/* ShellMenus.swift */
+"Rename file" = "إعادة تسمية الملف";
+
+/* ShellMenus.swift */
+"OK" = "حسنًا";
+
+/* ShellMenus.swift; ShellWindow.swift */
+"Cancel" = "إلغاء";
+
+/* ShellMenus.swift */
+"New File" = "ملف جديد";
+
+/* ShellMenus.swift */
+"New Folder" = "مجلد جديد";
+
+/* ShellMenus.swift */
+"Copy %d relative paths" = "نسخ المسارات النسبية (%d)";
+
+/* ShellMenus.swift */
+"Copy %d absolute paths" = "نسخ المسارات المطلقة (%d)";
+
+/* ShellMenus.swift */
+"Delete %d items" = "حذف العناصر (%d)";
+
+/* ShellMenus.swift */
+"Open Folder…" = "فتح مجلد…";
+
+/* ShellMenus.swift; ShellModel.swift (command palette command) */
+"Close Workspace" = "إغلاق مساحة العمل";
+
+/* ShellMenus.swift */
+"Close" = "إغلاق";
+
+/* ShellMenus.swift */
+"Close others" = "إغلاق الأخرى";
+
+/* ShellMenus.swift */
+"Close all" = "إغلاق الكل";
+
+/* ShellMenus.swift */
+"Reveal in sidebar" = "إظهار في الشريط الجانبي";
+
+/* ShellMenus.swift */
+"Copy path" = "نسخ المسار";
+
+/* ShellMenus.swift */
+"Words" = "الكلمات";
+
+/* ShellMenus.swift */
+"Characters" = "الأحرف";
+
+/* ShellMenus.swift */
+"Paragraphs" = "الفقرات";
+
+/* ShellMenus.swift; App menu item (macOS standard). */
+"Settings…" = "الإعدادات…";
+
+/* ShellMenus.swift; App menu (macOS standard). */
+"Services" = "الخدمات";
+
+/* ShellMenus.swift */
+"Hide Others" = "إخفاء الآخرين";
+
+/* ShellMenus.swift */
+"About %@" = "حول %@";
+
+/* ShellMenus.swift */
+"Hide %@" = "إخفاء %@";
+
+/* ShellMenus.swift */
+"Show All" = "إظهار الكل";
+
+/* ShellMenus.swift */
+"Quit %@" = "إنهاء %@";
+
+/* ShellMenus.swift */
+"Redo" = "إعادة";
+
+/* ShellMenus.swift */
+"Substitutions" = "الاستبدالات";
+
+/* ShellMenus.swift */
+"Show Substitutions" = "إظهار الاستبدالات";
+
+/* ShellMenus.swift */
+"Smart Copy/Paste" = "نسخ/لصق ذكي";
+
+/* ShellMenus.swift */
+"Smart Quotes" = "علامات اقتباس ذكية";
+
+/* ShellMenus.swift */
+"Smart Dashes" = "شرطات ذكية";
+
+/* ShellMenus.swift */
+"Smart Links" = "روابط ذكية";
+
+/* ShellMenus.swift */
+"Text Replacement" = "استبدال النص";
+
+/* ShellMenus.swift */
+"Undo" = "تراجع";
+
+/* ShellMenus.swift */
+"Select All" = "تحديد الكل";
+
+/* ShellMenus.swift */
+"Enter Full Screen" = "الدخول في وضع ملء الشاشة";
+
+/* ShellMenus.swift */
+"Go to Tab" = "الانتقال إلى علامة تبويب";
+
+/* ShellMenus.swift; Window > Go to Tab submenu item: "Tab 3". */
+"Tab %d" = "علامة التبويب %d";
+
+/* ShellMenus.swift */
+"Minimize" = "تصغير";
+
+/* ShellMenus.swift */
+"Close Window" = "إغلاق النافذة";
+
+/* ShellMenus.swift (menu bar); ShellModel.swift */
+"New Note" = "ملاحظة جديدة";
+
+/* ShellMenus.swift (menu bar) */
+"Go to File…" = "الانتقال إلى ملف…";
+
+/* ShellMenus.swift (menu bar) */
+"Go to Today" = "الانتقال إلى اليوم";
+
+/* ShellMenus.swift (menu bar) */
+"Search…" = "بحث…";
+
+/* ShellMenus.swift (menu bar) */
+"Search in All Notes…" = "البحث في كل الملاحظات…";
+
+/* ShellMenus.swift (menu bar) */
+"Close Tab" = "إغلاق علامة التبويب";
+
+/* ShellMenus.swift (menu bar); ShellModel.swift (command palette command) */
+"Toggle Sidebar" = "إظهار/إخفاء الشريط الجانبي";
+
+/* ShellMenus.swift (menu bar) */
+"Toggle Typewriter Scrolling" = "تبديل تمرير الآلة الكاتبة";
+
+/* ShellMenus.swift (menu bar) */
+"Increase Font Size" = "تكبير حجم الخط";
+
+/* ShellMenus.swift (menu bar) */
+"Decrease Font Size" = "تصغير حجم الخط";
+
+/* ShellMenus.swift (menu bar) */
+"Reset Font Size" = "إعادة تعيين حجم الخط";
+
+/* ShellMenus.swift (menu bar) */
+"Collapse All Headings" = "طي كل العناوين";
+
+/* ShellMenus.swift (menu bar) */
+"Expand All Headings" = "توسيع كل العناوين";
+
+/* ShellMenus.swift (menu bar) */
+"Back" = "للخلف";
+
+/* ShellMenus.swift (menu bar) */
+"Forward" = "للأمام";
+
+/* ShellMenus.swift (menu bar) */
+"Previous File" = "الملف السابق";
+
+/* ShellMenus.swift (menu bar) */
+"Next File" = "الملف التالي";
+
+/* ShellMenus.swift (menu bar) */
+"Show Previous Tab" = "إظهار علامة التبويب السابقة";
+
+/* ShellMenus.swift (menu bar) */
+"Show Next Tab" = "إظهار علامة التبويب التالية";
+
+/* ShellMenus.swift (menu bar title) */
+"File" = "ملف";
+
+/* ShellMenus.swift (menu bar title) */
+"Edit" = "تحرير";
+
+/* ShellMenus.swift (menu bar title) */
+"View" = "عرض";
+
+/* ShellMenus.swift (menu bar title) */
+"Window" = "نافذة";
+
+/* ShellMenus.swift (app menu) */
+"Check for Updates…" = "التحقق من وجود تحديثات…";
+
+/* ShellModel.swift */
+"Failed to save setting: %@" = "تعذر حفظ الإعداد: %@";
+
+/* ShellModel.swift */
+"Failed to open workspace: %@" = "تعذر فتح مساحة العمل: %@";
+
+/* ShellModel.swift */
+"No Workspace" = "لا توجد مساحة عمل";
+
+/* ShellModel.swift */
+"Failed to create file: %@" = "تعذر إنشاء الملف: %@";
+
+/* ShellModel.swift */
+"Failed to create folder: %@" = "تعذر إنشاء المجلد: %@";
+
+/* ShellModel.swift */
+"A folder named \"%@\" already exists." = "يوجد مجلد باسم «%@» بالفعل.";
+
+/* ShellModel.swift */
+"A file named \"%@\" already exists." = "يوجد ملف باسم «%@» بالفعل.";
+
+/* ShellModel.swift */
+"Failed to rename: %@" = "تعذرت إعادة التسمية: %@";
+
+/* ShellModel.swift */
+"\"%1$@\" contains %2$d unsaved files. Delete anyway?" = "يحتوي «%1$@» على ملفات غير محفوظة (%2$d). هل تريد الحذف على أي حال؟";
+
+/* ShellModel.swift */
+"\"%@\" contains 1 unsaved file. Delete anyway?" = "يحتوي «%@» على ملف واحد غير محفوظ. هل تريد الحذف على أي حال؟";
+
+/* ShellModel.swift */
+"\"%@\" has unsaved changes. Delete anyway?" = "يحتوي «%@» على تغييرات غير محفوظة. هل تريد الحذف على أي حال؟";
+
+/* ShellModel.swift */
+"Failed to delete: %@" = "تعذر الحذف: %@";
+
+/* ShellModel.swift; Confirmation; %1$d = unsaved count, %2$d = selected count. */
+"%1$d of %2$d selected items have unsaved changes. Delete anyway?" = "تحتوي %1$d من العناصر المحددة (%2$d) على تغييرات غير محفوظة. هل تريد الحذف على أي حال؟";
+
+/* ShellModel.swift */
+"Delete %d items?" = "حذف العناصر (%d)؟";
+
+/* ShellModel.swift */
+"Failed to delete \"%1$@\": %2$@" = "تعذر حذف «%1$@»: %2$@";
+
+/* ShellModel.swift */
+"Failed to duplicate: %@" = "تعذر النسخ المكرر: %@";
+
+/* ShellModel.swift; ShellWindow.swift */
+"Heading \"#%@\" not found in this document" = "لم يتم العثور على العنوان «#%@» في هذا المستند";
+
+/* ShellModel.swift */
+"Couldn't create the note: %@" = "تعذر إنشاء الملاحظة: %@";
+
+/* ShellModel.swift */
+"Couldn't create a notebook in Documents: %@" = "تعذر إنشاء دفتر في المستندات: %@";
+
+/* ShellModel.swift */
+"Type a note name to create it." = "اكتب اسم ملاحظة لإنشائها.";
+
+/* ShellModel.swift */
+"Create a new note..." = "إنشاء ملاحظة جديدة...";
+
+/* ShellModel.swift */
+"Create note" = "إنشاء ملاحظة";
+
+/* ShellModel.swift; Palette row: create a note with this file name. */
+"Create: %@" = "إنشاء: %@";
+
+/* ShellModel.swift; Full-text search result: "Note name  ·  line 12". */
+"line %d" = "السطر %d";
+
+/* ShellModel.swift */
+"Type at least two characters to search inside your notes." = "اكتب حرفين على الأقل للبحث داخل ملاحظاتك.";
+
+/* ShellModel.swift */
+"Indexing workspace..." = "جارٍ فهرسة مساحة العمل...";
+
+/* ShellModel.swift */
+"No notes contain \"%@\"." = "لا توجد ملاحظات تحتوي على «%@».";
+
+/* ShellModel.swift */
+"Search in all notes..." = "البحث في كل الملاحظات...";
+
+/* ShellModel.swift; Palette heading over full-text search results. */
+"In notes" = "في الملاحظات";
+
+/* ShellModel.swift */
+"No results found." = "لم يتم العثور على نتائج.";
+
+/* ShellModel.swift */
+"Search..." = "بحث...";
+
+/* ShellModel.swift; Command palette section heading when nothing is typed. */
+"Suggested" = "مقترح";
+
+/* ShellModel.swift */
+"Results (indexing...)" = "النتائج (جارٍ الفهرسة...)";
+
+/* ShellModel.swift */
+"Results" = "النتائج";
+
+/* ShellModel.swift (command palette command) */
+"Search in All Notes" = "البحث في كل الملاحظات";
+
+/* ShellModel.swift (command palette command) */
+"Create New File" = "إنشاء ملف جديد";
+
+/* ShellModel.swift (command palette command) */
+"Open File in Compact Window" = "فتح الملف في نافذة مدمجة";
+
+/* ShellModel.swift (command palette command) */
+"Close Current Tab" = "إغلاق علامة التبويب الحالية";
+
+/* ShellModel.swift (command palette command) */
+"Close All Tabs" = "إغلاق كل علامات التبويب";
+
+/* ShellModel.swift (command palette command) */
+"Open Workspace" = "فتح مساحة عمل";
+
+/* ShellModel.swift (command palette command) */
+"Toggle Dark Mode" = "تبديل الوضع الداكن";
+
+/* ShellModel.swift (command palette subtitle) */
+"App preferences" = "تفضيلات التطبيق";
+
+/* ShellModel.swift (command palette subtitle: the row is a command); Command palette row subtitle: the row runs a command. */
+"Command" = "أمر";
+
+/* ShellSnapshot.swift */
+"Open a folder of notes or a single file, or start from scratch." = "افتح مجلد ملاحظات أو ملفًا واحدًا، أو ابدأ من الصفر.";
+
+/* ShellSnapshot.swift (welcome screen button) */
+"Open Folder" = "فتح مجلد";
+
+/* ShellSnapshot.swift (welcome screen button) */
+"Open File" = "فتح ملف";
+
+/* ShellSnapshot.swift (welcome screen button) */
+"Start from Scratch" = "البدء من الصفر";
+
+/* SidebarView.swift */
+"No files" = "لا توجد ملفات";
+
+/* SidebarView.swift; Sidebar: reveal more recent/pinned files. */
+"Show More" = "إظهار المزيد";
+
+/* SidebarView.swift */
+"Hide sidebar" = "إخفاء الشريط الجانبي";
+
+/* SidebarView.swift */
+"\"%@\" already exists." = "«%@» موجود بالفعل.";
+
+/* SidebarView.swift */
+"Failed to move:" = "تعذر النقل:";
+
+/* SidebarView.swift (sidebar section header); Sidebar section header: pinned files. */
+"Pinned" = "المثبتة";
+
+/* StarterNotebook.swift; Folder name created in ~/Documents by "Start from Scratch" (a notebook = a folder of notes). */
+"Notebook" = "دفتر الملاحظات";
+
+/* StarterNotebook.swift; File name of the starter note. Translate "Welcome", keep ".md". The note links to itself as [[<name without .md>]]. */
+"Welcome.md" = "مرحبًا.md";
+
+/* Settings label (editor.font-size) */
+"Font size" = "حجم الخط";
+
+/* Settings description / tooltip (editor.font-size) */
+"Font size in pixels for the editor" = "حجم خط المحرر بالبكسل";
+
+/* Settings label (editor.line-height) */
+"Line height" = "ارتفاع السطر";
+
+/* Settings description / tooltip (editor.line-height) */
+"Line height multiplier for the editor" = "مُضاعِف ارتفاع السطر في المحرر";
+
+/* Settings label (editor.tab-size) */
+"Tab size" = "حجم علامة الجدولة";
+
+/* Settings description / tooltip (editor.tab-size) */
+"Number of spaces per tab" = "عدد المسافات لكل علامة جدولة";
+
+/* Settings label (editor.auto-insert-daily-heading) */
+"Insert today's date heading" = "إدراج عنوان بتاريخ اليوم";
+
+/* Settings description / tooltip (editor.auto-insert-daily-heading) */
+"When opening a dated notebook, append a heading for today if it isn't there yet" = "عند فتح دفتر مؤرخ، إضافة عنوان لليوم إن لم يكن موجودًا";
+
+/* Settings label (editor.show-outline) */
+"Show outline rail" = "إظهار شريط المخطط";
+
+/* Settings description / tooltip (editor.show-outline) */
+"The tick marks at the right edge of the editor that expand into a document outline on hover" = "العلامات على الحافة اليمنى للمحرر التي تتوسع إلى مخطط المستند عند التمرير فوقها";
+
+/* Settings label (editor.show-heading-chevrons) */
+"Show heading fold arrows" = "إظهار أسهم طي العناوين";
+
+/* Settings description / tooltip (editor.show-heading-chevrons) */
+"The arrow beside each heading for collapsing its section. Headings can still be folded from the View menu when hidden" = "السهم بجانب كل عنوان لطي قسمه. يمكن طي العناوين من قائمة عرض حتى عند إخفائه";
+
+/* Settings label (editor.jump-to-bottom-after-minutes) */
+"Jump to bottom after (minutes)" = "الانتقال إلى الأسفل بعد (دقائق)";
+
+/* Settings description / tooltip (editor.jump-to-bottom-after-minutes) */
+"On returning to Flo State after this long away, jump to the end of the document. 0 disables it." = "عند العودة إلى Flo State بعد غياب بهذه المدة، الانتقال إلى نهاية المستند. القيمة 0 تعطّل ذلك.";
+
+/* Settings label (editor.heading-space-before) */
+"Space before headings" = "المسافة قبل العناوين";
+
+/* Settings description / tooltip (editor.heading-space-before) */
+"Extra vertical space above a heading" = "مسافة رأسية إضافية فوق العنوان";
+
+/* Settings label (editor.heading-space-after) */
+"Space after headings" = "المسافة بعد العناوين";
+
+/* Settings description / tooltip (editor.heading-space-after) */
+"Extra vertical space below a heading" = "مسافة رأسية إضافية أسفل العنوان";
+
+/* Settings label (editor.subheading-color) */
+"Subheading colour" = "لون العناوين الفرعية";
+
+/* Settings description / tooltip (editor.subheading-color) */
+"Colour for level 2 and 3 headings" = "لون عناوين المستويين ٢ و٣";
+
+/* Settings label (editor.paragraph-spacing) */
+"Paragraph spacing" = "تباعد الفقرات";
+
+/* Settings description / tooltip (editor.paragraph-spacing) */
+"Vertical space between paragraphs" = "المسافة الرأسية بين الفقرات";
+
+/* Settings label (editor.bullet-spacing) */
+"Bullet spacing" = "تباعد النقاط";
+
+/* Settings description / tooltip (editor.bullet-spacing) */
+"Vertical space between list items" = "المسافة الرأسية بين عناصر القائمة";
+
+/* Settings description / tooltip (appearance.theme) */
+"Light or dark color schema" = "نظام ألوان فاتح أو داكن";
+
+/* Settings description / tooltip (appearance.sidebar-file-label) */
+"Show the document title or the filename for files in the sidebar" = "إظهار عنوان المستند أو اسم الملف للملفات في الشريط الجانبي";
+
+/* Settings description / tooltip (appearance.sidebar-show-search) */
+"Show the Search button at the top of the sidebar" = "إظهار زر البحث أعلى الشريط الجانبي";
+
+/* Settings description / tooltip (appearance.sidebar-show-recents) */
+"Show the Recents section in the sidebar" = "إظهار قسم الأحدث في الشريط الجانبي";
+
+/* Settings description / tooltip (appearance.editor-width) */
+"Editor content width mode" = "وضع عرض محتوى المحرر";
+
+/* Settings option (appearance.editor-width); Editor width option (vs Wide). */
+"Narrow" = "ضيق";
+
+/* Settings label (fonts.editor) */
+"Editor font" = "خط المحرر";
+
+/* Settings description / tooltip (fonts.editor) */
+"Font family and fallback stack used for document text" = "عائلة الخط والخطوط البديلة المستخدمة لنص المستند";
+
+/* Settings label (fonts.mono) */
+"Code font" = "خط الكود";
+
+/* Settings description / tooltip (fonts.mono) */
+"Font family and fallback stack used for code" = "عائلة الخط والخطوط البديلة المستخدمة للكود";
+
+/* Settings label (theme.light.preset); Settings label (theme.dark.preset) */
+"Preset" = "الإعداد المسبق";
+
+/* Settings description / tooltip (theme.light.preset) */
+"Light theme preset" = "الإعداد المسبق للسمة الفاتحة";
+
+/* Settings label (theme.light.accent); Settings label (theme.dark.accent) */
+"Accent" = "لون التمييز";
+
+/* Settings description / tooltip (theme.light.accent) */
+"Light theme accent color" = "لون التمييز في السمة الفاتحة";
+
+/* Settings label (theme.light.background); Settings label (theme.dark.background) */
+"Background" = "الخلفية";
+
+/* Settings description / tooltip (theme.light.background) */
+"Light theme background color" = "لون الخلفية في السمة الفاتحة";
+
+/* Settings label (theme.light.foreground); Settings label (theme.dark.foreground) */
+"Foreground" = "المقدمة";
+
+/* Settings description / tooltip (theme.light.foreground) */
+"Light theme foreground color" = "لون المقدمة في السمة الفاتحة";
+
+/* Settings label (theme.light.heading-color); Settings label (theme.dark.heading-color) */
+"Heading colour" = "لون العناوين";
+
+/* Settings description / tooltip (theme.light.heading-color) */
+"Light theme colour for level 1 headings" = "لون عناوين المستوى ١ في السمة الفاتحة";
+
+/* Settings label (theme.light.translucent); Settings label (theme.dark.translucent); Theme setting: window translucency slider. */
+"Translucent" = "الشفافية";
+
+/* Settings description / tooltip (theme.light.translucent) */
+"Light theme translucency (0 = solid, 100 = max)." = "شفافية السمة الفاتحة (0 = معتم، 100 = أقصى).";
+
+/* Settings label (theme.light.contrast); Settings label (theme.dark.contrast); Theme setting: how strong borders, cards and hover backgrounds are. */
+"Contrast" = "التباين";
+
+/* Settings description / tooltip (theme.light.contrast); Settings description / tooltip (theme.dark.contrast); Tooltip of the Contrast theme setting. */
+"alpha multiplier on borders, cards, hover bgs." = "مُضاعِف الشفافية للحدود والبطاقات وخلفيات التمرير.";
+
+/* Settings description / tooltip (theme.dark.preset) */
+"Dark theme preset" = "الإعداد المسبق للسمة الداكنة";
+
+/* Settings description / tooltip (theme.dark.accent) */
+"Dark theme accent color" = "لون التمييز في السمة الداكنة";
+
+/* Settings description / tooltip (theme.dark.background) */
+"Dark theme background color" = "لون الخلفية في السمة الداكنة";
+
+/* Settings description / tooltip (theme.dark.foreground) */
+"Dark theme foreground color" = "لون المقدمة في السمة الداكنة";
+
+/* Settings description / tooltip (theme.dark.heading-color) */
+"Dark theme colour for level 1 headings" = "لون عناوين المستوى ١ في السمة الداكنة";
+
+/* Settings description / tooltip (theme.dark.translucent) */
+"Dark theme translucency (0 = solid, 100 = max)." = "شفافية السمة الداكنة (0 = معتم، 100 = أقصى).";
+
+/* Settings label (files.associations) */
+"File associations" = "اقترانات الملفات";
+
+/* Settings description / tooltip (files.associations) */
+"File patterns to include in the workspace" = "أنماط الملفات المضمّنة في مساحة العمل";
+
+/* Settings label (workspace.restore-open-files) */
+"Restore open files" = "استعادة الملفات المفتوحة";
+
+/* Settings description / tooltip (workspace.restore-open-files) */
+"Reopen previously open files when opening a workspace" = "إعادة فتح الملفات المفتوحة سابقًا عند فتح مساحة عمل";
+
+/* Settings label (workspace.max-recent-workspaces) */
+"Max recent workspaces" = "الحد الأقصى لمساحات العمل الحديثة";
+
+/* Settings description / tooltip (workspace.max-recent-workspaces) */
+"Maximum number of recent workspaces to remember" = "الحد الأقصى لعدد مساحات العمل الحديثة التي يتم تذكرها";
+
+/* Settings label (window.restore-workspace) */
+"Restore workspace" = "استعادة مساحة العمل";
+
+/* Settings description / tooltip (window.restore-workspace) */
+"Automatically reopen the last workspace when the app starts" = "إعادة فتح آخر مساحة عمل تلقائيًا عند بدء التطبيق";
+
+/* Theme preset name; Theme preset name. */
+"Default" = "افتراضي";
+
+/* Theme preset name; Theme preset name. */
+"High Contrast" = "تباين عالٍ";
+
+/* Theme preset name; Theme preset name. */
+"Warm Paper" = "ورق دافئ";
+
+/* Theme preset name; App / theme name: keep "Flo State" untranslated. */
+"Flo State" = "Flo State";

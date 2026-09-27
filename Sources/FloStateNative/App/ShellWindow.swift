@@ -346,7 +346,7 @@ final class ShellRootView: FlippedView {
         }
         registerForDraggedTypes([.fileURL])
         collapsedToggle.action = { [weak model] in model?.toggleSidebar() }
-        collapsedToggle.toolTipText = "Show sidebar"
+        collapsedToggle.toolTipText = L("Show sidebar")
     }
     required init?(coder: NSCoder) { fatalError() }
 
@@ -669,8 +669,8 @@ final class ShellWindowController: NSWindowController, NSWindowDelegate {
         model.confirm = { msg in
             let a = NSAlert()
             a.messageText = msg
-            a.addButton(withTitle: "Delete")
-            a.addButton(withTitle: "Cancel")
+            a.addButton(withTitle: L("Delete"))
+            a.addButton(withTitle: L("Cancel"))
             return a.runModal() == .alertFirstButtonReturn
         }
         model.pickFolder = {
@@ -678,7 +678,7 @@ final class ShellWindowController: NSWindowController, NSWindowDelegate {
             p.canChooseDirectories = true
             p.canChooseFiles = false
             p.allowsMultipleSelection = false
-            p.prompt = "Open"
+            p.prompt = L("Open")
             return p.runModal() == .OK ? p.url?.path : nil
         }
     }
@@ -756,7 +756,7 @@ final class ShellWindowController: NSWindowController, NSWindowDelegate {
         if let (path, slug) = model.pendingAnchor, model.editor.activeFilePath == path,
            let pane = root.area.activeFilePane, pane.controller != nil {
             model.pendingAnchor = nil
-            if !pane.scrollToSlug(slug) { model.anchorWarning = "Heading \"#\(slug)\" not found in this document" }
+            if !pane.scrollToSlug(slug) { model.anchorWarning = L("Heading \"#%@\" not found in this document", slug) }
         }
         focusEditorOnTabSwitch()
         window?.title = model.editor.windowTitle()

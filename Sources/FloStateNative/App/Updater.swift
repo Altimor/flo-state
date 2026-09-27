@@ -1,5 +1,6 @@
 import AppKit
 import Sparkle
+import FloCore
 
 /// In-app updates (Sparkle 2). The feed and EdDSA public key come from the
 /// Info.plist written by scripts/bundle.sh (SUFeedURL, SUPublicEDKey,
@@ -39,7 +40,7 @@ final class AppUpdater: NSObject {
 
     /// App menu "Check for Updates…", validated by the controller (disabled while a check runs).
     func menuItem() -> NSMenuItem {
-        let item = NSMenuItem(title: MainMenu.checkForUpdatesTitle,
+        let item = NSMenuItem(title: L(MainMenu.checkForUpdatesTitle),
                               action: #selector(SPUStandardUpdaterController.checkForUpdates(_:)), keyEquivalent: "")
         item.target = controller
         return item

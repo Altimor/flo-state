@@ -400,8 +400,8 @@ final class LauncherView: FlippedView {
     private var kbdStyle: TextStyle { TextStyle(font: FontStack.font(model.values.fontsMono, size: 11), color: model.palette_.textIconMuted, kern: 11 * 0.2) }
 
     func items() -> [(String, String, () -> Void)] {
-        [("Create new note", "⌘N", { [weak model] in model?.palette = PaletteState(intent: .createFile) }),
-         ("Search", "⌘O", { [weak model] in model?.palette = PaletteState(intent: .search) })]
+        [(L("Create new note"), "⌘N", { [weak model] in model?.palette = PaletteState(intent: .createFile) }),
+         (L("Search"), "⌘O", { [weak model] in model?.palette = PaletteState(intent: .search) })]
     }
 
     /// Button rects: a centred column, gap-3, each label + gap-1.5 + kbd.
@@ -462,9 +462,9 @@ enum FooterMetrics {
     /// Visible metrics in order (words, characters, paragraphs).
     static func visible(_ stats: DocumentStats, _ v: SettingsValues) -> [Metric] {
         var out: [Metric] = []
-        if v.statusbarShowWords { out.append(Metric(value: stats.words, label: "words")) }
-        if v.statusbarShowCharacters { out.append(Metric(value: stats.characters, label: "characters")) }
-        if v.statusbarShowParagraphs { out.append(Metric(value: stats.paragraphs, label: "paragraphs")) }
+        if v.statusbarShowWords { out.append(Metric(value: stats.words, label: L("words"))) }
+        if v.statusbarShowCharacters { out.append(Metric(value: stats.characters, label: L("characters"))) }
+        if v.statusbarShowParagraphs { out.append(Metric(value: stats.paragraphs, label: L("paragraphs"))) }
         return out
     }
 
@@ -607,7 +607,7 @@ final class OutlineRailView: FlippedView {
     }
 
     func headingMenu(_ h: DocumentHeading) -> NSMenu {
-        ShellMenus.menu([ClosureMenuItem("Copy heading link") { [weak model] in model?.copyToPasteboard(DocumentHeadings.headingLink(h)) }])
+        ShellMenus.menu([ClosureMenuItem(L("Copy heading link")) { [weak model] in model?.copyToPasteboard(DocumentHeadings.headingLink(h)) }])
     }
 
     func dump() -> [[String: Any]] {

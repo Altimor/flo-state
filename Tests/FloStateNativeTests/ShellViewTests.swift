@@ -539,6 +539,17 @@ final class SidebarAnimationTests: XCTestCase {
         XCTAssertNotNil(root.sidebarAnimation)
         t += 0.2; check("autohide end")
         XCTAssertEqual(root.sidebarClip.frame.width, 0)
+        // narrow: shown by hand (collapsed toggle), pushing the editor, nothing clipped
+        XCTAssertFalse(root.collapsedToggle.isHidden)
+        root.collapsedToggle.action?()
+        wc.flush(); check("narrow show start"); t += 0.2; check("narrow show")
+        XCTAssertEqual(root.sidebarClip.frame.width, f.model.sidebarWidth)
+        XCTAssertTrue(root.collapsedToggle.isHidden)
+        XCTAssertLessThanOrEqual(root.area.frame.maxX, root.bounds.width + 0.001)
+        XCTAssertGreaterThan(root.area.frame.width, 300)
+        f.model.perform(.toggleSidebar)
+        wc.flush(); check("narrow hide start"); t += 0.2; check("narrow hide")
+        XCTAssertEqual(root.sidebarClip.frame.width, 0)
     }
 
     func testBackdropMatchesLegacy() async {

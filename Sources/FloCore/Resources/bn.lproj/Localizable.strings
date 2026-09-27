@@ -1,0 +1,902 @@
+/* Flo State UI strings. Key = English source text (base language).
+ * Generated from the sources; translations live in <lang>.lproj/Localizable.strings. */
+
+/* EditorModel.swift; TabStripView.swift; Tab title / tooltip of the + button (new empty tab). */
+"New tab" = "নতুন ট্যাব";
+
+/* EditorModel.swift; ShellModel.swift (command palette command) */
+"Settings" = "সেটিংস";
+
+/* EditorModel.swift; ShellMenus.swift (menu bar); Window title of an empty tab (title case where the language uses it). */
+"New Tab" = "নতুন ট্যাব";
+
+/* WorkspaceFS.swift */
+"IO error: %@" = "IO ত্রুটি: %@";
+
+/* WorkspaceFS.swift */
+"Not found: %@" = "পাওয়া যায়নি: %@";
+
+/* WorkspaceFS.swift */
+"Already exists: %@" = "আগে থেকেই আছে: %@";
+
+/* WorkspaceFS.swift */
+"No workspace is open" = "কোনো ওয়ার্কস্পেস খোলা নেই";
+
+/* WorkspaceFS.swift; ShellModel.swift; Default name of a new note file (".md" is appended). Use the word macOS uses for untitled documents. */
+"Untitled" = "শিরোনামহীন";
+
+/* WorkspaceFS.swift; Default name of a new folder, as in Finder. */
+"Untitled Folder" = "শিরোনামহীন ফোল্ডার";
+
+/* WorkspaceFS.swift; Finder-style duplicate name suffix: "note copy.md", "note copy 2.md". Use the word Finder uses in this language. */
+"copy" = "কপি";
+
+/* ContextMenu.swift (editor right-click menu); ShellMenus.swift */
+"Cut" = "কাটুন";
+
+/* ContextMenu.swift (editor right-click menu); ShellMenus.swift */
+"Copy" = "কপি করুন";
+
+/* ContextMenu.swift (editor right-click menu); ShellMenus.swift */
+"Paste" = "পেস্ট করুন";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Paste as plain text" = "সাধারণ টেক্সট হিসেবে পেস্ট করুন";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Format" = "ফরম্যাট";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Bold" = "বোল্ড";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Italic" = "ইটালিক";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Strikethrough" = "স্ট্রাইকথ্রু";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Inline code" = "ইনলাইন কোড";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Insert link…" = "লিঙ্ক যোগ করুন…";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Clear formatting" = "ফরম্যাটিং মুছুন";
+
+/* ContextMenu.swift (editor right-click menu); Editor context menu: submenu with block types; also item that turns a heading back into a normal paragraph. */
+"Paragraph" = "অনুচ্ছেদ";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 1" = "শিরোনাম ১";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 2" = "শিরোনাম ২";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 3" = "শিরোনাম ৩";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 4" = "শিরোনাম ৪";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 5" = "শিরোনাম ৫";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 6" = "শিরোনাম ৬";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Bullet list" = "বুলেট তালিকা";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Numbered list" = "সংখ্যাযুক্ত তালিকা";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Task list" = "কাজের তালিকা";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Blockquote" = "উদ্ধৃতি ব্লক";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Code block" = "কোড ব্লক";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Insert" = "যোগ করুন";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Link…" = "লিঙ্ক…";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Table" = "টেবিল";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Horizontal rule" = "অনুভূমিক রেখা";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Current date" = "আজকের তারিখ";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Current time" = "বর্তমান সময়";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Select all" = "সব নির্বাচন করুন";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Open link" = "লিঙ্ক খুলুন";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Copy link" = "লিঙ্ক কপি করুন";
+
+/* FindOverlay.swift; Find bar: toggle/button to replace text; also the replace field placeholder. */
+"Replace" = "প্রতিস্থাপন";
+
+/* FindOverlay.swift; Find bar button: Replace All (short, button). */
+"All" = "সব";
+
+/* FindOverlay.swift; Find bar search field placeholder. */
+"Find" = "খুঁজুন";
+
+/* FindOverlay.swift; Find bar counter when nothing matches (keep short, ~12 chars). */
+"No matches" = "মিল নেই";
+
+/* ImageResize.swift; Image right-click menu: "Image Size: Small". */
+"Image Size: %@" = "ছবির আকার: %@";
+
+/* ImageResize.swift (image size preset, used in "Image Size: %@") */
+"Small" = "ছোট";
+
+/* ImageResize.swift (image size preset, used in "Image Size: %@") */
+"Medium" = "মাঝারি";
+
+/* ImageResize.swift (image size preset, used in "Image Size: %@") */
+"Large" = "বড়";
+
+/* ImageResize.swift (image size preset, used in "Image Size: %@") */
+"Full Width" = "পূর্ণ প্রস্থ";
+
+/* ImageResize.swift (image size preset, used in "Image Size: %@") */
+"Original Size" = "আসল আকার";
+
+/* CompactHeader.swift */
+"Choose file" = "ফাইল বাছুন";
+
+/* CompactHeader.swift; ShellMenus.swift; SidebarView.swift (sidebar section header); Sidebar section header: recently opened files. */
+"Recents" = "সাম্প্রতিক";
+
+/* CompactHeader.swift */
+"No other recent files." = "আর কোনো সাম্প্রতিক ফাইল নেই।";
+
+/* EditorArea.swift */
+"Create new note" = "নতুন নোট তৈরি করুন";
+
+/* EditorArea.swift; ShellMenus.swift; SidebarView.swift; Sidebar search button / new-tab launcher / sidebar right-click toggle. */
+"Search" = "অনুসন্ধান";
+
+/* EditorArea.swift; Status bar counter shown after a number: "1,234 words". Lowercase noun. */
+"words" = "শব্দ";
+
+/* EditorArea.swift; Status bar counter shown after a number: "1,234 characters". */
+"characters" = "অক্ষর";
+
+/* EditorArea.swift; Status bar counter shown after a number: "12 paragraphs". */
+"paragraphs" = "অনুচ্ছেদ";
+
+/* EditorArea.swift */
+"Copy heading link" = "শিরোনামের লিঙ্ক কপি করুন";
+
+/* FloStateCLI.swift */
+"Command Line Tool Removed" = "কমান্ড লাইন টুল সরানো হয়েছে";
+
+/* FloStateCLI.swift */
+"The `flostate` command has been removed from %@." = "`flostate` কমান্ডটি %@ থেকে সরানো হয়েছে।";
+
+/* FloStateCLI.swift */
+"Command Line Tool Installed" = "কমান্ড লাইন টুল ইনস্টল হয়েছে";
+
+/* FloStateCLI.swift */
+"The `flostate` command is now installed at %@." = "`flostate` কমান্ডটি এখন %@-এ ইনস্টল করা আছে।";
+
+/* FloStateCLI.swift */
+"Run `flostate .` from any terminal to open the current folder." = "বর্তমান ফোল্ডার খুলতে যেকোনো টার্মিনালে `flostate .` চালান।";
+
+/* FloStateCLI.swift */
+"Flo State Command Line Tool" = "Flo State কমান্ড লাইন টুল";
+
+/* FloStateCLI.swift */
+"Could not remove the flostate command." = "flostate কমান্ডটি সরানো যায়নি।";
+
+/* FloStateCLI.swift */
+"Could not install the flostate command." = "flostate কমান্ডটি ইনস্টল করা যায়নি।";
+
+/* FloStateCLI.swift (app menu; keep `flostate` as is) */
+"Install 'flostate' Command Line Tool…" = "'flostate' কমান্ড লাইন টুল ইনস্টল করুন…";
+
+/* FloStateCLI.swift (app menu; keep `flostate` as is) */
+"Uninstall 'flostate' Command Line Tool…" = "'flostate' কমান্ড লাইন টুল আনইনস্টল করুন…";
+
+/* FrontmatterPanel.swift; Placeholder in a frontmatter property name field. */
+"key" = "কী";
+
+/* FrontmatterPanel.swift; Placeholder in a frontmatter property value field. */
+"value" = "মান";
+
+/* FrontmatterPanel.swift */
+"Add property" = "প্রপার্টি যোগ করুন";
+
+/* SettingsWindow.swift */
+"Match System" = "সিস্টেম অনুযায়ী";
+
+/* SettingsWindow.swift */
+"Document title" = "ডকুমেন্টের শিরোনাম";
+
+/* SettingsWindow.swift */
+"File name" = "ফাইলের নাম";
+
+/* SettingsWindow.swift; Editor width option (vs Narrow). */
+"Wide" = "চওড়া";
+
+/* SettingsWindow.swift; Unit: pixels. */
+"px" = "px";
+
+/* SettingsWindow.swift; Unit: minutes (short). */
+"min" = "মিনিট";
+
+/* SettingsWindow.swift; Unit: milliseconds. */
+"ms" = "ms";
+
+/* SettingsWindow.swift; SettingsWindow.swift (Settings pane / toolbar tab); SettingsWindow.swift (Settings group label, shown with a colon) */
+"Appearance" = "চেহারা";
+
+/* SettingsWindow.swift */
+"Default width" = "ডিফল্ট প্রস্থ";
+
+/* SettingsWindow.swift */
+"File labels" = "ফাইল লেবেল";
+
+/* SettingsWindow.swift */
+"Editor width" = "এডিটরের প্রস্থ";
+
+/* SettingsWindow.swift; ShellWindow.swift */
+"Show sidebar" = "সাইডবার দেখান";
+
+/* SettingsWindow.swift */
+"Show search button" = "অনুসন্ধান বোতাম দেখান";
+
+/* SettingsWindow.swift */
+"Show recents" = "সাম্প্রতিক দেখান";
+
+/* SettingsWindow.swift; Theme preset popup: current colours match no preset. */
+"Custom" = "কাস্টম";
+
+/* SettingsWindow.swift */
+"Restore Defaults" = "ডিফল্টে ফেরান";
+
+/* SettingsWindow.swift; SettingsWindow.swift (Settings group label, shown with a colon); Settings option (appearance.theme); Light appearance / light theme. */
+"Light" = "হালকা";
+
+/* SettingsWindow.swift; SettingsWindow.swift (Settings group label, shown with a colon); Settings option (appearance.theme); Dark appearance / dark theme. */
+"Dark" = "গাঢ়";
+
+/* SettingsWindow.swift (Settings pane / toolbar tab) */
+"General" = "সাধারণ";
+
+/* SettingsWindow.swift (Settings pane / toolbar tab) */
+"Editor" = "এডিটর";
+
+/* SettingsWindow.swift (Settings pane / toolbar tab) */
+"Theme" = "থিম";
+
+/* SettingsWindow.swift (Settings pane / toolbar tab) */
+"Files" = "ফাইল";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"On launch" = "চালু হলে";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Daily notes" = "দৈনিক নোট";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Text" = "টেক্সট";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Spacing" = "ব্যবধান";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Headings" = "শিরোনাম";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Outline" = "রূপরেখা";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Sidebar" = "সাইডবার";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Fonts" = "ফন্ট";
+
+/* ShellMenus.swift; ShellWindow.swift; Context menu item (open a file) and the open-panel confirm button. */
+"Open" = "খুলুন";
+
+/* ShellMenus.swift */
+"Open in new tab" = "নতুন ট্যাবে খুলুন";
+
+/* ShellMenus.swift */
+"Failed to open in new tab: %@" = "নতুন ট্যাবে খোলা যায়নি: %@";
+
+/* ShellMenus.swift */
+"Unpin" = "পিন সরান";
+
+/* ShellMenus.swift */
+"Pin" = "পিন করুন";
+
+/* ShellMenus.swift */
+"Duplicate" = "ডুপ্লিকেট করুন";
+
+/* ShellMenus.swift */
+"Copy relative path" = "আপেক্ষিক পাথ কপি করুন";
+
+/* ShellMenus.swift */
+"Copy absolute path" = "সম্পূর্ণ পাথ কপি করুন";
+
+/* ShellMenus.swift */
+"Reveal in Finder" = "Finder-এ দেখান";
+
+/* ShellMenus.swift */
+"Rename..." = "নাম বদলান...";
+
+/* ShellMenus.swift; ShellWindow.swift */
+"Delete" = "মুছুন";
+
+/* ShellMenus.swift */
+"Rename file" = "ফাইলের নাম বদলান";
+
+/* ShellMenus.swift */
+"OK" = "ঠিক আছে";
+
+/* ShellMenus.swift; ShellWindow.swift */
+"Cancel" = "বাতিল";
+
+/* ShellMenus.swift */
+"New File" = "নতুন ফাইল";
+
+/* ShellMenus.swift */
+"New Folder" = "নতুন ফোল্ডার";
+
+/* ShellMenus.swift */
+"Copy %d relative paths" = "আপেক্ষিক পাথ কপি করুন (%d)";
+
+/* ShellMenus.swift */
+"Copy %d absolute paths" = "সম্পূর্ণ পাথ কপি করুন (%d)";
+
+/* ShellMenus.swift */
+"Delete %d items" = "আইটেম মুছুন (%d)";
+
+/* ShellMenus.swift */
+"Open Folder…" = "ফোল্ডার খুলুন…";
+
+/* ShellMenus.swift; ShellModel.swift (command palette command) */
+"Close Workspace" = "ওয়ার্কস্পেস বন্ধ করুন";
+
+/* ShellMenus.swift */
+"Close" = "বন্ধ করুন";
+
+/* ShellMenus.swift */
+"Close others" = "অন্যগুলো বন্ধ করুন";
+
+/* ShellMenus.swift */
+"Close all" = "সব বন্ধ করুন";
+
+/* ShellMenus.swift */
+"Reveal in sidebar" = "সাইডবারে দেখান";
+
+/* ShellMenus.swift */
+"Copy path" = "পাথ কপি করুন";
+
+/* ShellMenus.swift */
+"Words" = "শব্দ";
+
+/* ShellMenus.swift */
+"Characters" = "অক্ষর";
+
+/* ShellMenus.swift */
+"Paragraphs" = "অনুচ্ছেদ";
+
+/* ShellMenus.swift; App menu item (macOS standard). */
+"Settings…" = "সেটিংস…";
+
+/* ShellMenus.swift; App menu (macOS standard). */
+"Services" = "পরিষেবা";
+
+/* ShellMenus.swift */
+"Hide Others" = "অন্যগুলো লুকান";
+
+/* ShellMenus.swift */
+"About %@" = "%@ সম্পর্কে";
+
+/* ShellMenus.swift */
+"Hide %@" = "%@ লুকান";
+
+/* ShellMenus.swift */
+"Show All" = "সব দেখান";
+
+/* ShellMenus.swift */
+"Quit %@" = "%@ থেকে প্রস্থান করুন";
+
+/* ShellMenus.swift */
+"Redo" = "পুনরায় করুন";
+
+/* ShellMenus.swift */
+"Substitutions" = "প্রতিস্থাপন";
+
+/* ShellMenus.swift */
+"Show Substitutions" = "প্রতিস্থাপন দেখান";
+
+/* ShellMenus.swift */
+"Smart Copy/Paste" = "স্মার্ট কপি/পেস্ট";
+
+/* ShellMenus.swift */
+"Smart Quotes" = "স্মার্ট উদ্ধৃতিচিহ্ন";
+
+/* ShellMenus.swift */
+"Smart Dashes" = "স্মার্ট ড্যাশ";
+
+/* ShellMenus.swift */
+"Smart Links" = "স্মার্ট লিঙ্ক";
+
+/* ShellMenus.swift */
+"Text Replacement" = "টেক্সট প্রতিস্থাপন";
+
+/* ShellMenus.swift */
+"Undo" = "পূর্বাবস্থায় ফেরান";
+
+/* ShellMenus.swift */
+"Select All" = "সব নির্বাচন করুন";
+
+/* ShellMenus.swift */
+"Enter Full Screen" = "পূর্ণ স্ক্রিনে যান";
+
+/* ShellMenus.swift */
+"Go to Tab" = "ট্যাবে যান";
+
+/* ShellMenus.swift; Window > Go to Tab submenu item: "Tab 3". */
+"Tab %d" = "ট্যাব %d";
+
+/* ShellMenus.swift */
+"Minimize" = "ছোট করুন";
+
+/* ShellMenus.swift */
+"Close Window" = "উইন্ডো বন্ধ করুন";
+
+/* ShellMenus.swift (menu bar); ShellModel.swift */
+"New Note" = "নতুন নোট";
+
+/* ShellMenus.swift (menu bar) */
+"Go to File…" = "ফাইলে যান…";
+
+/* ShellMenus.swift (menu bar) */
+"Go to Today" = "আজকে যান";
+
+/* ShellMenus.swift (menu bar) */
+"Search…" = "অনুসন্ধান…";
+
+/* ShellMenus.swift (menu bar) */
+"Search in All Notes…" = "সব নোটে অনুসন্ধান…";
+
+/* ShellMenus.swift (menu bar) */
+"Close Tab" = "ট্যাব বন্ধ করুন";
+
+/* ShellMenus.swift (menu bar); ShellModel.swift (command palette command) */
+"Toggle Sidebar" = "সাইডবার দেখান/লুকান";
+
+/* ShellMenus.swift (menu bar) */
+"Toggle Typewriter Scrolling" = "টাইপরাইটার স্ক্রলিং চালু/বন্ধ";
+
+/* ShellMenus.swift (menu bar) */
+"Increase Font Size" = "ফন্ট বড় করুন";
+
+/* ShellMenus.swift (menu bar) */
+"Decrease Font Size" = "ফন্ট ছোট করুন";
+
+/* ShellMenus.swift (menu bar) */
+"Reset Font Size" = "ফন্টের আকার রিসেট করুন";
+
+/* ShellMenus.swift (menu bar) */
+"Collapse All Headings" = "সব শিরোনাম গুটিয়ে নিন";
+
+/* ShellMenus.swift (menu bar) */
+"Expand All Headings" = "সব শিরোনাম প্রসারিত করুন";
+
+/* ShellMenus.swift (menu bar) */
+"Back" = "পেছনে";
+
+/* ShellMenus.swift (menu bar) */
+"Forward" = "সামনে";
+
+/* ShellMenus.swift (menu bar) */
+"Previous File" = "আগের ফাইল";
+
+/* ShellMenus.swift (menu bar) */
+"Next File" = "পরের ফাইল";
+
+/* ShellMenus.swift (menu bar) */
+"Show Previous Tab" = "আগের ট্যাব দেখান";
+
+/* ShellMenus.swift (menu bar) */
+"Show Next Tab" = "পরের ট্যাব দেখান";
+
+/* ShellMenus.swift (menu bar title) */
+"File" = "ফাইল";
+
+/* ShellMenus.swift (menu bar title) */
+"Edit" = "সম্পাদনা";
+
+/* ShellMenus.swift (menu bar title) */
+"View" = "দেখুন";
+
+/* ShellMenus.swift (menu bar title) */
+"Window" = "উইন্ডো";
+
+/* ShellMenus.swift (app menu) */
+"Check for Updates…" = "আপডেট দেখুন…";
+
+/* ShellModel.swift */
+"Failed to save setting: %@" = "সেটিং সংরক্ষণ করা যায়নি: %@";
+
+/* ShellModel.swift */
+"Failed to open workspace: %@" = "ওয়ার্কস্পেস খোলা যায়নি: %@";
+
+/* ShellModel.swift */
+"No Workspace" = "কোনো ওয়ার্কস্পেস নেই";
+
+/* ShellModel.swift */
+"Failed to create file: %@" = "ফাইল তৈরি করা যায়নি: %@";
+
+/* ShellModel.swift */
+"Failed to create folder: %@" = "ফোল্ডার তৈরি করা যায়নি: %@";
+
+/* ShellModel.swift */
+"A folder named \"%@\" already exists." = "“%@” নামে একটি ফোল্ডার আগে থেকেই আছে।";
+
+/* ShellModel.swift */
+"A file named \"%@\" already exists." = "“%@” নামে একটি ফাইল আগে থেকেই আছে।";
+
+/* ShellModel.swift */
+"Failed to rename: %@" = "নাম বদলানো যায়নি: %@";
+
+/* ShellModel.swift */
+"\"%1$@\" contains %2$d unsaved files. Delete anyway?" = "“%1$@”-এ অসংরক্ষিত ফাইল আছে (%2$d)। তবুও মুছবেন?";
+
+/* ShellModel.swift */
+"\"%@\" contains 1 unsaved file. Delete anyway?" = "“%@”-এ ১টি অসংরক্ষিত ফাইল আছে। তবুও মুছবেন?";
+
+/* ShellModel.swift */
+"\"%@\" has unsaved changes. Delete anyway?" = "“%@”-এ অসংরক্ষিত পরিবর্তন আছে। তবুও মুছবেন?";
+
+/* ShellModel.swift */
+"Failed to delete: %@" = "মোছা যায়নি: %@";
+
+/* ShellModel.swift; Confirmation; %1$d = unsaved count, %2$d = selected count. */
+"%1$d of %2$d selected items have unsaved changes. Delete anyway?" = "নির্বাচিত আইটেম: %2$d, অসংরক্ষিত পরিবর্তনসহ: %1$d। তবুও মুছবেন?";
+
+/* ShellModel.swift */
+"Delete %d items?" = "আইটেম মুছবেন (%d)?";
+
+/* ShellModel.swift */
+"Failed to delete \"%1$@\": %2$@" = "“%1$@” মোছা যায়নি: %2$@";
+
+/* ShellModel.swift */
+"Failed to duplicate: %@" = "ডুপ্লিকেট করা যায়নি: %@";
+
+/* ShellModel.swift; ShellWindow.swift */
+"Heading \"#%@\" not found in this document" = "এই ডকুমেন্টে “#%@” শিরোনামটি পাওয়া যায়নি";
+
+/* ShellModel.swift */
+"Couldn't create the note: %@" = "নোট তৈরি করা যায়নি: %@";
+
+/* ShellModel.swift */
+"Couldn't create a notebook in Documents: %@" = "Documents-এ নোটবুক তৈরি করা যায়নি: %@";
+
+/* ShellModel.swift */
+"Type a note name to create it." = "নোট তৈরি করতে তার নাম লিখুন।";
+
+/* ShellModel.swift */
+"Create a new note..." = "নতুন নোট তৈরি করুন...";
+
+/* ShellModel.swift */
+"Create note" = "নোট তৈরি করুন";
+
+/* ShellModel.swift; Palette row: create a note with this file name. */
+"Create: %@" = "তৈরি করুন: %@";
+
+/* ShellModel.swift; Full-text search result: "Note name  ·  line 12". */
+"line %d" = "লাইন %d";
+
+/* ShellModel.swift */
+"Type at least two characters to search inside your notes." = "নোটের ভেতরে অনুসন্ধান করতে অন্তত দুটি অক্ষর লিখুন।";
+
+/* ShellModel.swift */
+"Indexing workspace..." = "ওয়ার্কস্পেস ইনডেক্স করা হচ্ছে...";
+
+/* ShellModel.swift */
+"No notes contain \"%@\"." = "কোনো নোটে “%@” নেই।";
+
+/* ShellModel.swift */
+"Search in all notes..." = "সব নোটে অনুসন্ধান...";
+
+/* ShellModel.swift; Palette heading over full-text search results. */
+"In notes" = "নোটে";
+
+/* ShellModel.swift */
+"No results found." = "কোনো ফলাফল পাওয়া যায়নি।";
+
+/* ShellModel.swift */
+"Search..." = "অনুসন্ধান...";
+
+/* ShellModel.swift; Command palette section heading when nothing is typed. */
+"Suggested" = "প্রস্তাবিত";
+
+/* ShellModel.swift */
+"Results (indexing...)" = "ফলাফল (ইনডেক্স হচ্ছে...)";
+
+/* ShellModel.swift */
+"Results" = "ফলাফল";
+
+/* ShellModel.swift (command palette command) */
+"Search in All Notes" = "সব নোটে অনুসন্ধান";
+
+/* ShellModel.swift (command palette command) */
+"Create New File" = "নতুন ফাইল তৈরি করুন";
+
+/* ShellModel.swift (command palette command) */
+"Open File in Compact Window" = "কমপ্যাক্ট উইন্ডোতে ফাইল খুলুন";
+
+/* ShellModel.swift (command palette command) */
+"Close Current Tab" = "বর্তমান ট্যাব বন্ধ করুন";
+
+/* ShellModel.swift (command palette command) */
+"Close All Tabs" = "সব ট্যাব বন্ধ করুন";
+
+/* ShellModel.swift (command palette command) */
+"Open Workspace" = "ওয়ার্কস্পেস খুলুন";
+
+/* ShellModel.swift (command palette command) */
+"Toggle Dark Mode" = "ডার্ক মোড চালু/বন্ধ";
+
+/* ShellModel.swift (command palette subtitle) */
+"App preferences" = "অ্যাপের পছন্দসমূহ";
+
+/* ShellModel.swift (command palette subtitle: the row is a command); Command palette row subtitle: the row runs a command. */
+"Command" = "কমান্ড";
+
+/* ShellSnapshot.swift */
+"Open a folder of notes or a single file, or start from scratch." = "নোটের একটি ফোল্ডার বা একটি ফাইল খুলুন, অথবা একদম নতুন করে শুরু করুন।";
+
+/* ShellSnapshot.swift (welcome screen button) */
+"Open Folder" = "ফোল্ডার খুলুন";
+
+/* ShellSnapshot.swift (welcome screen button) */
+"Open File" = "ফাইল খুলুন";
+
+/* ShellSnapshot.swift (welcome screen button) */
+"Start from Scratch" = "নতুন শুরু";
+
+/* SidebarView.swift */
+"No files" = "কোনো ফাইল নেই";
+
+/* SidebarView.swift; Sidebar: reveal more recent/pinned files. */
+"Show More" = "আরও দেখান";
+
+/* SidebarView.swift */
+"Hide sidebar" = "সাইডবার লুকান";
+
+/* SidebarView.swift */
+"\"%@\" already exists." = "“%@” আগে থেকেই আছে।";
+
+/* SidebarView.swift */
+"Failed to move:" = "সরানো যায়নি:";
+
+/* SidebarView.swift (sidebar section header); Sidebar section header: pinned files. */
+"Pinned" = "পিন করা";
+
+/* StarterNotebook.swift; Folder name created in ~/Documents by "Start from Scratch" (a notebook = a folder of notes). */
+"Notebook" = "নোটবুক";
+
+/* StarterNotebook.swift; File name of the starter note. Translate "Welcome", keep ".md". The note links to itself as [[<name without .md>]]. */
+"Welcome.md" = "স্বাগতম.md";
+
+/* Settings label (editor.font-size) */
+"Font size" = "ফন্টের আকার";
+
+/* Settings description / tooltip (editor.font-size) */
+"Font size in pixels for the editor" = "এডিটরের ফন্টের আকার (পিক্সেলে)";
+
+/* Settings label (editor.line-height) */
+"Line height" = "লাইনের উচ্চতা";
+
+/* Settings description / tooltip (editor.line-height) */
+"Line height multiplier for the editor" = "এডিটরের লাইনের উচ্চতার গুণক";
+
+/* Settings label (editor.tab-size) */
+"Tab size" = "ট্যাবের আকার";
+
+/* Settings description / tooltip (editor.tab-size) */
+"Number of spaces per tab" = "প্রতি ট্যাবে স্পেসের সংখ্যা";
+
+/* Settings label (editor.auto-insert-daily-heading) */
+"Insert today's date heading" = "আজকের তারিখের শিরোনাম যোগ করুন";
+
+/* Settings description / tooltip (editor.auto-insert-daily-heading) */
+"When opening a dated notebook, append a heading for today if it isn't there yet" = "তারিখযুক্ত নোটবুক খুললে, আজকের শিরোনাম না থাকলে তা শেষে যোগ করুন";
+
+/* Settings label (editor.show-outline) */
+"Show outline rail" = "রূপরেখা রেল দেখান";
+
+/* Settings description / tooltip (editor.show-outline) */
+"The tick marks at the right edge of the editor that expand into a document outline on hover" = "এডিটরের ডান প্রান্তের দাগগুলো, যেগুলোর ওপর পয়েন্টার রাখলে ডকুমেন্টের রূপরেখা খুলে যায়";
+
+/* Settings label (editor.show-heading-chevrons) */
+"Show heading fold arrows" = "শিরোনাম গোটানোর তীর দেখান";
+
+/* Settings description / tooltip (editor.show-heading-chevrons) */
+"The arrow beside each heading for collapsing its section. Headings can still be folded from the View menu when hidden" = "প্রতিটি শিরোনামের পাশের তীর, যা দিয়ে তার অংশ গুটিয়ে নেওয়া যায়। লুকানো থাকলেও “দেখুন” মেনু থেকে শিরোনাম গোটানো যায়";
+
+/* Settings label (editor.jump-to-bottom-after-minutes) */
+"Jump to bottom after (minutes)" = "নিচে যাওয়ার সময় (মিনিট)";
+
+/* Settings description / tooltip (editor.jump-to-bottom-after-minutes) */
+"On returning to Flo State after this long away, jump to the end of the document. 0 disables it." = "এতক্ষণ দূরে থাকার পর Flo State-এ ফিরলে ডকুমেন্টের শেষে চলে যান। 0 দিলে বন্ধ থাকে।";
+
+/* Settings label (editor.heading-space-before) */
+"Space before headings" = "শিরোনামের আগে ফাঁকা";
+
+/* Settings description / tooltip (editor.heading-space-before) */
+"Extra vertical space above a heading" = "শিরোনামের ওপরে বাড়তি উল্লম্ব ফাঁকা";
+
+/* Settings label (editor.heading-space-after) */
+"Space after headings" = "শিরোনামের পরে ফাঁকা";
+
+/* Settings description / tooltip (editor.heading-space-after) */
+"Extra vertical space below a heading" = "শিরোনামের নিচে বাড়তি উল্লম্ব ফাঁকা";
+
+/* Settings label (editor.subheading-color) */
+"Subheading colour" = "উপশিরোনামের রং";
+
+/* Settings description / tooltip (editor.subheading-color) */
+"Colour for level 2 and 3 headings" = "লেভেল ২ ও ৩ শিরোনামের রং";
+
+/* Settings label (editor.paragraph-spacing) */
+"Paragraph spacing" = "অনুচ্ছেদের ব্যবধান";
+
+/* Settings description / tooltip (editor.paragraph-spacing) */
+"Vertical space between paragraphs" = "অনুচ্ছেদগুলোর মধ্যে উল্লম্ব ফাঁকা";
+
+/* Settings label (editor.bullet-spacing) */
+"Bullet spacing" = "বুলেটের ব্যবধান";
+
+/* Settings description / tooltip (editor.bullet-spacing) */
+"Vertical space between list items" = "তালিকার আইটেমগুলোর মধ্যে উল্লম্ব ফাঁকা";
+
+/* Settings description / tooltip (appearance.theme) */
+"Light or dark color schema" = "হালকা বা গাঢ় রঙের স্কিম";
+
+/* Settings description / tooltip (appearance.sidebar-file-label) */
+"Show the document title or the filename for files in the sidebar" = "সাইডবারে ফাইলের জন্য ডকুমেন্টের শিরোনাম বা ফাইলের নাম দেখান";
+
+/* Settings description / tooltip (appearance.sidebar-show-search) */
+"Show the Search button at the top of the sidebar" = "সাইডবারের ওপরে অনুসন্ধান বোতাম দেখান";
+
+/* Settings description / tooltip (appearance.sidebar-show-recents) */
+"Show the Recents section in the sidebar" = "সাইডবারে সাম্প্রতিক অংশ দেখান";
+
+/* Settings description / tooltip (appearance.editor-width) */
+"Editor content width mode" = "এডিটরের কনটেন্টের প্রস্থ";
+
+/* Settings option (appearance.editor-width); Editor width option (vs Wide). */
+"Narrow" = "সরু";
+
+/* Settings label (fonts.editor) */
+"Editor font" = "এডিটরের ফন্ট";
+
+/* Settings description / tooltip (fonts.editor) */
+"Font family and fallback stack used for document text" = "ডকুমেন্টের টেক্সটের ফন্ট ফ্যামিলি ও বিকল্প ফন্ট";
+
+/* Settings label (fonts.mono) */
+"Code font" = "কোডের ফন্ট";
+
+/* Settings description / tooltip (fonts.mono) */
+"Font family and fallback stack used for code" = "কোডের ফন্ট ফ্যামিলি ও বিকল্প ফন্ট";
+
+/* Settings label (theme.light.preset); Settings label (theme.dark.preset) */
+"Preset" = "প্রিসেট";
+
+/* Settings description / tooltip (theme.light.preset) */
+"Light theme preset" = "হালকা থিমের প্রিসেট";
+
+/* Settings label (theme.light.accent); Settings label (theme.dark.accent) */
+"Accent" = "অ্যাকসেন্ট";
+
+/* Settings description / tooltip (theme.light.accent) */
+"Light theme accent color" = "হালকা থিমের অ্যাকসেন্ট রং";
+
+/* Settings label (theme.light.background); Settings label (theme.dark.background) */
+"Background" = "ব্যাকগ্রাউন্ড";
+
+/* Settings description / tooltip (theme.light.background) */
+"Light theme background color" = "হালকা থিমের ব্যাকগ্রাউন্ড রং";
+
+/* Settings label (theme.light.foreground); Settings label (theme.dark.foreground) */
+"Foreground" = "ফোরগ্রাউন্ড";
+
+/* Settings description / tooltip (theme.light.foreground) */
+"Light theme foreground color" = "হালকা থিমের ফোরগ্রাউন্ড রং";
+
+/* Settings label (theme.light.heading-color); Settings label (theme.dark.heading-color) */
+"Heading colour" = "শিরোনামের রং";
+
+/* Settings description / tooltip (theme.light.heading-color) */
+"Light theme colour for level 1 headings" = "হালকা থিমে লেভেল ১ শিরোনামের রং";
+
+/* Settings label (theme.light.translucent); Settings label (theme.dark.translucent); Theme setting: window translucency slider. */
+"Translucent" = "স্বচ্ছতা";
+
+/* Settings description / tooltip (theme.light.translucent) */
+"Light theme translucency (0 = solid, 100 = max)." = "হালকা থিমের স্বচ্ছতা (0 = অস্বচ্ছ, 100 = সর্বোচ্চ)।";
+
+/* Settings label (theme.light.contrast); Settings label (theme.dark.contrast); Theme setting: how strong borders, cards and hover backgrounds are. */
+"Contrast" = "কনট্রাস্ট";
+
+/* Settings description / tooltip (theme.light.contrast); Settings description / tooltip (theme.dark.contrast); Tooltip of the Contrast theme setting. */
+"alpha multiplier on borders, cards, hover bgs." = "বর্ডার, কার্ড ও হোভার ব্যাকগ্রাউন্ডের আলফা গুণক।";
+
+/* Settings description / tooltip (theme.dark.preset) */
+"Dark theme preset" = "গাঢ় থিমের প্রিসেট";
+
+/* Settings description / tooltip (theme.dark.accent) */
+"Dark theme accent color" = "গাঢ় থিমের অ্যাকসেন্ট রং";
+
+/* Settings description / tooltip (theme.dark.background) */
+"Dark theme background color" = "গাঢ় থিমের ব্যাকগ্রাউন্ড রং";
+
+/* Settings description / tooltip (theme.dark.foreground) */
+"Dark theme foreground color" = "গাঢ় থিমের ফোরগ্রাউন্ড রং";
+
+/* Settings description / tooltip (theme.dark.heading-color) */
+"Dark theme colour for level 1 headings" = "গাঢ় থিমে লেভেল ১ শিরোনামের রং";
+
+/* Settings description / tooltip (theme.dark.translucent) */
+"Dark theme translucency (0 = solid, 100 = max)." = "গাঢ় থিমের স্বচ্ছতা (0 = অস্বচ্ছ, 100 = সর্বোচ্চ)।";
+
+/* Settings label (files.associations) */
+"File associations" = "ফাইল অ্যাসোসিয়েশন";
+
+/* Settings description / tooltip (files.associations) */
+"File patterns to include in the workspace" = "ওয়ার্কস্পেসে অন্তর্ভুক্ত ফাইলের প্যাটার্ন";
+
+/* Settings label (workspace.restore-open-files) */
+"Restore open files" = "খোলা ফাইল পুনরুদ্ধার";
+
+/* Settings description / tooltip (workspace.restore-open-files) */
+"Reopen previously open files when opening a workspace" = "ওয়ার্কস্পেস খুললে আগে খোলা ফাইলগুলো আবার খুলুন";
+
+/* Settings label (workspace.max-recent-workspaces) */
+"Max recent workspaces" = "সর্বোচ্চ সাম্প্রতিক ওয়ার্কস্পেস";
+
+/* Settings description / tooltip (workspace.max-recent-workspaces) */
+"Maximum number of recent workspaces to remember" = "মনে রাখার জন্য সাম্প্রতিক ওয়ার্কস্পেসের সর্বোচ্চ সংখ্যা";
+
+/* Settings label (window.restore-workspace) */
+"Restore workspace" = "ওয়ার্কস্পেস পুনরুদ্ধার";
+
+/* Settings description / tooltip (window.restore-workspace) */
+"Automatically reopen the last workspace when the app starts" = "অ্যাপ চালু হলে শেষ ওয়ার্কস্পেসটি নিজে থেকে আবার খুলুন";
+
+/* Theme preset name; Theme preset name. */
+"Default" = "ডিফল্ট";
+
+/* Theme preset name; Theme preset name. */
+"High Contrast" = "উচ্চ কনট্রাস্ট";
+
+/* Theme preset name; Theme preset name. */
+"Warm Paper" = "উষ্ণ কাগজ";
+
+/* Theme preset name; App / theme name: keep "Flo State" untranslated. */
+"Flo State" = "Flo State";

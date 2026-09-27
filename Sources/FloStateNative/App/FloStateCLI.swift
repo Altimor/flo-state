@@ -180,14 +180,14 @@ enum FloStateCLI {
 @MainActor
 final class CLIMenuItem: NSMenuItem {
     init() {
-        super.init(title: FloStateCLI.installLabel, action: #selector(toggle), keyEquivalent: "")
+        super.init(title: L(FloStateCLI.installLabel), action: #selector(toggle), keyEquivalent: "")
         target = self
         refresh()
     }
     required init(coder: NSCoder) { fatalError() }
 
     func refresh() {
-        title = FloStateCLI.state(source: FloStateCLI.sourceBinary) == .installed ? FloStateCLI.uninstallLabel : FloStateCLI.installLabel
+        title = L(FloStateCLI.state(source: FloStateCLI.sourceBinary) == .installed ? FloStateCLI.uninstallLabel : FloStateCLI.installLabel)
     }
 
     @objc func toggle() {
@@ -197,17 +197,17 @@ final class CLIMenuItem: NSMenuItem {
         do {
             if installed {
                 try FloStateCLI.uninstall(source: src)
-                alert.messageText = "Command Line Tool Removed"
-                alert.informativeText = "The `flostate` command has been removed from \(FloStateCLI.installTarget)."
+                alert.messageText = L("Command Line Tool Removed")
+                alert.informativeText = L("The `flostate` command has been removed from %@.", FloStateCLI.installTarget)
             } else {
                 try FloStateCLI.install(source: src)
-                alert.messageText = "Command Line Tool Installed"
-                alert.informativeText = "The `flostate` command is now installed at \(FloStateCLI.installTarget).\n\nRun `flostate .` from any terminal to open the current folder."
+                alert.messageText = L("Command Line Tool Installed")
+                alert.informativeText = L("The `flostate` command is now installed at %@.", FloStateCLI.installTarget) + "\n\n" + L("Run `flostate .` from any terminal to open the current folder.")
             }
         } catch {
             alert.alertStyle = .warning
-            alert.messageText = "Flo State Command Line Tool"
-            alert.informativeText = (installed ? "Could not remove the flostate command.\n\n" : "Could not install the flostate command.\n\n") + "\(error)"
+            alert.messageText = L("Flo State Command Line Tool")
+            alert.informativeText = (installed ? L("Could not remove the flostate command.") : L("Could not install the flostate command.")) + "\n\n\(error)"
         }
         refresh()
         alert.runModal()

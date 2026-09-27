@@ -13,6 +13,7 @@ enum FloApp {
         if let a0 = args.first, FloStateCLI.isCLIInvocation(a0) {
             exit(FloStateCLI.run(args, cwd: FileManager.default.currentDirectoryPath))
         }
+        forceLeftToRightLayout()
         if args.contains("--settings-snapshot") {
             ShellSnapshot.runSettings(args)
             exit(0)
@@ -49,6 +50,19 @@ enum FloApp {
         // Our own session restore owns windows; no AppKit window restoration.
         "NSQuitAlwaysKeepsWindows": false,
     ]
+
+    /// Arabic and Urdu get translated text in a left-to-right layout. A
+    /// right-to-left app direction (the system's AppleTextDirection) makes
+    /// TextKit's default paragraph direction right-to-left, which moves the
+    /// editor's indents and bullets off the note's own text direction; the
+    /// shell is custom-drawn and doesn't mirror anyway. Argument domain: wins
+    /// over the global setting, for this process only, nothing persisted.
+    static func forceLeftToRightLayout(_ defaults: UserDefaults = .standard) {
+        guard defaults.bool(forKey: "AppleTextDirection") else { return }  // left-to-right systems: nothing to do
+        var args = defaults.volatileDomain(forName: UserDefaults.argumentDomain)
+        args["AppleTextDirection"] = false
+        defaults.setVolatileDomain(args, forName: UserDefaults.argumentDomain)
+    }
 
     static func registerLaunchDefaults(_ defaults: UserDefaults = .standard) {
         defaults.register(defaults: launchDefaults)
@@ -131,6 +145,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }
         if !offscreen, AppUpdater.shared == nil, AppUpdater.isConfigured() { AppUpdater.shared = AppUpdater() }
+        if LaunchTrace.enabled { let t = Date(); _ = L("File"); LaunchTrace.note("first localized lookup (\(L10n.current))", since: t) }
         NSApp.mainMenu = MainMenu.build(target: router, updateItem: AppUpdater.shared?.menuItem())
         router.focusedModel = { [weak self] in self?.focusedController?.model }
         router.keyWindowIsForeign = { [weak self] in

@@ -1,0 +1,902 @@
+/* Flo State UI strings. Key = English source text (base language).
+ * Generated from the sources; translations live in <lang>.lproj/Localizable.strings. */
+
+/* EditorModel.swift; TabStripView.swift; Tab title / tooltip of the + button (new empty tab). */
+"New tab" = "新标签页";
+
+/* EditorModel.swift; ShellModel.swift (command palette command) */
+"Settings" = "设置";
+
+/* EditorModel.swift; ShellMenus.swift (menu bar); Window title of an empty tab (title case where the language uses it). */
+"New Tab" = "新标签页";
+
+/* WorkspaceFS.swift */
+"IO error: %@" = "I/O 错误：%@";
+
+/* WorkspaceFS.swift */
+"Not found: %@" = "未找到：%@";
+
+/* WorkspaceFS.swift */
+"Already exists: %@" = "已存在：%@";
+
+/* WorkspaceFS.swift */
+"No workspace is open" = "未打开工作区";
+
+/* WorkspaceFS.swift; ShellModel.swift; Default name of a new note file (".md" is appended). Use the word macOS uses for untitled documents. */
+"Untitled" = "未命名";
+
+/* WorkspaceFS.swift; Default name of a new folder, as in Finder. */
+"Untitled Folder" = "未命名文件夹";
+
+/* WorkspaceFS.swift; Finder-style duplicate name suffix: "note copy.md", "note copy 2.md". Use the word Finder uses in this language. */
+"copy" = "副本";
+
+/* ContextMenu.swift (editor right-click menu); ShellMenus.swift */
+"Cut" = "剪切";
+
+/* ContextMenu.swift (editor right-click menu); ShellMenus.swift */
+"Copy" = "拷贝";
+
+/* ContextMenu.swift (editor right-click menu); ShellMenus.swift */
+"Paste" = "粘贴";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Paste as plain text" = "粘贴为纯文本";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Format" = "格式";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Bold" = "粗体";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Italic" = "斜体";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Strikethrough" = "删除线";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Inline code" = "行内代码";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Insert link…" = "插入链接…";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Clear formatting" = "清除格式";
+
+/* ContextMenu.swift (editor right-click menu); Editor context menu: submenu with block types; also item that turns a heading back into a normal paragraph. */
+"Paragraph" = "段落";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 1" = "标题 1";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 2" = "标题 2";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 3" = "标题 3";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 4" = "标题 4";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 5" = "标题 5";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 6" = "标题 6";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Bullet list" = "项目符号列表";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Numbered list" = "编号列表";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Task list" = "任务列表";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Blockquote" = "引用块";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Code block" = "代码块";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Insert" = "插入";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Link…" = "链接…";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Table" = "表格";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Horizontal rule" = "水平分割线";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Current date" = "当前日期";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Current time" = "当前时间";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Select all" = "全选";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Open link" = "打开链接";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Copy link" = "拷贝链接";
+
+/* FindOverlay.swift; Find bar: toggle/button to replace text; also the replace field placeholder. */
+"Replace" = "替换";
+
+/* FindOverlay.swift; Find bar button: Replace All (short, button). */
+"All" = "全部";
+
+/* FindOverlay.swift; Find bar search field placeholder. */
+"Find" = "查找";
+
+/* FindOverlay.swift; Find bar counter when nothing matches (keep short, ~12 chars). */
+"No matches" = "无匹配项";
+
+/* ImageResize.swift; Image right-click menu: "Image Size: Small". */
+"Image Size: %@" = "图像大小：%@";
+
+/* ImageResize.swift (image size preset, used in "Image Size: %@") */
+"Small" = "小";
+
+/* ImageResize.swift (image size preset, used in "Image Size: %@") */
+"Medium" = "中";
+
+/* ImageResize.swift (image size preset, used in "Image Size: %@") */
+"Large" = "大";
+
+/* ImageResize.swift (image size preset, used in "Image Size: %@") */
+"Full Width" = "全宽";
+
+/* ImageResize.swift (image size preset, used in "Image Size: %@") */
+"Original Size" = "原始大小";
+
+/* CompactHeader.swift */
+"Choose file" = "选取文件";
+
+/* CompactHeader.swift; ShellMenus.swift; SidebarView.swift (sidebar section header); Sidebar section header: recently opened files. */
+"Recents" = "最近使用";
+
+/* CompactHeader.swift */
+"No other recent files." = "没有其他最近使用的文件。";
+
+/* EditorArea.swift */
+"Create new note" = "新建笔记";
+
+/* EditorArea.swift; ShellMenus.swift; SidebarView.swift; Sidebar search button / new-tab launcher / sidebar right-click toggle. */
+"Search" = "搜索";
+
+/* EditorArea.swift; Status bar counter shown after a number: "1,234 words". Lowercase noun. */
+"words" = "词";
+
+/* EditorArea.swift; Status bar counter shown after a number: "1,234 characters". */
+"characters" = "字符";
+
+/* EditorArea.swift; Status bar counter shown after a number: "12 paragraphs". */
+"paragraphs" = "段落";
+
+/* EditorArea.swift */
+"Copy heading link" = "拷贝标题链接";
+
+/* FloStateCLI.swift */
+"Command Line Tool Removed" = "命令行工具已移除";
+
+/* FloStateCLI.swift */
+"The `flostate` command has been removed from %@." = "已从 %@ 移除 `flostate` 命令。";
+
+/* FloStateCLI.swift */
+"Command Line Tool Installed" = "命令行工具已安装";
+
+/* FloStateCLI.swift */
+"The `flostate` command is now installed at %@." = "`flostate` 命令已安装到 %@。";
+
+/* FloStateCLI.swift */
+"Run `flostate .` from any terminal to open the current folder." = "在任意终端中运行 `flostate .` 即可打开当前文件夹。";
+
+/* FloStateCLI.swift */
+"Flo State Command Line Tool" = "Flo State 命令行工具";
+
+/* FloStateCLI.swift */
+"Could not remove the flostate command." = "无法移除 flostate 命令。";
+
+/* FloStateCLI.swift */
+"Could not install the flostate command." = "无法安装 flostate 命令。";
+
+/* FloStateCLI.swift (app menu; keep `flostate` as is) */
+"Install 'flostate' Command Line Tool…" = "安装“flostate”命令行工具…";
+
+/* FloStateCLI.swift (app menu; keep `flostate` as is) */
+"Uninstall 'flostate' Command Line Tool…" = "卸载“flostate”命令行工具…";
+
+/* FrontmatterPanel.swift; Placeholder in a frontmatter property name field. */
+"key" = "键";
+
+/* FrontmatterPanel.swift; Placeholder in a frontmatter property value field. */
+"value" = "值";
+
+/* FrontmatterPanel.swift */
+"Add property" = "添加属性";
+
+/* SettingsWindow.swift */
+"Match System" = "跟随系统";
+
+/* SettingsWindow.swift */
+"Document title" = "文稿标题";
+
+/* SettingsWindow.swift */
+"File name" = "文件名";
+
+/* SettingsWindow.swift; Editor width option (vs Narrow). */
+"Wide" = "宽";
+
+/* SettingsWindow.swift; Unit: pixels. */
+"px" = "px";
+
+/* SettingsWindow.swift; Unit: minutes (short). */
+"min" = "分钟";
+
+/* SettingsWindow.swift; Unit: milliseconds. */
+"ms" = "毫秒";
+
+/* SettingsWindow.swift; SettingsWindow.swift (Settings pane / toolbar tab); SettingsWindow.swift (Settings group label, shown with a colon) */
+"Appearance" = "外观";
+
+/* SettingsWindow.swift */
+"Default width" = "默认宽度";
+
+/* SettingsWindow.swift */
+"File labels" = "文件标签";
+
+/* SettingsWindow.swift */
+"Editor width" = "编辑器宽度";
+
+/* SettingsWindow.swift; ShellWindow.swift */
+"Show sidebar" = "显示边栏";
+
+/* SettingsWindow.swift */
+"Show search button" = "显示搜索按钮";
+
+/* SettingsWindow.swift */
+"Show recents" = "显示最近使用";
+
+/* SettingsWindow.swift; Theme preset popup: current colours match no preset. */
+"Custom" = "自定义";
+
+/* SettingsWindow.swift */
+"Restore Defaults" = "恢复默认";
+
+/* SettingsWindow.swift; SettingsWindow.swift (Settings group label, shown with a colon); Settings option (appearance.theme); Light appearance / light theme. */
+"Light" = "浅色";
+
+/* SettingsWindow.swift; SettingsWindow.swift (Settings group label, shown with a colon); Settings option (appearance.theme); Dark appearance / dark theme. */
+"Dark" = "深色";
+
+/* SettingsWindow.swift (Settings pane / toolbar tab) */
+"General" = "通用";
+
+/* SettingsWindow.swift (Settings pane / toolbar tab) */
+"Editor" = "编辑器";
+
+/* SettingsWindow.swift (Settings pane / toolbar tab) */
+"Theme" = "主题";
+
+/* SettingsWindow.swift (Settings pane / toolbar tab) */
+"Files" = "文件";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"On launch" = "启动时";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Daily notes" = "每日笔记";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Text" = "文本";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Spacing" = "间距";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Headings" = "标题";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Outline" = "大纲";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Sidebar" = "边栏";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Fonts" = "字体";
+
+/* ShellMenus.swift; ShellWindow.swift; Context menu item (open a file) and the open-panel confirm button. */
+"Open" = "打开";
+
+/* ShellMenus.swift */
+"Open in new tab" = "在新标签页中打开";
+
+/* ShellMenus.swift */
+"Failed to open in new tab: %@" = "无法在新标签页中打开：%@";
+
+/* ShellMenus.swift */
+"Unpin" = "取消固定";
+
+/* ShellMenus.swift */
+"Pin" = "固定";
+
+/* ShellMenus.swift */
+"Duplicate" = "复制";
+
+/* ShellMenus.swift */
+"Copy relative path" = "拷贝相对路径";
+
+/* ShellMenus.swift */
+"Copy absolute path" = "拷贝绝对路径";
+
+/* ShellMenus.swift */
+"Reveal in Finder" = "在访达中显示";
+
+/* ShellMenus.swift */
+"Rename..." = "重新命名...";
+
+/* ShellMenus.swift; ShellWindow.swift */
+"Delete" = "删除";
+
+/* ShellMenus.swift */
+"Rename file" = "重新命名文件";
+
+/* ShellMenus.swift */
+"OK" = "好";
+
+/* ShellMenus.swift; ShellWindow.swift */
+"Cancel" = "取消";
+
+/* ShellMenus.swift */
+"New File" = "新建文件";
+
+/* ShellMenus.swift */
+"New Folder" = "新建文件夹";
+
+/* ShellMenus.swift */
+"Copy %d relative paths" = "拷贝 %d 个相对路径";
+
+/* ShellMenus.swift */
+"Copy %d absolute paths" = "拷贝 %d 个绝对路径";
+
+/* ShellMenus.swift */
+"Delete %d items" = "删除 %d 个项目";
+
+/* ShellMenus.swift */
+"Open Folder…" = "打开文件夹…";
+
+/* ShellMenus.swift; ShellModel.swift (command palette command) */
+"Close Workspace" = "关闭工作区";
+
+/* ShellMenus.swift */
+"Close" = "关闭";
+
+/* ShellMenus.swift */
+"Close others" = "关闭其他";
+
+/* ShellMenus.swift */
+"Close all" = "全部关闭";
+
+/* ShellMenus.swift */
+"Reveal in sidebar" = "在边栏中显示";
+
+/* ShellMenus.swift */
+"Copy path" = "拷贝路径";
+
+/* ShellMenus.swift */
+"Words" = "词数";
+
+/* ShellMenus.swift */
+"Characters" = "字符数";
+
+/* ShellMenus.swift */
+"Paragraphs" = "段落数";
+
+/* ShellMenus.swift; App menu item (macOS standard). */
+"Settings…" = "设置…";
+
+/* ShellMenus.swift; App menu (macOS standard). */
+"Services" = "服务";
+
+/* ShellMenus.swift */
+"Hide Others" = "隐藏其他";
+
+/* ShellMenus.swift */
+"About %@" = "关于 %@";
+
+/* ShellMenus.swift */
+"Hide %@" = "隐藏 %@";
+
+/* ShellMenus.swift */
+"Show All" = "全部显示";
+
+/* ShellMenus.swift */
+"Quit %@" = "退出 %@";
+
+/* ShellMenus.swift */
+"Redo" = "重做";
+
+/* ShellMenus.swift */
+"Substitutions" = "替换";
+
+/* ShellMenus.swift */
+"Show Substitutions" = "显示替换";
+
+/* ShellMenus.swift */
+"Smart Copy/Paste" = "智能拷贝/粘贴";
+
+/* ShellMenus.swift */
+"Smart Quotes" = "智能引号";
+
+/* ShellMenus.swift */
+"Smart Dashes" = "智能破折号";
+
+/* ShellMenus.swift */
+"Smart Links" = "智能链接";
+
+/* ShellMenus.swift */
+"Text Replacement" = "文本替换";
+
+/* ShellMenus.swift */
+"Undo" = "撤销";
+
+/* ShellMenus.swift */
+"Select All" = "全选";
+
+/* ShellMenus.swift */
+"Enter Full Screen" = "进入全屏幕";
+
+/* ShellMenus.swift */
+"Go to Tab" = "前往标签页";
+
+/* ShellMenus.swift; Window > Go to Tab submenu item: "Tab 3". */
+"Tab %d" = "标签页 %d";
+
+/* ShellMenus.swift */
+"Minimize" = "最小化";
+
+/* ShellMenus.swift */
+"Close Window" = "关闭窗口";
+
+/* ShellMenus.swift (menu bar); ShellModel.swift */
+"New Note" = "新建笔记";
+
+/* ShellMenus.swift (menu bar) */
+"Go to File…" = "前往文件…";
+
+/* ShellMenus.swift (menu bar) */
+"Go to Today" = "前往今天";
+
+/* ShellMenus.swift (menu bar) */
+"Search…" = "搜索…";
+
+/* ShellMenus.swift (menu bar) */
+"Search in All Notes…" = "在所有笔记中搜索…";
+
+/* ShellMenus.swift (menu bar) */
+"Close Tab" = "关闭标签页";
+
+/* ShellMenus.swift (menu bar); ShellModel.swift (command palette command) */
+"Toggle Sidebar" = "切换边栏";
+
+/* ShellMenus.swift (menu bar) */
+"Toggle Typewriter Scrolling" = "切换打字机滚动";
+
+/* ShellMenus.swift (menu bar) */
+"Increase Font Size" = "增大字号";
+
+/* ShellMenus.swift (menu bar) */
+"Decrease Font Size" = "减小字号";
+
+/* ShellMenus.swift (menu bar) */
+"Reset Font Size" = "重置字号";
+
+/* ShellMenus.swift (menu bar) */
+"Collapse All Headings" = "折叠所有标题";
+
+/* ShellMenus.swift (menu bar) */
+"Expand All Headings" = "展开所有标题";
+
+/* ShellMenus.swift (menu bar) */
+"Back" = "返回";
+
+/* ShellMenus.swift (menu bar) */
+"Forward" = "前进";
+
+/* ShellMenus.swift (menu bar) */
+"Previous File" = "上一个文件";
+
+/* ShellMenus.swift (menu bar) */
+"Next File" = "下一个文件";
+
+/* ShellMenus.swift (menu bar) */
+"Show Previous Tab" = "显示上一个标签页";
+
+/* ShellMenus.swift (menu bar) */
+"Show Next Tab" = "显示下一个标签页";
+
+/* ShellMenus.swift (menu bar title) */
+"File" = "文件";
+
+/* ShellMenus.swift (menu bar title) */
+"Edit" = "编辑";
+
+/* ShellMenus.swift (menu bar title) */
+"View" = "显示";
+
+/* ShellMenus.swift (menu bar title) */
+"Window" = "窗口";
+
+/* ShellMenus.swift (app menu) */
+"Check for Updates…" = "检查更新…";
+
+/* ShellModel.swift */
+"Failed to save setting: %@" = "无法存储设置：%@";
+
+/* ShellModel.swift */
+"Failed to open workspace: %@" = "无法打开工作区：%@";
+
+/* ShellModel.swift */
+"No Workspace" = "无工作区";
+
+/* ShellModel.swift */
+"Failed to create file: %@" = "无法创建文件：%@";
+
+/* ShellModel.swift */
+"Failed to create folder: %@" = "无法创建文件夹：%@";
+
+/* ShellModel.swift */
+"A folder named \"%@\" already exists." = "名为“%@”的文件夹已存在。";
+
+/* ShellModel.swift */
+"A file named \"%@\" already exists." = "名为“%@”的文件已存在。";
+
+/* ShellModel.swift */
+"Failed to rename: %@" = "无法重新命名：%@";
+
+/* ShellModel.swift */
+"\"%1$@\" contains %2$d unsaved files. Delete anyway?" = "“%1$@”包含 %2$d 个未存储的文件。仍要删除吗？";
+
+/* ShellModel.swift */
+"\"%@\" contains 1 unsaved file. Delete anyway?" = "“%@”包含 1 个未存储的文件。仍要删除吗？";
+
+/* ShellModel.swift */
+"\"%@\" has unsaved changes. Delete anyway?" = "“%@”有未存储的更改。仍要删除吗？";
+
+/* ShellModel.swift */
+"Failed to delete: %@" = "无法删除：%@";
+
+/* ShellModel.swift; Confirmation; %1$d = unsaved count, %2$d = selected count. */
+"%1$d of %2$d selected items have unsaved changes. Delete anyway?" = "所选的 %2$d 个项目中有 %1$d 个有未存储的更改。仍要删除吗？";
+
+/* ShellModel.swift */
+"Delete %d items?" = "删除 %d 个项目？";
+
+/* ShellModel.swift */
+"Failed to delete \"%1$@\": %2$@" = "无法删除“%1$@”：%2$@";
+
+/* ShellModel.swift */
+"Failed to duplicate: %@" = "无法复制：%@";
+
+/* ShellModel.swift; ShellWindow.swift */
+"Heading \"#%@\" not found in this document" = "在此文稿中找不到标题“#%@”";
+
+/* ShellModel.swift */
+"Couldn't create the note: %@" = "无法创建笔记：%@";
+
+/* ShellModel.swift */
+"Couldn't create a notebook in Documents: %@" = "无法在“文稿”中创建笔记本：%@";
+
+/* ShellModel.swift */
+"Type a note name to create it." = "输入笔记名称以创建。";
+
+/* ShellModel.swift */
+"Create a new note..." = "新建笔记...";
+
+/* ShellModel.swift */
+"Create note" = "创建笔记";
+
+/* ShellModel.swift; Palette row: create a note with this file name. */
+"Create: %@" = "创建：%@";
+
+/* ShellModel.swift; Full-text search result: "Note name  ·  line 12". */
+"line %d" = "第 %d 行";
+
+/* ShellModel.swift */
+"Type at least two characters to search inside your notes." = "至少输入两个字符以在笔记中搜索。";
+
+/* ShellModel.swift */
+"Indexing workspace..." = "正在索引工作区...";
+
+/* ShellModel.swift */
+"No notes contain \"%@\"." = "没有笔记包含“%@”。";
+
+/* ShellModel.swift */
+"Search in all notes..." = "在所有笔记中搜索...";
+
+/* ShellModel.swift; Palette heading over full-text search results. */
+"In notes" = "笔记中";
+
+/* ShellModel.swift */
+"No results found." = "未找到结果。";
+
+/* ShellModel.swift */
+"Search..." = "搜索...";
+
+/* ShellModel.swift; Command palette section heading when nothing is typed. */
+"Suggested" = "建议";
+
+/* ShellModel.swift */
+"Results (indexing...)" = "结果（正在索引...）";
+
+/* ShellModel.swift */
+"Results" = "结果";
+
+/* ShellModel.swift (command palette command) */
+"Search in All Notes" = "在所有笔记中搜索";
+
+/* ShellModel.swift (command palette command) */
+"Create New File" = "新建文件";
+
+/* ShellModel.swift (command palette command) */
+"Open File in Compact Window" = "在紧凑窗口中打开文件";
+
+/* ShellModel.swift (command palette command) */
+"Close Current Tab" = "关闭当前标签页";
+
+/* ShellModel.swift (command palette command) */
+"Close All Tabs" = "关闭所有标签页";
+
+/* ShellModel.swift (command palette command) */
+"Open Workspace" = "打开工作区";
+
+/* ShellModel.swift (command palette command) */
+"Toggle Dark Mode" = "切换深色模式";
+
+/* ShellModel.swift (command palette subtitle) */
+"App preferences" = "App 设置";
+
+/* ShellModel.swift (command palette subtitle: the row is a command); Command palette row subtitle: the row runs a command. */
+"Command" = "命令";
+
+/* ShellSnapshot.swift */
+"Open a folder of notes or a single file, or start from scratch." = "打开笔记文件夹或单个文件，或从头开始。";
+
+/* ShellSnapshot.swift (welcome screen button) */
+"Open Folder" = "打开文件夹";
+
+/* ShellSnapshot.swift (welcome screen button) */
+"Open File" = "打开文件";
+
+/* ShellSnapshot.swift (welcome screen button) */
+"Start from Scratch" = "从头开始";
+
+/* SidebarView.swift */
+"No files" = "无文件";
+
+/* SidebarView.swift; Sidebar: reveal more recent/pinned files. */
+"Show More" = "显示更多";
+
+/* SidebarView.swift */
+"Hide sidebar" = "隐藏边栏";
+
+/* SidebarView.swift */
+"\"%@\" already exists." = "“%@”已存在。";
+
+/* SidebarView.swift */
+"Failed to move:" = "无法移动：";
+
+/* SidebarView.swift (sidebar section header); Sidebar section header: pinned files. */
+"Pinned" = "已固定";
+
+/* StarterNotebook.swift; Folder name created in ~/Documents by "Start from Scratch" (a notebook = a folder of notes). */
+"Notebook" = "笔记本";
+
+/* StarterNotebook.swift; File name of the starter note. Translate "Welcome", keep ".md". The note links to itself as [[<name without .md>]]. */
+"Welcome.md" = "欢迎.md";
+
+/* Settings label (editor.font-size) */
+"Font size" = "字号";
+
+/* Settings description / tooltip (editor.font-size) */
+"Font size in pixels for the editor" = "编辑器字号（像素）";
+
+/* Settings label (editor.line-height) */
+"Line height" = "行高";
+
+/* Settings description / tooltip (editor.line-height) */
+"Line height multiplier for the editor" = "编辑器行高倍数";
+
+/* Settings label (editor.tab-size) */
+"Tab size" = "制表符宽度";
+
+/* Settings description / tooltip (editor.tab-size) */
+"Number of spaces per tab" = "每个制表符的空格数";
+
+/* Settings label (editor.auto-insert-daily-heading) */
+"Insert today's date heading" = "插入今日日期标题";
+
+/* Settings description / tooltip (editor.auto-insert-daily-heading) */
+"When opening a dated notebook, append a heading for today if it isn't there yet" = "打开按日期记录的笔记本时，若尚无今天的标题则自动添加";
+
+/* Settings label (editor.show-outline) */
+"Show outline rail" = "显示大纲栏";
+
+/* Settings description / tooltip (editor.show-outline) */
+"The tick marks at the right edge of the editor that expand into a document outline on hover" = "编辑器右边缘的刻度标记，悬停时展开为文稿大纲";
+
+/* Settings label (editor.show-heading-chevrons) */
+"Show heading fold arrows" = "显示标题折叠箭头";
+
+/* Settings description / tooltip (editor.show-heading-chevrons) */
+"The arrow beside each heading for collapsing its section. Headings can still be folded from the View menu when hidden" = "每个标题旁用于折叠该部分的箭头。隐藏后仍可通过“显示”菜单折叠标题";
+
+/* Settings label (editor.jump-to-bottom-after-minutes) */
+"Jump to bottom after (minutes)" = "多久后跳到末尾（分钟）";
+
+/* Settings description / tooltip (editor.jump-to-bottom-after-minutes) */
+"On returning to Flo State after this long away, jump to the end of the document. 0 disables it." = "离开 Flo State 超过此时长后再返回时，跳到文稿末尾。0 表示停用。";
+
+/* Settings label (editor.heading-space-before) */
+"Space before headings" = "标题前间距";
+
+/* Settings description / tooltip (editor.heading-space-before) */
+"Extra vertical space above a heading" = "标题上方的额外垂直间距";
+
+/* Settings label (editor.heading-space-after) */
+"Space after headings" = "标题后间距";
+
+/* Settings description / tooltip (editor.heading-space-after) */
+"Extra vertical space below a heading" = "标题下方的额外垂直间距";
+
+/* Settings label (editor.subheading-color) */
+"Subheading colour" = "副标题颜色";
+
+/* Settings description / tooltip (editor.subheading-color) */
+"Colour for level 2 and 3 headings" = "二级和三级标题的颜色";
+
+/* Settings label (editor.paragraph-spacing) */
+"Paragraph spacing" = "段落间距";
+
+/* Settings description / tooltip (editor.paragraph-spacing) */
+"Vertical space between paragraphs" = "段落之间的垂直间距";
+
+/* Settings label (editor.bullet-spacing) */
+"Bullet spacing" = "列表项间距";
+
+/* Settings description / tooltip (editor.bullet-spacing) */
+"Vertical space between list items" = "列表项之间的垂直间距";
+
+/* Settings description / tooltip (appearance.theme) */
+"Light or dark color schema" = "浅色或深色配色方案";
+
+/* Settings description / tooltip (appearance.sidebar-file-label) */
+"Show the document title or the filename for files in the sidebar" = "在边栏中显示文件的文稿标题或文件名";
+
+/* Settings description / tooltip (appearance.sidebar-show-search) */
+"Show the Search button at the top of the sidebar" = "在边栏顶部显示搜索按钮";
+
+/* Settings description / tooltip (appearance.sidebar-show-recents) */
+"Show the Recents section in the sidebar" = "在边栏中显示“最近使用”部分";
+
+/* Settings description / tooltip (appearance.editor-width) */
+"Editor content width mode" = "编辑器内容宽度模式";
+
+/* Settings option (appearance.editor-width); Editor width option (vs Wide). */
+"Narrow" = "窄";
+
+/* Settings label (fonts.editor) */
+"Editor font" = "编辑器字体";
+
+/* Settings description / tooltip (fonts.editor) */
+"Font family and fallback stack used for document text" = "文稿正文使用的字体系列及备用字体";
+
+/* Settings label (fonts.mono) */
+"Code font" = "代码字体";
+
+/* Settings description / tooltip (fonts.mono) */
+"Font family and fallback stack used for code" = "代码使用的字体系列及备用字体";
+
+/* Settings label (theme.light.preset); Settings label (theme.dark.preset) */
+"Preset" = "预设";
+
+/* Settings description / tooltip (theme.light.preset) */
+"Light theme preset" = "浅色主题预设";
+
+/* Settings label (theme.light.accent); Settings label (theme.dark.accent) */
+"Accent" = "强调色";
+
+/* Settings description / tooltip (theme.light.accent) */
+"Light theme accent color" = "浅色主题强调色";
+
+/* Settings label (theme.light.background); Settings label (theme.dark.background) */
+"Background" = "背景";
+
+/* Settings description / tooltip (theme.light.background) */
+"Light theme background color" = "浅色主题背景颜色";
+
+/* Settings label (theme.light.foreground); Settings label (theme.dark.foreground) */
+"Foreground" = "前景";
+
+/* Settings description / tooltip (theme.light.foreground) */
+"Light theme foreground color" = "浅色主题前景颜色";
+
+/* Settings label (theme.light.heading-color); Settings label (theme.dark.heading-color) */
+"Heading colour" = "标题颜色";
+
+/* Settings description / tooltip (theme.light.heading-color) */
+"Light theme colour for level 1 headings" = "浅色主题一级标题颜色";
+
+/* Settings label (theme.light.translucent); Settings label (theme.dark.translucent); Theme setting: window translucency slider. */
+"Translucent" = "半透明";
+
+/* Settings description / tooltip (theme.light.translucent) */
+"Light theme translucency (0 = solid, 100 = max)." = "浅色主题半透明度（0 = 不透明，100 = 最大）。";
+
+/* Settings label (theme.light.contrast); Settings label (theme.dark.contrast); Theme setting: how strong borders, cards and hover backgrounds are. */
+"Contrast" = "对比度";
+
+/* Settings description / tooltip (theme.light.contrast); Settings description / tooltip (theme.dark.contrast); Tooltip of the Contrast theme setting. */
+"alpha multiplier on borders, cards, hover bgs." = "边框、卡片和悬停背景的透明度倍数。";
+
+/* Settings description / tooltip (theme.dark.preset) */
+"Dark theme preset" = "深色主题预设";
+
+/* Settings description / tooltip (theme.dark.accent) */
+"Dark theme accent color" = "深色主题强调色";
+
+/* Settings description / tooltip (theme.dark.background) */
+"Dark theme background color" = "深色主题背景颜色";
+
+/* Settings description / tooltip (theme.dark.foreground) */
+"Dark theme foreground color" = "深色主题前景颜色";
+
+/* Settings description / tooltip (theme.dark.heading-color) */
+"Dark theme colour for level 1 headings" = "深色主题一级标题颜色";
+
+/* Settings description / tooltip (theme.dark.translucent) */
+"Dark theme translucency (0 = solid, 100 = max)." = "深色主题半透明度（0 = 不透明，100 = 最大）。";
+
+/* Settings label (files.associations) */
+"File associations" = "文件关联";
+
+/* Settings description / tooltip (files.associations) */
+"File patterns to include in the workspace" = "工作区中包含的文件模式";
+
+/* Settings label (workspace.restore-open-files) */
+"Restore open files" = "恢复打开的文件";
+
+/* Settings description / tooltip (workspace.restore-open-files) */
+"Reopen previously open files when opening a workspace" = "打开工作区时重新打开之前打开的文件";
+
+/* Settings label (workspace.max-recent-workspaces) */
+"Max recent workspaces" = "最近工作区上限";
+
+/* Settings description / tooltip (workspace.max-recent-workspaces) */
+"Maximum number of recent workspaces to remember" = "记住的最近工作区最大数量";
+
+/* Settings label (window.restore-workspace) */
+"Restore workspace" = "恢复工作区";
+
+/* Settings description / tooltip (window.restore-workspace) */
+"Automatically reopen the last workspace when the app starts" = "App 启动时自动重新打开上次的工作区";
+
+/* Theme preset name; Theme preset name. */
+"Default" = "默认";
+
+/* Theme preset name; Theme preset name. */
+"High Contrast" = "高对比度";
+
+/* Theme preset name; Theme preset name. */
+"Warm Paper" = "暖色纸张";
+
+/* Theme preset name; App / theme name: keep "Flo State" untranslated. */
+"Flo State" = "Flo State";

@@ -96,7 +96,7 @@ final class TabButtonView: FlippedView {
 final class PlusButtonView: FlippedView {
     unowned let model: ShellModel
     private var hovering = false { didSet { needsDisplay = true } }
-    init(model: ShellModel) { self.model = model; super.init(frame: .zero); toolTip = "New tab" }
+    init(model: ShellModel) { self.model = model; super.init(frame: .zero); toolTip = L("New tab") }
     required init?(coder: NSCoder) { fatalError() }
     override func updateTrackingAreas() {
         trackingAreas.forEach(removeTrackingArea)

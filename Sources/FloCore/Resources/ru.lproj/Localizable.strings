@@ -1,0 +1,902 @@
+/* Flo State UI strings. Key = English source text (base language).
+ * Generated from the sources; translations live in <lang>.lproj/Localizable.strings. */
+
+/* EditorModel.swift; TabStripView.swift; Tab title / tooltip of the + button (new empty tab). */
+"New tab" = "Новая вкладка";
+
+/* EditorModel.swift; ShellModel.swift (command palette command) */
+"Settings" = "Настройки";
+
+/* EditorModel.swift; ShellMenus.swift (menu bar); Window title of an empty tab (title case where the language uses it). */
+"New Tab" = "Новая вкладка";
+
+/* WorkspaceFS.swift */
+"IO error: %@" = "Ошибка ввода-вывода: %@";
+
+/* WorkspaceFS.swift */
+"Not found: %@" = "Не найдено: %@";
+
+/* WorkspaceFS.swift */
+"Already exists: %@" = "Уже существует: %@";
+
+/* WorkspaceFS.swift */
+"No workspace is open" = "Рабочая область не открыта";
+
+/* WorkspaceFS.swift; ShellModel.swift; Default name of a new note file (".md" is appended). Use the word macOS uses for untitled documents. */
+"Untitled" = "Без названия";
+
+/* WorkspaceFS.swift; Default name of a new folder, as in Finder. */
+"Untitled Folder" = "папка без названия";
+
+/* WorkspaceFS.swift; Finder-style duplicate name suffix: "note copy.md", "note copy 2.md". Use the word Finder uses in this language. */
+"copy" = "копия";
+
+/* ContextMenu.swift (editor right-click menu); ShellMenus.swift */
+"Cut" = "Вырезать";
+
+/* ContextMenu.swift (editor right-click menu); ShellMenus.swift */
+"Copy" = "Скопировать";
+
+/* ContextMenu.swift (editor right-click menu); ShellMenus.swift */
+"Paste" = "Вставить";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Paste as plain text" = "Вставить как простой текст";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Format" = "Формат";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Bold" = "Жирный";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Italic" = "Курсив";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Strikethrough" = "Зачеркнутый";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Inline code" = "Встроенный код";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Insert link…" = "Вставить ссылку…";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Clear formatting" = "Очистить формат";
+
+/* ContextMenu.swift (editor right-click menu); Editor context menu: submenu with block types; also item that turns a heading back into a normal paragraph. */
+"Paragraph" = "Абзац";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 1" = "Заголовок 1";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 2" = "Заголовок 2";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 3" = "Заголовок 3";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 4" = "Заголовок 4";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 5" = "Заголовок 5";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 6" = "Заголовок 6";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Bullet list" = "Маркированный список";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Numbered list" = "Нумерованный список";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Task list" = "Список задач";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Blockquote" = "Цитата";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Code block" = "Блок кода";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Insert" = "Вставить";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Link…" = "Ссылка…";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Table" = "Таблица";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Horizontal rule" = "Горизонтальная линия";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Current date" = "Текущая дата";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Current time" = "Текущее время";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Select all" = "Выбрать все";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Open link" = "Открыть ссылку";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Copy link" = "Скопировать ссылку";
+
+/* FindOverlay.swift; Find bar: toggle/button to replace text; also the replace field placeholder. */
+"Replace" = "Заменить";
+
+/* FindOverlay.swift; Find bar button: Replace All (short, button). */
+"All" = "Все";
+
+/* FindOverlay.swift; Find bar search field placeholder. */
+"Find" = "Найти";
+
+/* FindOverlay.swift; Find bar counter when nothing matches (keep short, ~12 chars). */
+"No matches" = "Не найдено";
+
+/* ImageResize.swift; Image right-click menu: "Image Size: Small". */
+"Image Size: %@" = "Размер изображения: %@";
+
+/* ImageResize.swift (image size preset, used in "Image Size: %@") */
+"Small" = "Маленький";
+
+/* ImageResize.swift (image size preset, used in "Image Size: %@") */
+"Medium" = "Средний";
+
+/* ImageResize.swift (image size preset, used in "Image Size: %@") */
+"Large" = "Большой";
+
+/* ImageResize.swift (image size preset, used in "Image Size: %@") */
+"Full Width" = "Во всю ширину";
+
+/* ImageResize.swift (image size preset, used in "Image Size: %@") */
+"Original Size" = "Исходный размер";
+
+/* CompactHeader.swift */
+"Choose file" = "Выбрать файл";
+
+/* CompactHeader.swift; ShellMenus.swift; SidebarView.swift (sidebar section header); Sidebar section header: recently opened files. */
+"Recents" = "Недавние";
+
+/* CompactHeader.swift */
+"No other recent files." = "Других недавних файлов нет.";
+
+/* EditorArea.swift */
+"Create new note" = "Создать заметку";
+
+/* EditorArea.swift; ShellMenus.swift; SidebarView.swift; Sidebar search button / new-tab launcher / sidebar right-click toggle. */
+"Search" = "Поиск";
+
+/* EditorArea.swift; Status bar counter shown after a number: "1,234 words". Lowercase noun. */
+"words" = "слов";
+
+/* EditorArea.swift; Status bar counter shown after a number: "1,234 characters". */
+"characters" = "символов";
+
+/* EditorArea.swift; Status bar counter shown after a number: "12 paragraphs". */
+"paragraphs" = "абзацев";
+
+/* EditorArea.swift */
+"Copy heading link" = "Скопировать ссылку на заголовок";
+
+/* FloStateCLI.swift */
+"Command Line Tool Removed" = "Инструмент командной строки удален";
+
+/* FloStateCLI.swift */
+"The `flostate` command has been removed from %@." = "Команда `flostate` удалена из %@.";
+
+/* FloStateCLI.swift */
+"Command Line Tool Installed" = "Инструмент командной строки установлен";
+
+/* FloStateCLI.swift */
+"The `flostate` command is now installed at %@." = "Команда `flostate` установлена в %@.";
+
+/* FloStateCLI.swift */
+"Run `flostate .` from any terminal to open the current folder." = "Выполните `flostate .` в любом терминале, чтобы открыть текущую папку.";
+
+/* FloStateCLI.swift */
+"Flo State Command Line Tool" = "Инструмент командной строки Flo State";
+
+/* FloStateCLI.swift */
+"Could not remove the flostate command." = "Не удалось удалить команду flostate.";
+
+/* FloStateCLI.swift */
+"Could not install the flostate command." = "Не удалось установить команду flostate.";
+
+/* FloStateCLI.swift (app menu; keep `flostate` as is) */
+"Install 'flostate' Command Line Tool…" = "Установить инструмент командной строки «flostate»…";
+
+/* FloStateCLI.swift (app menu; keep `flostate` as is) */
+"Uninstall 'flostate' Command Line Tool…" = "Удалить инструмент командной строки «flostate»…";
+
+/* FrontmatterPanel.swift; Placeholder in a frontmatter property name field. */
+"key" = "ключ";
+
+/* FrontmatterPanel.swift; Placeholder in a frontmatter property value field. */
+"value" = "значение";
+
+/* FrontmatterPanel.swift */
+"Add property" = "Добавить свойство";
+
+/* SettingsWindow.swift */
+"Match System" = "Как в системе";
+
+/* SettingsWindow.swift */
+"Document title" = "Заголовок документа";
+
+/* SettingsWindow.swift */
+"File name" = "Имя файла";
+
+/* SettingsWindow.swift; Editor width option (vs Narrow). */
+"Wide" = "Широкий";
+
+/* SettingsWindow.swift; Unit: pixels. */
+"px" = "px";
+
+/* SettingsWindow.swift; Unit: minutes (short). */
+"min" = "мин";
+
+/* SettingsWindow.swift; Unit: milliseconds. */
+"ms" = "мс";
+
+/* SettingsWindow.swift; SettingsWindow.swift (Settings pane / toolbar tab); SettingsWindow.swift (Settings group label, shown with a colon) */
+"Appearance" = "Оформление";
+
+/* SettingsWindow.swift */
+"Default width" = "Ширина по умолчанию";
+
+/* SettingsWindow.swift */
+"File labels" = "Названия файлов";
+
+/* SettingsWindow.swift */
+"Editor width" = "Ширина редактора";
+
+/* SettingsWindow.swift; ShellWindow.swift */
+"Show sidebar" = "Показать боковую панель";
+
+/* SettingsWindow.swift */
+"Show search button" = "Показывать кнопку поиска";
+
+/* SettingsWindow.swift */
+"Show recents" = "Показывать недавние";
+
+/* SettingsWindow.swift; Theme preset popup: current colours match no preset. */
+"Custom" = "Свой";
+
+/* SettingsWindow.swift */
+"Restore Defaults" = "Восстановить стандартные";
+
+/* SettingsWindow.swift; SettingsWindow.swift (Settings group label, shown with a colon); Settings option (appearance.theme); Light appearance / light theme. */
+"Light" = "Светлый";
+
+/* SettingsWindow.swift; SettingsWindow.swift (Settings group label, shown with a colon); Settings option (appearance.theme); Dark appearance / dark theme. */
+"Dark" = "Темный";
+
+/* SettingsWindow.swift (Settings pane / toolbar tab) */
+"General" = "Основные";
+
+/* SettingsWindow.swift (Settings pane / toolbar tab) */
+"Editor" = "Редактор";
+
+/* SettingsWindow.swift (Settings pane / toolbar tab) */
+"Theme" = "Тема";
+
+/* SettingsWindow.swift (Settings pane / toolbar tab) */
+"Files" = "Файлы";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"On launch" = "При запуске";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Daily notes" = "Ежедневные заметки";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Text" = "Текст";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Spacing" = "Интервалы";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Headings" = "Заголовки";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Outline" = "Структура";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Sidebar" = "Боковая панель";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Fonts" = "Шрифты";
+
+/* ShellMenus.swift; ShellWindow.swift; Context menu item (open a file) and the open-panel confirm button. */
+"Open" = "Открыть";
+
+/* ShellMenus.swift */
+"Open in new tab" = "Открыть в новой вкладке";
+
+/* ShellMenus.swift */
+"Failed to open in new tab: %@" = "Не удалось открыть в новой вкладке: %@";
+
+/* ShellMenus.swift */
+"Unpin" = "Открепить";
+
+/* ShellMenus.swift */
+"Pin" = "Закрепить";
+
+/* ShellMenus.swift */
+"Duplicate" = "Дублировать";
+
+/* ShellMenus.swift */
+"Copy relative path" = "Скопировать относительный путь";
+
+/* ShellMenus.swift */
+"Copy absolute path" = "Скопировать абсолютный путь";
+
+/* ShellMenus.swift */
+"Reveal in Finder" = "Показать в Finder";
+
+/* ShellMenus.swift */
+"Rename..." = "Переименовать...";
+
+/* ShellMenus.swift; ShellWindow.swift */
+"Delete" = "Удалить";
+
+/* ShellMenus.swift */
+"Rename file" = "Переименовать файл";
+
+/* ShellMenus.swift */
+"OK" = "ОК";
+
+/* ShellMenus.swift; ShellWindow.swift */
+"Cancel" = "Отменить";
+
+/* ShellMenus.swift */
+"New File" = "Новый файл";
+
+/* ShellMenus.swift */
+"New Folder" = "Новая папка";
+
+/* ShellMenus.swift */
+"Copy %d relative paths" = "Скопировать относительные пути (%d)";
+
+/* ShellMenus.swift */
+"Copy %d absolute paths" = "Скопировать абсолютные пути (%d)";
+
+/* ShellMenus.swift */
+"Delete %d items" = "Удалить объекты (%d)";
+
+/* ShellMenus.swift */
+"Open Folder…" = "Открыть папку…";
+
+/* ShellMenus.swift; ShellModel.swift (command palette command) */
+"Close Workspace" = "Закрыть рабочую область";
+
+/* ShellMenus.swift */
+"Close" = "Закрыть";
+
+/* ShellMenus.swift */
+"Close others" = "Закрыть другие";
+
+/* ShellMenus.swift */
+"Close all" = "Закрыть все";
+
+/* ShellMenus.swift */
+"Reveal in sidebar" = "Показать в боковой панели";
+
+/* ShellMenus.swift */
+"Copy path" = "Скопировать путь";
+
+/* ShellMenus.swift */
+"Words" = "Слова";
+
+/* ShellMenus.swift */
+"Characters" = "Символы";
+
+/* ShellMenus.swift */
+"Paragraphs" = "Абзацы";
+
+/* ShellMenus.swift; App menu item (macOS standard). */
+"Settings…" = "Настройки…";
+
+/* ShellMenus.swift; App menu (macOS standard). */
+"Services" = "Службы";
+
+/* ShellMenus.swift */
+"Hide Others" = "Скрыть остальные";
+
+/* ShellMenus.swift */
+"About %@" = "О программе %@";
+
+/* ShellMenus.swift */
+"Hide %@" = "Скрыть %@";
+
+/* ShellMenus.swift */
+"Show All" = "Показать все";
+
+/* ShellMenus.swift */
+"Quit %@" = "Завершить %@";
+
+/* ShellMenus.swift */
+"Redo" = "Повторить";
+
+/* ShellMenus.swift */
+"Substitutions" = "Замены";
+
+/* ShellMenus.swift */
+"Show Substitutions" = "Показать замены";
+
+/* ShellMenus.swift */
+"Smart Copy/Paste" = "Смарт-копирование/вставка";
+
+/* ShellMenus.swift */
+"Smart Quotes" = "Смарт-кавычки";
+
+/* ShellMenus.swift */
+"Smart Dashes" = "Смарт-тире";
+
+/* ShellMenus.swift */
+"Smart Links" = "Смарт-ссылки";
+
+/* ShellMenus.swift */
+"Text Replacement" = "Замена текста";
+
+/* ShellMenus.swift */
+"Undo" = "Отменить";
+
+/* ShellMenus.swift */
+"Select All" = "Выбрать все";
+
+/* ShellMenus.swift */
+"Enter Full Screen" = "Войти в полноэкранный режим";
+
+/* ShellMenus.swift */
+"Go to Tab" = "Перейти к вкладке";
+
+/* ShellMenus.swift; Window > Go to Tab submenu item: "Tab 3". */
+"Tab %d" = "Вкладка %d";
+
+/* ShellMenus.swift */
+"Minimize" = "Свернуть";
+
+/* ShellMenus.swift */
+"Close Window" = "Закрыть окно";
+
+/* ShellMenus.swift (menu bar); ShellModel.swift */
+"New Note" = "Новая заметка";
+
+/* ShellMenus.swift (menu bar) */
+"Go to File…" = "Перейти к файлу…";
+
+/* ShellMenus.swift (menu bar) */
+"Go to Today" = "Перейти к сегодняшнему дню";
+
+/* ShellMenus.swift (menu bar) */
+"Search…" = "Поиск…";
+
+/* ShellMenus.swift (menu bar) */
+"Search in All Notes…" = "Искать во всех заметках…";
+
+/* ShellMenus.swift (menu bar) */
+"Close Tab" = "Закрыть вкладку";
+
+/* ShellMenus.swift (menu bar); ShellModel.swift (command palette command) */
+"Toggle Sidebar" = "Показать/скрыть боковую панель";
+
+/* ShellMenus.swift (menu bar) */
+"Toggle Typewriter Scrolling" = "Режим пишущей машинки";
+
+/* ShellMenus.swift (menu bar) */
+"Increase Font Size" = "Увеличить шрифт";
+
+/* ShellMenus.swift (menu bar) */
+"Decrease Font Size" = "Уменьшить шрифт";
+
+/* ShellMenus.swift (menu bar) */
+"Reset Font Size" = "Исходный размер шрифта";
+
+/* ShellMenus.swift (menu bar) */
+"Collapse All Headings" = "Свернуть все заголовки";
+
+/* ShellMenus.swift (menu bar) */
+"Expand All Headings" = "Развернуть все заголовки";
+
+/* ShellMenus.swift (menu bar) */
+"Back" = "Назад";
+
+/* ShellMenus.swift (menu bar) */
+"Forward" = "Вперед";
+
+/* ShellMenus.swift (menu bar) */
+"Previous File" = "Предыдущий файл";
+
+/* ShellMenus.swift (menu bar) */
+"Next File" = "Следующий файл";
+
+/* ShellMenus.swift (menu bar) */
+"Show Previous Tab" = "Показать предыдущую вкладку";
+
+/* ShellMenus.swift (menu bar) */
+"Show Next Tab" = "Показать следующую вкладку";
+
+/* ShellMenus.swift (menu bar title) */
+"File" = "Файл";
+
+/* ShellMenus.swift (menu bar title) */
+"Edit" = "Правка";
+
+/* ShellMenus.swift (menu bar title) */
+"View" = "Вид";
+
+/* ShellMenus.swift (menu bar title) */
+"Window" = "Окно";
+
+/* ShellMenus.swift (app menu) */
+"Check for Updates…" = "Проверить обновления…";
+
+/* ShellModel.swift */
+"Failed to save setting: %@" = "Не удалось сохранить настройку: %@";
+
+/* ShellModel.swift */
+"Failed to open workspace: %@" = "Не удалось открыть рабочую область: %@";
+
+/* ShellModel.swift */
+"No Workspace" = "Нет рабочей области";
+
+/* ShellModel.swift */
+"Failed to create file: %@" = "Не удалось создать файл: %@";
+
+/* ShellModel.swift */
+"Failed to create folder: %@" = "Не удалось создать папку: %@";
+
+/* ShellModel.swift */
+"A folder named \"%@\" already exists." = "Папка «%@» уже существует.";
+
+/* ShellModel.swift */
+"A file named \"%@\" already exists." = "Файл «%@» уже существует.";
+
+/* ShellModel.swift */
+"Failed to rename: %@" = "Не удалось переименовать: %@";
+
+/* ShellModel.swift */
+"\"%1$@\" contains %2$d unsaved files. Delete anyway?" = "Несохраненных файлов в «%1$@»: %2$d. Все равно удалить?";
+
+/* ShellModel.swift */
+"\"%@\" contains 1 unsaved file. Delete anyway?" = "«%@» содержит 1 несохраненный файл. Все равно удалить?";
+
+/* ShellModel.swift */
+"\"%@\" has unsaved changes. Delete anyway?" = "В «%@» есть несохраненные изменения. Все равно удалить?";
+
+/* ShellModel.swift */
+"Failed to delete: %@" = "Не удалось удалить: %@";
+
+/* ShellModel.swift; Confirmation; %1$d = unsaved count, %2$d = selected count. */
+"%1$d of %2$d selected items have unsaved changes. Delete anyway?" = "Несохраненные изменения в выбранных объектах: %1$d из %2$d. Все равно удалить?";
+
+/* ShellModel.swift */
+"Delete %d items?" = "Удалить объекты (%d)?";
+
+/* ShellModel.swift */
+"Failed to delete \"%1$@\": %2$@" = "Не удалось удалить «%1$@»: %2$@";
+
+/* ShellModel.swift */
+"Failed to duplicate: %@" = "Не удалось дублировать: %@";
+
+/* ShellModel.swift; ShellWindow.swift */
+"Heading \"#%@\" not found in this document" = "Заголовок «#%@» не найден в этом документе";
+
+/* ShellModel.swift */
+"Couldn't create the note: %@" = "Не удалось создать заметку: %@";
+
+/* ShellModel.swift */
+"Couldn't create a notebook in Documents: %@" = "Не удалось создать блокнот в папке «Документы»: %@";
+
+/* ShellModel.swift */
+"Type a note name to create it." = "Введите имя заметки, чтобы создать ее.";
+
+/* ShellModel.swift */
+"Create a new note..." = "Создать заметку...";
+
+/* ShellModel.swift */
+"Create note" = "Создать заметку";
+
+/* ShellModel.swift; Palette row: create a note with this file name. */
+"Create: %@" = "Создать: %@";
+
+/* ShellModel.swift; Full-text search result: "Note name  ·  line 12". */
+"line %d" = "строка %d";
+
+/* ShellModel.swift */
+"Type at least two characters to search inside your notes." = "Введите не менее двух символов для поиска в заметках.";
+
+/* ShellModel.swift */
+"Indexing workspace..." = "Индексация рабочей области...";
+
+/* ShellModel.swift */
+"No notes contain \"%@\"." = "Нет заметок, содержащих «%@».";
+
+/* ShellModel.swift */
+"Search in all notes..." = "Искать во всех заметках...";
+
+/* ShellModel.swift; Palette heading over full-text search results. */
+"In notes" = "В заметках";
+
+/* ShellModel.swift */
+"No results found." = "Ничего не найдено.";
+
+/* ShellModel.swift */
+"Search..." = "Поиск...";
+
+/* ShellModel.swift; Command palette section heading when nothing is typed. */
+"Suggested" = "Предложения";
+
+/* ShellModel.swift */
+"Results (indexing...)" = "Результаты (индексация...)";
+
+/* ShellModel.swift */
+"Results" = "Результаты";
+
+/* ShellModel.swift (command palette command) */
+"Search in All Notes" = "Искать во всех заметках";
+
+/* ShellModel.swift (command palette command) */
+"Create New File" = "Создать файл";
+
+/* ShellModel.swift (command palette command) */
+"Open File in Compact Window" = "Открыть файл в компактном окне";
+
+/* ShellModel.swift (command palette command) */
+"Close Current Tab" = "Закрыть текущую вкладку";
+
+/* ShellModel.swift (command palette command) */
+"Close All Tabs" = "Закрыть все вкладки";
+
+/* ShellModel.swift (command palette command) */
+"Open Workspace" = "Открыть рабочую область";
+
+/* ShellModel.swift (command palette command) */
+"Toggle Dark Mode" = "Вкл./выкл. темный режим";
+
+/* ShellModel.swift (command palette subtitle) */
+"App preferences" = "Настройки приложения";
+
+/* ShellModel.swift (command palette subtitle: the row is a command); Command palette row subtitle: the row runs a command. */
+"Command" = "Команда";
+
+/* ShellSnapshot.swift */
+"Open a folder of notes or a single file, or start from scratch." = "Откройте папку с заметками или отдельный файл либо начните с нуля.";
+
+/* ShellSnapshot.swift (welcome screen button) */
+"Open Folder" = "Открыть папку";
+
+/* ShellSnapshot.swift (welcome screen button) */
+"Open File" = "Открыть файл";
+
+/* ShellSnapshot.swift (welcome screen button) */
+"Start from Scratch" = "Начать с нуля";
+
+/* SidebarView.swift */
+"No files" = "Нет файлов";
+
+/* SidebarView.swift; Sidebar: reveal more recent/pinned files. */
+"Show More" = "Показать еще";
+
+/* SidebarView.swift */
+"Hide sidebar" = "Скрыть боковую панель";
+
+/* SidebarView.swift */
+"\"%@\" already exists." = "«%@» уже существует.";
+
+/* SidebarView.swift */
+"Failed to move:" = "Не удалось переместить:";
+
+/* SidebarView.swift (sidebar section header); Sidebar section header: pinned files. */
+"Pinned" = "Закрепленные";
+
+/* StarterNotebook.swift; Folder name created in ~/Documents by "Start from Scratch" (a notebook = a folder of notes). */
+"Notebook" = "Блокнот";
+
+/* StarterNotebook.swift; File name of the starter note. Translate "Welcome", keep ".md". The note links to itself as [[<name without .md>]]. */
+"Welcome.md" = "Приветствие.md";
+
+/* Settings label (editor.font-size) */
+"Font size" = "Размер шрифта";
+
+/* Settings description / tooltip (editor.font-size) */
+"Font size in pixels for the editor" = "Размер шрифта редактора в пикселях";
+
+/* Settings label (editor.line-height) */
+"Line height" = "Высота строки";
+
+/* Settings description / tooltip (editor.line-height) */
+"Line height multiplier for the editor" = "Множитель высоты строки в редакторе";
+
+/* Settings label (editor.tab-size) */
+"Tab size" = "Размер табуляции";
+
+/* Settings description / tooltip (editor.tab-size) */
+"Number of spaces per tab" = "Число пробелов в одной табуляции";
+
+/* Settings label (editor.auto-insert-daily-heading) */
+"Insert today's date heading" = "Вставлять заголовок с датой";
+
+/* Settings description / tooltip (editor.auto-insert-daily-heading) */
+"When opening a dated notebook, append a heading for today if it isn't there yet" = "При открытии блокнота с датами добавлять заголовок за сегодня, если его еще нет";
+
+/* Settings label (editor.show-outline) */
+"Show outline rail" = "Показывать шкалу структуры";
+
+/* Settings description / tooltip (editor.show-outline) */
+"The tick marks at the right edge of the editor that expand into a document outline on hover" = "Метки у правого края редактора, которые при наведении раскрываются в структуру документа";
+
+/* Settings label (editor.show-heading-chevrons) */
+"Show heading fold arrows" = "Показывать стрелки сворачивания";
+
+/* Settings description / tooltip (editor.show-heading-chevrons) */
+"The arrow beside each heading for collapsing its section. Headings can still be folded from the View menu when hidden" = "Стрелка рядом с заголовком сворачивает его раздел. Если стрелки скрыты, заголовки можно свернуть в меню «Вид»";
+
+/* Settings label (editor.jump-to-bottom-after-minutes) */
+"Jump to bottom after (minutes)" = "Переход в конец через (мин)";
+
+/* Settings description / tooltip (editor.jump-to-bottom-after-minutes) */
+"On returning to Flo State after this long away, jump to the end of the document. 0 disables it." = "При возврате в Flo State после такого перерыва переходить в конец документа. 0 — выключено.";
+
+/* Settings label (editor.heading-space-before) */
+"Space before headings" = "Отступ перед заголовками";
+
+/* Settings description / tooltip (editor.heading-space-before) */
+"Extra vertical space above a heading" = "Дополнительный отступ над заголовком";
+
+/* Settings label (editor.heading-space-after) */
+"Space after headings" = "Отступ после заголовков";
+
+/* Settings description / tooltip (editor.heading-space-after) */
+"Extra vertical space below a heading" = "Дополнительный отступ под заголовком";
+
+/* Settings label (editor.subheading-color) */
+"Subheading colour" = "Цвет подзаголовков";
+
+/* Settings description / tooltip (editor.subheading-color) */
+"Colour for level 2 and 3 headings" = "Цвет заголовков 2 и 3 уровня";
+
+/* Settings label (editor.paragraph-spacing) */
+"Paragraph spacing" = "Интервал между абзацами";
+
+/* Settings description / tooltip (editor.paragraph-spacing) */
+"Vertical space between paragraphs" = "Вертикальный отступ между абзацами";
+
+/* Settings label (editor.bullet-spacing) */
+"Bullet spacing" = "Интервал в списках";
+
+/* Settings description / tooltip (editor.bullet-spacing) */
+"Vertical space between list items" = "Вертикальный отступ между пунктами списка";
+
+/* Settings description / tooltip (appearance.theme) */
+"Light or dark color schema" = "Светлая или темная цветовая схема";
+
+/* Settings description / tooltip (appearance.sidebar-file-label) */
+"Show the document title or the filename for files in the sidebar" = "Показывать в боковой панели заголовок документа или имя файла";
+
+/* Settings description / tooltip (appearance.sidebar-show-search) */
+"Show the Search button at the top of the sidebar" = "Показывать кнопку «Поиск» вверху боковой панели";
+
+/* Settings description / tooltip (appearance.sidebar-show-recents) */
+"Show the Recents section in the sidebar" = "Показывать раздел «Недавние» в боковой панели";
+
+/* Settings description / tooltip (appearance.editor-width) */
+"Editor content width mode" = "Режим ширины содержимого редактора";
+
+/* Settings option (appearance.editor-width); Editor width option (vs Wide). */
+"Narrow" = "Узкий";
+
+/* Settings label (fonts.editor) */
+"Editor font" = "Шрифт редактора";
+
+/* Settings description / tooltip (fonts.editor) */
+"Font family and fallback stack used for document text" = "Семейство шрифтов и резервные шрифты для текста документа";
+
+/* Settings label (fonts.mono) */
+"Code font" = "Шрифт кода";
+
+/* Settings description / tooltip (fonts.mono) */
+"Font family and fallback stack used for code" = "Семейство шрифтов и резервные шрифты для кода";
+
+/* Settings label (theme.light.preset); Settings label (theme.dark.preset) */
+"Preset" = "Шаблон";
+
+/* Settings description / tooltip (theme.light.preset) */
+"Light theme preset" = "Шаблон светлой темы";
+
+/* Settings label (theme.light.accent); Settings label (theme.dark.accent) */
+"Accent" = "Акцент";
+
+/* Settings description / tooltip (theme.light.accent) */
+"Light theme accent color" = "Цвет акцента светлой темы";
+
+/* Settings label (theme.light.background); Settings label (theme.dark.background) */
+"Background" = "Фон";
+
+/* Settings description / tooltip (theme.light.background) */
+"Light theme background color" = "Цвет фона светлой темы";
+
+/* Settings label (theme.light.foreground); Settings label (theme.dark.foreground) */
+"Foreground" = "Основной цвет";
+
+/* Settings description / tooltip (theme.light.foreground) */
+"Light theme foreground color" = "Основной цвет светлой темы";
+
+/* Settings label (theme.light.heading-color); Settings label (theme.dark.heading-color) */
+"Heading colour" = "Цвет заголовков";
+
+/* Settings description / tooltip (theme.light.heading-color) */
+"Light theme colour for level 1 headings" = "Цвет заголовков 1 уровня в светлой теме";
+
+/* Settings label (theme.light.translucent); Settings label (theme.dark.translucent); Theme setting: window translucency slider. */
+"Translucent" = "Прозрачность";
+
+/* Settings description / tooltip (theme.light.translucent) */
+"Light theme translucency (0 = solid, 100 = max)." = "Прозрачность светлой темы (0 — нет, 100 — макс.).";
+
+/* Settings label (theme.light.contrast); Settings label (theme.dark.contrast); Theme setting: how strong borders, cards and hover backgrounds are. */
+"Contrast" = "Контраст";
+
+/* Settings description / tooltip (theme.light.contrast); Settings description / tooltip (theme.dark.contrast); Tooltip of the Contrast theme setting. */
+"alpha multiplier on borders, cards, hover bgs." = "множитель альфа для рамок, карточек и фона при наведении.";
+
+/* Settings description / tooltip (theme.dark.preset) */
+"Dark theme preset" = "Шаблон темной темы";
+
+/* Settings description / tooltip (theme.dark.accent) */
+"Dark theme accent color" = "Цвет акцента темной темы";
+
+/* Settings description / tooltip (theme.dark.background) */
+"Dark theme background color" = "Цвет фона темной темы";
+
+/* Settings description / tooltip (theme.dark.foreground) */
+"Dark theme foreground color" = "Основной цвет темной темы";
+
+/* Settings description / tooltip (theme.dark.heading-color) */
+"Dark theme colour for level 1 headings" = "Цвет заголовков 1 уровня в темной теме";
+
+/* Settings description / tooltip (theme.dark.translucent) */
+"Dark theme translucency (0 = solid, 100 = max)." = "Прозрачность темной темы (0 — нет, 100 — макс.).";
+
+/* Settings label (files.associations) */
+"File associations" = "Сопоставления файлов";
+
+/* Settings description / tooltip (files.associations) */
+"File patterns to include in the workspace" = "Шаблоны файлов для включения в рабочую область";
+
+/* Settings label (workspace.restore-open-files) */
+"Restore open files" = "Восстанавливать открытые файлы";
+
+/* Settings description / tooltip (workspace.restore-open-files) */
+"Reopen previously open files when opening a workspace" = "Снова открывать ранее открытые файлы при открытии рабочей области";
+
+/* Settings label (workspace.max-recent-workspaces) */
+"Max recent workspaces" = "Макс. недавних областей";
+
+/* Settings description / tooltip (workspace.max-recent-workspaces) */
+"Maximum number of recent workspaces to remember" = "Сколько недавних рабочих областей запоминать";
+
+/* Settings label (window.restore-workspace) */
+"Restore workspace" = "Восстанавливать рабочую область";
+
+/* Settings description / tooltip (window.restore-workspace) */
+"Automatically reopen the last workspace when the app starts" = "Автоматически открывать последнюю рабочую область при запуске";
+
+/* Theme preset name; Theme preset name. */
+"Default" = "Стандартная";
+
+/* Theme preset name; Theme preset name. */
+"High Contrast" = "Высокий контраст";
+
+/* Theme preset name; Theme preset name. */
+"Warm Paper" = "Теплая бумага";
+
+/* Theme preset name; App / theme name: keep "Flo State" untranslated. */
+"Flo State" = "Flo State";

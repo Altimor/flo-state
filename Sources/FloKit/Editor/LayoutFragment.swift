@@ -255,11 +255,9 @@ final class FloLayoutFragment: NSTextLayoutFragment {
         case .dash(let e):
             let s = NSAttributedString(string: e, attributes: [.font: font, .foregroundColor: theme.textColor])
             s.draw(at: CGPoint(x: p.x, y: p.cssBaseline(font: font) - font.ascender))
-        case .wikiLink(let display, let image):
-            if !image {
-                let s = NSAttributedString(string: display, attributes: [.font: font, .foregroundColor: theme.accent])
-                s.draw(at: CGPoint(x: p.x, y: p.textTop(font: font)))
-            }
+        case .wikiLink(let display, false):
+            let s = NSAttributedString(string: display, attributes: [.font: font, .foregroundColor: theme.accent])
+            s.draw(at: CGPoint(x: p.x, y: p.textTop(font: font)))
         case .image, .wikiLink(_, true):
             if let text = box.placeholder {
                 let s = NSAttributedString(string: text, attributes: [.font: font, .foregroundColor: theme.mutedColor])
@@ -273,7 +271,8 @@ final class FloLayoutFragment: NSTextLayoutFragment {
             let rect = CGRect(x: x, y: p.lineTop + box.yOffset, width: box.size.width, height: box.size.height)
             img.draw(in: rect, from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true,
                      hints: [.interpolation: NSImageInterpolation.high.rawValue])
-            if case .image = box.widget.kind { editor?.noteImageDrawn(rect.offsetBy(dx: layoutFragmentFrame.minX - drawOrigin.x, dy: layoutFragmentFrame.minY - drawOrigin.y), widget: box.widget) }
+            editor?.noteImageDrawn(rect.offsetBy(dx: layoutFragmentFrame.minX - drawOrigin.x, dy: layoutFragmentFrame.minY - drawOrigin.y),
+                                   widget: box.widget, url: box.image?.url)
         case .math(_, let display):
             guard let m = box.math else { return }
             let rect: CGRect

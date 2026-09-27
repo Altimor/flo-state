@@ -357,13 +357,43 @@ final class ShellSidebarTests: XCTestCase {
         XCTAssertEqual(f.model.tabStripLeft, 132)
         f.model.windowWidth = 850
         XCTAssertTrue(f.model.sidebarVisible)
-        // toggling while narrow flips only the preference (quirk 6)
-        f.model.windowWidth = 800
+        // wide: toggling flips the saved preference
         f.model.perform(.toggleSidebar)
-        XCTAssertFalse(f.model.sidebarPreferenceVisible)
-        f.model.windowWidth = 1200
         XCTAssertFalse(f.model.sidebarVisible)
         XCTAssertTrue(TFS.read(f.data + "/config")!.contains("appearance.sidebar-visible = false"))
+        f.model.perform(.toggleSidebar)
+        XCTAssertTrue(f.model.sidebarVisible)
+    }
+
+    /// Narrow windows auto-hide the sidebar, but it can still be shown by hand
+    /// (transiently: the preference is untouched, crossing 850px resets it).
+    func testNarrowWindowSidebarCanBeShownByHand() async {
+        let f = ShellFixture(files: ["a.md": "x"])
+        await f.open()
+        f.model.windowWidth = 700
+        XCTAssertFalse(f.model.sidebarVisible)
+        f.model.perform(.toggleSidebar)
+        XCTAssertTrue(f.model.sidebarVisible)
+        XCTAssertEqual(f.model.tabStripLeft, f.model.sidebarWidth + 12)
+        f.model.toggleSidebar()
+        XCTAssertFalse(f.model.sidebarVisible)
+        XCTAssertTrue(f.model.sidebarPreferenceVisible, "the saved preference is untouched")
+        XCTAssertFalse(TFS.read(f.data + "/config")!.contains("appearance.sidebar-visible"))
+        // shown by hand, then widened past 850: the preference applies again
+        f.model.toggleSidebar()
+        f.model.windowWidth = 1000
+        XCTAssertTrue(f.model.sidebarVisible)
+        f.model.perform(.toggleSidebar)  // hide by preference while wide
+        f.model.windowWidth = 700
+        f.model.windowWidth = 1000
+        XCTAssertFalse(f.model.sidebarVisible, "preference (hidden) applies after the round trip")
+        // back to narrow: auto-hidden again, the by-hand show was reset
+        f.model.perform(.toggleSidebar)
+        f.model.windowWidth = 700
+        XCTAssertFalse(f.model.sidebarVisible)
+        // reveal in sidebar while narrow shows it
+        f.model.revealInSidebar(f.p("a.md"))
+        XCTAssertTrue(f.model.sidebarVisible)
     }
 
     func testSidebarWidthClamp() {

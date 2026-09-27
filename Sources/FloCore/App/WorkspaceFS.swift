@@ -74,10 +74,10 @@ public enum AppError: Error, Equatable, CustomStringConvertible {
     /// Matches the web app's serialized error strings.
     public var description: String {
         switch self {
-        case let .io(m): return "IO error: \(m)"
-        case let .notFound(p): return "Not found: \(p)"
-        case let .alreadyExists(p): return "Already exists: \(p)"
-        case .noWorkspace: return "No workspace is open"
+        case let .io(m): return L("IO error: %@", m)
+        case let .notFound(p): return L("Not found: %@", p)
+        case let .alreadyExists(p): return L("Already exists: %@", p)
+        case .noWorkspace: return L("No workspace is open")
         }
     }
 }
@@ -366,11 +366,11 @@ public enum WorkspaceFS {
     }
 
     public static func newFilePath(in parent: String, exists: (String) -> Bool = WorkspaceFS.exists) throws -> String {
-        try uniqueName(in: parent, base: "Untitled", ext: ".md", exists: exists)
+        try uniqueName(in: parent, base: L("Untitled"), ext: ".md", exists: exists)
     }
 
     public static func newFolderPath(in parent: String, exists: (String) -> Bool = WorkspaceFS.exists) throws -> String {
-        try uniqueName(in: parent, base: "Untitled Folder", ext: "", exists: exists)
+        try uniqueName(in: parent, base: L("Untitled Folder"), ext: "", exists: exists)
     }
 
     /// Duplicate naming (`resolveDuplicatePath`): `note copy.md`, `note copy 2.md`, ….
@@ -381,10 +381,11 @@ public enum WorkspaceFS {
         let ext: String
         if let dot = name.lastIndex(of: "."), dot != name.startIndex { ext = String(name[dot...]) } else { ext = "" }
         let stem = LinkPaths.getFileStem(source)
-        let first = "\(parent)/\(stem) copy\(ext)"
+        let copy = L("copy")  // Finder-style "note copy.md"
+        let first = "\(parent)/\(stem) \(copy)\(ext)"
         if !exists(first) { return first }
         for n in 2..<1000 {
-            let candidate = "\(parent)/\(stem) copy \(n)\(ext)"
+            let candidate = "\(parent)/\(stem) \(copy) \(n)\(ext)"
             if !exists(candidate) { return candidate }
         }
         throw AppError.io("Could not find an available duplicate name for \(source)")

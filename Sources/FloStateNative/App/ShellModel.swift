@@ -66,7 +66,14 @@ final class ShellModel {
     var watcherEnabled = true
 
     // View state
-    var windowWidth: CGFloat = 1200 { didSet { if oldValue != windowWidth { notify(.layout) } } }
+    var windowWidth: CGFloat = 1200 {
+        didSet {
+            guard oldValue != windowWidth else { return }
+            // crossing the auto-hide threshold drops a by-hand show/hide
+            if (oldValue < Metrics.narrowWidth) != isNarrow { narrowSidebarShown = false }
+            notify(.layout)
+        }
+    }
     var typewriterScrolling = true
     var palette: PaletteState? {
         didSet {
@@ -185,7 +192,7 @@ final class ShellModel {
     var palette_: ShellPalette { ShellPalette(settings: values, mode: mode) }
 
     func setSetting(_ key: String, _ value: ConfigValue) {
-        do { try settings.set(key, value, scope: .global) } catch { alert("Failed to save setting: \(error)") }
+        do { try settings.set(key, value, scope: .global) } catch { alert(L("Failed to save setting: %@", "\(error)")) }
         settingsDidChange()
     }
 
@@ -210,12 +217,17 @@ final class ShellModel {
 
     var sidebarPreferenceVisible: Bool { values.appearanceSidebarVisible }
     var isNarrow: Bool { windowWidth < Metrics.narrowWidth }
-    /// Effective: preference unless the window is narrower than 850px.
-    var sidebarVisible: Bool { sidebarPreferenceVisible && !isNarrow && root != nil }
+    /// Below 850px the sidebar auto-hides; showing it by hand there is transient
+    /// (the saved preference is untouched) and lasts until the width crosses 850px.
+    var narrowSidebarShown = false
+    /// Effective: the preference, or the transient narrow-window choice.
+    var sidebarVisible: Bool { root != nil && (isNarrow ? narrowSidebarShown : sidebarPreferenceVisible) }
     var sidebarWidth: CGFloat { Metrics.clampSidebarWidth(values.appearanceSidebarWidth, viewport: windowWidth) }
     var tabStripLeft: CGFloat { sidebarVisible ? sidebarWidth + 12 : Metrics.collapsedTabLeft }
 
-    func toggleSidebar() { setSetting("appearance.sidebar-visible", .bool(!sidebarPreferenceVisible)) }
+    func toggleSidebar() {
+        if isNarrow { narrowSidebarShown.toggle(); notify(.layout) } else { setSetting("appearance.sidebar-visible", .bool(!sidebarPreferenceVisible)) }
+    }
 
     // MARK: workspace lifecycle
 
@@ -231,7 +243,7 @@ final class ShellModel {
         do {
             info = try WorkspaceBootstrap.open(path, settings: settings, recents: readOnly ? nil : recentWorkspacesStore)
         } catch {
-            alert("Failed to open workspace: \(error)")
+            alert(L("Failed to open workspace: %@", "\(error)"))
             return
         }
         LaunchTrace.mark("workspace opened")
@@ -332,7 +344,7 @@ final class ShellModel {
     }
 
     var workspaceName: String {
-        guard let r = root else { return "No Workspace" }
+        guard let r = root else { return L("No Workspace") }
         let n = (r as NSString).lastPathComponent
         return n.isEmpty ? r : n
     }
@@ -403,7 +415,8 @@ final class ShellModel {
     /// Reveal in sidebar: expand ancestors, show the sidebar.
     func revealInSidebar(_ path: String) {
         try? tree.expandAncestors(of: path)
-        if !sidebarPreferenceVisible { setSetting("appearance.sidebar-visible", .bool(true)) }
+        if isNarrow { if !narrowSidebarShown { narrowSidebarShown = true; notify(.layout) } }
+        else if !sidebarPreferenceVisible { setSetting("appearance.sidebar-visible", .bool(true)) }
         revealTarget = path
         notify(.sidebar)
     }
@@ -461,7 +474,7 @@ final class ShellModel {
             if tree.expandedDirs.contains(folder) || folder == root { refreshDirectory(folder) } else { ensureExpanded(folder) }
             index?.add(p, modifiedAt: WorkspaceFS.modifiedTime(p))
             renamingPath = p
-        } catch { alert("Failed to create file: \(error)") }
+        } catch { alert(L("Failed to create file: %@", "\(error)")) }
     }
 
     func createFolderInFolder(_ folder: String) {
@@ -470,7 +483,7 @@ final class ShellModel {
             _ = try WorkspaceFS.createDirectory(p)
             if tree.expandedDirs.contains(folder) || folder == root { refreshDirectory(folder) } else { ensureExpanded(folder) }
             renamingPath = p
-        } catch { alert("Failed to create folder: \(error)") }
+        } catch { alert(L("Failed to create folder: %@", "\(error)")) }
     }
 
     /// `handleRenameSubmit`: files take a stem, folders a full name.
@@ -483,17 +496,17 @@ final class ShellModel {
         if entry.isDir {
             if trimmed == entry.name { return }
             newPath = "\(parent)/\(trimmed)"
-            conflict = "A folder named \"\(trimmed)\" already exists."
+            conflict = L("A folder named \"%@\" already exists.", trimmed)
         } else {
             let stem = LinkPaths.getFileStem(entry.name)
             if trimmed == stem { return }
             let ext = Self.fileExtension(entry.name)
             newPath = "\(parent)/\(trimmed)\(ext)"
-            conflict = "A file named \"\(trimmed)\(ext)\" already exists."
+            conflict = L("A file named \"%@\" already exists.", trimmed + ext)
         }
         if newPath == entry.path { return }
         if WorkspaceFS.exists(newPath) { alert(conflict); return }
-        do { try applyPathChange(entry, newPath) } catch { alert("Failed to rename: \(error)") }
+        do { try applyPathChange(entry, newPath) } catch { alert(L("Failed to rename: %@", "\(error)")) }
     }
 
     static func fileExtension(_ name: String) -> String {
@@ -539,9 +552,9 @@ final class ShellModel {
         if entry.isDir {
             let prefix = entry.path + "/"
             let dirty = editor.openFiles.filter { $0.key.hasPrefix(prefix) && $0.value.isDirty }.count
-            if dirty > 0, !confirm("\"\(entry.name)\" contains \(dirty) unsaved file\(dirty > 1 ? "s" : ""). Delete anyway?") { return }
+            if dirty > 0, !confirm(dirty > 1 ? L("\"%1$@\" contains %2$d unsaved files. Delete anyway?", entry.name, dirty) : L("\"%@\" contains 1 unsaved file. Delete anyway?", entry.name)) { return }
         } else if editor.file(entry.path)?.isDirty == true,
-                  !confirm("\"\(entry.name)\" has unsaved changes. Delete anyway?") { return }
+                  !confirm(L("\"%@\" has unsaved changes. Delete anyway?", entry.name)) { return }
         do {
             _ = try WorkspaceFS.deleteEntry(entry.path)
             if entry.isDir {
@@ -555,12 +568,12 @@ final class ShellModel {
                 index?.remove(entry.path)
             }
             refreshDirectory(LinkPaths.getParentDir(entry.path))
-        } catch { alert("Failed to delete: \(error)") }
+        } catch { alert(L("Failed to delete: %@", "\(error)")) }
     }
 
     func deleteEntries(_ paths: [String]) {
         let dirty = paths.filter { editor.file($0)?.isDirty == true }.count
-        let msg = dirty > 0 ? "\(dirty) of \(paths.count) selected items have unsaved changes. Delete anyway?" : "Delete \(paths.count) items?"
+        let msg = dirty > 0 ? L("%1$d of %2$d selected items have unsaved changes. Delete anyway?", dirty, paths.count) : L("Delete %d items?", paths.count)
         guard confirm(msg) else { return }
         var parents = Set<String>()
         for p in paths {
@@ -571,7 +584,7 @@ final class ShellModel {
                 tree.removePinnedFilesWithPrefix(p)
                 index?.remove(p); index?.removeSubtree(p)
                 parents.insert(LinkPaths.getParentDir(p))
-            } catch { alert("Failed to delete \"\(p)\": \(error)") }
+            } catch { alert(L("Failed to delete \"%1$@\": %2$@", p, "\(error)")) }
         }
         selectedPaths = []
         for d in parents { refreshDirectory(d) }
@@ -591,7 +604,7 @@ final class ShellModel {
             index?.add(target, modifiedAt: WorkspaceFS.modifiedTime(target))
             refreshDirectory(LinkPaths.getParentDir(path))
             try await editor.openFileInNewTab(target)
-        } catch { alert("Failed to duplicate: \(error)") }
+        } catch { alert(L("Failed to duplicate: %@", "\(error)")) }
     }
 
     func relativePath(_ p: String) -> String { root.map { LinkPaths.getRelativePath(p, root: $0) } ?? p }
@@ -747,7 +760,7 @@ final class ShellModel {
             if let anchor = anchor { pendingAnchor = (path, anchor) }
             Task { await editor.navigateToFile(path) }
         case let .scrollToAnchor(slug):
-            if !scrollToAnchor(slug) { anchorWarning = "Heading \"#\(slug)\" not found in this document" }
+            if !scrollToAnchor(slug) { anchorWarning = L("Heading \"#%@\" not found in this document", slug) }
         case let .openURL(u): if let url = URL(string: u) { openExternal(url) }
         case let .openPath(p): openExternal(URL(fileURLWithPath: p))
         case .none: break
@@ -785,8 +798,8 @@ final class ShellModel {
     /// New Note with nothing open: ask where to save it (Documents, "Untitled.md"), create it, open it on its own.
     var chooseNewNotePath: () -> String? = {
         let p = NSSavePanel()
-        p.title = "New Note"
-        p.nameFieldStringValue = "Untitled.md"
+        p.title = L("New Note")
+        p.nameFieldStringValue = L("Untitled") + ".md"
         p.allowedContentTypes = [.init(filenameExtension: "md")!]
         p.directoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
         return p.runModal() == .OK ? p.url?.path : nil
@@ -796,7 +809,7 @@ final class ShellModel {
         do {
             if !FileManager.default.fileExists(atPath: path) { try Data().write(to: URL(fileURLWithPath: path)) }
         } catch {
-            alert("Couldn't create the note: \(error.localizedDescription)")
+            alert(L("Couldn't create the note: %@", error.localizedDescription))
             return
         }
         openPickedFile(path)
@@ -809,7 +822,7 @@ final class ShellModel {
             let (dir, note) = try StarterNotebook.create(documents: documentsDirectory())
             Task { await openWorkspace(dir, openFile: note, keepSession: false) }
         } catch {
-            alert("Couldn't create a notebook in Documents: \(error.localizedDescription)")
+            alert(L("Couldn't create a notebook in Documents: %@", error.localizedDescription))
         }
     }
 
@@ -829,7 +842,7 @@ final class ShellModel {
 
     func paletteCommands() -> [PaletteItem] {
         var out: [PaletteItem] = []
-        func add(_ id: String, _ label: String, _ desc: String = "Command") { out.append(PaletteItem(kind: .command(id), title: label, subtitle: desc)) }
+        func add(_ id: String, _ label: String, _ desc: String = "Command") { out.append(PaletteItem(kind: .command(id), title: L(label), subtitle: L(desc))) }
         let compact = isCompact
         if root != nil && !compact { add("toggle-sidebar", "Toggle Sidebar") }
         if root != nil && !compact { add("search-contents", "Search in All Notes") }
@@ -858,23 +871,23 @@ final class ShellModel {
             // compact windows create next to the active file
             let base = root ?? editor.activeFilePath.map(LinkPaths.getParentDir)
             guard let root = base, !q.isEmpty, let path = WorkspaceFS.paletteCreatePath(root: root, rawName: q) else {
-                return PaletteView(heading: nil, empty: q.isEmpty ? "Type a note name to create it." : nil, items: [], placeholder: "Create a new note...")
+                return PaletteView(heading: nil, empty: q.isEmpty ? L("Type a note name to create it.") : nil, items: [], placeholder: L("Create a new note..."))
             }
-            return PaletteView(heading: "Create note", empty: nil,
-                               items: [PaletteItem(kind: .create(path), title: "Create: \(LinkPaths.getFileName(path))")],
-                               placeholder: "Create a new note...")
+            return PaletteView(heading: L("Create note"), empty: nil,
+                               items: [PaletteItem(kind: .create(path), title: L("Create: %@", LinkPaths.getFileName(path)))],
+                               placeholder: L("Create a new note..."))
         }
         if p.intent == .fullText {
             let items = contentResults.map {
                 PaletteItem(kind: .hit(path: $0.path, offset: $0.offset, length: $0.length),
-                            title: "\(LinkPaths.getFileStem(LinkPaths.getFileName($0.path)))  ·  line \($0.line)",
+                            title: LinkPaths.getFileStem(LinkPaths.getFileName($0.path)) + "  ·  " + L("line %d", $0.line),
                             subtitle: $0.snippet, highlights: $0.highlights)
             }
             if items.isEmpty {
-                let empty = q.count < 2 ? "Type at least two characters to search inside your notes." : (isIndexing ? "Indexing workspace..." : "No notes contain \"\(q)\".")
-                return PaletteView(heading: nil, empty: empty, items: [], placeholder: "Search in all notes...")
+                let empty = q.count < 2 ? L("Type at least two characters to search inside your notes.") : (isIndexing ? L("Indexing workspace...") : L("No notes contain \"%@\".", q))
+                return PaletteView(heading: nil, empty: empty, items: [], placeholder: L("Search in all notes..."))
             }
-            return PaletteView(heading: "In notes", empty: nil, items: items, placeholder: "Search in all notes...")
+            return PaletteView(heading: L("In notes"), empty: nil, items: items, placeholder: L("Search in all notes..."))
         }
         let cmds = q.isEmpty ? paletteCommands() : paletteCommands().filter { $0.title.lowercased().contains(q.lowercased()) }
         var files = q.isEmpty || isCompact ? [] : paletteResults.map {
@@ -891,10 +904,10 @@ final class ShellModel {
         }
         let items = cmds + files
         if items.isEmpty {
-            return PaletteView(heading: nil, empty: isIndexing && !q.isEmpty ? "Indexing workspace..." : "No results found.", items: [], placeholder: "Search...")
+            return PaletteView(heading: nil, empty: isIndexing && !q.isEmpty ? L("Indexing workspace...") : L("No results found."), items: [], placeholder: L("Search..."))
         }
-        let heading = q.isEmpty ? "Suggested" : (isIndexing ? "Results (indexing...)" : "Results")
-        return PaletteView(heading: heading, empty: nil, items: items, placeholder: "Search...")
+        let heading = q.isEmpty ? L("Suggested") : (isIndexing ? L("Results (indexing...)") : L("Results"))
+        return PaletteView(heading: heading, empty: nil, items: items, placeholder: L("Search..."))
     }
 
     /// Query changed: fuzzy search (20 results, the web's `useFuzzySearch` limit).

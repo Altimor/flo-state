@@ -66,7 +66,7 @@ enum SidebarLayout {
             blocks.append(b)
         }
         let flat = model.flatTree()
-        blocks.append(flat.isEmpty ? [.empty("No files")] : flat.map { .row($0.entry, depth: $0.depth, section: .tree) })
+        blocks.append(flat.isEmpty ? [.empty(L("No files"))] : flat.map { .row($0.entry, depth: $0.depth, section: .tree) })
         var out: [SidebarItem] = []
         for (i, b) in blocks.enumerated() {
             if i > 0 { out.append(.gap(16)) }
@@ -219,7 +219,7 @@ final class SidebarRowView: FlippedView {
         case .showMore:
             Icon.ellipsis.draw(in: iconRect, color: fg.withAlphaComponent(hovering ? 1 : 0.6), ctx: ctx)
             TextStyle(font: font, color: fg.withAlphaComponent(hovering ? 1 : 0.6))
-                .draw("Show More", x: labelX, lineTop: (bounds.height - 13 * 1.15) / 2, lineHeight: 13 * 1.15, in: ctx)
+                .draw(L("Show More"), x: labelX, lineTop: (bounds.height - 13 * 1.15) / 2, lineHeight: 13 * 1.15, in: ctx)
         case .switcher:
             let c = hovering ? fg : p.textMuted
             Icon.switcher.draw(in: iconRect, color: c, ctx: ctx)
@@ -253,8 +253,9 @@ final class SectionHeaderView: FlippedView {
         ctx.saveGState()
         ctx.setAlpha(hovering ? 1 : 0.6)
         let style = TextStyle(font: font, color: p.textMuted)
-        let w = style.width(section.rawValue)
-        style.draw(section.rawValue, x: 12, lineTop: 0, lineHeight: 20, in: ctx)
+        let title = L(section.rawValue)
+        let w = style.width(title)
+        style.draw(title, x: 12, lineTop: 0, lineHeight: 20, in: ctx)
         Icon.sectionChevron.draw(in: CGRect(x: 12 + w + 4, y: 4, width: 12, height: 12), color: p.textMuted, ctx: ctx,
                                  rotation: collapsed ? 0 : .pi / 2)
         ctx.restoreGState()
@@ -280,7 +281,7 @@ final class SidebarView: FlippedView, NSTextFieldDelegate {
         wantsLayer = true
         addSubview(toggle)
         toggle.action = { [weak model] in model?.toggleSidebar() }
-        toggle.toolTipText = "Hide sidebar"
+        toggle.toolTipText = L("Hide sidebar")
         scroll.drawsBackground = false
         scroll.automaticallyAdjustsContentInsets = false
         scroll.hasVerticalScroller = false
@@ -530,13 +531,13 @@ final class SidebarView: FlippedView, NSTextFieldDelegate {
                 var failures: [String] = []
                 for e in d.entries where TreeMove.canMoveInto(e.path, isDir: e.isDir, destDir: dest) {
                     switch model.moveEntry(e, into: dest) {
-                    case let .exists(p): failures.append("\"\(LinkPaths.getFileName(p))\" already exists.")
+                    case let .exists(p): failures.append(L("\"%@\" already exists.", LinkPaths.getFileName(p)))
                     case let .failed(msg): failures.append(msg)
                     default: break
                     }
                 }
                 model.selectedPaths = []
-                if !failures.isEmpty { model.alert("Failed to move:\n" + failures.joined(separator: "\n")) }
+                if !failures.isEmpty { model.alert(L("Failed to move:") + "\n" + failures.joined(separator: "\n")) }
             }
             return
         }
@@ -634,6 +635,6 @@ final class SearchFieldButton: FlippedView {
         p.surfaceInput.setFill(); roundedPath(bounds, 8).fill()
         let c = hovering ? p.fgBase : p.textMuted
         Icon.search.draw(in: CGRect(x: 10, y: 8, width: 16, height: 16), color: c, ctx: ctx)
-        TextStyle(font: font, color: c).draw("Search", x: 34, lineTop: 6.25, lineHeight: 19.5, in: ctx)
+        TextStyle(font: font, color: c).draw(L("Search"), x: 34, lineTop: 6.25, lineHeight: 19.5, in: ctx)
     }
 }

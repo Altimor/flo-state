@@ -329,9 +329,9 @@ public final class FindOverlayView: NSView, NSTextFieldDelegate {
         if kern != 0 { a[.kern] = kern }
         return ceil((s as NSString).size(withAttributes: a).width * 100) / 100
     }
-    var measuredToggleWidth: CGFloat { textWidth("Replace", chrome.uiFont(12, .regular), kern: -0.3) + 16 }
-    var measuredReplaceWidth: CGFloat { textWidth("Replace", chrome.uiFont(12, .regular)) + 20 }
-    var measuredAllWidth: CGFloat { textWidth("All", chrome.uiFont(12, .medium)) + 20 }
+    var measuredToggleWidth: CGFloat { textWidth(L("Replace"), chrome.uiFont(12, .regular), kern: -0.3) + 16 }
+    var measuredReplaceWidth: CGFloat { textWidth(L("Replace"), chrome.uiFont(12, .regular)) + 20 }
+    var measuredAllWidth: CGFloat { textWidth(L("All"), chrome.uiFont(12, .medium)) + 20 }
 
     /// `bottom-2 right-3 w-[min(560px, 100% - 1.5rem)]`.
     func place(in host: NSView) {
@@ -358,7 +358,7 @@ public final class FindOverlayView: NSView, NSTextFieldDelegate {
 
     func restyle() {
         let font = chrome.uiFont(13, .regular)
-        for (f, ph) in [(findField, "Find"), (replaceField, "Replace")] {
+        for (f, ph) in [(findField, L("Find")), (replaceField, L("Replace"))] {
             f.font = font
             f.textColor = tokens.textPrimary.nsColor
             f.placeholderAttributedString = NSAttributedString(string: ph, attributes: [.font: font, .foregroundColor: tokens.textMuted.nsColor])
@@ -433,7 +433,7 @@ public final class FindOverlayView: NSView, NSTextFieldDelegate {
     /// The counter text, nil when hidden.
     public var counterText: String? {
         guard let m = matchInfo, !query.isEmpty else { return nil }
-        return m.total == 0 ? "No matches" : "\(m.current)/\(m.total)"
+        return m.total == 0 ? L("No matches") : "\(m.current)/\(m.total)"
     }
     private var cachedCounter: String?
     func refreshCounter() {
@@ -589,7 +589,7 @@ public final class FindOverlayView: NSView, NSTextFieldDelegate {
                 t.surfaceSubtle.nsColor.setFill(); NSBezierPath(roundedRect: r, xRadius: 6, yRadius: 6).fill()
                 color = t.textSecondary.nsColor
             }
-            drawLabel("Replace", in: r, font: chrome.uiFont(12, .regular), color: color, kern: -0.3)
+            drawLabel(L("Replace"), in: r, font: chrome.uiFont(12, .regular), color: color, kern: -0.3)
         }
         iconButton("close", l.close, FindIcons.cancel)
         if showReplace {
@@ -597,10 +597,10 @@ public final class FindOverlayView: NSView, NSTextFieldDelegate {
             NSBezierPath(roundedRect: l.replaceInput, xRadius: 8, yRadius: 8).fill()
             let hot = hover == "replace"
             if hot { t.surfaceSubtle.nsColor.setFill(); NSBezierPath(roundedRect: l.replaceButton, xRadius: 6, yRadius: 6).fill() }
-            drawLabel("Replace", in: l.replaceButton, font: chrome.uiFont(12, .regular), color: hot ? t.textPrimary.nsColor : t.textSecondary.nsColor)
+            drawLabel(L("Replace"), in: l.replaceButton, font: chrome.uiFont(12, .regular), color: hot ? t.textPrimary.nsColor : t.textSecondary.nsColor)
             let allColor = hover == "all" ? t.accent.mixedWithTransparent(0.9).nsColor : t.accent.nsColor
             allColor.setFill(); NSBezierPath(roundedRect: l.all, xRadius: 6, yRadius: 6).fill()
-            drawLabel("All", in: l.all, font: chrome.uiFont(12, .medium), color: .white)
+            drawLabel(L("All"), in: l.all, font: chrome.uiFont(12, .medium), color: .white)
         }
     }
 

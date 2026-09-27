@@ -11,34 +11,50 @@ final class WelcomeView: FlippedView {
     init(model: ShellModel) { self.model = model; super.init(frame: .zero) }
     required init?(coder: NSCoder) { fatalError() }
 
-    private static let titles = ["Open Folder", "Open File", "Start from Scratch"]
-    private var buttons: [(String, CGRect)] {
+    static let titles = ["Open Folder", "Open File", "Start from Scratch"]
+    /// Localized titles and their button rects: one centred row, or a centred
+    /// column of equal-width buttons when the row doesn't fit (long languages, narrow windows).
+    var buttons: [(String, CGRect)] {
         let f = UIFonts.ui(model.values, weight: .medium)
-        let widths = Self.titles.map { TextStyle(font: f, color: .black).width($0) + 32 }
+        let titles = Self.titles.map { L($0) }
+        let widths = titles.map { TextStyle(font: f, color: .black).width($0) + 32 }
         let total = widths.reduce(0, +) + 12 * CGFloat(widths.count - 1)
         let y = bounds.height / 2 + 4
+        if total > bounds.width - 32 {
+            let w = min(widths.max() ?? 0, max(0, bounds.width - 32))
+            return titles.enumerated().map { i, t in (t, CGRect(x: (bounds.width - w) / 2, y: y + CGFloat(i) * (35.5 + 8), width: w, height: 35.5)) }
+        }
         var x = (bounds.width - total) / 2
-        return zip(Self.titles, widths).map { t, w in defer { x += w + 12 }; return (t, CGRect(x: x, y: y, width: w, height: 35.5)) }
+        let row = zip(titles, widths).map { t, w in defer { x += w + 12 }; return (t, CGRect(x: x, y: y, width: w, height: 35.5)) }
+        guard userInterfaceLayoutDirection == .rightToLeft else { return row }
+        // right-to-left UI (Arabic, Urdu): the primary button leads on the right
+        return row.map { t, r in (t, CGRect(x: bounds.width - r.maxX, y: r.minY, width: r.width, height: r.height)) }
+    }
+
+    /// The prompt above the buttons, wrapped to 252pt (wider for long languages).
+    var messageLines: [String] {
+        TextWrap.lines(L("Open a folder of notes or a single file, or start from scratch."), font: UIFonts.ui(model.values), width: 252)
     }
 
     override func draw(_ dirtyRect: NSRect) {
         guard let ctx = NSGraphicsContext.current?.cgContext else { return }
         let p = model.palette_
         p.bg.setFill(); bounds.fill(using: .sourceOver)
-        let msg = "Open a folder of notes or a single file, or start from scratch."
         let style = TextStyle(font: UIFonts.ui(model.values), color: p.textMuted)
-        let lines = TextWrap.lines(msg, font: style.font, width: 252)
+        let lines = messageLines
         var y = bounds.height / 2 - 24 - CGFloat(lines.count) * 21.125
         for l in lines { style.draw(l, x: (bounds.width - style.width(l)) / 2, lineTop: y, lineHeight: 21.125, in: ctx); y += 21.125 }
         let bf = UIFonts.ui(model.values, weight: .medium)
         for (i, (t, r)) in buttons.enumerated() {
             if i == 0 {
                 p.textPrimary.setFill(); roundedPath(r, 8).fill()
-                TextStyle(font: bf, color: p.bgBaseOpaque).draw(t, x: r.minX + 16, lineTop: r.minY + 8, lineHeight: 19.5, in: ctx)
+                let ts = TextStyle(font: bf, color: p.bgBaseOpaque)
+                ts.draw(t, x: r.minX + max(16, (r.width - ts.width(t)) / 2), lineTop: r.minY + 8, lineHeight: 19.5, maxWidth: r.width - 32, in: ctx)
             } else {
                 let path = roundedPath(r.insetBy(dx: 0.5, dy: 0.5), 7.5)
                 p.lineSubtle.setStroke(); path.lineWidth = 1; path.stroke()
-                TextStyle(font: bf, color: p.textSecondary).draw(t, x: r.minX + 16, lineTop: r.minY + 8, lineHeight: 19.5, in: ctx)
+                let ts = TextStyle(font: bf, color: p.textSecondary)
+                ts.draw(t, x: r.minX + max(16, (r.width - ts.width(t)) / 2), lineTop: r.minY + 8, lineHeight: 19.5, maxWidth: r.width - 32, in: ctx)
             }
         }
     }
@@ -50,8 +66,8 @@ final class WelcomeView: FlippedView {
     }
 }
 
-/// `--shell-snapshot <workspace> --data-dir D [--width W --height H] [--out png]
-/// [--dump json] [--expand dir]... [--action newtab|palette[:q]|create:name]`
+/// `--shell-snapshot <workspace | -> --data-dir D [--width W --height H] [--out png]
+/// [--dump json] [--expand dir]... [--open file] [--action newtab|palette[:q]|create:name]`
 ///
 /// Builds the real window content offscreen (x=-10000, never ordered front,
 /// never activates, no Dock icon) and writes a PNG + a frame dump.
@@ -83,6 +99,7 @@ enum ShellSnapshot {
         }
         if let d = opt("--dump") {
             let dump: [String: Any] = ["title": w.title, "frame": [w.frame.width, w.frame.height],
+                                       "language": L10n.current, "rtl": NSApp.userInterfaceLayoutDirection == .rightToLeft,
                                        "resizable": w.styleMask.contains(.resizable),
                                        "toolbar": w.toolbar?.items.map { $0.label } ?? [],
                                        "keys": wc.selectedPane.controls.map { $0.def.key },
@@ -110,7 +127,8 @@ enum ShellSnapshot {
         wc.root.opaqueBase = true
         wc.root.wantsLayer = true
         wc.window?.setFrameOrigin(NSPoint(x: -10000, y: -10000))
-        pump { await model.openWorkspace(ws) }
+        // "-": no workspace (welcome screen); --open <file>: open that note too
+        if ws != "-" { pump { await model.openWorkspace(ws, openFile: opt("--open")) } }
         wc.flush()
         for d in all("--expand") { model.toggleDirectory(d) }
         wc.flush()

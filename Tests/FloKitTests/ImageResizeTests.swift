@@ -8,7 +8,7 @@ final class ImageResizeTests: XCTestCase {
     var window: NSWindow!
     override func tearDown() { window?.close(); window = nil }
 
-    func makeEditor(_ text: String, caret: Int = 0) -> (EditorController, String) {
+    func makeEditor(_ text: String, caret: Int = 0, workspace: Bool = false) -> (EditorController, String) {
         let dir = FileManager.default.temporaryDirectory.appendingPathComponent("imgr-\(UUID().uuidString)")
         try! FileManager.default.createDirectory(at: dir.appendingPathComponent("attachments"), withIntermediateDirectories: true)
         let img = NSImage(size: NSSize(width: 800, height: 400)); img.lockFocus(); NSColor.systemBlue.setFill(); NSRect(x: 0, y: 0, width: 800, height: 400).fill(); img.unlockFocus()
@@ -23,6 +23,7 @@ final class ImageResizeTests: XCTestCase {
         c.scrollView.frame = content.bounds
         content.addSubview(c.scrollView)
         c.layoutColumn()
+        if workspace { c.workspaceRoot = dir.path }
         c.documentPath = doc
         c.load(text, selection: .cursor(caret))
         c.layoutColumn()
@@ -62,6 +63,39 @@ final class ImageResizeTests: XCTestCase {
         XCTAssertEqual(c.text, "# T\n\n![shot @2x.png|320](attachments/i.png)\n\nafter\n")
         _ = c.handleKey("Mod-z")
         XCTAssertEqual(c.text, "# T\n\n![shot @2x.png](attachments/i.png)\n\nafter\n")
+    }
+
+    func click(_ c: EditorController, at p: NSPoint, count: Int) {
+        let w = c.textView.convert(p, to: nil)
+        func ev(_ t: NSEvent.EventType) -> NSEvent {
+            NSEvent.mouseEvent(with: t, location: w, modifierFlags: [], timestamp: ProcessInfo.processInfo.systemUptime,
+                               windowNumber: window.windowNumber, context: nil, eventNumber: 0, clickCount: count, pressure: 1)!
+        }
+        window.postEvent(ev(.leftMouseUp), atStart: false)  // ends NSTextView's tracking loop, if it runs one
+        c.textView.mouseDown(with: ev(.leftMouseDown))
+        while NSApp.nextEvent(matching: .any, until: Date(), inMode: .default, dequeue: true) != nil {}  // unconsumed mouse-up
+    }
+
+    /// Double-clicking a rendered image opens its file (never launches anything here) and
+    /// leaves the selection where it was before the first click.
+    func testDoubleClickOpensTheImageFile() throws {
+        for (text, embed) in [("# T\n\n![shot](attachments/i.png)\n\nafter\n", false), ("# T\n\nsee ![[i.png]] here\n\nafter\n", true)] {
+            let (c, doc) = makeEditor(text, caret: (text as NSString).length - 1, workspace: embed)
+            var opened: [URL] = []
+            c.openImageFile = { opened.append($0) }
+            let hit = try XCTUnwrap(c.imageRects.values.first { $0.url != nil }, "image drawn: \(text)")
+            let mid = NSPoint(x: hit.rect.midX, y: hit.rect.midY)
+            XCTAssertEqual(c.imageFileURL(at: mid)?.lastPathComponent, "i.png")
+            XCTAssertEqual(c.imageFileURL(at: NSPoint(x: hit.rect.maxX + 40, y: mid.y)), nil)
+            let before = c.state.selection.main
+            click(c, at: mid, count: 1)
+            XCTAssertEqual(opened, [], "a single click doesn't open")
+            click(c, at: mid, count: 2)
+            XCTAssertEqual(opened.map { $0.resolvingSymlinksInPath().path },
+                           [URL(fileURLWithPath: (doc as NSString).deletingLastPathComponent + "/attachments/i.png").resolvingSymlinksInPath().path])
+            XCTAssertEqual(c.state.selection.main, before, "the double-click leaves the selection as it was")
+            XCTAssertEqual(c.text, text)
+        }
     }
 
     func testPresetsReplaceAndRemoveWidth() throws {

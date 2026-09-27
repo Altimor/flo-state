@@ -14,6 +14,8 @@ let package = Package(
         .package(url: "https://github.com/sparkle-project/Sparkle", exact: "2.10.0"),
     ],
     targets: [
+        // Resources/<lang>.lproj: UI strings (Localizable.strings) + the localized Welcome note, copied
+        // verbatim (CFBundle treats the bundle's top-level Resources/ as its resource directory).
         .target(name: "FloCore", resources: [.copy("Resources")], swiftSettings: [.swiftLanguageMode(.v5)]),
         .target(name: "FloKit", dependencies: ["FloCore"], swiftSettings: [.swiftLanguageMode(.v5)]),
         .executableTarget(name: "FloStateNative", dependencies: ["FloKit", .product(name: "Sparkle", package: "Sparkle")], swiftSettings: [.swiftLanguageMode(.v5)]),

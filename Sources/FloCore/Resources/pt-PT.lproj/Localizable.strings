@@ -1,0 +1,902 @@
+/* Flo State UI strings. Key = English source text (base language).
+ * Generated from the sources; translations live in <lang>.lproj/Localizable.strings. */
+
+/* EditorModel.swift; TabStripView.swift; Tab title / tooltip of the + button (new empty tab). */
+"New tab" = "Nova aba";
+
+/* EditorModel.swift; ShellModel.swift (command palette command) */
+"Settings" = "Ajustes";
+
+/* EditorModel.swift; ShellMenus.swift (menu bar); Window title of an empty tab (title case where the language uses it). */
+"New Tab" = "Nova Aba";
+
+/* WorkspaceFS.swift */
+"IO error: %@" = "Erro de E/S: %@";
+
+/* WorkspaceFS.swift */
+"Not found: %@" = "Não encontrado: %@";
+
+/* WorkspaceFS.swift */
+"Already exists: %@" = "Já existe: %@";
+
+/* WorkspaceFS.swift */
+"No workspace is open" = "Nenhum espaço de trabalho aberto";
+
+/* WorkspaceFS.swift; ShellModel.swift; Default name of a new note file (".md" is appended). Use the word macOS uses for untitled documents. */
+"Untitled" = "Sem Título";
+
+/* WorkspaceFS.swift; Default name of a new folder, as in Finder. */
+"Untitled Folder" = "pasta sem título";
+
+/* WorkspaceFS.swift; Finder-style duplicate name suffix: "note copy.md", "note copy 2.md". Use the word Finder uses in this language. */
+"copy" = "cópia";
+
+/* ContextMenu.swift (editor right-click menu); ShellMenus.swift */
+"Cut" = "Recortar";
+
+/* ContextMenu.swift (editor right-click menu); ShellMenus.swift */
+"Copy" = "Copiar";
+
+/* ContextMenu.swift (editor right-click menu); ShellMenus.swift */
+"Paste" = "Colar";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Paste as plain text" = "Colar como texto simples";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Format" = "Formatar";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Bold" = "Negrito";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Italic" = "Itálico";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Strikethrough" = "Tachado";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Inline code" = "Código em linha";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Insert link…" = "Inserir link…";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Clear formatting" = "Limpar formatação";
+
+/* ContextMenu.swift (editor right-click menu); Editor context menu: submenu with block types; also item that turns a heading back into a normal paragraph. */
+"Paragraph" = "Parágrafo";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 1" = "Título 1";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 2" = "Título 2";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 3" = "Título 3";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 4" = "Título 4";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 5" = "Título 5";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 6" = "Título 6";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Bullet list" = "Lista com marcadores";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Numbered list" = "Lista numerada";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Task list" = "Lista de tarefas";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Blockquote" = "Citação";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Code block" = "Bloco de código";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Insert" = "Inserir";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Link…" = "Link…";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Table" = "Tabela";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Horizontal rule" = "Linha horizontal";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Current date" = "Data atual";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Current time" = "Hora atual";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Select all" = "Selecionar tudo";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Open link" = "Abrir link";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Copy link" = "Copiar link";
+
+/* FindOverlay.swift; Find bar: toggle/button to replace text; also the replace field placeholder. */
+"Replace" = "Substituir";
+
+/* FindOverlay.swift; Find bar button: Replace All (short, button). */
+"All" = "Tudo";
+
+/* FindOverlay.swift; Find bar search field placeholder. */
+"Find" = "Buscar";
+
+/* FindOverlay.swift; Find bar counter when nothing matches (keep short, ~12 chars). */
+"No matches" = "Sem resultados";
+
+/* ImageResize.swift; Image right-click menu: "Image Size: Small". */
+"Image Size: %@" = "Tamanho da Imagem: %@";
+
+/* ImageResize.swift (image size preset, used in "Image Size: %@") */
+"Small" = "Pequeno";
+
+/* ImageResize.swift (image size preset, used in "Image Size: %@") */
+"Medium" = "Médio";
+
+/* ImageResize.swift (image size preset, used in "Image Size: %@") */
+"Large" = "Grande";
+
+/* ImageResize.swift (image size preset, used in "Image Size: %@") */
+"Full Width" = "Largura Total";
+
+/* ImageResize.swift (image size preset, used in "Image Size: %@") */
+"Original Size" = "Tamanho Original";
+
+/* CompactHeader.swift */
+"Choose file" = "Escolher arquivo";
+
+/* CompactHeader.swift; ShellMenus.swift; SidebarView.swift (sidebar section header); Sidebar section header: recently opened files. */
+"Recents" = "Recentes";
+
+/* CompactHeader.swift */
+"No other recent files." = "Nenhum outro arquivo recente.";
+
+/* EditorArea.swift */
+"Create new note" = "Criar nova nota";
+
+/* EditorArea.swift; ShellMenus.swift; SidebarView.swift; Sidebar search button / new-tab launcher / sidebar right-click toggle. */
+"Search" = "Buscar";
+
+/* EditorArea.swift; Status bar counter shown after a number: "1,234 words". Lowercase noun. */
+"words" = "palavras";
+
+/* EditorArea.swift; Status bar counter shown after a number: "1,234 characters". */
+"characters" = "caracteres";
+
+/* EditorArea.swift; Status bar counter shown after a number: "12 paragraphs". */
+"paragraphs" = "parágrafos";
+
+/* EditorArea.swift */
+"Copy heading link" = "Copiar link do título";
+
+/* FloStateCLI.swift */
+"Command Line Tool Removed" = "Ferramenta de Linha de Comando Removida";
+
+/* FloStateCLI.swift */
+"The `flostate` command has been removed from %@." = "O comando `flostate` foi removido de %@.";
+
+/* FloStateCLI.swift */
+"Command Line Tool Installed" = "Ferramenta de Linha de Comando Instalada";
+
+/* FloStateCLI.swift */
+"The `flostate` command is now installed at %@." = "O comando `flostate` agora está instalado em %@.";
+
+/* FloStateCLI.swift */
+"Run `flostate .` from any terminal to open the current folder." = "Execute `flostate .` em qualquer terminal para abrir a pasta atual.";
+
+/* FloStateCLI.swift */
+"Flo State Command Line Tool" = "Ferramenta de Linha de Comando do Flo State";
+
+/* FloStateCLI.swift */
+"Could not remove the flostate command." = "Não foi possível remover o comando flostate.";
+
+/* FloStateCLI.swift */
+"Could not install the flostate command." = "Não foi possível instalar o comando flostate.";
+
+/* FloStateCLI.swift (app menu; keep `flostate` as is) */
+"Install 'flostate' Command Line Tool…" = "Instalar Ferramenta de Linha de Comando 'flostate'…";
+
+/* FloStateCLI.swift (app menu; keep `flostate` as is) */
+"Uninstall 'flostate' Command Line Tool…" = "Desinstalar Ferramenta de Linha de Comando 'flostate'…";
+
+/* FrontmatterPanel.swift; Placeholder in a frontmatter property name field. */
+"key" = "chave";
+
+/* FrontmatterPanel.swift; Placeholder in a frontmatter property value field. */
+"value" = "valor";
+
+/* FrontmatterPanel.swift */
+"Add property" = "Adicionar propriedade";
+
+/* SettingsWindow.swift */
+"Match System" = "Igual ao Sistema";
+
+/* SettingsWindow.swift */
+"Document title" = "Título do documento";
+
+/* SettingsWindow.swift */
+"File name" = "Nome do arquivo";
+
+/* SettingsWindow.swift; Editor width option (vs Narrow). */
+"Wide" = "Larga";
+
+/* SettingsWindow.swift; Unit: pixels. */
+"px" = "px";
+
+/* SettingsWindow.swift; Unit: minutes (short). */
+"min" = "min";
+
+/* SettingsWindow.swift; Unit: milliseconds. */
+"ms" = "ms";
+
+/* SettingsWindow.swift; SettingsWindow.swift (Settings pane / toolbar tab); SettingsWindow.swift (Settings group label, shown with a colon) */
+"Appearance" = "Aparência";
+
+/* SettingsWindow.swift */
+"Default width" = "Largura padrão";
+
+/* SettingsWindow.swift */
+"File labels" = "Rótulos de arquivo";
+
+/* SettingsWindow.swift */
+"Editor width" = "Largura do editor";
+
+/* SettingsWindow.swift; ShellWindow.swift */
+"Show sidebar" = "Mostrar barra lateral";
+
+/* SettingsWindow.swift */
+"Show search button" = "Mostrar botão de busca";
+
+/* SettingsWindow.swift */
+"Show recents" = "Mostrar recentes";
+
+/* SettingsWindow.swift; Theme preset popup: current colours match no preset. */
+"Custom" = "Personalizado";
+
+/* SettingsWindow.swift */
+"Restore Defaults" = "Restaurar Padrões";
+
+/* SettingsWindow.swift; SettingsWindow.swift (Settings group label, shown with a colon); Settings option (appearance.theme); Light appearance / light theme. */
+"Light" = "Claro";
+
+/* SettingsWindow.swift; SettingsWindow.swift (Settings group label, shown with a colon); Settings option (appearance.theme); Dark appearance / dark theme. */
+"Dark" = "Escuro";
+
+/* SettingsWindow.swift (Settings pane / toolbar tab) */
+"General" = "Geral";
+
+/* SettingsWindow.swift (Settings pane / toolbar tab) */
+"Editor" = "Editor";
+
+/* SettingsWindow.swift (Settings pane / toolbar tab) */
+"Theme" = "Tema";
+
+/* SettingsWindow.swift (Settings pane / toolbar tab) */
+"Files" = "Arquivos";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"On launch" = "Ao abrir";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Daily notes" = "Notas diárias";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Text" = "Texto";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Spacing" = "Espaçamento";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Headings" = "Títulos";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Outline" = "Estrutura";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Sidebar" = "Barra lateral";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Fonts" = "Fontes";
+
+/* ShellMenus.swift; ShellWindow.swift; Context menu item (open a file) and the open-panel confirm button. */
+"Open" = "Abrir";
+
+/* ShellMenus.swift */
+"Open in new tab" = "Abrir em nova aba";
+
+/* ShellMenus.swift */
+"Failed to open in new tab: %@" = "Falha ao abrir em nova aba: %@";
+
+/* ShellMenus.swift */
+"Unpin" = "Desafixar";
+
+/* ShellMenus.swift */
+"Pin" = "Fixar";
+
+/* ShellMenus.swift */
+"Duplicate" = "Duplicar";
+
+/* ShellMenus.swift */
+"Copy relative path" = "Copiar caminho relativo";
+
+/* ShellMenus.swift */
+"Copy absolute path" = "Copiar caminho absoluto";
+
+/* ShellMenus.swift */
+"Reveal in Finder" = "Mostrar no Finder";
+
+/* ShellMenus.swift */
+"Rename..." = "Renomear...";
+
+/* ShellMenus.swift; ShellWindow.swift */
+"Delete" = "Apagar";
+
+/* ShellMenus.swift */
+"Rename file" = "Renomear arquivo";
+
+/* ShellMenus.swift */
+"OK" = "OK";
+
+/* ShellMenus.swift; ShellWindow.swift */
+"Cancel" = "Cancelar";
+
+/* ShellMenus.swift */
+"New File" = "Novo Arquivo";
+
+/* ShellMenus.swift */
+"New Folder" = "Nova Pasta";
+
+/* ShellMenus.swift */
+"Copy %d relative paths" = "Copiar caminhos relativos (%d)";
+
+/* ShellMenus.swift */
+"Copy %d absolute paths" = "Copiar caminhos absolutos (%d)";
+
+/* ShellMenus.swift */
+"Delete %d items" = "Apagar itens (%d)";
+
+/* ShellMenus.swift */
+"Open Folder…" = "Abrir Pasta…";
+
+/* ShellMenus.swift; ShellModel.swift (command palette command) */
+"Close Workspace" = "Fechar Espaço de Trabalho";
+
+/* ShellMenus.swift */
+"Close" = "Fechar";
+
+/* ShellMenus.swift */
+"Close others" = "Fechar outras";
+
+/* ShellMenus.swift */
+"Close all" = "Fechar todas";
+
+/* ShellMenus.swift */
+"Reveal in sidebar" = "Mostrar na barra lateral";
+
+/* ShellMenus.swift */
+"Copy path" = "Copiar caminho";
+
+/* ShellMenus.swift */
+"Words" = "Palavras";
+
+/* ShellMenus.swift */
+"Characters" = "Caracteres";
+
+/* ShellMenus.swift */
+"Paragraphs" = "Parágrafos";
+
+/* ShellMenus.swift; App menu item (macOS standard). */
+"Settings…" = "Ajustes…";
+
+/* ShellMenus.swift; App menu (macOS standard). */
+"Services" = "Serviços";
+
+/* ShellMenus.swift */
+"Hide Others" = "Ocultar Outros";
+
+/* ShellMenus.swift */
+"About %@" = "Sobre o %@";
+
+/* ShellMenus.swift */
+"Hide %@" = "Ocultar %@";
+
+/* ShellMenus.swift */
+"Show All" = "Mostrar Tudo";
+
+/* ShellMenus.swift */
+"Quit %@" = "Encerrar %@";
+
+/* ShellMenus.swift */
+"Redo" = "Refazer";
+
+/* ShellMenus.swift */
+"Substitutions" = "Substituições";
+
+/* ShellMenus.swift */
+"Show Substitutions" = "Mostrar Substituições";
+
+/* ShellMenus.swift */
+"Smart Copy/Paste" = "Copiar/Colar Inteligente";
+
+/* ShellMenus.swift */
+"Smart Quotes" = "Aspas Inteligentes";
+
+/* ShellMenus.swift */
+"Smart Dashes" = "Traços Inteligentes";
+
+/* ShellMenus.swift */
+"Smart Links" = "Links Inteligentes";
+
+/* ShellMenus.swift */
+"Text Replacement" = "Substituição de Texto";
+
+/* ShellMenus.swift */
+"Undo" = "Desfazer";
+
+/* ShellMenus.swift */
+"Select All" = "Selecionar Tudo";
+
+/* ShellMenus.swift */
+"Enter Full Screen" = "Entrar em Tela Cheia";
+
+/* ShellMenus.swift */
+"Go to Tab" = "Ir para Aba";
+
+/* ShellMenus.swift; Window > Go to Tab submenu item: "Tab 3". */
+"Tab %d" = "Aba %d";
+
+/* ShellMenus.swift */
+"Minimize" = "Minimizar";
+
+/* ShellMenus.swift */
+"Close Window" = "Fechar Janela";
+
+/* ShellMenus.swift (menu bar); ShellModel.swift */
+"New Note" = "Nova Nota";
+
+/* ShellMenus.swift (menu bar) */
+"Go to File…" = "Ir para Arquivo…";
+
+/* ShellMenus.swift (menu bar) */
+"Go to Today" = "Ir para Hoje";
+
+/* ShellMenus.swift (menu bar) */
+"Search…" = "Buscar…";
+
+/* ShellMenus.swift (menu bar) */
+"Search in All Notes…" = "Buscar em Todas as Notas…";
+
+/* ShellMenus.swift (menu bar) */
+"Close Tab" = "Fechar Aba";
+
+/* ShellMenus.swift (menu bar); ShellModel.swift (command palette command) */
+"Toggle Sidebar" = "Mostrar/Ocultar Barra Lateral";
+
+/* ShellMenus.swift (menu bar) */
+"Toggle Typewriter Scrolling" = "Alternar Rolagem de Máquina de Escrever";
+
+/* ShellMenus.swift (menu bar) */
+"Increase Font Size" = "Aumentar Tamanho da Fonte";
+
+/* ShellMenus.swift (menu bar) */
+"Decrease Font Size" = "Diminuir Tamanho da Fonte";
+
+/* ShellMenus.swift (menu bar) */
+"Reset Font Size" = "Redefinir Tamanho da Fonte";
+
+/* ShellMenus.swift (menu bar) */
+"Collapse All Headings" = "Recolher Todos os Títulos";
+
+/* ShellMenus.swift (menu bar) */
+"Expand All Headings" = "Expandir Todos os Títulos";
+
+/* ShellMenus.swift (menu bar) */
+"Back" = "Voltar";
+
+/* ShellMenus.swift (menu bar) */
+"Forward" = "Avançar";
+
+/* ShellMenus.swift (menu bar) */
+"Previous File" = "Arquivo Anterior";
+
+/* ShellMenus.swift (menu bar) */
+"Next File" = "Próximo Arquivo";
+
+/* ShellMenus.swift (menu bar) */
+"Show Previous Tab" = "Mostrar Aba Anterior";
+
+/* ShellMenus.swift (menu bar) */
+"Show Next Tab" = "Mostrar Próxima Aba";
+
+/* ShellMenus.swift (menu bar title) */
+"File" = "Arquivo";
+
+/* ShellMenus.swift (menu bar title) */
+"Edit" = "Editar";
+
+/* ShellMenus.swift (menu bar title) */
+"View" = "Visualizar";
+
+/* ShellMenus.swift (menu bar title) */
+"Window" = "Janela";
+
+/* ShellMenus.swift (app menu) */
+"Check for Updates…" = "Verificar Atualizações…";
+
+/* ShellModel.swift */
+"Failed to save setting: %@" = "Falha ao salvar ajuste: %@";
+
+/* ShellModel.swift */
+"Failed to open workspace: %@" = "Falha ao abrir espaço de trabalho: %@";
+
+/* ShellModel.swift */
+"No Workspace" = "Nenhum Espaço de Trabalho";
+
+/* ShellModel.swift */
+"Failed to create file: %@" = "Falha ao criar arquivo: %@";
+
+/* ShellModel.swift */
+"Failed to create folder: %@" = "Falha ao criar pasta: %@";
+
+/* ShellModel.swift */
+"A folder named \"%@\" already exists." = "Já existe uma pasta chamada “%@”.";
+
+/* ShellModel.swift */
+"A file named \"%@\" already exists." = "Já existe um arquivo chamado “%@”.";
+
+/* ShellModel.swift */
+"Failed to rename: %@" = "Falha ao renomear: %@";
+
+/* ShellModel.swift */
+"\"%1$@\" contains %2$d unsaved files. Delete anyway?" = "“%1$@” contém arquivos não salvos (%2$d). Apagar mesmo assim?";
+
+/* ShellModel.swift */
+"\"%@\" contains 1 unsaved file. Delete anyway?" = "“%@” contém 1 arquivo não salvo. Apagar mesmo assim?";
+
+/* ShellModel.swift */
+"\"%@\" has unsaved changes. Delete anyway?" = "“%@” tem alterações não salvas. Apagar mesmo assim?";
+
+/* ShellModel.swift */
+"Failed to delete: %@" = "Falha ao apagar: %@";
+
+/* ShellModel.swift; Confirmation; %1$d = unsaved count, %2$d = selected count. */
+"%1$d of %2$d selected items have unsaved changes. Delete anyway?" = "Itens selecionados com alterações não salvas: %1$d de %2$d. Apagar mesmo assim?";
+
+/* ShellModel.swift */
+"Delete %d items?" = "Apagar itens (%d)?";
+
+/* ShellModel.swift */
+"Failed to delete \"%1$@\": %2$@" = "Falha ao apagar “%1$@”: %2$@";
+
+/* ShellModel.swift */
+"Failed to duplicate: %@" = "Falha ao duplicar: %@";
+
+/* ShellModel.swift; ShellWindow.swift */
+"Heading \"#%@\" not found in this document" = "Título “#%@” não encontrado neste documento";
+
+/* ShellModel.swift */
+"Couldn't create the note: %@" = "Não foi possível criar a nota: %@";
+
+/* ShellModel.swift */
+"Couldn't create a notebook in Documents: %@" = "Não foi possível criar um caderno em Documentos: %@";
+
+/* ShellModel.swift */
+"Type a note name to create it." = "Digite o nome de uma nota para criá-la.";
+
+/* ShellModel.swift */
+"Create a new note..." = "Criar uma nova nota...";
+
+/* ShellModel.swift */
+"Create note" = "Criar nota";
+
+/* ShellModel.swift; Palette row: create a note with this file name. */
+"Create: %@" = "Criar: %@";
+
+/* ShellModel.swift; Full-text search result: "Note name  ·  line 12". */
+"line %d" = "linha %d";
+
+/* ShellModel.swift */
+"Type at least two characters to search inside your notes." = "Digite pelo menos dois caracteres para buscar nas suas notas.";
+
+/* ShellModel.swift */
+"Indexing workspace..." = "Indexando espaço de trabalho...";
+
+/* ShellModel.swift */
+"No notes contain \"%@\"." = "Nenhuma nota contém “%@”.";
+
+/* ShellModel.swift */
+"Search in all notes..." = "Buscar em todas as notas...";
+
+/* ShellModel.swift; Palette heading over full-text search results. */
+"In notes" = "Nas notas";
+
+/* ShellModel.swift */
+"No results found." = "Nenhum resultado encontrado.";
+
+/* ShellModel.swift */
+"Search..." = "Buscar...";
+
+/* ShellModel.swift; Command palette section heading when nothing is typed. */
+"Suggested" = "Sugestões";
+
+/* ShellModel.swift */
+"Results (indexing...)" = "Resultados (indexando...)";
+
+/* ShellModel.swift */
+"Results" = "Resultados";
+
+/* ShellModel.swift (command palette command) */
+"Search in All Notes" = "Buscar em Todas as Notas";
+
+/* ShellModel.swift (command palette command) */
+"Create New File" = "Criar Novo Arquivo";
+
+/* ShellModel.swift (command palette command) */
+"Open File in Compact Window" = "Abrir Arquivo em Janela Compacta";
+
+/* ShellModel.swift (command palette command) */
+"Close Current Tab" = "Fechar Aba Atual";
+
+/* ShellModel.swift (command palette command) */
+"Close All Tabs" = "Fechar Todas as Abas";
+
+/* ShellModel.swift (command palette command) */
+"Open Workspace" = "Abrir Espaço de Trabalho";
+
+/* ShellModel.swift (command palette command) */
+"Toggle Dark Mode" = "Alternar Modo Escuro";
+
+/* ShellModel.swift (command palette subtitle) */
+"App preferences" = "Preferências do app";
+
+/* ShellModel.swift (command palette subtitle: the row is a command); Command palette row subtitle: the row runs a command. */
+"Command" = "Comando";
+
+/* ShellSnapshot.swift */
+"Open a folder of notes or a single file, or start from scratch." = "Abra uma pasta de notas ou um único arquivo, ou comece do zero.";
+
+/* ShellSnapshot.swift (welcome screen button) */
+"Open Folder" = "Abrir Pasta";
+
+/* ShellSnapshot.swift (welcome screen button) */
+"Open File" = "Abrir Arquivo";
+
+/* ShellSnapshot.swift (welcome screen button) */
+"Start from Scratch" = "Começar do Zero";
+
+/* SidebarView.swift */
+"No files" = "Nenhum arquivo";
+
+/* SidebarView.swift; Sidebar: reveal more recent/pinned files. */
+"Show More" = "Mostrar Mais";
+
+/* SidebarView.swift */
+"Hide sidebar" = "Ocultar barra lateral";
+
+/* SidebarView.swift */
+"\"%@\" already exists." = "“%@” já existe.";
+
+/* SidebarView.swift */
+"Failed to move:" = "Falha ao mover:";
+
+/* SidebarView.swift (sidebar section header); Sidebar section header: pinned files. */
+"Pinned" = "Fixados";
+
+/* StarterNotebook.swift; Folder name created in ~/Documents by "Start from Scratch" (a notebook = a folder of notes). */
+"Notebook" = "Caderno";
+
+/* StarterNotebook.swift; File name of the starter note. Translate "Welcome", keep ".md". The note links to itself as [[<name without .md>]]. */
+"Welcome.md" = "Boas-vindas.md";
+
+/* Settings label (editor.font-size) */
+"Font size" = "Tamanho da fonte";
+
+/* Settings description / tooltip (editor.font-size) */
+"Font size in pixels for the editor" = "Tamanho da fonte do editor, em pixels";
+
+/* Settings label (editor.line-height) */
+"Line height" = "Altura da linha";
+
+/* Settings description / tooltip (editor.line-height) */
+"Line height multiplier for the editor" = "Multiplicador da altura da linha do editor";
+
+/* Settings label (editor.tab-size) */
+"Tab size" = "Tamanho da tabulação";
+
+/* Settings description / tooltip (editor.tab-size) */
+"Number of spaces per tab" = "Número de espaços por tabulação";
+
+/* Settings label (editor.auto-insert-daily-heading) */
+"Insert today's date heading" = "Inserir título com a data de hoje";
+
+/* Settings description / tooltip (editor.auto-insert-daily-heading) */
+"When opening a dated notebook, append a heading for today if it isn't there yet" = "Ao abrir um caderno datado, adiciona um título para hoje se ainda não existir";
+
+/* Settings label (editor.show-outline) */
+"Show outline rail" = "Mostrar barra de estrutura";
+
+/* Settings description / tooltip (editor.show-outline) */
+"The tick marks at the right edge of the editor that expand into a document outline on hover" = "As marcas na borda direita do editor que se expandem na estrutura do documento ao passar o cursor";
+
+/* Settings label (editor.show-heading-chevrons) */
+"Show heading fold arrows" = "Mostrar setas para recolher títulos";
+
+/* Settings description / tooltip (editor.show-heading-chevrons) */
+"The arrow beside each heading for collapsing its section. Headings can still be folded from the View menu when hidden" = "A seta ao lado de cada título para recolher a sua seção. Se ocultas, os títulos ainda podem ser recolhidos pelo menu Visualizar";
+
+/* Settings label (editor.jump-to-bottom-after-minutes) */
+"Jump to bottom after (minutes)" = "Ir para o fim após (minutos)";
+
+/* Settings description / tooltip (editor.jump-to-bottom-after-minutes) */
+"On returning to Flo State after this long away, jump to the end of the document. 0 disables it." = "Ao voltar ao Flo State após esse tempo ausente, vai para o fim do documento. 0 desativa.";
+
+/* Settings label (editor.heading-space-before) */
+"Space before headings" = "Espaço antes dos títulos";
+
+/* Settings description / tooltip (editor.heading-space-before) */
+"Extra vertical space above a heading" = "Espaço vertical extra acima de um título";
+
+/* Settings label (editor.heading-space-after) */
+"Space after headings" = "Espaço após os títulos";
+
+/* Settings description / tooltip (editor.heading-space-after) */
+"Extra vertical space below a heading" = "Espaço vertical extra abaixo de um título";
+
+/* Settings label (editor.subheading-color) */
+"Subheading colour" = "Cor dos subtítulos";
+
+/* Settings description / tooltip (editor.subheading-color) */
+"Colour for level 2 and 3 headings" = "Cor dos títulos de nível 2 e 3";
+
+/* Settings label (editor.paragraph-spacing) */
+"Paragraph spacing" = "Espaço entre parágrafos";
+
+/* Settings description / tooltip (editor.paragraph-spacing) */
+"Vertical space between paragraphs" = "Espaço vertical entre parágrafos";
+
+/* Settings label (editor.bullet-spacing) */
+"Bullet spacing" = "Espaço entre itens";
+
+/* Settings description / tooltip (editor.bullet-spacing) */
+"Vertical space between list items" = "Espaço vertical entre itens de lista";
+
+/* Settings description / tooltip (appearance.theme) */
+"Light or dark color schema" = "Esquema de cores claro ou escuro";
+
+/* Settings description / tooltip (appearance.sidebar-file-label) */
+"Show the document title or the filename for files in the sidebar" = "Mostrar o título do documento ou o nome do arquivo na barra lateral";
+
+/* Settings description / tooltip (appearance.sidebar-show-search) */
+"Show the Search button at the top of the sidebar" = "Mostrar o botão Buscar no topo da barra lateral";
+
+/* Settings description / tooltip (appearance.sidebar-show-recents) */
+"Show the Recents section in the sidebar" = "Mostrar a seção Recentes na barra lateral";
+
+/* Settings description / tooltip (appearance.editor-width) */
+"Editor content width mode" = "Modo de largura do conteúdo do editor";
+
+/* Settings option (appearance.editor-width); Editor width option (vs Wide). */
+"Narrow" = "Estreita";
+
+/* Settings label (fonts.editor) */
+"Editor font" = "Fonte do editor";
+
+/* Settings description / tooltip (fonts.editor) */
+"Font family and fallback stack used for document text" = "Família de fontes e alternativas usadas no texto do documento";
+
+/* Settings label (fonts.mono) */
+"Code font" = "Fonte do código";
+
+/* Settings description / tooltip (fonts.mono) */
+"Font family and fallback stack used for code" = "Família de fontes e alternativas usadas no código";
+
+/* Settings label (theme.light.preset); Settings label (theme.dark.preset) */
+"Preset" = "Predefinição";
+
+/* Settings description / tooltip (theme.light.preset) */
+"Light theme preset" = "Predefinição do tema claro";
+
+/* Settings label (theme.light.accent); Settings label (theme.dark.accent) */
+"Accent" = "Destaque";
+
+/* Settings description / tooltip (theme.light.accent) */
+"Light theme accent color" = "Cor de destaque do tema claro";
+
+/* Settings label (theme.light.background); Settings label (theme.dark.background) */
+"Background" = "Fundo";
+
+/* Settings description / tooltip (theme.light.background) */
+"Light theme background color" = "Cor de fundo do tema claro";
+
+/* Settings label (theme.light.foreground); Settings label (theme.dark.foreground) */
+"Foreground" = "Primeiro plano";
+
+/* Settings description / tooltip (theme.light.foreground) */
+"Light theme foreground color" = "Cor de primeiro plano do tema claro";
+
+/* Settings label (theme.light.heading-color); Settings label (theme.dark.heading-color) */
+"Heading colour" = "Cor dos títulos";
+
+/* Settings description / tooltip (theme.light.heading-color) */
+"Light theme colour for level 1 headings" = "Cor dos títulos de nível 1 do tema claro";
+
+/* Settings label (theme.light.translucent); Settings label (theme.dark.translucent); Theme setting: window translucency slider. */
+"Translucent" = "Translucidez";
+
+/* Settings description / tooltip (theme.light.translucent) */
+"Light theme translucency (0 = solid, 100 = max)." = "Translucidez do tema claro (0 = sólido, 100 = máx.).";
+
+/* Settings label (theme.light.contrast); Settings label (theme.dark.contrast); Theme setting: how strong borders, cards and hover backgrounds are. */
+"Contrast" = "Contraste";
+
+/* Settings description / tooltip (theme.light.contrast); Settings description / tooltip (theme.dark.contrast); Tooltip of the Contrast theme setting. */
+"alpha multiplier on borders, cards, hover bgs." = "multiplicador alfa de bordas, cartões e fundos ao passar o cursor.";
+
+/* Settings description / tooltip (theme.dark.preset) */
+"Dark theme preset" = "Predefinição do tema escuro";
+
+/* Settings description / tooltip (theme.dark.accent) */
+"Dark theme accent color" = "Cor de destaque do tema escuro";
+
+/* Settings description / tooltip (theme.dark.background) */
+"Dark theme background color" = "Cor de fundo do tema escuro";
+
+/* Settings description / tooltip (theme.dark.foreground) */
+"Dark theme foreground color" = "Cor de primeiro plano do tema escuro";
+
+/* Settings description / tooltip (theme.dark.heading-color) */
+"Dark theme colour for level 1 headings" = "Cor dos títulos de nível 1 do tema escuro";
+
+/* Settings description / tooltip (theme.dark.translucent) */
+"Dark theme translucency (0 = solid, 100 = max)." = "Translucidez do tema escuro (0 = sólido, 100 = máx.).";
+
+/* Settings label (files.associations) */
+"File associations" = "Associações de arquivo";
+
+/* Settings description / tooltip (files.associations) */
+"File patterns to include in the workspace" = "Padrões de arquivo a incluir no espaço de trabalho";
+
+/* Settings label (workspace.restore-open-files) */
+"Restore open files" = "Restaurar arquivos abertos";
+
+/* Settings description / tooltip (workspace.restore-open-files) */
+"Reopen previously open files when opening a workspace" = "Reabrir os arquivos que estavam abertos ao abrir um espaço de trabalho";
+
+/* Settings label (workspace.max-recent-workspaces) */
+"Max recent workspaces" = "Máx. de espaços recentes";
+
+/* Settings description / tooltip (workspace.max-recent-workspaces) */
+"Maximum number of recent workspaces to remember" = "Número máximo de espaços de trabalho recentes a lembrar";
+
+/* Settings label (window.restore-workspace) */
+"Restore workspace" = "Restaurar espaço de trabalho";
+
+/* Settings description / tooltip (window.restore-workspace) */
+"Automatically reopen the last workspace when the app starts" = "Reabrir automaticamente o último espaço de trabalho ao iniciar o app";
+
+/* Theme preset name; Theme preset name. */
+"Default" = "Padrão";
+
+/* Theme preset name; Theme preset name. */
+"High Contrast" = "Alto Contraste";
+
+/* Theme preset name; Theme preset name. */
+"Warm Paper" = "Papel Quente";
+
+/* Theme preset name; App / theme name: keep "Flo State" untranslated. */
+"Flo State" = "Flo State";

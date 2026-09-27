@@ -1,0 +1,902 @@
+/* Flo State UI strings. Key = English source text (base language).
+ * Generated from the sources; translations live in <lang>.lproj/Localizable.strings. */
+
+/* EditorModel.swift; TabStripView.swift; Tab title / tooltip of the + button (new empty tab). */
+"New tab" = "新規タブ";
+
+/* EditorModel.swift; ShellModel.swift (command palette command) */
+"Settings" = "設定";
+
+/* EditorModel.swift; ShellMenus.swift (menu bar); Window title of an empty tab (title case where the language uses it). */
+"New Tab" = "新規タブ";
+
+/* WorkspaceFS.swift */
+"IO error: %@" = "入出力エラー: %@";
+
+/* WorkspaceFS.swift */
+"Not found: %@" = "見つかりません: %@";
+
+/* WorkspaceFS.swift */
+"Already exists: %@" = "すでに存在します: %@";
+
+/* WorkspaceFS.swift */
+"No workspace is open" = "ワークスペースが開かれていません";
+
+/* WorkspaceFS.swift; ShellModel.swift; Default name of a new note file (".md" is appended). Use the word macOS uses for untitled documents. */
+"Untitled" = "名称未設定";
+
+/* WorkspaceFS.swift; Default name of a new folder, as in Finder. */
+"Untitled Folder" = "名称未設定フォルダ";
+
+/* WorkspaceFS.swift; Finder-style duplicate name suffix: "note copy.md", "note copy 2.md". Use the word Finder uses in this language. */
+"copy" = "のコピー";
+
+/* ContextMenu.swift (editor right-click menu); ShellMenus.swift */
+"Cut" = "カット";
+
+/* ContextMenu.swift (editor right-click menu); ShellMenus.swift */
+"Copy" = "コピー";
+
+/* ContextMenu.swift (editor right-click menu); ShellMenus.swift */
+"Paste" = "ペースト";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Paste as plain text" = "プレーンテキストとしてペースト";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Format" = "フォーマット";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Bold" = "太字";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Italic" = "斜体";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Strikethrough" = "取り消し線";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Inline code" = "インラインコード";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Insert link…" = "リンクを挿入…";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Clear formatting" = "フォーマットを消去";
+
+/* ContextMenu.swift (editor right-click menu); Editor context menu: submenu with block types; also item that turns a heading back into a normal paragraph. */
+"Paragraph" = "段落";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 1" = "見出し1";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 2" = "見出し2";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 3" = "見出し3";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 4" = "見出し4";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 5" = "見出し5";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 6" = "見出し6";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Bullet list" = "箇条書き";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Numbered list" = "番号付きリスト";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Task list" = "タスクリスト";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Blockquote" = "引用";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Code block" = "コードブロック";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Insert" = "挿入";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Link…" = "リンク…";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Table" = "表";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Horizontal rule" = "水平線";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Current date" = "現在の日付";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Current time" = "現在の時刻";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Select all" = "すべてを選択";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Open link" = "リンクを開く";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Copy link" = "リンクをコピー";
+
+/* FindOverlay.swift; Find bar: toggle/button to replace text; also the replace field placeholder. */
+"Replace" = "置換";
+
+/* FindOverlay.swift; Find bar button: Replace All (short, button). */
+"All" = "すべて";
+
+/* FindOverlay.swift; Find bar search field placeholder. */
+"Find" = "検索";
+
+/* FindOverlay.swift; Find bar counter when nothing matches (keep short, ~12 chars). */
+"No matches" = "一致なし";
+
+/* ImageResize.swift; Image right-click menu: "Image Size: Small". */
+"Image Size: %@" = "イメージサイズ: %@";
+
+/* ImageResize.swift (image size preset, used in "Image Size: %@") */
+"Small" = "小";
+
+/* ImageResize.swift (image size preset, used in "Image Size: %@") */
+"Medium" = "中";
+
+/* ImageResize.swift (image size preset, used in "Image Size: %@") */
+"Large" = "大";
+
+/* ImageResize.swift (image size preset, used in "Image Size: %@") */
+"Full Width" = "全幅";
+
+/* ImageResize.swift (image size preset, used in "Image Size: %@") */
+"Original Size" = "実際のサイズ";
+
+/* CompactHeader.swift */
+"Choose file" = "ファイルを選択";
+
+/* CompactHeader.swift; ShellMenus.swift; SidebarView.swift (sidebar section header); Sidebar section header: recently opened files. */
+"Recents" = "最近の項目";
+
+/* CompactHeader.swift */
+"No other recent files." = "ほかに最近のファイルはありません。";
+
+/* EditorArea.swift */
+"Create new note" = "新規ノートを作成";
+
+/* EditorArea.swift; ShellMenus.swift; SidebarView.swift; Sidebar search button / new-tab launcher / sidebar right-click toggle. */
+"Search" = "検索";
+
+/* EditorArea.swift; Status bar counter shown after a number: "1,234 words". Lowercase noun. */
+"words" = "語";
+
+/* EditorArea.swift; Status bar counter shown after a number: "1,234 characters". */
+"characters" = "文字";
+
+/* EditorArea.swift; Status bar counter shown after a number: "12 paragraphs". */
+"paragraphs" = "段落";
+
+/* EditorArea.swift */
+"Copy heading link" = "見出しのリンクをコピー";
+
+/* FloStateCLI.swift */
+"Command Line Tool Removed" = "コマンドラインツールを削除しました";
+
+/* FloStateCLI.swift */
+"The `flostate` command has been removed from %@." = "`flostate`コマンドを%@から削除しました。";
+
+/* FloStateCLI.swift */
+"Command Line Tool Installed" = "コマンドラインツールをインストールしました";
+
+/* FloStateCLI.swift */
+"The `flostate` command is now installed at %@." = "`flostate`コマンドを%@にインストールしました。";
+
+/* FloStateCLI.swift */
+"Run `flostate .` from any terminal to open the current folder." = "ターミナルで`flostate .`を実行すると、現在のフォルダを開けます。";
+
+/* FloStateCLI.swift */
+"Flo State Command Line Tool" = "Flo Stateコマンドラインツール";
+
+/* FloStateCLI.swift */
+"Could not remove the flostate command." = "flostateコマンドを削除できませんでした。";
+
+/* FloStateCLI.swift */
+"Could not install the flostate command." = "flostateコマンドをインストールできませんでした。";
+
+/* FloStateCLI.swift (app menu; keep `flostate` as is) */
+"Install 'flostate' Command Line Tool…" = "「flostate」コマンドラインツールをインストール…";
+
+/* FloStateCLI.swift (app menu; keep `flostate` as is) */
+"Uninstall 'flostate' Command Line Tool…" = "「flostate」コマンドラインツールをアンインストール…";
+
+/* FrontmatterPanel.swift; Placeholder in a frontmatter property name field. */
+"key" = "キー";
+
+/* FrontmatterPanel.swift; Placeholder in a frontmatter property value field. */
+"value" = "値";
+
+/* FrontmatterPanel.swift */
+"Add property" = "プロパティを追加";
+
+/* SettingsWindow.swift */
+"Match System" = "システムに合わせる";
+
+/* SettingsWindow.swift */
+"Document title" = "書類のタイトル";
+
+/* SettingsWindow.swift */
+"File name" = "ファイル名";
+
+/* SettingsWindow.swift; Editor width option (vs Narrow). */
+"Wide" = "広い";
+
+/* SettingsWindow.swift; Unit: pixels. */
+"px" = "px";
+
+/* SettingsWindow.swift; Unit: minutes (short). */
+"min" = "分";
+
+/* SettingsWindow.swift; Unit: milliseconds. */
+"ms" = "ms";
+
+/* SettingsWindow.swift; SettingsWindow.swift (Settings pane / toolbar tab); SettingsWindow.swift (Settings group label, shown with a colon) */
+"Appearance" = "外観";
+
+/* SettingsWindow.swift */
+"Default width" = "デフォルトの幅";
+
+/* SettingsWindow.swift */
+"File labels" = "ファイルのラベル";
+
+/* SettingsWindow.swift */
+"Editor width" = "エディタの幅";
+
+/* SettingsWindow.swift; ShellWindow.swift */
+"Show sidebar" = "サイドバーを表示";
+
+/* SettingsWindow.swift */
+"Show search button" = "検索ボタンを表示";
+
+/* SettingsWindow.swift */
+"Show recents" = "最近の項目を表示";
+
+/* SettingsWindow.swift; Theme preset popup: current colours match no preset. */
+"Custom" = "カスタム";
+
+/* SettingsWindow.swift */
+"Restore Defaults" = "デフォルトに戻す";
+
+/* SettingsWindow.swift; SettingsWindow.swift (Settings group label, shown with a colon); Settings option (appearance.theme); Light appearance / light theme. */
+"Light" = "ライト";
+
+/* SettingsWindow.swift; SettingsWindow.swift (Settings group label, shown with a colon); Settings option (appearance.theme); Dark appearance / dark theme. */
+"Dark" = "ダーク";
+
+/* SettingsWindow.swift (Settings pane / toolbar tab) */
+"General" = "一般";
+
+/* SettingsWindow.swift (Settings pane / toolbar tab) */
+"Editor" = "エディタ";
+
+/* SettingsWindow.swift (Settings pane / toolbar tab) */
+"Theme" = "テーマ";
+
+/* SettingsWindow.swift (Settings pane / toolbar tab) */
+"Files" = "ファイル";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"On launch" = "起動時";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Daily notes" = "デイリーノート";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Text" = "テキスト";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Spacing" = "間隔";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Headings" = "見出し";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Outline" = "アウトライン";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Sidebar" = "サイドバー";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Fonts" = "フォント";
+
+/* ShellMenus.swift; ShellWindow.swift; Context menu item (open a file) and the open-panel confirm button. */
+"Open" = "開く";
+
+/* ShellMenus.swift */
+"Open in new tab" = "新規タブで開く";
+
+/* ShellMenus.swift */
+"Failed to open in new tab: %@" = "新規タブで開けませんでした: %@";
+
+/* ShellMenus.swift */
+"Unpin" = "固定を解除";
+
+/* ShellMenus.swift */
+"Pin" = "固定";
+
+/* ShellMenus.swift */
+"Duplicate" = "複製";
+
+/* ShellMenus.swift */
+"Copy relative path" = "相対パスをコピー";
+
+/* ShellMenus.swift */
+"Copy absolute path" = "絶対パスをコピー";
+
+/* ShellMenus.swift */
+"Reveal in Finder" = "Finderに表示";
+
+/* ShellMenus.swift */
+"Rename..." = "名前を変更...";
+
+/* ShellMenus.swift; ShellWindow.swift */
+"Delete" = "削除";
+
+/* ShellMenus.swift */
+"Rename file" = "ファイル名を変更";
+
+/* ShellMenus.swift */
+"OK" = "OK";
+
+/* ShellMenus.swift; ShellWindow.swift */
+"Cancel" = "キャンセル";
+
+/* ShellMenus.swift */
+"New File" = "新規ファイル";
+
+/* ShellMenus.swift */
+"New Folder" = "新規フォルダ";
+
+/* ShellMenus.swift */
+"Copy %d relative paths" = "%d件の相対パスをコピー";
+
+/* ShellMenus.swift */
+"Copy %d absolute paths" = "%d件の絶対パスをコピー";
+
+/* ShellMenus.swift */
+"Delete %d items" = "%d項目を削除";
+
+/* ShellMenus.swift */
+"Open Folder…" = "フォルダを開く…";
+
+/* ShellMenus.swift; ShellModel.swift (command palette command) */
+"Close Workspace" = "ワークスペースを閉じる";
+
+/* ShellMenus.swift */
+"Close" = "閉じる";
+
+/* ShellMenus.swift */
+"Close others" = "ほかを閉じる";
+
+/* ShellMenus.swift */
+"Close all" = "すべてを閉じる";
+
+/* ShellMenus.swift */
+"Reveal in sidebar" = "サイドバーに表示";
+
+/* ShellMenus.swift */
+"Copy path" = "パスをコピー";
+
+/* ShellMenus.swift */
+"Words" = "語数";
+
+/* ShellMenus.swift */
+"Characters" = "文字数";
+
+/* ShellMenus.swift */
+"Paragraphs" = "段落数";
+
+/* ShellMenus.swift; App menu item (macOS standard). */
+"Settings…" = "設定…";
+
+/* ShellMenus.swift; App menu (macOS standard). */
+"Services" = "サービス";
+
+/* ShellMenus.swift */
+"Hide Others" = "ほかを非表示";
+
+/* ShellMenus.swift */
+"About %@" = "%@について";
+
+/* ShellMenus.swift */
+"Hide %@" = "%@を非表示";
+
+/* ShellMenus.swift */
+"Show All" = "すべてを表示";
+
+/* ShellMenus.swift */
+"Quit %@" = "%@を終了";
+
+/* ShellMenus.swift */
+"Redo" = "やり直す";
+
+/* ShellMenus.swift */
+"Substitutions" = "自動置換";
+
+/* ShellMenus.swift */
+"Show Substitutions" = "置換を表示";
+
+/* ShellMenus.swift */
+"Smart Copy/Paste" = "スマートコピー/ペースト";
+
+/* ShellMenus.swift */
+"Smart Quotes" = "スマート引用符";
+
+/* ShellMenus.swift */
+"Smart Dashes" = "スマートダッシュ";
+
+/* ShellMenus.swift */
+"Smart Links" = "スマートリンク";
+
+/* ShellMenus.swift */
+"Text Replacement" = "テキストの置換";
+
+/* ShellMenus.swift */
+"Undo" = "取り消す";
+
+/* ShellMenus.swift */
+"Select All" = "すべてを選択";
+
+/* ShellMenus.swift */
+"Enter Full Screen" = "フルスクリーンにする";
+
+/* ShellMenus.swift */
+"Go to Tab" = "タブに移動";
+
+/* ShellMenus.swift; Window > Go to Tab submenu item: "Tab 3". */
+"Tab %d" = "タブ%d";
+
+/* ShellMenus.swift */
+"Minimize" = "しまう";
+
+/* ShellMenus.swift */
+"Close Window" = "ウインドウを閉じる";
+
+/* ShellMenus.swift (menu bar); ShellModel.swift */
+"New Note" = "新規ノート";
+
+/* ShellMenus.swift (menu bar) */
+"Go to File…" = "ファイルに移動…";
+
+/* ShellMenus.swift (menu bar) */
+"Go to Today" = "今日に移動";
+
+/* ShellMenus.swift (menu bar) */
+"Search…" = "検索…";
+
+/* ShellMenus.swift (menu bar) */
+"Search in All Notes…" = "すべてのノートを検索…";
+
+/* ShellMenus.swift (menu bar) */
+"Close Tab" = "タブを閉じる";
+
+/* ShellMenus.swift (menu bar); ShellModel.swift (command palette command) */
+"Toggle Sidebar" = "サイドバーの表示/非表示";
+
+/* ShellMenus.swift (menu bar) */
+"Toggle Typewriter Scrolling" = "タイプライタースクロールの切り替え";
+
+/* ShellMenus.swift (menu bar) */
+"Increase Font Size" = "フォントを大きく";
+
+/* ShellMenus.swift (menu bar) */
+"Decrease Font Size" = "フォントを小さく";
+
+/* ShellMenus.swift (menu bar) */
+"Reset Font Size" = "フォントサイズをリセット";
+
+/* ShellMenus.swift (menu bar) */
+"Collapse All Headings" = "すべての見出しを折りたたむ";
+
+/* ShellMenus.swift (menu bar) */
+"Expand All Headings" = "すべての見出しを展開";
+
+/* ShellMenus.swift (menu bar) */
+"Back" = "戻る";
+
+/* ShellMenus.swift (menu bar) */
+"Forward" = "進む";
+
+/* ShellMenus.swift (menu bar) */
+"Previous File" = "前のファイル";
+
+/* ShellMenus.swift (menu bar) */
+"Next File" = "次のファイル";
+
+/* ShellMenus.swift (menu bar) */
+"Show Previous Tab" = "前のタブを表示";
+
+/* ShellMenus.swift (menu bar) */
+"Show Next Tab" = "次のタブを表示";
+
+/* ShellMenus.swift (menu bar title) */
+"File" = "ファイル";
+
+/* ShellMenus.swift (menu bar title) */
+"Edit" = "編集";
+
+/* ShellMenus.swift (menu bar title) */
+"View" = "表示";
+
+/* ShellMenus.swift (menu bar title) */
+"Window" = "ウインドウ";
+
+/* ShellMenus.swift (app menu) */
+"Check for Updates…" = "アップデートを確認…";
+
+/* ShellModel.swift */
+"Failed to save setting: %@" = "設定を保存できませんでした: %@";
+
+/* ShellModel.swift */
+"Failed to open workspace: %@" = "ワークスペースを開けませんでした: %@";
+
+/* ShellModel.swift */
+"No Workspace" = "ワークスペースなし";
+
+/* ShellModel.swift */
+"Failed to create file: %@" = "ファイルを作成できませんでした: %@";
+
+/* ShellModel.swift */
+"Failed to create folder: %@" = "フォルダを作成できませんでした: %@";
+
+/* ShellModel.swift */
+"A folder named \"%@\" already exists." = "「%@」という名前のフォルダはすでに存在します。";
+
+/* ShellModel.swift */
+"A file named \"%@\" already exists." = "「%@」という名前のファイルはすでに存在します。";
+
+/* ShellModel.swift */
+"Failed to rename: %@" = "名前を変更できませんでした: %@";
+
+/* ShellModel.swift */
+"\"%1$@\" contains %2$d unsaved files. Delete anyway?" = "「%1$@」には未保存のファイルが%2$d個あります。削除してもよろしいですか？";
+
+/* ShellModel.swift */
+"\"%@\" contains 1 unsaved file. Delete anyway?" = "「%@」には未保存のファイルが1個あります。削除してもよろしいですか？";
+
+/* ShellModel.swift */
+"\"%@\" has unsaved changes. Delete anyway?" = "「%@」には未保存の変更があります。削除してもよろしいですか？";
+
+/* ShellModel.swift */
+"Failed to delete: %@" = "削除できませんでした: %@";
+
+/* ShellModel.swift; Confirmation; %1$d = unsaved count, %2$d = selected count. */
+"%1$d of %2$d selected items have unsaved changes. Delete anyway?" = "選択した%2$d項目のうち%1$d項目に未保存の変更があります。削除してもよろしいですか？";
+
+/* ShellModel.swift */
+"Delete %d items?" = "%d項目を削除しますか？";
+
+/* ShellModel.swift */
+"Failed to delete \"%1$@\": %2$@" = "「%1$@」を削除できませんでした: %2$@";
+
+/* ShellModel.swift */
+"Failed to duplicate: %@" = "複製できませんでした: %@";
+
+/* ShellModel.swift; ShellWindow.swift */
+"Heading \"#%@\" not found in this document" = "見出し「#%@」がこの書類に見つかりません";
+
+/* ShellModel.swift */
+"Couldn't create the note: %@" = "ノートを作成できませんでした: %@";
+
+/* ShellModel.swift */
+"Couldn't create a notebook in Documents: %@" = "書類フォルダにノートブックを作成できませんでした: %@";
+
+/* ShellModel.swift */
+"Type a note name to create it." = "作成するノートの名前を入力してください。";
+
+/* ShellModel.swift */
+"Create a new note..." = "新規ノートを作成...";
+
+/* ShellModel.swift */
+"Create note" = "ノートを作成";
+
+/* ShellModel.swift; Palette row: create a note with this file name. */
+"Create: %@" = "作成: %@";
+
+/* ShellModel.swift; Full-text search result: "Note name  ·  line 12". */
+"line %d" = "%d行目";
+
+/* ShellModel.swift */
+"Type at least two characters to search inside your notes." = "ノート内を検索するには2文字以上入力してください。";
+
+/* ShellModel.swift */
+"Indexing workspace..." = "ワークスペースをインデックス中...";
+
+/* ShellModel.swift */
+"No notes contain \"%@\"." = "「%@」を含むノートはありません。";
+
+/* ShellModel.swift */
+"Search in all notes..." = "すべてのノートを検索...";
+
+/* ShellModel.swift; Palette heading over full-text search results. */
+"In notes" = "ノート内";
+
+/* ShellModel.swift */
+"No results found." = "結果が見つかりません。";
+
+/* ShellModel.swift */
+"Search..." = "検索...";
+
+/* ShellModel.swift; Command palette section heading when nothing is typed. */
+"Suggested" = "おすすめ";
+
+/* ShellModel.swift */
+"Results (indexing...)" = "結果（インデックス中...）";
+
+/* ShellModel.swift */
+"Results" = "結果";
+
+/* ShellModel.swift (command palette command) */
+"Search in All Notes" = "すべてのノートを検索";
+
+/* ShellModel.swift (command palette command) */
+"Create New File" = "新規ファイルを作成";
+
+/* ShellModel.swift (command palette command) */
+"Open File in Compact Window" = "ファイルをコンパクトウインドウで開く";
+
+/* ShellModel.swift (command palette command) */
+"Close Current Tab" = "現在のタブを閉じる";
+
+/* ShellModel.swift (command palette command) */
+"Close All Tabs" = "すべてのタブを閉じる";
+
+/* ShellModel.swift (command palette command) */
+"Open Workspace" = "ワークスペースを開く";
+
+/* ShellModel.swift (command palette command) */
+"Toggle Dark Mode" = "ダークモードの切り替え";
+
+/* ShellModel.swift (command palette subtitle) */
+"App preferences" = "アプリの設定";
+
+/* ShellModel.swift (command palette subtitle: the row is a command); Command palette row subtitle: the row runs a command. */
+"Command" = "コマンド";
+
+/* ShellSnapshot.swift */
+"Open a folder of notes or a single file, or start from scratch." = "ノートのフォルダまたはファイルを開くか、新しく始めましょう。";
+
+/* ShellSnapshot.swift (welcome screen button) */
+"Open Folder" = "フォルダを開く";
+
+/* ShellSnapshot.swift (welcome screen button) */
+"Open File" = "ファイルを開く";
+
+/* ShellSnapshot.swift (welcome screen button) */
+"Start from Scratch" = "新しく始める";
+
+/* SidebarView.swift */
+"No files" = "ファイルなし";
+
+/* SidebarView.swift; Sidebar: reveal more recent/pinned files. */
+"Show More" = "さらに表示";
+
+/* SidebarView.swift */
+"Hide sidebar" = "サイドバーを非表示";
+
+/* SidebarView.swift */
+"\"%@\" already exists." = "「%@」はすでに存在します。";
+
+/* SidebarView.swift */
+"Failed to move:" = "移動できませんでした:";
+
+/* SidebarView.swift (sidebar section header); Sidebar section header: pinned files. */
+"Pinned" = "固定";
+
+/* StarterNotebook.swift; Folder name created in ~/Documents by "Start from Scratch" (a notebook = a folder of notes). */
+"Notebook" = "ノートブック";
+
+/* StarterNotebook.swift; File name of the starter note. Translate "Welcome", keep ".md". The note links to itself as [[<name without .md>]]. */
+"Welcome.md" = "ようこそ.md";
+
+/* Settings label (editor.font-size) */
+"Font size" = "フォントサイズ";
+
+/* Settings description / tooltip (editor.font-size) */
+"Font size in pixels for the editor" = "エディタのフォントサイズ（ピクセル）";
+
+/* Settings label (editor.line-height) */
+"Line height" = "行の高さ";
+
+/* Settings description / tooltip (editor.line-height) */
+"Line height multiplier for the editor" = "エディタの行の高さの倍率";
+
+/* Settings label (editor.tab-size) */
+"Tab size" = "タブのサイズ";
+
+/* Settings description / tooltip (editor.tab-size) */
+"Number of spaces per tab" = "タブあたりのスペース数";
+
+/* Settings label (editor.auto-insert-daily-heading) */
+"Insert today's date heading" = "今日の日付の見出しを挿入";
+
+/* Settings description / tooltip (editor.auto-insert-daily-heading) */
+"When opening a dated notebook, append a heading for today if it isn't there yet" = "日付入りのノートを開いたとき、今日の見出しがなければ末尾に追加します";
+
+/* Settings label (editor.show-outline) */
+"Show outline rail" = "アウトラインレールを表示";
+
+/* Settings description / tooltip (editor.show-outline) */
+"The tick marks at the right edge of the editor that expand into a document outline on hover" = "エディタ右端の目盛り。ポインタを重ねると書類のアウトラインが開きます";
+
+/* Settings label (editor.show-heading-chevrons) */
+"Show heading fold arrows" = "見出しの折りたたみ矢印を表示";
+
+/* Settings description / tooltip (editor.show-heading-chevrons) */
+"The arrow beside each heading for collapsing its section. Headings can still be folded from the View menu when hidden" = "各見出しの横にある、セクションを折りたたむための矢印。非表示にしても「表示」メニューから見出しを折りたためます";
+
+/* Settings label (editor.jump-to-bottom-after-minutes) */
+"Jump to bottom after (minutes)" = "末尾に移動するまでの時間（分）";
+
+/* Settings description / tooltip (editor.jump-to-bottom-after-minutes) */
+"On returning to Flo State after this long away, jump to the end of the document. 0 disables it." = "この時間以上離れてからFlo Stateに戻ると、書類の末尾に移動します。0でオフになります。";
+
+/* Settings label (editor.heading-space-before) */
+"Space before headings" = "見出しの前の間隔";
+
+/* Settings description / tooltip (editor.heading-space-before) */
+"Extra vertical space above a heading" = "見出しの上に追加する縦の間隔";
+
+/* Settings label (editor.heading-space-after) */
+"Space after headings" = "見出しの後の間隔";
+
+/* Settings description / tooltip (editor.heading-space-after) */
+"Extra vertical space below a heading" = "見出しの下に追加する縦の間隔";
+
+/* Settings label (editor.subheading-color) */
+"Subheading colour" = "小見出しの色";
+
+/* Settings description / tooltip (editor.subheading-color) */
+"Colour for level 2 and 3 headings" = "レベル2と3の見出しの色";
+
+/* Settings label (editor.paragraph-spacing) */
+"Paragraph spacing" = "段落の間隔";
+
+/* Settings description / tooltip (editor.paragraph-spacing) */
+"Vertical space between paragraphs" = "段落間の縦の間隔";
+
+/* Settings label (editor.bullet-spacing) */
+"Bullet spacing" = "箇条書きの間隔";
+
+/* Settings description / tooltip (editor.bullet-spacing) */
+"Vertical space between list items" = "リスト項目間の縦の間隔";
+
+/* Settings description / tooltip (appearance.theme) */
+"Light or dark color schema" = "ライトまたはダークのカラースキーム";
+
+/* Settings description / tooltip (appearance.sidebar-file-label) */
+"Show the document title or the filename for files in the sidebar" = "サイドバーのファイルに書類のタイトルとファイル名のどちらを表示するか";
+
+/* Settings description / tooltip (appearance.sidebar-show-search) */
+"Show the Search button at the top of the sidebar" = "サイドバーの上部に検索ボタンを表示";
+
+/* Settings description / tooltip (appearance.sidebar-show-recents) */
+"Show the Recents section in the sidebar" = "サイドバーに「最近の項目」セクションを表示";
+
+/* Settings description / tooltip (appearance.editor-width) */
+"Editor content width mode" = "エディタの内容の幅";
+
+/* Settings option (appearance.editor-width); Editor width option (vs Wide). */
+"Narrow" = "狭い";
+
+/* Settings label (fonts.editor) */
+"Editor font" = "エディタのフォント";
+
+/* Settings description / tooltip (fonts.editor) */
+"Font family and fallback stack used for document text" = "書類のテキストに使うフォントファミリーと代替フォント";
+
+/* Settings label (fonts.mono) */
+"Code font" = "コードのフォント";
+
+/* Settings description / tooltip (fonts.mono) */
+"Font family and fallback stack used for code" = "コードに使うフォントファミリーと代替フォント";
+
+/* Settings label (theme.light.preset); Settings label (theme.dark.preset) */
+"Preset" = "プリセット";
+
+/* Settings description / tooltip (theme.light.preset) */
+"Light theme preset" = "ライトテーマのプリセット";
+
+/* Settings label (theme.light.accent); Settings label (theme.dark.accent) */
+"Accent" = "アクセント";
+
+/* Settings description / tooltip (theme.light.accent) */
+"Light theme accent color" = "ライトテーマのアクセントカラー";
+
+/* Settings label (theme.light.background); Settings label (theme.dark.background) */
+"Background" = "背景";
+
+/* Settings description / tooltip (theme.light.background) */
+"Light theme background color" = "ライトテーマの背景色";
+
+/* Settings label (theme.light.foreground); Settings label (theme.dark.foreground) */
+"Foreground" = "前景";
+
+/* Settings description / tooltip (theme.light.foreground) */
+"Light theme foreground color" = "ライトテーマの前景色";
+
+/* Settings label (theme.light.heading-color); Settings label (theme.dark.heading-color) */
+"Heading colour" = "見出しの色";
+
+/* Settings description / tooltip (theme.light.heading-color) */
+"Light theme colour for level 1 headings" = "ライトテーマのレベル1見出しの色";
+
+/* Settings label (theme.light.translucent); Settings label (theme.dark.translucent); Theme setting: window translucency slider. */
+"Translucent" = "透明度";
+
+/* Settings description / tooltip (theme.light.translucent) */
+"Light theme translucency (0 = solid, 100 = max)." = "ライトテーマの透明度（0 = 不透明、100 = 最大）。";
+
+/* Settings label (theme.light.contrast); Settings label (theme.dark.contrast); Theme setting: how strong borders, cards and hover backgrounds are. */
+"Contrast" = "コントラスト";
+
+/* Settings description / tooltip (theme.light.contrast); Settings description / tooltip (theme.dark.contrast); Tooltip of the Contrast theme setting. */
+"alpha multiplier on borders, cards, hover bgs." = "枠線、カード、ホバー背景の不透明度の倍率。";
+
+/* Settings description / tooltip (theme.dark.preset) */
+"Dark theme preset" = "ダークテーマのプリセット";
+
+/* Settings description / tooltip (theme.dark.accent) */
+"Dark theme accent color" = "ダークテーマのアクセントカラー";
+
+/* Settings description / tooltip (theme.dark.background) */
+"Dark theme background color" = "ダークテーマの背景色";
+
+/* Settings description / tooltip (theme.dark.foreground) */
+"Dark theme foreground color" = "ダークテーマの前景色";
+
+/* Settings description / tooltip (theme.dark.heading-color) */
+"Dark theme colour for level 1 headings" = "ダークテーマのレベル1見出しの色";
+
+/* Settings description / tooltip (theme.dark.translucent) */
+"Dark theme translucency (0 = solid, 100 = max)." = "ダークテーマの透明度（0 = 不透明、100 = 最大）。";
+
+/* Settings label (files.associations) */
+"File associations" = "ファイルの関連付け";
+
+/* Settings description / tooltip (files.associations) */
+"File patterns to include in the workspace" = "ワークスペースに含めるファイルのパターン";
+
+/* Settings label (workspace.restore-open-files) */
+"Restore open files" = "開いていたファイルを復元";
+
+/* Settings description / tooltip (workspace.restore-open-files) */
+"Reopen previously open files when opening a workspace" = "ワークスペースを開くときに、前回開いていたファイルを再度開きます";
+
+/* Settings label (workspace.max-recent-workspaces) */
+"Max recent workspaces" = "最近のワークスペースの最大数";
+
+/* Settings description / tooltip (workspace.max-recent-workspaces) */
+"Maximum number of recent workspaces to remember" = "記憶する最近のワークスペースの最大数";
+
+/* Settings label (window.restore-workspace) */
+"Restore workspace" = "ワークスペースを復元";
+
+/* Settings description / tooltip (window.restore-workspace) */
+"Automatically reopen the last workspace when the app starts" = "アプリの起動時に最後のワークスペースを自動的に再度開きます";
+
+/* Theme preset name; Theme preset name. */
+"Default" = "デフォルト";
+
+/* Theme preset name; Theme preset name. */
+"High Contrast" = "ハイコントラスト";
+
+/* Theme preset name; Theme preset name. */
+"Warm Paper" = "ウォームペーパー";
+
+/* Theme preset name; App / theme name: keep "Flo State" untranslated. */
+"Flo State" = "Flo State";

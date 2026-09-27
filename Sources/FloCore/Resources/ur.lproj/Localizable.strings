@@ -1,0 +1,902 @@
+/* Flo State UI strings. Key = English source text (base language).
+ * Generated from the sources; translations live in <lang>.lproj/Localizable.strings. */
+
+/* EditorModel.swift; TabStripView.swift; Tab title / tooltip of the + button (new empty tab). */
+"New tab" = "نیا ٹیب";
+
+/* EditorModel.swift; ShellModel.swift (command palette command) */
+"Settings" = "سیٹنگز";
+
+/* EditorModel.swift; ShellMenus.swift (menu bar); Window title of an empty tab (title case where the language uses it). */
+"New Tab" = "نیا ٹیب";
+
+/* WorkspaceFS.swift */
+"IO error: %@" = "IO خرابی: %@";
+
+/* WorkspaceFS.swift */
+"Not found: %@" = "نہیں ملا: %@";
+
+/* WorkspaceFS.swift */
+"Already exists: %@" = "پہلے سے موجود ہے: %@";
+
+/* WorkspaceFS.swift */
+"No workspace is open" = "کوئی ورک اسپیس کھلی نہیں ہے";
+
+/* WorkspaceFS.swift; ShellModel.swift; Default name of a new note file (".md" is appended). Use the word macOS uses for untitled documents. */
+"Untitled" = "بلا عنوان";
+
+/* WorkspaceFS.swift; Default name of a new folder, as in Finder. */
+"Untitled Folder" = "بلا عنوان فولڈر";
+
+/* WorkspaceFS.swift; Finder-style duplicate name suffix: "note copy.md", "note copy 2.md". Use the word Finder uses in this language. */
+"copy" = "کاپی";
+
+/* ContextMenu.swift (editor right-click menu); ShellMenus.swift */
+"Cut" = "کاٹیں";
+
+/* ContextMenu.swift (editor right-click menu); ShellMenus.swift */
+"Copy" = "کاپی کریں";
+
+/* ContextMenu.swift (editor right-click menu); ShellMenus.swift */
+"Paste" = "پیسٹ کریں";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Paste as plain text" = "سادہ متن کے طور پر پیسٹ کریں";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Format" = "فارمیٹ";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Bold" = "بولڈ";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Italic" = "اٹالک";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Strikethrough" = "خط تنسیخ";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Inline code" = "ان لائن کوڈ";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Insert link…" = "لنک داخل کریں…";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Clear formatting" = "فارمیٹنگ صاف کریں";
+
+/* ContextMenu.swift (editor right-click menu); Editor context menu: submenu with block types; also item that turns a heading back into a normal paragraph. */
+"Paragraph" = "پیراگراف";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 1" = "سرخی 1";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 2" = "سرخی 2";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 3" = "سرخی 3";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 4" = "سرخی 4";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 5" = "سرخی 5";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Heading 6" = "سرخی 6";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Bullet list" = "بلٹ فہرست";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Numbered list" = "نمبر والی فہرست";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Task list" = "کاموں کی فہرست";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Blockquote" = "اقتباس";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Code block" = "کوڈ بلاک";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Insert" = "داخل کریں";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Link…" = "لنک…";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Table" = "ٹیبل";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Horizontal rule" = "افقی لکیر";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Current date" = "موجودہ تاریخ";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Current time" = "موجودہ وقت";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Select all" = "سبھی منتخب کریں";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Open link" = "لنک کھولیں";
+
+/* ContextMenu.swift (editor right-click menu) */
+"Copy link" = "لنک کاپی کریں";
+
+/* FindOverlay.swift; Find bar: toggle/button to replace text; also the replace field placeholder. */
+"Replace" = "بدلیں";
+
+/* FindOverlay.swift; Find bar button: Replace All (short, button). */
+"All" = "سبھی";
+
+/* FindOverlay.swift; Find bar search field placeholder. */
+"Find" = "تلاش کریں";
+
+/* FindOverlay.swift; Find bar counter when nothing matches (keep short, ~12 chars). */
+"No matches" = "کوئی میچ نہیں";
+
+/* ImageResize.swift; Image right-click menu: "Image Size: Small". */
+"Image Size: %@" = "تصویر کا سائز: %@";
+
+/* ImageResize.swift (image size preset, used in "Image Size: %@") */
+"Small" = "چھوٹا";
+
+/* ImageResize.swift (image size preset, used in "Image Size: %@") */
+"Medium" = "درمیانہ";
+
+/* ImageResize.swift (image size preset, used in "Image Size: %@") */
+"Large" = "بڑا";
+
+/* ImageResize.swift (image size preset, used in "Image Size: %@") */
+"Full Width" = "پوری چوڑائی";
+
+/* ImageResize.swift (image size preset, used in "Image Size: %@") */
+"Original Size" = "اصل سائز";
+
+/* CompactHeader.swift */
+"Choose file" = "فائل منتخب کریں";
+
+/* CompactHeader.swift; ShellMenus.swift; SidebarView.swift (sidebar section header); Sidebar section header: recently opened files. */
+"Recents" = "حالیہ";
+
+/* CompactHeader.swift */
+"No other recent files." = "کوئی اور حالیہ فائل نہیں۔";
+
+/* EditorArea.swift */
+"Create new note" = "نیا نوٹ بنائیں";
+
+/* EditorArea.swift; ShellMenus.swift; SidebarView.swift; Sidebar search button / new-tab launcher / sidebar right-click toggle. */
+"Search" = "تلاش";
+
+/* EditorArea.swift; Status bar counter shown after a number: "1,234 words". Lowercase noun. */
+"words" = "الفاظ";
+
+/* EditorArea.swift; Status bar counter shown after a number: "1,234 characters". */
+"characters" = "حروف";
+
+/* EditorArea.swift; Status bar counter shown after a number: "12 paragraphs". */
+"paragraphs" = "پیراگراف";
+
+/* EditorArea.swift */
+"Copy heading link" = "سرخی کا لنک کاپی کریں";
+
+/* FloStateCLI.swift */
+"Command Line Tool Removed" = "کمانڈ لائن ٹول ہٹا دیا گیا";
+
+/* FloStateCLI.swift */
+"The `flostate` command has been removed from %@." = "`flostate` کمانڈ %@ سے ہٹا دی گئی ہے۔";
+
+/* FloStateCLI.swift */
+"Command Line Tool Installed" = "کمانڈ لائن ٹول انسٹال ہو گیا";
+
+/* FloStateCLI.swift */
+"The `flostate` command is now installed at %@." = "`flostate` کمانڈ اب %@ پر انسٹال ہے۔";
+
+/* FloStateCLI.swift */
+"Run `flostate .` from any terminal to open the current folder." = "موجودہ فولڈر کھولنے کے لیے کسی بھی ٹرمینل سے `flostate .` چلائیں۔";
+
+/* FloStateCLI.swift */
+"Flo State Command Line Tool" = "Flo State کمانڈ لائن ٹول";
+
+/* FloStateCLI.swift */
+"Could not remove the flostate command." = "flostate کمانڈ ہٹائی نہیں جا سکی۔";
+
+/* FloStateCLI.swift */
+"Could not install the flostate command." = "flostate کمانڈ انسٹال نہیں ہو سکی۔";
+
+/* FloStateCLI.swift (app menu; keep `flostate` as is) */
+"Install 'flostate' Command Line Tool…" = "‘flostate’ کمانڈ لائن ٹول انسٹال کریں…";
+
+/* FloStateCLI.swift (app menu; keep `flostate` as is) */
+"Uninstall 'flostate' Command Line Tool…" = "‘flostate’ کمانڈ لائن ٹول ان انسٹال کریں…";
+
+/* FrontmatterPanel.swift; Placeholder in a frontmatter property name field. */
+"key" = "کلید";
+
+/* FrontmatterPanel.swift; Placeholder in a frontmatter property value field. */
+"value" = "قدر";
+
+/* FrontmatterPanel.swift */
+"Add property" = "پراپرٹی شامل کریں";
+
+/* SettingsWindow.swift */
+"Match System" = "سسٹم کے مطابق";
+
+/* SettingsWindow.swift */
+"Document title" = "دستاویز کا عنوان";
+
+/* SettingsWindow.swift */
+"File name" = "فائل کا نام";
+
+/* SettingsWindow.swift; Editor width option (vs Narrow). */
+"Wide" = "چوڑا";
+
+/* SettingsWindow.swift; Unit: pixels. */
+"px" = "px";
+
+/* SettingsWindow.swift; Unit: minutes (short). */
+"min" = "منٹ";
+
+/* SettingsWindow.swift; Unit: milliseconds. */
+"ms" = "ms";
+
+/* SettingsWindow.swift; SettingsWindow.swift (Settings pane / toolbar tab); SettingsWindow.swift (Settings group label, shown with a colon) */
+"Appearance" = "ظاہری شکل";
+
+/* SettingsWindow.swift */
+"Default width" = "ڈیفالٹ چوڑائی";
+
+/* SettingsWindow.swift */
+"File labels" = "فائل لیبلز";
+
+/* SettingsWindow.swift */
+"Editor width" = "ایڈیٹر کی چوڑائی";
+
+/* SettingsWindow.swift; ShellWindow.swift */
+"Show sidebar" = "سائڈبار دکھائیں";
+
+/* SettingsWindow.swift */
+"Show search button" = "تلاش کا بٹن دکھائیں";
+
+/* SettingsWindow.swift */
+"Show recents" = "حالیہ دکھائیں";
+
+/* SettingsWindow.swift; Theme preset popup: current colours match no preset. */
+"Custom" = "حسب ضرورت";
+
+/* SettingsWindow.swift */
+"Restore Defaults" = "ڈیفالٹس بحال کریں";
+
+/* SettingsWindow.swift; SettingsWindow.swift (Settings group label, shown with a colon); Settings option (appearance.theme); Light appearance / light theme. */
+"Light" = "روشن";
+
+/* SettingsWindow.swift; SettingsWindow.swift (Settings group label, shown with a colon); Settings option (appearance.theme); Dark appearance / dark theme. */
+"Dark" = "تاریک";
+
+/* SettingsWindow.swift (Settings pane / toolbar tab) */
+"General" = "عمومی";
+
+/* SettingsWindow.swift (Settings pane / toolbar tab) */
+"Editor" = "ایڈیٹر";
+
+/* SettingsWindow.swift (Settings pane / toolbar tab) */
+"Theme" = "تھیم";
+
+/* SettingsWindow.swift (Settings pane / toolbar tab) */
+"Files" = "فائلیں";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"On launch" = "لانچ پر";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Daily notes" = "روزانہ نوٹس";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Text" = "متن";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Spacing" = "فاصلہ";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Headings" = "سرخیاں";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Outline" = "خاکہ";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Sidebar" = "سائڈبار";
+
+/* SettingsWindow.swift (Settings group label, shown with a colon) */
+"Fonts" = "فونٹس";
+
+/* ShellMenus.swift; ShellWindow.swift; Context menu item (open a file) and the open-panel confirm button. */
+"Open" = "کھولیں";
+
+/* ShellMenus.swift */
+"Open in new tab" = "نئے ٹیب میں کھولیں";
+
+/* ShellMenus.swift */
+"Failed to open in new tab: %@" = "نئے ٹیب میں کھولنا ناکام: %@";
+
+/* ShellMenus.swift */
+"Unpin" = "ان پن کریں";
+
+/* ShellMenus.swift */
+"Pin" = "پن کریں";
+
+/* ShellMenus.swift */
+"Duplicate" = "ڈپلیکیٹ بنائیں";
+
+/* ShellMenus.swift */
+"Copy relative path" = "متعلقہ پاتھ کاپی کریں";
+
+/* ShellMenus.swift */
+"Copy absolute path" = "مکمل پاتھ کاپی کریں";
+
+/* ShellMenus.swift */
+"Reveal in Finder" = "Finder میں دکھائیں";
+
+/* ShellMenus.swift */
+"Rename..." = "نام بدلیں...";
+
+/* ShellMenus.swift; ShellWindow.swift */
+"Delete" = "حذف کریں";
+
+/* ShellMenus.swift */
+"Rename file" = "فائل کا نام بدلیں";
+
+/* ShellMenus.swift */
+"OK" = "ٹھیک ہے";
+
+/* ShellMenus.swift; ShellWindow.swift */
+"Cancel" = "منسوخ کریں";
+
+/* ShellMenus.swift */
+"New File" = "نئی فائل";
+
+/* ShellMenus.swift */
+"New Folder" = "نیا فولڈر";
+
+/* ShellMenus.swift */
+"Copy %d relative paths" = "متعلقہ پاتھ کاپی کریں (%d)";
+
+/* ShellMenus.swift */
+"Copy %d absolute paths" = "مکمل پاتھ کاپی کریں (%d)";
+
+/* ShellMenus.swift */
+"Delete %d items" = "آئٹمز حذف کریں (%d)";
+
+/* ShellMenus.swift */
+"Open Folder…" = "فولڈر کھولیں…";
+
+/* ShellMenus.swift; ShellModel.swift (command palette command) */
+"Close Workspace" = "ورک اسپیس بند کریں";
+
+/* ShellMenus.swift */
+"Close" = "بند کریں";
+
+/* ShellMenus.swift */
+"Close others" = "دیگر بند کریں";
+
+/* ShellMenus.swift */
+"Close all" = "سبھی بند کریں";
+
+/* ShellMenus.swift */
+"Reveal in sidebar" = "سائڈبار میں دکھائیں";
+
+/* ShellMenus.swift */
+"Copy path" = "پاتھ کاپی کریں";
+
+/* ShellMenus.swift */
+"Words" = "الفاظ";
+
+/* ShellMenus.swift */
+"Characters" = "حروف";
+
+/* ShellMenus.swift */
+"Paragraphs" = "پیراگراف";
+
+/* ShellMenus.swift; App menu item (macOS standard). */
+"Settings…" = "سیٹنگز…";
+
+/* ShellMenus.swift; App menu (macOS standard). */
+"Services" = "خدمات";
+
+/* ShellMenus.swift */
+"Hide Others" = "دیگر کو چھپائیں";
+
+/* ShellMenus.swift */
+"About %@" = "%@ کے بارے میں";
+
+/* ShellMenus.swift */
+"Hide %@" = "%@ چھپائیں";
+
+/* ShellMenus.swift */
+"Show All" = "سبھی دکھائیں";
+
+/* ShellMenus.swift */
+"Quit %@" = "%@ سے باہر نکلیں";
+
+/* ShellMenus.swift */
+"Redo" = "دوبارہ کریں";
+
+/* ShellMenus.swift */
+"Substitutions" = "متبادلات";
+
+/* ShellMenus.swift */
+"Show Substitutions" = "متبادلات دکھائیں";
+
+/* ShellMenus.swift */
+"Smart Copy/Paste" = "اسمارٹ کاپی/پیسٹ";
+
+/* ShellMenus.swift */
+"Smart Quotes" = "اسمارٹ کوٹیشنز";
+
+/* ShellMenus.swift */
+"Smart Dashes" = "اسمارٹ ڈیشز";
+
+/* ShellMenus.swift */
+"Smart Links" = "اسمارٹ لنکس";
+
+/* ShellMenus.swift */
+"Text Replacement" = "متن کا متبادل";
+
+/* ShellMenus.swift */
+"Undo" = "کالعدم کریں";
+
+/* ShellMenus.swift */
+"Select All" = "سبھی منتخب کریں";
+
+/* ShellMenus.swift */
+"Enter Full Screen" = "پوری اسکرین میں جائیں";
+
+/* ShellMenus.swift */
+"Go to Tab" = "ٹیب پر جائیں";
+
+/* ShellMenus.swift; Window > Go to Tab submenu item: "Tab 3". */
+"Tab %d" = "ٹیب %d";
+
+/* ShellMenus.swift */
+"Minimize" = "چھوٹا کریں";
+
+/* ShellMenus.swift */
+"Close Window" = "ونڈو بند کریں";
+
+/* ShellMenus.swift (menu bar); ShellModel.swift */
+"New Note" = "نیا نوٹ";
+
+/* ShellMenus.swift (menu bar) */
+"Go to File…" = "فائل پر جائیں…";
+
+/* ShellMenus.swift (menu bar) */
+"Go to Today" = "آج پر جائیں";
+
+/* ShellMenus.swift (menu bar) */
+"Search…" = "تلاش کریں…";
+
+/* ShellMenus.swift (menu bar) */
+"Search in All Notes…" = "تمام نوٹس میں تلاش کریں…";
+
+/* ShellMenus.swift (menu bar) */
+"Close Tab" = "ٹیب بند کریں";
+
+/* ShellMenus.swift (menu bar); ShellModel.swift (command palette command) */
+"Toggle Sidebar" = "سائڈبار ٹوگل کریں";
+
+/* ShellMenus.swift (menu bar) */
+"Toggle Typewriter Scrolling" = "ٹائپ رائٹر اسکرولنگ ٹوگل کریں";
+
+/* ShellMenus.swift (menu bar) */
+"Increase Font Size" = "فونٹ سائز بڑھائیں";
+
+/* ShellMenus.swift (menu bar) */
+"Decrease Font Size" = "فونٹ سائز گھٹائیں";
+
+/* ShellMenus.swift (menu bar) */
+"Reset Font Size" = "فونٹ سائز ری سیٹ کریں";
+
+/* ShellMenus.swift (menu bar) */
+"Collapse All Headings" = "تمام سرخیاں سمیٹیں";
+
+/* ShellMenus.swift (menu bar) */
+"Expand All Headings" = "تمام سرخیاں پھیلائیں";
+
+/* ShellMenus.swift (menu bar) */
+"Back" = "پیچھے";
+
+/* ShellMenus.swift (menu bar) */
+"Forward" = "آگے";
+
+/* ShellMenus.swift (menu bar) */
+"Previous File" = "پچھلی فائل";
+
+/* ShellMenus.swift (menu bar) */
+"Next File" = "اگلی فائل";
+
+/* ShellMenus.swift (menu bar) */
+"Show Previous Tab" = "پچھلا ٹیب دکھائیں";
+
+/* ShellMenus.swift (menu bar) */
+"Show Next Tab" = "اگلا ٹیب دکھائیں";
+
+/* ShellMenus.swift (menu bar title) */
+"File" = "فائل";
+
+/* ShellMenus.swift (menu bar title) */
+"Edit" = "ترمیم";
+
+/* ShellMenus.swift (menu bar title) */
+"View" = "منظر";
+
+/* ShellMenus.swift (menu bar title) */
+"Window" = "ونڈو";
+
+/* ShellMenus.swift (app menu) */
+"Check for Updates…" = "اپ ڈیٹس چیک کریں…";
+
+/* ShellModel.swift */
+"Failed to save setting: %@" = "سیٹنگ محفوظ کرنا ناکام: %@";
+
+/* ShellModel.swift */
+"Failed to open workspace: %@" = "ورک اسپیس کھولنا ناکام: %@";
+
+/* ShellModel.swift */
+"No Workspace" = "کوئی ورک اسپیس نہیں";
+
+/* ShellModel.swift */
+"Failed to create file: %@" = "فائل بنانا ناکام: %@";
+
+/* ShellModel.swift */
+"Failed to create folder: %@" = "فولڈر بنانا ناکام: %@";
+
+/* ShellModel.swift */
+"A folder named \"%@\" already exists." = "“%@” نام کا فولڈر پہلے سے موجود ہے۔";
+
+/* ShellModel.swift */
+"A file named \"%@\" already exists." = "“%@” نام کی فائل پہلے سے موجود ہے۔";
+
+/* ShellModel.swift */
+"Failed to rename: %@" = "نام بدلنا ناکام: %@";
+
+/* ShellModel.swift */
+"\"%1$@\" contains %2$d unsaved files. Delete anyway?" = "“%1$@” میں غیر محفوظ فائلیں ہیں (%2$d)۔ پھر بھی حذف کریں؟";
+
+/* ShellModel.swift */
+"\"%@\" contains 1 unsaved file. Delete anyway?" = "“%@” میں 1 غیر محفوظ فائل ہے۔ پھر بھی حذف کریں؟";
+
+/* ShellModel.swift */
+"\"%@\" has unsaved changes. Delete anyway?" = "“%@” میں غیر محفوظ تبدیلیاں ہیں۔ پھر بھی حذف کریں؟";
+
+/* ShellModel.swift */
+"Failed to delete: %@" = "حذف کرنا ناکام: %@";
+
+/* ShellModel.swift; Confirmation; %1$d = unsaved count, %2$d = selected count. */
+"%1$d of %2$d selected items have unsaved changes. Delete anyway?" = "منتخب کردہ %2$d آئٹمز میں سے %1$d میں غیر محفوظ تبدیلیاں ہیں۔ پھر بھی حذف کریں؟";
+
+/* ShellModel.swift */
+"Delete %d items?" = "آئٹمز حذف کریں (%d)؟";
+
+/* ShellModel.swift */
+"Failed to delete \"%1$@\": %2$@" = "“%1$@” حذف کرنا ناکام: %2$@";
+
+/* ShellModel.swift */
+"Failed to duplicate: %@" = "ڈپلیکیٹ بنانا ناکام: %@";
+
+/* ShellModel.swift; ShellWindow.swift */
+"Heading \"#%@\" not found in this document" = "اس دستاویز میں سرخی “#%@” نہیں ملی";
+
+/* ShellModel.swift */
+"Couldn't create the note: %@" = "نوٹ نہیں بن سکا: %@";
+
+/* ShellModel.swift */
+"Couldn't create a notebook in Documents: %@" = "Documents میں نوٹ بک نہیں بن سکی: %@";
+
+/* ShellModel.swift */
+"Type a note name to create it." = "نوٹ بنانے کے لیے اس کا نام لکھیں۔";
+
+/* ShellModel.swift */
+"Create a new note..." = "نیا نوٹ بنائیں...";
+
+/* ShellModel.swift */
+"Create note" = "نوٹ بنائیں";
+
+/* ShellModel.swift; Palette row: create a note with this file name. */
+"Create: %@" = "بنائیں: %@";
+
+/* ShellModel.swift; Full-text search result: "Note name  ·  line 12". */
+"line %d" = "لائن %d";
+
+/* ShellModel.swift */
+"Type at least two characters to search inside your notes." = "اپنے نوٹس میں تلاش کے لیے کم از کم دو حروف لکھیں۔";
+
+/* ShellModel.swift */
+"Indexing workspace..." = "ورک اسپیس کی انڈیکسنگ ہو رہی ہے...";
+
+/* ShellModel.swift */
+"No notes contain \"%@\"." = "کسی نوٹ میں “%@” نہیں ہے۔";
+
+/* ShellModel.swift */
+"Search in all notes..." = "تمام نوٹس میں تلاش کریں...";
+
+/* ShellModel.swift; Palette heading over full-text search results. */
+"In notes" = "نوٹس میں";
+
+/* ShellModel.swift */
+"No results found." = "کوئی نتیجہ نہیں ملا۔";
+
+/* ShellModel.swift */
+"Search..." = "تلاش کریں...";
+
+/* ShellModel.swift; Command palette section heading when nothing is typed. */
+"Suggested" = "تجویز کردہ";
+
+/* ShellModel.swift */
+"Results (indexing...)" = "نتائج (انڈیکسنگ...)";
+
+/* ShellModel.swift */
+"Results" = "نتائج";
+
+/* ShellModel.swift (command palette command) */
+"Search in All Notes" = "تمام نوٹس میں تلاش کریں";
+
+/* ShellModel.swift (command palette command) */
+"Create New File" = "نئی فائل بنائیں";
+
+/* ShellModel.swift (command palette command) */
+"Open File in Compact Window" = "فائل کو مختصر ونڈو میں کھولیں";
+
+/* ShellModel.swift (command palette command) */
+"Close Current Tab" = "موجودہ ٹیب بند کریں";
+
+/* ShellModel.swift (command palette command) */
+"Close All Tabs" = "تمام ٹیبز بند کریں";
+
+/* ShellModel.swift (command palette command) */
+"Open Workspace" = "ورک اسپیس کھولیں";
+
+/* ShellModel.swift (command palette command) */
+"Toggle Dark Mode" = "تاریک موڈ ٹوگل کریں";
+
+/* ShellModel.swift (command palette subtitle) */
+"App preferences" = "ایپ کی ترجیحات";
+
+/* ShellModel.swift (command palette subtitle: the row is a command); Command palette row subtitle: the row runs a command. */
+"Command" = "کمانڈ";
+
+/* ShellSnapshot.swift */
+"Open a folder of notes or a single file, or start from scratch." = "نوٹس کا فولڈر یا ایک فائل کھولیں، یا نئے سرے سے شروع کریں۔";
+
+/* ShellSnapshot.swift (welcome screen button) */
+"Open Folder" = "فولڈر کھولیں";
+
+/* ShellSnapshot.swift (welcome screen button) */
+"Open File" = "فائل کھولیں";
+
+/* ShellSnapshot.swift (welcome screen button) */
+"Start from Scratch" = "نیا آغاز";
+
+/* SidebarView.swift */
+"No files" = "کوئی فائل نہیں";
+
+/* SidebarView.swift; Sidebar: reveal more recent/pinned files. */
+"Show More" = "مزید دکھائیں";
+
+/* SidebarView.swift */
+"Hide sidebar" = "سائڈبار چھپائیں";
+
+/* SidebarView.swift */
+"\"%@\" already exists." = "“%@” پہلے سے موجود ہے۔";
+
+/* SidebarView.swift */
+"Failed to move:" = "منتقل کرنا ناکام:";
+
+/* SidebarView.swift (sidebar section header); Sidebar section header: pinned files. */
+"Pinned" = "پن شدہ";
+
+/* StarterNotebook.swift; Folder name created in ~/Documents by "Start from Scratch" (a notebook = a folder of notes). */
+"Notebook" = "نوٹ بک";
+
+/* StarterNotebook.swift; File name of the starter note. Translate "Welcome", keep ".md". The note links to itself as [[<name without .md>]]. */
+"Welcome.md" = "خوش آمدید.md";
+
+/* Settings label (editor.font-size) */
+"Font size" = "فونٹ سائز";
+
+/* Settings description / tooltip (editor.font-size) */
+"Font size in pixels for the editor" = "ایڈیٹر کا فونٹ سائز پکسلز میں";
+
+/* Settings label (editor.line-height) */
+"Line height" = "لائن کی اونچائی";
+
+/* Settings description / tooltip (editor.line-height) */
+"Line height multiplier for the editor" = "ایڈیٹر کی لائن اونچائی کا ضارب";
+
+/* Settings label (editor.tab-size) */
+"Tab size" = "ٹیب سائز";
+
+/* Settings description / tooltip (editor.tab-size) */
+"Number of spaces per tab" = "فی ٹیب اسپیسز کی تعداد";
+
+/* Settings label (editor.auto-insert-daily-heading) */
+"Insert today's date heading" = "آج کی تاریخ کی سرخی داخل کریں";
+
+/* Settings description / tooltip (editor.auto-insert-daily-heading) */
+"When opening a dated notebook, append a heading for today if it isn't there yet" = "تاریخ والی نوٹ بک کھولتے وقت آج کی سرخی شامل کریں اگر وہ پہلے سے موجود نہ ہو";
+
+/* Settings label (editor.show-outline) */
+"Show outline rail" = "خاکے کی پٹی دکھائیں";
+
+/* Settings description / tooltip (editor.show-outline) */
+"The tick marks at the right edge of the editor that expand into a document outline on hover" = "ایڈیٹر کے دائیں کنارے پر نشانات جو ہوور کرنے پر دستاویز کے خاکے میں پھیل جاتے ہیں";
+
+/* Settings label (editor.show-heading-chevrons) */
+"Show heading fold arrows" = "سرخی سمیٹنے کے تیر دکھائیں";
+
+/* Settings description / tooltip (editor.show-heading-chevrons) */
+"The arrow beside each heading for collapsing its section. Headings can still be folded from the View menu when hidden" = "ہر سرخی کے ساتھ والا تیر جو اس کا حصہ سمیٹتا ہے۔ چھپا ہونے پر بھی سرخیاں منظر مینو سے سمیٹی جا سکتی ہیں";
+
+/* Settings label (editor.jump-to-bottom-after-minutes) */
+"Jump to bottom after (minutes)" = "آخر پر جائیں، اتنے منٹ بعد";
+
+/* Settings description / tooltip (editor.jump-to-bottom-after-minutes) */
+"On returning to Flo State after this long away, jump to the end of the document. 0 disables it." = "اتنی دیر بعد Flo State پر واپس آنے پر دستاویز کے آخر پر جائیں۔ 0 اسے غیر فعال کرتا ہے۔";
+
+/* Settings label (editor.heading-space-before) */
+"Space before headings" = "سرخیوں سے پہلے جگہ";
+
+/* Settings description / tooltip (editor.heading-space-before) */
+"Extra vertical space above a heading" = "سرخی کے اوپر اضافی عمودی جگہ";
+
+/* Settings label (editor.heading-space-after) */
+"Space after headings" = "سرخیوں کے بعد جگہ";
+
+/* Settings description / tooltip (editor.heading-space-after) */
+"Extra vertical space below a heading" = "سرخی کے نیچے اضافی عمودی جگہ";
+
+/* Settings label (editor.subheading-color) */
+"Subheading colour" = "ذیلی سرخی کا رنگ";
+
+/* Settings description / tooltip (editor.subheading-color) */
+"Colour for level 2 and 3 headings" = "سطح 2 اور 3 کی سرخیوں کا رنگ";
+
+/* Settings label (editor.paragraph-spacing) */
+"Paragraph spacing" = "پیراگراف کا فاصلہ";
+
+/* Settings description / tooltip (editor.paragraph-spacing) */
+"Vertical space between paragraphs" = "پیراگرافس کے درمیان عمودی جگہ";
+
+/* Settings label (editor.bullet-spacing) */
+"Bullet spacing" = "بلٹ فاصلہ";
+
+/* Settings description / tooltip (editor.bullet-spacing) */
+"Vertical space between list items" = "فہرست کے آئٹمز کے درمیان عمودی جگہ";
+
+/* Settings description / tooltip (appearance.theme) */
+"Light or dark color schema" = "روشن یا تاریک رنگ سکیم";
+
+/* Settings description / tooltip (appearance.sidebar-file-label) */
+"Show the document title or the filename for files in the sidebar" = "سائڈبار میں فائلوں کے لیے دستاویز کا عنوان یا فائل کا نام دکھائیں";
+
+/* Settings description / tooltip (appearance.sidebar-show-search) */
+"Show the Search button at the top of the sidebar" = "سائڈبار کے اوپر تلاش کا بٹن دکھائیں";
+
+/* Settings description / tooltip (appearance.sidebar-show-recents) */
+"Show the Recents section in the sidebar" = "سائڈبار میں حالیہ سیکشن دکھائیں";
+
+/* Settings description / tooltip (appearance.editor-width) */
+"Editor content width mode" = "ایڈیٹر کے مواد کی چوڑائی کا موڈ";
+
+/* Settings option (appearance.editor-width); Editor width option (vs Wide). */
+"Narrow" = "تنگ";
+
+/* Settings label (fonts.editor) */
+"Editor font" = "ایڈیٹر فونٹ";
+
+/* Settings description / tooltip (fonts.editor) */
+"Font family and fallback stack used for document text" = "دستاویز کے متن کے لیے فونٹ فیملی اور متبادل فونٹس";
+
+/* Settings label (fonts.mono) */
+"Code font" = "کوڈ فونٹ";
+
+/* Settings description / tooltip (fonts.mono) */
+"Font family and fallback stack used for code" = "کوڈ کے لیے فونٹ فیملی اور متبادل فونٹس";
+
+/* Settings label (theme.light.preset); Settings label (theme.dark.preset) */
+"Preset" = "پری سیٹ";
+
+/* Settings description / tooltip (theme.light.preset) */
+"Light theme preset" = "روشن تھیم کا پری سیٹ";
+
+/* Settings label (theme.light.accent); Settings label (theme.dark.accent) */
+"Accent" = "نمایاں رنگ";
+
+/* Settings description / tooltip (theme.light.accent) */
+"Light theme accent color" = "روشن تھیم کا نمایاں رنگ";
+
+/* Settings label (theme.light.background); Settings label (theme.dark.background) */
+"Background" = "پس منظر";
+
+/* Settings description / tooltip (theme.light.background) */
+"Light theme background color" = "روشن تھیم کا پس منظر رنگ";
+
+/* Settings label (theme.light.foreground); Settings label (theme.dark.foreground) */
+"Foreground" = "پیش منظر";
+
+/* Settings description / tooltip (theme.light.foreground) */
+"Light theme foreground color" = "روشن تھیم کا پیش منظر رنگ";
+
+/* Settings label (theme.light.heading-color); Settings label (theme.dark.heading-color) */
+"Heading colour" = "سرخی کا رنگ";
+
+/* Settings description / tooltip (theme.light.heading-color) */
+"Light theme colour for level 1 headings" = "روشن تھیم میں سطح 1 کی سرخیوں کا رنگ";
+
+/* Settings label (theme.light.translucent); Settings label (theme.dark.translucent); Theme setting: window translucency slider. */
+"Translucent" = "نیم شفاف";
+
+/* Settings description / tooltip (theme.light.translucent) */
+"Light theme translucency (0 = solid, 100 = max)." = "روشن تھیم کی شفافیت (0 = ٹھوس، 100 = زیادہ سے زیادہ)۔";
+
+/* Settings label (theme.light.contrast); Settings label (theme.dark.contrast); Theme setting: how strong borders, cards and hover backgrounds are. */
+"Contrast" = "کنٹراسٹ";
+
+/* Settings description / tooltip (theme.light.contrast); Settings description / tooltip (theme.dark.contrast); Tooltip of the Contrast theme setting. */
+"alpha multiplier on borders, cards, hover bgs." = "بارڈرز، کارڈز اور ہوور پس منظر پر الفا ضارب۔";
+
+/* Settings description / tooltip (theme.dark.preset) */
+"Dark theme preset" = "تاریک تھیم کا پری سیٹ";
+
+/* Settings description / tooltip (theme.dark.accent) */
+"Dark theme accent color" = "تاریک تھیم کا نمایاں رنگ";
+
+/* Settings description / tooltip (theme.dark.background) */
+"Dark theme background color" = "تاریک تھیم کا پس منظر رنگ";
+
+/* Settings description / tooltip (theme.dark.foreground) */
+"Dark theme foreground color" = "تاریک تھیم کا پیش منظر رنگ";
+
+/* Settings description / tooltip (theme.dark.heading-color) */
+"Dark theme colour for level 1 headings" = "تاریک تھیم میں سطح 1 کی سرخیوں کا رنگ";
+
+/* Settings description / tooltip (theme.dark.translucent) */
+"Dark theme translucency (0 = solid, 100 = max)." = "تاریک تھیم کی شفافیت (0 = ٹھوس، 100 = زیادہ سے زیادہ)۔";
+
+/* Settings label (files.associations) */
+"File associations" = "فائل ایسوسی ایشنز";
+
+/* Settings description / tooltip (files.associations) */
+"File patterns to include in the workspace" = "ورک اسپیس میں شامل کرنے کے لیے فائل پیٹرنز";
+
+/* Settings label (workspace.restore-open-files) */
+"Restore open files" = "کھلی فائلیں بحال کریں";
+
+/* Settings description / tooltip (workspace.restore-open-files) */
+"Reopen previously open files when opening a workspace" = "ورک اسپیس کھولتے وقت پہلے سے کھلی فائلیں دوبارہ کھولیں";
+
+/* Settings label (workspace.max-recent-workspaces) */
+"Max recent workspaces" = "زیادہ سے زیادہ حالیہ ورک اسپیسز";
+
+/* Settings description / tooltip (workspace.max-recent-workspaces) */
+"Maximum number of recent workspaces to remember" = "یاد رکھی جانے والی حالیہ ورک اسپیسز کی زیادہ سے زیادہ تعداد";
+
+/* Settings label (window.restore-workspace) */
+"Restore workspace" = "ورک اسپیس بحال کریں";
+
+/* Settings description / tooltip (window.restore-workspace) */
+"Automatically reopen the last workspace when the app starts" = "ایپ شروع ہونے پر آخری ورک اسپیس خودکار طور پر دوبارہ کھولیں";
+
+/* Theme preset name; Theme preset name. */
+"Default" = "ڈیفالٹ";
+
+/* Theme preset name; Theme preset name. */
+"High Contrast" = "زیادہ کنٹراسٹ";
+
+/* Theme preset name; Theme preset name. */
+"Warm Paper" = "گرم کاغذ";
+
+/* Theme preset name; App / theme name: keep "Flo State" untranslated. */
+"Flo State" = "Flo State";

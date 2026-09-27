@@ -29,37 +29,37 @@ enum ShellMenus {
     static func fileMenu(model: ShellModel, entry: DirEntry, inlineRename: Bool) -> NSMenu {
         let isPinned = model.pinnedFiles.contains(entry.path)
         return menu([
-            ClosureMenuItem("Open") { Task { await model.editor.openFile(entry.path) } },
-            ClosureMenuItem("Open in new tab") {
+            ClosureMenuItem(L("Open")) { Task { await model.editor.openFile(entry.path) } },
+            ClosureMenuItem(L("Open in new tab")) {
                 Task {
-                    do { try await model.editor.openFileInNewTab(entry.path) } catch { model.alert("Failed to open in new tab: \(error)") }
+                    do { try await model.editor.openFileInNewTab(entry.path) } catch { model.alert(L("Failed to open in new tab: %@", "\(error)")) }
                 }
             },
-            ClosureMenuItem(isPinned ? "Unpin" : "Pin") { model.togglePinned(entry.path) },
+            ClosureMenuItem(isPinned ? L("Unpin") : L("Pin")) { model.togglePinned(entry.path) },
             .separator(),
-            ClosureMenuItem("Duplicate") { Task { await model.duplicate(entry.path) } },
+            ClosureMenuItem(L("Duplicate")) { Task { await model.duplicate(entry.path) } },
             .separator(),
-            ClosureMenuItem("Copy relative path") { model.copyToPasteboard(model.relativePath(entry.path)) },
-            ClosureMenuItem("Copy absolute path") { model.copyToPasteboard(entry.path) },
+            ClosureMenuItem(L("Copy relative path")) { model.copyToPasteboard(model.relativePath(entry.path)) },
+            ClosureMenuItem(L("Copy absolute path")) { model.copyToPasteboard(entry.path) },
             .separator(),
-            ClosureMenuItem("Reveal in Finder") { model.revealInFinder(entry.path) },
+            ClosureMenuItem(L("Reveal in Finder")) { model.revealInFinder(entry.path) },
             .separator(),
-            ClosureMenuItem("Rename...") {
+            ClosureMenuItem(L("Rename...")) {
                 if inlineRename { model.renamingPath = entry.path } else { promptRename(model: model, entry: entry) }
             },
-            ClosureMenuItem("Delete") { model.deleteEntry(entry) },
+            ClosureMenuItem(L("Delete")) { model.deleteEntry(entry) },
         ])
     }
 
     /// Pinned/Recents rows rename through a prompt (`window.prompt`).
     static func promptRename(model: ShellModel, entry: DirEntry) {
         let alert = NSAlert()
-        alert.messageText = "Rename file"
+        alert.messageText = L("Rename file")
         let field = NSTextField(frame: NSRect(x: 0, y: 0, width: 240, height: 24))
         field.stringValue = LinkPaths.getFileStem(entry.name)
         alert.accessoryView = field
-        alert.addButton(withTitle: "OK")
-        alert.addButton(withTitle: "Cancel")
+        alert.addButton(withTitle: L("OK"))
+        alert.addButton(withTitle: L("Cancel"))
         guard alert.runModal() == .alertFirstButtonReturn else { return }
         model.submitRename(entry, field.stringValue)
     }
@@ -67,26 +67,26 @@ enum ShellMenus {
     /// `buildFolderMenuItemsSpec`.
     static func folderMenu(model: ShellModel, entry: DirEntry) -> NSMenu {
         menu([
-            ClosureMenuItem("New File") { model.createFileInFolder(entry.path) },
-            ClosureMenuItem("New Folder") { model.createFolderInFolder(entry.path) },
+            ClosureMenuItem(L("New File")) { model.createFileInFolder(entry.path) },
+            ClosureMenuItem(L("New Folder")) { model.createFolderInFolder(entry.path) },
             .separator(),
-            ClosureMenuItem("Copy relative path") { model.copyToPasteboard(model.relativePath(entry.path)) },
-            ClosureMenuItem("Copy absolute path") { model.copyToPasteboard(entry.path) },
+            ClosureMenuItem(L("Copy relative path")) { model.copyToPasteboard(model.relativePath(entry.path)) },
+            ClosureMenuItem(L("Copy absolute path")) { model.copyToPasteboard(entry.path) },
             .separator(),
-            ClosureMenuItem("Reveal in Finder") { model.revealInFinder(entry.path) },
+            ClosureMenuItem(L("Reveal in Finder")) { model.revealInFinder(entry.path) },
             .separator(),
-            ClosureMenuItem("Rename...") { model.renamingPath = entry.path },
-            ClosureMenuItem("Delete") { model.deleteEntry(entry) },
+            ClosureMenuItem(L("Rename...")) { model.renamingPath = entry.path },
+            ClosureMenuItem(L("Delete")) { model.deleteEntry(entry) },
         ])
     }
 
     /// `buildBulkMenuItemsSpec`.
     static func bulkMenu(model: ShellModel, paths: [String]) -> NSMenu {
         menu([
-            ClosureMenuItem("Copy \(paths.count) relative paths") { model.copyToPasteboard(paths.map(model.relativePath).joined(separator: "\n")) },
-            ClosureMenuItem("Copy \(paths.count) absolute paths") { model.copyToPasteboard(paths.joined(separator: "\n")) },
+            ClosureMenuItem(L("Copy %d relative paths", paths.count)) { model.copyToPasteboard(paths.map(model.relativePath).joined(separator: "\n")) },
+            ClosureMenuItem(L("Copy %d absolute paths", paths.count)) { model.copyToPasteboard(paths.joined(separator: "\n")) },
             .separator(),
-            ClosureMenuItem("Delete \(paths.count) items") { model.deleteEntries(paths) },
+            ClosureMenuItem(L("Delete %d items", paths.count)) { model.deleteEntries(paths) },
         ])
     }
 
@@ -94,8 +94,8 @@ enum ShellMenus {
     static func sidebarSurfaceMenu(model: ShellModel) -> NSMenu {
         let v = model.values
         return menu([
-            ClosureMenuItem("Search", checked: v.appearanceSidebarShowSearch) { model.setSetting("appearance.sidebar-show-search", .bool(!v.appearanceSidebarShowSearch)) },
-            ClosureMenuItem("Recents", checked: v.appearanceSidebarShowRecents) { model.setSetting("appearance.sidebar-show-recents", .bool(!v.appearanceSidebarShowRecents)) },
+            ClosureMenuItem(L("Search"), checked: v.appearanceSidebarShowSearch) { model.setSetting("appearance.sidebar-show-search", .bool(!v.appearanceSidebarShowSearch)) },
+            ClosureMenuItem(L("Recents"), checked: v.appearanceSidebarShowRecents) { model.setSetting("appearance.sidebar-show-recents", .bool(!v.appearanceSidebarShowRecents)) },
         ])
     }
 
@@ -108,8 +108,8 @@ enum ShellMenus {
             items.append(ClosureMenuItem(name.isEmpty ? p : name) { Task { await model.openWorkspace(p) } })
         }
         if !others.isEmpty { items.append(.separator()) }
-        items.append(ClosureMenuItem("Open Folder…") { model.perform(.openWorkspacePanel) })
-        if model.root != nil { items.append(ClosureMenuItem("Close Workspace") { model.closeWorkspace() }) }
+        items.append(ClosureMenuItem(L("Open Folder…")) { model.perform(.openWorkspacePanel) })
+        if model.root != nil { items.append(ClosureMenuItem(L("Close Workspace")) { model.closeWorkspace() }) }
         return menu(items)
     }
 
@@ -117,12 +117,12 @@ enum ShellMenus {
     static func tabMenu(model: ShellModel, tab: Tab) -> NSMenu? {
         guard let path = tab.location.primaryPath else { return nil }
         return menu([
-            ClosureMenuItem("Close") { model.editor.closeTab(tab.id) },
-            ClosureMenuItem("Close others") { model.editor.closeOtherTabs(tab.id) },
-            ClosureMenuItem("Close all") { model.editor.closeAllTabs() },
+            ClosureMenuItem(L("Close")) { model.editor.closeTab(tab.id) },
+            ClosureMenuItem(L("Close others")) { model.editor.closeOtherTabs(tab.id) },
+            ClosureMenuItem(L("Close all")) { model.editor.closeAllTabs() },
             .separator(),
-            ClosureMenuItem("Reveal in sidebar") { model.editor.setActiveTab(tab.id); model.revealInSidebar(path) },
-            ClosureMenuItem("Copy path") { model.copyToPasteboard(model.relativePath(path)) },
+            ClosureMenuItem(L("Reveal in sidebar")) { model.editor.setActiveTab(tab.id); model.revealInSidebar(path) },
+            ClosureMenuItem(L("Copy path")) { model.copyToPasteboard(model.relativePath(path)) },
         ])
     }
 
@@ -130,9 +130,9 @@ enum ShellMenus {
     static func footerMenu(model: ShellModel) -> NSMenu {
         let v = model.values
         return menu([
-            ClosureMenuItem("Words", checked: v.statusbarShowWords) { model.setSetting("statusbar.show-words", .bool(!v.statusbarShowWords)) },
-            ClosureMenuItem("Characters", checked: v.statusbarShowCharacters) { model.setSetting("statusbar.show-characters", .bool(!v.statusbarShowCharacters)) },
-            ClosureMenuItem("Paragraphs", checked: v.statusbarShowParagraphs) { model.setSetting("statusbar.show-paragraphs", .bool(!v.statusbarShowParagraphs)) },
+            ClosureMenuItem(L("Words"), checked: v.statusbarShowWords) { model.setSetting("statusbar.show-words", .bool(!v.statusbarShowWords)) },
+            ClosureMenuItem(L("Characters"), checked: v.statusbarShowCharacters) { model.setSetting("statusbar.show-characters", .bool(!v.statusbarShowCharacters)) },
+            ClosureMenuItem(L("Paragraphs"), checked: v.statusbarShowParagraphs) { model.setSetting("statusbar.show-paragraphs", .bool(!v.statusbarShowParagraphs)) },
         ])
     }
 }
@@ -212,7 +212,8 @@ enum MainMenu {
     /// `updateItem`: "Check for Updates…" (AppUpdater) — only when this build has a feed.
     static func build(target: MenuRouter, updateItem: NSMenuItem? = nil) -> NSMenu {
         let main = NSMenu()
-        func sub(_ title: String, _ items: [NSMenuItem]) {
+        func sub(_ key: String, _ items: [NSMenuItem]) {
+            let title = L(key)
             let item = NSMenuItem(title: title, action: nil, keyEquivalent: "")
             let m = NSMenu(title: title)
             items.forEach(m.addItem)
@@ -222,7 +223,7 @@ enum MainMenu {
         func routed(_ entries: [Entry?]) -> [NSMenuItem] {
             entries.map { e in
                 guard let e = e else { return .separator() }
-                let it = NSMenuItem(title: e.title, action: #selector(MenuRouter.menuAction(_:)), keyEquivalent: e.key)
+                let it = NSMenuItem(title: L(e.title), action: #selector(MenuRouter.menuAction(_:)), keyEquivalent: e.key)
                 it.keyEquivalentModifierMask = e.modifiers
                 it.target = target
                 it.representedObject = MenuRouter.Box(e.action!)
@@ -233,16 +234,16 @@ enum MainMenu {
         // the installed bundle's name ("Flo State"); tests / bare binaries get the same
         let appName = Bundle.main.bundleIdentifier == "app.flostate.native"
             ? (Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String ?? "Flo State") : "Flo State"
-        let prefs = NSMenuItem(title: "Settings…", action: #selector(MenuRouter.menuAction(_:)), keyEquivalent: ",")
+        let prefs = NSMenuItem(title: L("Settings…"), action: #selector(MenuRouter.menuAction(_:)), keyEquivalent: ",")
         prefs.target = target
         prefs.representedObject = MenuRouter.Box(.openPreferences)
-        let services = NSMenuItem(title: "Services", action: nil, keyEquivalent: "")
-        services.submenu = NSMenu(title: "Services")
+        let services = NSMenuItem(title: L("Services"), action: nil, keyEquivalent: "")
+        services.submenu = NSMenu(title: L("Services"))
         NSApp?.servicesMenu = services.submenu
-        let hideOthers = NSMenuItem(title: "Hide Others", action: #selector(NSApplication.hideOtherApplications(_:)), keyEquivalent: "h")
+        let hideOthers = NSMenuItem(title: L("Hide Others"), action: #selector(NSApplication.hideOtherApplications(_:)), keyEquivalent: "h")
         hideOthers.keyEquivalentModifierMask = [.command, .option]
         sub(appName, [
-            NSMenuItem(title: "About \(appName)", action: #selector(NSApplication.orderFrontStandardAboutPanel(_:)), keyEquivalent: ""),
+            NSMenuItem(title: L("About %@", appName), action: #selector(NSApplication.orderFrontStandardAboutPanel(_:)), keyEquivalent: ""),
         ] + (updateItem.map { [$0] } ?? []) + [
             .separator(),
             prefs,
@@ -250,54 +251,54 @@ enum MainMenu {
             .separator(),
             services,
             .separator(),
-            NSMenuItem(title: "Hide \(appName)", action: #selector(NSApplication.hide(_:)), keyEquivalent: "h"),
+            NSMenuItem(title: L("Hide %@", appName), action: #selector(NSApplication.hide(_:)), keyEquivalent: "h"),
             hideOthers,
-            NSMenuItem(title: "Show All", action: #selector(NSApplication.unhideAllApplications(_:)), keyEquivalent: ""),
+            NSMenuItem(title: L("Show All"), action: #selector(NSApplication.unhideAllApplications(_:)), keyEquivalent: ""),
             .separator(),
-            NSMenuItem(title: "Quit \(appName)", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"),
+            NSMenuItem(title: L("Quit %@", appName), action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"),
         ])
-        let openFolder = NSMenuItem(title: "Open Folder…", action: #selector(MenuRouter.menuAction(_:)), keyEquivalent: "")
+        let openFolder = NSMenuItem(title: L("Open Folder…"), action: #selector(MenuRouter.menuAction(_:)), keyEquivalent: "")
         openFolder.target = target
         openFolder.representedObject = MenuRouter.Box(.openWorkspacePanel)
         sub("File", routed(fileEntries))
         // Edit: standard responder actions + Substitutions (text replacement).
-        let redo = NSMenuItem(title: "Redo", action: Selector(("redo:")), keyEquivalent: "z")
+        let redo = NSMenuItem(title: L("Redo"), action: Selector(("redo:")), keyEquivalent: "z")
         redo.keyEquivalentModifierMask = [.command, .shift]
-        let subs = NSMenuItem(title: "Substitutions", action: nil, keyEquivalent: "")
-        let subsMenu = NSMenu(title: "Substitutions")
-        subsMenu.addItem(NSMenuItem(title: "Show Substitutions", action: #selector(NSTextView.orderFrontSubstitutionsPanel(_:)), keyEquivalent: ""))
+        let subs = NSMenuItem(title: L("Substitutions"), action: nil, keyEquivalent: "")
+        let subsMenu = NSMenu(title: L("Substitutions"))
+        subsMenu.addItem(NSMenuItem(title: L("Show Substitutions"), action: #selector(NSTextView.orderFrontSubstitutionsPanel(_:)), keyEquivalent: ""))
         subsMenu.addItem(.separator())
-        subsMenu.addItem(NSMenuItem(title: "Smart Copy/Paste", action: #selector(NSTextView.toggleSmartInsertDelete(_:)), keyEquivalent: ""))
-        subsMenu.addItem(NSMenuItem(title: "Smart Quotes", action: #selector(NSTextView.toggleAutomaticQuoteSubstitution(_:)), keyEquivalent: ""))
-        subsMenu.addItem(NSMenuItem(title: "Smart Dashes", action: #selector(NSTextView.toggleAutomaticDashSubstitution(_:)), keyEquivalent: ""))
-        subsMenu.addItem(NSMenuItem(title: "Smart Links", action: #selector(NSTextView.toggleAutomaticLinkDetection(_:)), keyEquivalent: ""))
-        subsMenu.addItem(NSMenuItem(title: "Text Replacement", action: #selector(NSTextView.toggleAutomaticTextReplacement(_:)), keyEquivalent: ""))
+        subsMenu.addItem(NSMenuItem(title: L("Smart Copy/Paste"), action: #selector(NSTextView.toggleSmartInsertDelete(_:)), keyEquivalent: ""))
+        subsMenu.addItem(NSMenuItem(title: L("Smart Quotes"), action: #selector(NSTextView.toggleAutomaticQuoteSubstitution(_:)), keyEquivalent: ""))
+        subsMenu.addItem(NSMenuItem(title: L("Smart Dashes"), action: #selector(NSTextView.toggleAutomaticDashSubstitution(_:)), keyEquivalent: ""))
+        subsMenu.addItem(NSMenuItem(title: L("Smart Links"), action: #selector(NSTextView.toggleAutomaticLinkDetection(_:)), keyEquivalent: ""))
+        subsMenu.addItem(NSMenuItem(title: L("Text Replacement"), action: #selector(NSTextView.toggleAutomaticTextReplacement(_:)), keyEquivalent: ""))
         subs.submenu = subsMenu
         sub("Edit", [
-            NSMenuItem(title: "Undo", action: Selector(("undo:")), keyEquivalent: "z"),
+            NSMenuItem(title: L("Undo"), action: Selector(("undo:")), keyEquivalent: "z"),
             redo,
             .separator(),
-            NSMenuItem(title: "Cut", action: #selector(NSText.cut(_:)), keyEquivalent: "x"),
-            NSMenuItem(title: "Copy", action: #selector(NSText.copy(_:)), keyEquivalent: "c"),
-            NSMenuItem(title: "Paste", action: #selector(NSText.paste(_:)), keyEquivalent: "v"),
-            NSMenuItem(title: "Select All", action: #selector(NSText.selectAll(_:)), keyEquivalent: "a"),
+            NSMenuItem(title: L("Cut"), action: #selector(NSText.cut(_:)), keyEquivalent: "x"),
+            NSMenuItem(title: L("Copy"), action: #selector(NSText.copy(_:)), keyEquivalent: "c"),
+            NSMenuItem(title: L("Paste"), action: #selector(NSText.paste(_:)), keyEquivalent: "v"),
+            NSMenuItem(title: L("Select All"), action: #selector(NSText.selectAll(_:)), keyEquivalent: "a"),
             .separator(),
             subs,
         ])
         sub("View", routed(viewEntries))
-        let fullscreen = NSMenuItem(title: "Enter Full Screen", action: #selector(NSWindow.toggleFullScreen(_:)), keyEquivalent: "f")
+        let fullscreen = NSMenuItem(title: L("Enter Full Screen"), action: #selector(NSWindow.toggleFullScreen(_:)), keyEquivalent: "f")
         fullscreen.keyEquivalentModifierMask = [.command, .control]
-        let goTo = NSMenuItem(title: "Go to Tab", action: nil, keyEquivalent: "")
-        goTo.submenu = NSMenu(title: "Go to Tab")
-        routed((1...9).map { Entry(title: "Tab \($0)", key: "\($0)", modifiers: [.command], action: .selectTab($0)) }).forEach(goTo.submenu!.addItem)
+        let goTo = NSMenuItem(title: L("Go to Tab"), action: nil, keyEquivalent: "")
+        goTo.submenu = NSMenu(title: L("Go to Tab"))
+        routed((1...9).map { Entry(title: L("Tab %d", $0), key: "\($0)", modifiers: [.command], action: .selectTab($0)) }).forEach(goTo.submenu!.addItem)
         let windowMenuItems: [NSMenuItem] = [
-            NSMenuItem(title: "Minimize", action: #selector(NSWindow.performMiniaturize(_:)), keyEquivalent: "m"),
+            NSMenuItem(title: L("Minimize"), action: #selector(NSWindow.performMiniaturize(_:)), keyEquivalent: "m"),
             fullscreen,
             .separator(),
         ] + routed(tabEntries) + [
             goTo,
             .separator(),
-            NSMenuItem(title: "Close Window", action: #selector(NSWindow.performClose(_:)), keyEquivalent: ""),
+            NSMenuItem(title: L("Close Window"), action: #selector(NSWindow.performClose(_:)), keyEquivalent: ""),
         ]
         sub("Window", windowMenuItems)
         NSApp?.windowsMenu = main.items.last?.submenu
