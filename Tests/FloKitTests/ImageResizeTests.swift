@@ -8,7 +8,7 @@ final class ImageResizeTests: XCTestCase {
     var window: NSWindow!
     override func tearDown() { window?.close(); window = nil }
 
-    func makeEditor(_ text: String) -> (EditorController, String) {
+    func makeEditor(_ text: String, caret: Int = 0) -> (EditorController, String) {
         let dir = FileManager.default.temporaryDirectory.appendingPathComponent("imgr-\(UUID().uuidString)")
         try! FileManager.default.createDirectory(at: dir.appendingPathComponent("attachments"), withIntermediateDirectories: true)
         let img = NSImage(size: NSSize(width: 800, height: 400)); img.lockFocus(); NSColor.systemBlue.setFill(); NSRect(x: 0, y: 0, width: 800, height: 400).fill(); img.unlockFocus()
@@ -24,7 +24,7 @@ final class ImageResizeTests: XCTestCase {
         content.addSubview(c.scrollView)
         c.layoutColumn()
         c.documentPath = doc
-        c.load(text, selection: .cursor(0))
+        c.load(text, selection: .cursor(caret))
         c.layoutColumn()
         c.waitForAsyncWidgets()
         let tlm = c.textView.textLayoutManager!
@@ -73,5 +73,36 @@ final class ImageResizeTests: XCTestCase {
         XCTAssertEqual(c.text, "x\n\n![a](attachments/i.png)\n")
         c.setImageWidth(from: hit.from, to: c.state.doc.length - 1, width: 150)
         XCTAssertEqual(c.text, "x\n\n![a|150](attachments/i.png)\n")
+    }
+
+    /// Live bug: with the caret on the image's line (e.g. right after pasting), the widget is a
+    /// zero-length marker after the source, and resizing did nothing.
+    func testResizeWithCaretOnTheImageLine() throws {
+        let text = "x\n![shot](attachments/i.png)\n"
+        let (c, _) = makeEditor(text, caret: 10)
+        let hit = try XCTUnwrap(c.imageRects.values.first)
+        XCTAssertEqual(hit.from, hit.to, "touched: zero-length widget")
+        c.setImageWidth(from: hit.from, to: hit.to, width: 250)
+        XCTAssertEqual(c.text, "x\n![shot|250](attachments/i.png)\n")
+    }
+
+    /// The real drag path: events queued, then the handle's mouseDown tracks them and commits.
+    func testDraggingTheHandleResizes() throws {
+        let (c, _) = makeEditor("x\n\n![shot](attachments/i.png)\n\nend\n")
+        let hit = try XCTUnwrap(c.imageRects.values.first)
+        c.imageOverlay.show(hit)
+        let w = try XCTUnwrap(c.textView.window)
+        let corner = c.textView.convert(NSPoint(x: hit.rect.maxX, y: hit.rect.maxY), to: nil)
+        func ev(_ t: NSEvent.EventType, dx: CGFloat) -> NSEvent {
+            NSEvent.mouseEvent(with: t, location: NSPoint(x: corner.x + dx, y: corner.y), modifierFlags: [], timestamp: 0,
+                               windowNumber: w.windowNumber, context: nil, eventNumber: 0, clickCount: 1, pressure: 1)!
+        }
+        // queued events come back offset by the (offscreen, x = -10000) window origin: compensate
+        let o = -w.frame.origin.x
+        NSApp.postEvent(ev(.leftMouseDragged, dx: -150 + o), atStart: false)
+        NSApp.postEvent(ev(.leftMouseUp, dx: -200 + o), atStart: false)
+        c.imageOverlay.mouseDown(with: ev(.leftMouseDown, dx: 0))
+        let want = Int((hit.rect.width - 200).rounded())
+        XCTAssertEqual(c.text, "x\n\n![shot|\(want)](attachments/i.png)\n\nend\n")
     }
 }

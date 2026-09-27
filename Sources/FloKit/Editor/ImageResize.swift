@@ -21,6 +21,20 @@ extension EditorController {
         imageRects[widget.from] = ImageHit(rect: rect.offsetBy(dx: o.x, dy: o.y), from: widget.from, to: widget.to)
     }
 
+    /// The `![alt](src)` source of an image widget. With the caret on the image's line the
+    /// widget is a zero-length marker right after the source (the markdown stays visible),
+    /// so look back on that line for the `![` that ends there.
+    func imageSourceRange(from: Int, to: Int) -> (Int, Int)? {
+        if to > from { return (from, to) }
+        guard from > 0, from <= state.doc.length else { return nil }
+        let line = state.doc.lineAt(from)
+        let before = state.doc.slice(line.from, from) as NSString
+        guard before.hasSuffix(")") else { return nil }
+        let start = before.range(of: "![", options: .backwards)
+        guard start.location != NSNotFound else { return nil }
+        return (line.from + start.location, from)
+    }
+
     /// The image under a view point, if its widget is still in the current plan.
     func image(at point: NSPoint, slop: CGFloat = 0) -> ImageHit? {
         guard let plan = currentPlan else { return nil }
@@ -41,8 +55,8 @@ extension EditorController {
     var imageMaxWidth: CGFloat { max(40, applier.columnWidth - 6) }
 
     /// Rewrite the image's alt text with `|width` (nil = remove it: natural size).
-    public func setImageWidth(from: Int, to: Int, width: Int?) {
-        guard from >= 0, to <= state.doc.length, to > from else { return }
+    public func setImageWidth(from widgetFrom: Int, to widgetTo: Int, width: Int?) {
+        guard let (from, to) = imageSourceRange(from: widgetFrom, to: widgetTo), from >= 0, to <= state.doc.length, to > from else { return }
         let source = state.doc.slice(from, to) as NSString
         guard source.hasPrefix("![") else { return }
         let close = source.range(of: "](")
@@ -141,14 +155,6 @@ final class ImageResizeOverlay: NSView {
         let h = NSBezierPath(roundedRect: handleRect, xRadius: 3, yRadius: 3)
         NSColor.white.setFill(); h.fill()
         accent.setStroke(); h.lineWidth = 1.5; h.stroke()
-        if let pw = previewWidth {
-            let label = NSAttributedString(string: " \(Int(pw.rounded())) px ", attributes: [
-                .font: NSFont.monospacedDigitSystemFont(ofSize: 11, weight: .medium), .foregroundColor: NSColor.white])
-            let sz = label.size()
-            let lr = CGRect(x: shown.maxX - sz.width - 6, y: shown.maxY - sz.height - 8, width: sz.width, height: sz.height + 2)
-            accent.setFill(); NSBezierPath(roundedRect: lr, xRadius: 4, yRadius: 4).fill()
-            label.draw(at: CGPoint(x: lr.minX, y: lr.minY + 1))
-        }
     }
 
     override func mouseDown(with event: NSEvent) {
