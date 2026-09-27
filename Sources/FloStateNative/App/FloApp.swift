@@ -28,10 +28,13 @@ enum FloApp {
         if args.contains("--sparkle-probe") {
             UpdateProbe.run(args)
         }
+        LaunchTrace.mark("main")
+        if LaunchTrace.enabled { EditorController.launchTrace = { LaunchTrace.note($0, since: $1) } }
         registerLaunchDefaults()
         let app = NSApplication.shared
-        let d = AppDelegate(dataDir: AppDataDirectory(baseURL: AppDataDirectory.defaultBaseURL), launchPaths: launchPaths(args))
-        if d.forwardToRunningInstance() { exit(0) }
+        let dataOverride = ProcessInfo.processInfo.environment["FLO_DATA_DIR"].map { URL(fileURLWithPath: $0) }
+        let d = AppDelegate(dataDir: AppDataDirectory(baseURL: dataOverride ?? AppDataDirectory.defaultBaseURL), launchPaths: launchPaths(args))
+        if dataOverride == nil, d.forwardToRunningInstance() { exit(0) }
         delegate = d
         app.delegate = d
         app.setActivationPolicy(.regular)
@@ -114,6 +117,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var appearanceObservation: NSKeyValueObservation?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        LaunchTrace.mark("didFinishLaunching")
         // Follow the system light/dark switch for windows set to "system".
         appearanceObservation = NSApp.observe(\.effectiveAppearance, options: [.new]) { [weak self] _, _ in
             DispatchQueue.main.async {
@@ -241,10 +245,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
         // Reuse an empty welcome window.
         let c = windows.first(where: { $0.model.root == nil && $0.model.editor.tabs.isEmpty }) ?? makeController()
+        let secondary = windows.count > 1
+        c.model.onWorkspaceShellReady = { [weak self, weak c] in
+            guard let self = self, let c = c else { return }
+            c.model.onWorkspaceShellReady = {}
+            c.flush()
+            if c.window?.isVisible != true { self.show(c, secondary: secondary) }
+        }
         track { [weak self] in
             await c.model.openWorkspace(canonical, openFile: file, keepSession: keepSession)
             c.flush()
-            if c.window?.isVisible != true { self?.show(c, secondary: (self?.windows.count ?? 0) > 1) }
+            if c.window?.isVisible != true { self?.show(c, secondary: secondary) }
             c.didActivate()
         }
     }

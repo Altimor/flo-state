@@ -67,6 +67,8 @@ final class EditorPaneView: FlippedView {
     /// Sync with the store: create the editor once the file is loaded, reload
     /// it after an external change (`reloadVersion` bump).
     func sync() {
+        // Background tabs get their editor when first shown (launch builds only the visible one).
+        if controller == nil && isHidden { return }
         guard let f = model.editor.file(path) else { return }
         if f.isLoading {
             if spinner == nil {
@@ -96,6 +98,8 @@ final class EditorPaneView: FlippedView {
     }
 
     private func makeController(text: String, caret: Int) {
+        let t0 = Date()
+        defer { LaunchTrace.note("makeController \((path as NSString).lastPathComponent) \(text.utf16.count) chars", since: t0) }
         let c = EditorController(theme: EditorTheme.from(settings: model.values, mode: model.mode))
         c.documentPath = path
         c.workspaceRoot = model.root
@@ -105,11 +109,15 @@ final class EditorPaneView: FlippedView {
         c.scrollView.frame = scrollBox
         c.textView.topChromeHeight = Metrics.chromeDragHeight   // tabs / drag strip: arrow cursor there
         addSubview(c.scrollView)
+        var lt = Date()
         c.layoutColumn()
+        LaunchTrace.note("  layoutColumn#1", since: lt); lt = Date()
         suppressUpdates = true
         c.load(text, selection: .cursor(caret))
         suppressUpdates = false
+        LaunchTrace.note("  load", since: lt); lt = Date()
         c.layoutColumn()
+        LaunchTrace.note("  layoutColumn#2", since: lt)
         c.onDocChanged = { [weak self] state in
             guard let self = self, !self.suppressUpdates else { return }
             self.model.editor.updateContent(self.path, state.doc.string)

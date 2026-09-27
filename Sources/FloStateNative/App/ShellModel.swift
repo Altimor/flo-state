@@ -129,7 +129,14 @@ final class ShellModel {
                                     writer: { path, content, done in
                                         do { try writeHook?(path, content); done(.success(())) } catch { done(.failure(error)) }
                                     })
-        editor = EditorStore(reader: { path in try WorkspaceFS.readFile(path) }, saveEngine: saveEngine)
+        // Reads run off the main thread and in parallel: iCloud Drive files can take tens of ms each.
+        editor = EditorStore(reader: { path in
+            let t0 = Date()
+            let r = try await Task.detached(priority: .userInitiated) { try WorkspaceFS.readFile(path) }.value
+            LaunchTrace.note("read \((path as NSString).lastPathComponent)", since: t0)
+            return r
+        },
+                             saveEngine: saveEngine)
         writeHook = { [weak self] path, content in try self?.writeFile(path, content) }
         box.read = { [weak self] path in
             guard let self = self else { return [] }
@@ -227,6 +234,7 @@ final class ShellModel {
             alert("Failed to open workspace: \(error)")
             return
         }
+        LaunchTrace.mark("workspace opened")
         values = settings.values
         // No session writes until this workspace's restore has finished: the
         // editor is empty / half-restored until then (quit during startup,
@@ -235,20 +243,27 @@ final class ShellModel {
         editor.reset()
         root = info.root
         ignore = WorkspaceIgnore.load(root: URL(fileURLWithPath: info.root))
+        var tt = Date()
         let idx = FileIndex(root: info.root)
         idx.rebuild(extensions: settings.supportedExtensions)
+        LaunchTrace.note("index rebuild (\(idx.files.count) files)", since: tt); tt = Date()
         index = idx
         isIndexing = false
         let entries = readDirectory(info.root)
+        LaunchTrace.note("readDirectory", since: tt); tt = Date()
         tree.open(root: info.root, entries: entries, recentWorkspaces: recentWorkspacesStore.load(),
                   pinned: pinnedStore.load(root: info.root))
         startWatcher()
         notify(.settings)
         notify(.sidebar)
+        LaunchTrace.note("tree + watcher + notify", since: tt); tt = Date()
+        onWorkspaceShellReady()
+        LaunchTrace.note("before loadSession", since: tt); tt = Date()
         let stored = keepSession ? SessionAutosaver.loadSession(store: sessionStore, root: info.root, restoreOpenFiles: values.workspaceRestoreOpenFiles) : nil
         var complete = true
         if let s = stored, !s.tabs.isEmpty {
             complete = await editor.restoreSession(s.tabs, activeIndex: s.activeIndex)
+            LaunchTrace.note("restoreSession (\(s.tabs.count) tabs)", since: tt); tt = Date()
             purgeSettingsTabs()
         }
         // Another openWorkspace/closeWorkspace ran meanwhile: it owns the gate.
@@ -759,6 +774,10 @@ final class ShellModel {
     static func imageDropEdit(snippets: [String], lineStart: Bool) -> String {
         (lineStart ? "" : "\n") + snippets.joined(separator: "\n") + "\n"
     }
+
+    /// Called once the workspace's sidebar is ready, before its tabs restore: the window
+    /// can be shown right away (launch feels instant) and fills in as notes load.
+    var onWorkspaceShellReady: () -> Void = {}
 
     /// Paths from a Finder drop that are not images (folders / notes to open).
     var openDroppedPaths: ([String]) -> Void = { _ in }

@@ -225,6 +225,9 @@ public final class EditorController: NSObject, NSTextViewDelegate, NSTextLayoutM
 
     // MARK: document
 
+    /// Launch tracing hook (set by the app when FLO_TRACE_LAUNCH is on).
+    public static var launchTrace: ((String, Date) -> Void)?
+
     public func load(_ text: String, selection: EditorSelection = .cursor(0)) {
         let t = Text(text)
         session.replaceState(EditorState(doc: t, selection: selection))
@@ -236,12 +239,15 @@ public final class EditorController: NSObject, NSTextViewDelegate, NSTextLayoutM
         planCache.reset()
         folds = []
         foldSections = [:]
+        var lt = Date()
         render(force: true)
+        EditorController.launchTrace?("    render(force)", lt); lt = Date()
         layoutColumn()
         applyDefaultParagraphStyle()
         // Lay out the whole document now: TextKit 2's estimated heights for
         // unlaid-out text make the scroll position and click targets jump.
         ensureFullLayout()
+        EditorController.launchTrace?("    ensureFullLayout", lt)
         setNativeSelection(state.selection)
         textView.undoManager?.removeAllActions()
         features.documentReplaced()

@@ -714,6 +714,13 @@ final class ShellWindowController: NSWindowController, NSWindowDelegate {
     private func focusEditorOnTabSwitch() {
         guard let tab = root.area.activeTab else { focusedTabId = nil; return }
         guard "\(tab.id)" != focusedTabId, let c = root.area.activeFilePane?.controller else { return }
+        if LaunchTrace.enabled {
+            LaunchTrace.mark("first editor loaded")
+            DispatchQueue.main.async {
+                LaunchTrace.mark("first editor drawn")
+                if ProcessInfo.processInfo.environment["FLO_TRACE_EXIT"] != nil { exit(0) }
+            }
+        }
         focusedTabId = "\(tab.id)"
         guard root.paletteOverlay == nil, let w = window else { return }
         if let t = w.firstResponder as? NSText, t.isFieldEditor { return }
@@ -724,6 +731,8 @@ final class ShellWindowController: NSWindowController, NSWindowDelegate {
         let s = refreshScheduled
         refreshScheduled = []
         if s.isEmpty { return }
+        let ft = Date()
+        defer { LaunchTrace.note("flush \(s.sorted())", since: ft) }
         if s.contains("layout") { root.area.needsLayout = true }
         if s.contains("tabs") || s.contains("settings") || s.contains("layout") {
             root.area.reloadTabs()
@@ -912,6 +921,7 @@ final class ShellWindowController: NSWindowController, NSWindowDelegate {
         guard let w = window else { return }
         if secondary, let frame = ShellWindowController.randomFrame(size: w.frame.size) { w.setFrame(frame, display: false) } else { w.center() }
         w.makeKeyAndOrderFront(nil)
+        LaunchTrace.mark("window shown")
         positionTrafficLights()
     }
 }
