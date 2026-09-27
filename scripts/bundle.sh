@@ -56,6 +56,8 @@ cat > "$APP/Contents/Info.plist" <<PLIST
   <key>SUFeedURL</key><string>${FEED_URL}</string>
   <key>SUPublicEDKey</key><string>${SU_PUBLIC_ED_KEY}</string>
   <key>SUEnableAutomaticChecks</key><true/>
+  <key>SUAutomaticallyUpdate</key><true/>
+  <key>SUAllowsAutomaticUpdates</key><true/>
   <key>SUScheduledCheckInterval</key><integer>86400</integer>
   <key>CFBundleIconFile</key><string>AppIcon</string>
   <key>LSMinimumSystemVersion</key><string>14.0</string>

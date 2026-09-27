@@ -168,6 +168,11 @@ public final class EditorController: NSObject, NSTextViewDelegate, NSTextLayoutM
     public var topInset: CGFloat = 180
 
     public func layoutColumn() {
+        let oldInset = textView.textContainerInset, oldW = textView.textContainer?.size.width
+        defer {
+            // the column moved or resized: images moved too; the hover box comes back on the next hover
+            if imageOverlay.hit != nil, oldInset != textView.textContainerInset || oldW != textView.textContainer?.size.width { imageOverlay.show(nil) }
+        }
         let w = scrollView.contentSize.width
         let sidePad = min(64, max(24, 0.04 * (scrollView.window?.frame.width ?? w)))
         let textW = max(100, min(theme.maxTextWidth, w - 2 * sidePad))

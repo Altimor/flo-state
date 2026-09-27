@@ -105,4 +105,21 @@ final class ImageResizeTests: XCTestCase {
         let want = Int((hit.rect.width - 200).rounded())
         XCTAssertEqual(c.text, "x\n\n![shot|\(want)](attachments/i.png)\n\nend\n")
     }
+
+    /// Live bug: toggling the sidebar resized the column but the hover box stayed at the old spot.
+    func testHoverBoxFollowsColumnChanges() throws {
+        let (c, _) = makeEditor("x\n\n![shot](attachments/i.png)\n")
+        let hit = try XCTUnwrap(c.imageRects.values.first)
+        c.imageOverlay.show(hit)
+        c.scrollView.setFrameSize(NSSize(width: 800, height: 900))   // narrower, like the sidebar appearing
+        c.layoutColumn()
+        XCTAssertTrue(c.imageOverlay.isHidden, "stale box hidden when the column moves")
+        c.imageOverlay.show(hit)
+        let content = c.scrollView.superview!
+        let rep = content.bitmapImageRepForCachingDisplay(in: content.bounds)!
+        content.cacheDisplay(in: content.bounds, to: rep)          // redraw at the new position
+        let now = try XCTUnwrap(c.imageRects[hit.from])
+        XCTAssertNotEqual(now.rect, hit.rect)
+        XCTAssertEqual(c.imageOverlay.hit, now, "box follows the redrawn image")
+    }
 }

@@ -18,7 +18,10 @@ extension EditorController {
     /// `rect` is in text-container coordinates.
     func noteImageDrawn(_ rect: CGRect, widget: Widget) {
         let o = textView.textContainerOrigin
-        imageRects[widget.from] = ImageHit(rect: rect.offsetBy(dx: o.x, dy: o.y), from: widget.from, to: widget.to)
+        let hit = ImageHit(rect: rect.offsetBy(dx: o.x, dy: o.y), from: widget.from, to: widget.to)
+        imageRects[widget.from] = hit
+        // the image moved/resized (sidebar toggle, window resize, edit): keep the hover box on it
+        if let shown = imageOverlay.hit, shown.from == hit.from, shown != hit { imageOverlay.show(hit) }
     }
 
     /// The `![alt](src)` source of an image widget. With the caret on the image's line the
