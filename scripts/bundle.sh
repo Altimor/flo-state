@@ -10,7 +10,12 @@ SCRATCH=$ROOT/.build-release
 # APP_NAME / APP (output path) are overridable: scripts/release.sh builds "Flo State".
 APP_NAME="${APP_NAME:-Flo State Native}"
 APP="${APP:-$ROOT/build/$APP_NAME.app}"
-ICON_SRC="$ROOT/Resources/AppIcon.icns"
+# App icon: Resources/AppIcon.icon (Icon Composer bundle) compiled by Xcode 26's actool into
+# Assets.car (macOS 26 Liquid Glass icon + pre-rendered rounded-rect images for macOS <=15)
+# + AppIcon.icns. Without actool, fall back to Resources/AppIcon.icns: the same rounded-rect
+# artwork pre-masked (Tahoe then shows it inside its generic squircle frame).
+ICON_SRC="$ROOT/Resources/AppIcon.icon"
+ICON_FALLBACK="$ROOT/Resources/AppIcon.icns"
 
 # JOBS caps parallel compile jobs; wrap with $THROTTLE (e.g. a nice/taskpolicy wrapper) if set
 ${=THROTTLE:-} swift build -c release -j "${JOBS:-4}" --product FloStateNative --scratch-path "$SCRATCH"
@@ -33,7 +38,19 @@ install_name_tool -add_rpath "@executable_path/../Frameworks" "$EXE"
 for b in "$BIN_DIR"/*.bundle(N); do
   cp -R "$b" "$APP/Contents/Resources/"
 done
-[[ -f "$ICON_SRC" ]] && cp "$ICON_SRC" "$APP/Contents/Resources/AppIcon.icns"
+ICON_NAME_PLIST=""
+ICON_OUT="$SCRATCH/appicon"
+rm -rf "$ICON_OUT"; mkdir -p "$ICON_OUT"
+if xcrun actool "$ICON_SRC" --compile "$ICON_OUT" --app-icon AppIcon --platform macosx \
+     --target-device mac --minimum-deployment-target 14.0 \
+     --output-partial-info-plist "$ICON_OUT/partial.plist" >/dev/null 2>&1 \
+   && [[ -f "$ICON_OUT/Assets.car" && -f "$ICON_OUT/AppIcon.icns" ]]; then
+  cp "$ICON_OUT/Assets.car" "$ICON_OUT/AppIcon.icns" "$APP/Contents/Resources/"
+  ICON_NAME_PLIST="<key>CFBundleIconName</key><string>AppIcon</string>"
+else
+  echo "warning: actool (Xcode 26) failed; using pre-masked $ICON_FALLBACK" >&2
+  cp "$ICON_FALLBACK" "$APP/Contents/Resources/AppIcon.icns"
+fi
 # Localization: the UI strings live in the FloCore bundle's Resources/<lang>.lproj; the app
 # bundle gets matching <lang>.lproj (InfoPlist.strings: document-type names) so
 # AppKit, Sparkle and System Settings' per-app language see the same languages.
@@ -75,6 +92,7 @@ cat > "$APP/Contents/Info.plist" <<PLIST
   <key>SUAllowsAutomaticUpdates</key><true/>
   <key>SUScheduledCheckInterval</key><integer>86400</integer>
   <key>CFBundleIconFile</key><string>AppIcon</string>
+  ${ICON_NAME_PLIST}
   <key>LSMinimumSystemVersion</key><string>14.0</string>
   <key>NSHighResolutionCapable</key><true/>
   <key>NSPrincipalClass</key><string>NSApplication</string>

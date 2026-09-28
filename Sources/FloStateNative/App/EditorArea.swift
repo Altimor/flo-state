@@ -56,6 +56,8 @@ final class EditorPaneView: FlippedView {
     private var suppressUpdates = false
     var onScroll: (() -> Void)?
     private(set) var frontmatterPanel: FrontmatterPanelView?
+    /// PDF / image tabs: a viewer instead of the editor (`controller` stays nil).
+    private(set) var viewer: FileViewerView?
 
     init(path: String, model: ShellModel) {
         self.path = path
@@ -69,6 +71,15 @@ final class EditorPaneView: FlippedView {
     func sync() {
         // Background tabs get their editor when first shown (launch builds only the visible one).
         if controller == nil && isHidden { return }
+        if let kind = WorkspaceFS.viewerKind(path) {
+            if viewer == nil {
+                let v = FileViewerView(path: path, kind: kind, background: model.palette_.bg)
+                addSubview(v)
+                viewer = v
+                needsLayout = true
+            }
+            return
+        }
         guard let f = model.editor.file(path) else { return }
         if f.isLoading {
             if spinner == nil {
@@ -241,6 +252,7 @@ final class EditorPaneView: FlippedView {
 
     override func layout() {
         super.layout()
+        viewer?.frame = scrollBox
         applyColumnLayout()
         spinner?.sizeToFit()
         if let s = spinner { s.frame.origin = CGPoint(x: (bounds.width - s.frame.width) / 2, y: (bounds.height - s.frame.height) / 2) }

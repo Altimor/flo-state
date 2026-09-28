@@ -7,8 +7,11 @@ import ImageIO
 final class LoadedImage {
     let url: URL
     let pixelSize: CGSize
+    /// Set for PDFs: drawn as a one-page card (first page + page count + Quick Look).
+    let pdfPageCount: Int?
     private var _image: NSImage?
-    init(url: URL, pixelSize: CGSize) { self.url = url; self.pixelSize = pixelSize }
+    init(url: URL, pixelSize: CGSize, pdfPageCount: Int? = nil) { self.url = url; self.pixelSize = pixelSize; self.pdfPageCount = pdfPageCount }
+    var isPDF: Bool { pdfPageCount != nil }
     var image: NSImage? {
         if _image == nil { _image = NSImage(contentsOf: url) }
         return _image
@@ -29,6 +32,18 @@ final class ImageStore {
         if let hit = cache[absolutePath] { return hit }
         var result: LoadedImage? = nil
         let url = URL(fileURLWithPath: absolutePath)
+        if url.pathExtension.lowercased() == "pdf" {
+            // first page, sized in points (= CSS px); NSImage draws that page as vectors
+            if let doc = CGPDFDocument(url as CFURL), doc.numberOfPages > 0, let page = doc.page(at: 1) {
+                var box = page.getBoxRect(.cropBox)
+                if page.rotationAngle % 180 != 0 { box.size = CGSize(width: box.height, height: box.width) }
+                if box.width > 0, box.height > 0 {
+                    result = LoadedImage(url: url, pixelSize: box.size, pdfPageCount: doc.numberOfPages)
+                }
+            }
+            cache[absolutePath] = result
+            return result
+        }
         if let src = CGImageSourceCreateWithURL(url as CFURL, nil),
            let props = CGImageSourceCopyPropertiesAtIndex(src, 0, nil) as? [CFString: Any],
            var w = (props[kCGImagePropertyPixelWidth] as? NSNumber)?.doubleValue,
@@ -77,7 +92,76 @@ extension WidgetBox {
     /// `.cm-image-block { padding-left: 6px }`, width from `|N`.
     static func imageSize(_ img: LoadedImage, explicitWidth: Int?, block: Bool, columnWidth: CGFloat) -> CGSize {
         let maxW = block ? columnWidth - 6 : columnWidth
-        let w = min(explicitWidth.map { CGFloat($0) } ?? img.pixelSize.width, maxW)
+        // a PDF is a compact page preview by default; `|N` still sets any width
+        let natural = img.isPDF ? min(img.pixelSize.width, PDFCard.defaultWidth) : img.pixelSize.width
+        let w = min(explicitWidth.map { CGFloat($0) } ?? natural, maxW)
         return CGSize(width: w, height: w * img.pixelSize.height / img.pixelSize.width)
+    }
+}
+
+/// Rendered PDFs: the first page on a white card, a page count, and a Quick Look button. The geometry is
+/// shared by drawing and hit-testing, so the button's clickable area is always exactly what is drawn.
+enum PDFCard {
+    static let defaultWidth: CGFloat = 360
+    static let buttonHeight: CGFloat = 24
+    static let inset: CGFloat = 8
+    static var buttonFont: NSFont { .systemFont(ofSize: 11.5, weight: .medium) }
+    static var buttonTitle: String { L("Quick Look") }
+
+    static func quickLookRect(in card: CGRect) -> CGRect {
+        let w = ceil((buttonTitle as NSString).size(withAttributes: [.font: buttonFont]).width) + 42
+        return CGRect(x: card.maxX - inset - w, y: card.maxY - inset - buttonHeight, width: w, height: buttonHeight)
+    }
+
+    static func draw(_ img: NSImage, pages: Int, in rect: CGRect, theme: EditorTheme) {
+        let card = NSBezierPath(roundedRect: rect, xRadius: 4, yRadius: 4)
+        NSGraphicsContext.saveGraphicsState()
+        let shadow = NSShadow()
+        shadow.shadowColor = NSColor.black.withAlphaComponent(0.16)
+        shadow.shadowBlurRadius = 6
+        shadow.shadowOffset = NSSize(width: 0, height: -1)
+        shadow.set()
+        NSColor.white.setFill()
+        card.fill()
+        NSGraphicsContext.restoreGraphicsState()
+        NSGraphicsContext.saveGraphicsState()
+        card.addClip()
+        img.draw(in: rect, from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true,
+                 hints: [.interpolation: NSImageInterpolation.high.rawValue])
+        NSGraphicsContext.restoreGraphicsState()
+        theme.foreground.withAlphaComponent(0.14).setStroke()
+        card.lineWidth = 1
+        NSBezierPath(roundedRect: rect.insetBy(dx: 0.5, dy: 0.5), xRadius: 4, yRadius: 4).stroke()
+
+        let pill = { (r: CGRect) in
+            let path = NSBezierPath(roundedRect: r, xRadius: r.height / 2, yRadius: r.height / 2)
+            NSColor(white: 0.12, alpha: 0.78).setFill()
+            path.fill()
+        }
+        let attrs: [NSAttributedString.Key: Any] = [.font: buttonFont, .foregroundColor: NSColor.white]
+        // page count, bottom-left
+        if pages > 1 {
+            let label = L("%d pages", pages) as NSString
+            let size = label.size(withAttributes: attrs)
+            let r = CGRect(x: rect.minX + inset, y: rect.maxY - inset - buttonHeight, width: ceil(size.width) + 18, height: buttonHeight)
+            if r.maxX < quickLookRect(in: rect).minX - 6 {
+                pill(r)
+                label.draw(at: CGPoint(x: r.minX + 9, y: r.midY - size.height / 2), withAttributes: attrs)
+            }
+        }
+        // Quick Look, bottom-right
+        let q = quickLookRect(in: rect)
+        pill(q)
+        if let eye = NSImage(systemSymbolName: "eye", accessibilityDescription: nil)?
+            .withSymbolConfiguration(.init(pointSize: 11, weight: .medium)) {
+            let tinted = NSImage(size: eye.size, flipped: false) { r in
+                eye.draw(in: r); NSColor.white.set(); r.fill(using: .sourceAtop); return true
+            }
+            tinted.draw(in: CGRect(x: q.minX + 10, y: q.midY - eye.size.height / 2, width: eye.size.width, height: eye.size.height),
+                        from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: nil)
+        }
+        let title = buttonTitle as NSString
+        let ts = title.size(withAttributes: attrs)
+        title.draw(at: CGPoint(x: q.maxX - 11 - ts.width, y: q.midY - ts.height / 2), withAttributes: attrs)
     }
 }

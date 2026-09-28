@@ -144,6 +144,15 @@ final class IconButton: FlippedView {
 
 /// One sidebar row (file/folder/show-more/workspace switcher).
 final class SidebarRowView: FlippedView {
+    /// An SF Symbol tinted like the custom `Icon`s, fitted in `rect`.
+    static func drawSymbol(_ name: String, in rect: CGRect, color: NSColor) {
+        guard let sym = NSImage(systemSymbolName: name, accessibilityDescription: nil)?
+            .withSymbolConfiguration(.init(pointSize: 12, weight: .regular)) else { return }
+        let size = sym.size
+        let r = CGRect(x: rect.midX - size.width / 2, y: rect.midY - size.height / 2, width: size.width, height: size.height)
+        let tinted = NSImage(size: size, flipped: false) { b in sym.draw(in: b); color.set(); b.fill(using: .sourceAtop); return true }
+        tinted.draw(in: r, from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: nil)
+    }
     enum Kind { case entry(DirEntry, SidebarItem.Section), showMore(SidebarItem.Section), switcher }
     let kind: Kind
     var depth: Int = 0
@@ -208,6 +217,9 @@ final class SidebarRowView: FlippedView {
                 } else {
                     (isExpanded ? Icon.folderOpen : Icon.folderClosed).draw(in: iconRect, color: fg.withAlphaComponent(0.6), ctx: ctx)
                 }
+            } else if let kind = WorkspaceFS.viewerKind(e.path) {
+                // PDFs / images: a distinct glyph, so they don't read as notes
+                Self.drawSymbol(kind == .pdf ? "doc.richtext" : "photo", in: iconRect, color: fg.withAlphaComponent(hovering ? 1 : 0.6))
             } else {
                 Icon.file.draw(in: iconRect, color: fg.withAlphaComponent(hovering ? 1 : 0.6), ctx: ctx)
             }

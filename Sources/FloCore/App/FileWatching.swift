@@ -241,7 +241,7 @@ public final class FileChangeReconciler {
     @discardableResult
     public func handleFileChanged(path: String, kind: FileChangeKind) async -> Bool {
         onSidebarMetadataChanged?()
-        guard decide(path: path, kind: kind) == .reread, let editor = editor else { return false }
+        guard decide(path: path, kind: kind) == .reread, let editor = editor, WorkspaceFS.viewerKind(path) == nil else { return false }
         editor.saveEngine.cancelSave(path)
         guard let content = try? await reader(path) else { return false }
         guard let latest = editor.file(path), content.content != latest.diskContent else { return false }

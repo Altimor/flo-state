@@ -936,3 +936,8 @@
 
 /* ShellMenus.swift (Format menu) */
 "Move Line Down" = "Переместить строку вниз";
+
+/* PDF card: button that opens the file in the system Quick Look panel */
+"Quick Look" = "Быстрый просмотр";
+/* PDF card: page count badge */
+"%d pages" = "%d стр.";

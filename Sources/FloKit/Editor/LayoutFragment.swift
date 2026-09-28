@@ -269,8 +269,12 @@ final class FloLayoutFragment: NSTextLayoutFragment {
             if case .image(_, _, _, true) = box.widget.kind { x = lineLeft + 6 }
             else if box.trailing, let after = trailingX { x = after - box.width }
             let rect = CGRect(x: x, y: p.lineTop + box.yOffset, width: box.size.width, height: box.size.height)
-            img.draw(in: rect, from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true,
-                     hints: [.interpolation: NSImageInterpolation.high.rawValue])
+            if let pages = box.image?.pdfPageCount {
+                PDFCard.draw(img, pages: pages, in: rect, theme: theme)
+            } else {
+                img.draw(in: rect, from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true,
+                         hints: [.interpolation: NSImageInterpolation.high.rawValue])
+            }
             editor?.noteImageDrawn(rect.offsetBy(dx: layoutFragmentFrame.minX - drawOrigin.x, dy: layoutFragmentFrame.minY - drawOrigin.y),
                                    widget: box.widget, url: box.image?.url)
         case .math(_, let display):

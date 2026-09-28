@@ -1,4 +1,5 @@
 import AppKit
+import Quartz
 import FloCore
 
 public final class EditorController: NSObject, NSTextViewDelegate, NSTextLayoutManagerDelegate, NSTextStorageDelegate {
@@ -641,6 +642,7 @@ public final class FloTextView: NSTextView {
         if chromeRect.contains(convert(event.locationInWindow, from: nil)) { NSCursor.arrow.set() }
         else if let c = controller, c.imageOverlay.handleContains(convert(event.locationInWindow, from: nil)) { ImageResizeOverlay.diagonalCursor.set() }
         else if let c = controller, c.features.pointerOverLink(event) { NSCursor.pointingHand.set() }
+        else if let c = controller, c.pdfQuickLookURL(at: convert(event.locationInWindow, from: nil)) != nil { NSCursor.pointingHand.set() }
         else { super.cursorUpdate(with: event) }
     }
 
@@ -733,6 +735,7 @@ public final class FloTextView: NSTextView {
         super.mouseMoved(with: event)
         if chromeRect.contains(convert(event.locationInWindow, from: nil)) { NSCursor.arrow.set(); return }
         if let c = controller, c.features.pointerOverLink(event) { NSCursor.pointingHand.set() }
+        if let c = controller, c.pdfQuickLookURL(at: convert(event.locationInWindow, from: nil)) != nil { NSCursor.pointingHand.set(); return }
         guard let c = controller else { return }
         let p = convert(event.locationInWindow, from: nil)
         let i = characterIndexForInsertion(at: NSPoint(x: textContainerOrigin.x + c.applier.gutter + 1, y: p.y))
@@ -761,9 +764,19 @@ public final class FloTextView: NSTextView {
     /// selection before that click (the single click selects the image source).
     private var imageClick: (url: URL, selection: [NSValue])?
 
+    // Quick Look panel control (PDF cards): the panel asks the responder chain for a data source
+    public override func acceptsPreviewPanelControl(_ panel: QLPreviewPanel!) -> Bool { QuickLook.shared.url != nil }
+    public override func beginPreviewPanelControl(_ panel: QLPreviewPanel!) { panel.dataSource = QuickLook.shared; panel.delegate = QuickLook.shared }
+    public override func endPreviewPanelControl(_ panel: QLPreviewPanel!) { panel.dataSource = nil; panel.delegate = nil }
+
     public override func mouseDown(with event: NSEvent) {
         if let c = controller, event.clickCount == 1, !event.modifierFlags.contains(.shift),
            c.toggleCheckbox(at: convert(event.locationInWindow, from: nil)) { return }
+        if let c = controller, !event.modifierFlags.contains(.shift),
+           let pdf = c.pdfQuickLookURL(at: convert(event.locationInWindow, from: nil)) {
+            QuickLook.shared.show(pdf)
+            return
+        }
         if let c = controller, let line = chevronLine(at: convert(event.locationInWindow, from: nil)) {
             c.toggleFold(line: line)
             return

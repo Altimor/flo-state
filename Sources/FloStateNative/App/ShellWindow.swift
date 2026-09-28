@@ -502,8 +502,8 @@ final class ShellRootView: FlippedView {
 
     override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
         let paths = droppedPaths(sender)
-        let images = paths.filter { WorkspaceFS.isImagePath($0) }
-        let others = paths.filter { !WorkspaceFS.isImagePath($0) }
+        let images = paths.filter { WorkspaceFS.isEmbeddablePath($0) }
+        let others = paths.filter { !WorkspaceFS.isEmbeddablePath($0) }
         if !images.isEmpty, let pane = area.activeFilePane {
             pane.insertDroppedImages(model.importDroppedImages(images, into: pane.path))
         }

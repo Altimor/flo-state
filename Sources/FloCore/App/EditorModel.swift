@@ -275,6 +275,12 @@ public final class EditorStore: SaveEngineHost {
     /// the placeholder and rethrows.
     public func ensureFileLoaded(_ path: String) async throws {
         if let existing = openFiles[path], !existing.isLoading { return }
+        // PDFs and images open in a viewer: never decode them as text (that failed and closed the tab)
+        if WorkspaceFS.viewerKind(path) != nil {
+            let base = openFiles[path] ?? .loading(path)
+            mutate { openFiles[path] = loaded(base, raw: "") }
+            return
+        }
         if let pending = pendingLoads[path] {
             try await pending.value
             return

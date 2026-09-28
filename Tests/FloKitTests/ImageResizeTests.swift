@@ -65,6 +65,46 @@ final class ImageResizeTests: XCTestCase {
         XCTAssertEqual(c.text, "# T\n\n![shot @2x.png](attachments/i.png)\n\nafter\n")
     }
 
+    /// A 3-page, 400×500pt PDF with a red first page, next to the note.
+    func writePDF(_ dir: String) {
+        let url = URL(fileURLWithPath: dir + "/attachments/doc.pdf")
+        var box = CGRect(x: 0, y: 0, width: 400, height: 500)
+        let ctx = CGContext(url as CFURL, mediaBox: &box, nil)!
+        for page in 0..<3 {
+            ctx.beginPDFPage(nil)
+            if page == 0 { ctx.setFillColor(NSColor.systemRed.cgColor); ctx.fill(CGRect(x: 50, y: 50, width: 300, height: 400)) }
+            ctx.endPDFPage()
+        }
+        ctx.closePDF()
+    }
+
+    func testPDFRendersAsAPageCardWithQuickLook() throws {
+        let (c0, doc) = makeEditor("x\n")
+        writePDF((doc as NSString).deletingLastPathComponent)
+        c0.applier.images.invalidate()
+        c0.load("# T\n\n![doc](attachments/doc.pdf)\n\nafter\n", selection: .cursor(0))
+        c0.layoutColumn(); c0.waitForAsyncWidgets()
+        let tlm = c0.textView.textLayoutManager!; tlm.ensureLayout(for: tlm.documentRange)
+        let content = c0.scrollView.superview!
+        let rep = content.bitmapImageRepForCachingDisplay(in: content.bounds)!
+        content.cacheDisplay(in: content.bounds, to: rep)
+        let hit = try XCTUnwrap(c0.imageRects.values.first, "PDF drawn and recorded")
+        XCTAssertEqual(hit.url?.pathExtension, "pdf")
+        XCTAssertEqual(hit.rect.width, PDFCard.defaultWidth, accuracy: 1, "compact preview by default")
+        XCTAssertEqual(hit.rect.height, PDFCard.defaultWidth * 500 / 400, accuracy: 1, "first page's proportions")
+        XCTAssertEqual(c0.applier.images.resolve(markdownSource: "attachments/doc.pdf")?.pdfPageCount, 3)
+        // the first page's red rectangle is drawn at the card's centre
+        let mid = c0.textView.convert(NSPoint(x: hit.rect.midX, y: hit.rect.midY), to: content)
+        let px = rep.colorAt(x: Int(mid.x * CGFloat(rep.pixelsWide) / content.bounds.width),
+                             y: Int((content.bounds.height - mid.y) * CGFloat(rep.pixelsHigh) / content.bounds.height))!
+        XCTAssertGreaterThan(px.redComponent, 0.6); XCTAssertLessThan(px.blueComponent, 0.4)
+        // the Quick Look button is hit exactly where it is drawn, not elsewhere on the card
+        let q = PDFCard.quickLookRect(in: hit.rect)
+        XCTAssertEqual(c0.pdfQuickLookURL(at: NSPoint(x: q.midX, y: q.midY))?.lastPathComponent, "doc.pdf")
+        XCTAssertNil(c0.pdfQuickLookURL(at: NSPoint(x: hit.rect.midX, y: hit.rect.midY)))
+        XCTAssertTrue(hit.rect.contains(q))
+    }
+
     func click(_ c: EditorController, at p: NSPoint, count: Int) {
         let w = c.textView.convert(p, to: nil)
         func ev(_ t: NSEvent.EventType) -> NSEvent {

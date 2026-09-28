@@ -24,6 +24,36 @@ final class ShellViewTests: XCTestCase {
         wc = nil
     }
 
+    /// PDFs and images open in a viewer tab: the tab stays (it used to fail decoding the bytes as text and
+    /// close again), the pane shows PDFKit / an image view instead of the editor, and the file is untouched.
+    func testPDFAndImageOpenInViewerTabs() async throws {
+        await make(["a.md": "# A"])
+        let pdf = f.p("doc.pdf"), png = f.p("pic.png")
+        var box = CGRect(x: 0, y: 0, width: 300, height: 400)
+        let ctx = CGContext(URL(fileURLWithPath: pdf) as CFURL, mediaBox: &box, nil)!
+        ctx.beginPDFPage(nil); ctx.setFillColor(NSColor.systemBlue.cgColor); ctx.fill(CGRect(x: 40, y: 40, width: 220, height: 320)); ctx.endPDFPage(); ctx.beginPDFPage(nil); ctx.endPDFPage(); ctx.closePDF()
+        let img = NSImage(size: NSSize(width: 64, height: 32)); img.lockFocus(); NSColor.red.setFill(); NSRect(x: 0, y: 0, width: 64, height: 32).fill(); img.unlockFocus()
+        try NSBitmapImageRep(data: img.tiffRepresentation!)!.representation(using: .png, properties: [:])!.write(to: URL(fileURLWithPath: png))
+        let before = try Data(contentsOf: URL(fileURLWithPath: png))
+        for (path, kind) in [(pdf, WorkspaceFS.ViewerKind.pdf), (png, .image)] {
+            try await f.model.editor.openFileInTabOrFocus(path)
+            await f.settle()
+            refresh()
+            XCTAssertTrue(f.model.editor.tabs.contains { $0.location == .file(path) }, "tab stays open")
+            let pane = try XCTUnwrap(wc.root.area.activeFilePane)
+            XCTAssertEqual(pane.path, path)
+            XCTAssertNil(pane.controller, "no text editor")
+            XCTAssertEqual(pane.viewer?.kind, kind)
+            XCTAssertGreaterThan(pane.viewer?.frame.width ?? 0, 100)
+            if kind == .pdf {
+                XCTAssertEqual(pane.viewer?.pdfView?.document?.pageCount, 2)
+                XCTAssertEqual(pane.viewer?.pdfView?.scaleFactor ?? 0, 3, accuracy: 0.01, "300pt page fitted to 900pt, not the full pane")
+            }
+            else { XCTAssertEqual(pane.viewer?.imageView?.frame.size, CGSize(width: 128, height: 64), "2x bitmap shown at its pixel size") }
+        }
+        XCTAssertEqual(try Data(contentsOf: URL(fileURLWithPath: png)), before, "never written")
+    }
+
     /// Crash report (0.1.8): AppKit laid a window out after its controller, the model's other owner, was
     /// released; the root view's `unowned` model then aborted in `setWindowActive` during `layout()`.
     func testRootViewOutlivingItsControllerCanStillLayOut() {

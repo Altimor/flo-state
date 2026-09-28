@@ -404,6 +404,18 @@ public enum WorkspaceFS {
     public static let attachmentsDir = "attachments"
     public static let imageExtensions = ["png", "jpg", "jpeg", "gif", "webp", "svg", "heic", "bmp"]
 
+    /// Files a tab shows in a viewer instead of the text editor (never read or saved as text).
+    public enum ViewerKind { case pdf, image }
+    public static func viewerKind(_ path: String) -> ViewerKind? {
+        if rustExtension(path)?.lowercased() == "pdf" { return .pdf }
+        return isImagePath(path) ? .image : nil
+    }
+
+    /// Dropped files embedded in the note like images (PDFs render as a one-page card).
+    public static func isEmbeddablePath(_ path: String) -> Bool {
+        isImagePath(path) || rustExtension(path)?.lowercased() == "pdf"
+    }
+
     public static func isImagePath(_ path: String) -> Bool {
         guard let ext = rustExtension(path) else { return false }
         return imageExtensions.contains { $0.caseInsensitiveCompare(ext) == .orderedSame }
