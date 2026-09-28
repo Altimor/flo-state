@@ -103,17 +103,17 @@ extension WidgetBox {
 /// shared by drawing and hit-testing, so the button's clickable area is always exactly what is drawn.
 enum PDFCard {
     static let defaultWidth: CGFloat = 360
-    static let buttonHeight: CGFloat = 24
+    static let buttonHeight: CGFloat = 26
     static let inset: CGFloat = 8
-    static var buttonFont: NSFont { .systemFont(ofSize: 11.5, weight: .medium) }
-    static var buttonTitle: String { L("Quick Look") }
+    static var labelFont: NSFont { .systemFont(ofSize: 11.5, weight: .medium) }
 
+    /// The icon-only Quick Look button, bottom-right (hit-tested with the same rect).
     static func quickLookRect(in card: CGRect) -> CGRect {
-        let w = ceil((buttonTitle as NSString).size(withAttributes: [.font: buttonFont]).width) + 42
-        return CGRect(x: card.maxX - inset - w, y: card.maxY - inset - buttonHeight, width: w, height: buttonHeight)
+        CGRect(x: card.maxX - inset - buttonHeight, y: card.maxY - inset - buttonHeight, width: buttonHeight, height: buttonHeight)
     }
 
-    static func draw(_ img: NSImage, pages: Int, in rect: CGRect, theme: EditorTheme) {
+    /// `controls`: the page count and Quick Look button, shown while the pointer is over the card.
+    static func draw(_ img: NSImage, pages: Int, in rect: CGRect, theme: EditorTheme, controls: Bool) {
         let card = NSBezierPath(roundedRect: rect, xRadius: 4, yRadius: 4)
         NSGraphicsContext.saveGraphicsState()
         let shadow = NSShadow()
@@ -130,38 +130,42 @@ enum PDFCard {
                  hints: [.interpolation: NSImageInterpolation.high.rawValue])
         NSGraphicsContext.restoreGraphicsState()
         theme.foreground.withAlphaComponent(0.14).setStroke()
-        card.lineWidth = 1
         NSBezierPath(roundedRect: rect.insetBy(dx: 0.5, dy: 0.5), xRadius: 4, yRadius: 4).stroke()
+        guard controls else { return }
 
-        let pill = { (r: CGRect) in
-            let path = NSBezierPath(roundedRect: r, xRadius: r.height / 2, yRadius: r.height / 2)
-            NSColor(white: 0.12, alpha: 0.78).setFill()
-            path.fill()
+        let ink = NSColor(white: 0.18, alpha: 1)
+        let chip = { (r: CGRect) in
+            NSGraphicsContext.saveGraphicsState()
+            let s = NSShadow()
+            s.shadowColor = NSColor.black.withAlphaComponent(0.18)
+            s.shadowBlurRadius = 3
+            s.shadowOffset = NSSize(width: 0, height: -0.5)
+            s.set()
+            NSColor(white: 1, alpha: 0.92).setFill()
+            NSBezierPath(roundedRect: r, xRadius: r.height / 2, yRadius: r.height / 2).fill()
+            NSGraphicsContext.restoreGraphicsState()
+            NSColor.black.withAlphaComponent(0.1).setStroke()
+            NSBezierPath(roundedRect: r.insetBy(dx: 0.5, dy: 0.5), xRadius: r.height / 2 - 0.5, yRadius: r.height / 2 - 0.5).stroke()
         }
-        let attrs: [NSAttributedString.Key: Any] = [.font: buttonFont, .foregroundColor: NSColor.white]
         // page count, bottom-left
         if pages > 1 {
+            let attrs: [NSAttributedString.Key: Any] = [.font: labelFont, .foregroundColor: ink]
             let label = L("%d pages", pages) as NSString
             let size = label.size(withAttributes: attrs)
             let r = CGRect(x: rect.minX + inset, y: rect.maxY - inset - buttonHeight, width: ceil(size.width) + 18, height: buttonHeight)
             if r.maxX < quickLookRect(in: rect).minX - 6 {
-                pill(r)
+                chip(r)
                 label.draw(at: CGPoint(x: r.minX + 9, y: r.midY - size.height / 2), withAttributes: attrs)
             }
         }
-        // Quick Look, bottom-right
+        // Quick Look, bottom-right: the eye alone
         let q = quickLookRect(in: rect)
-        pill(q)
-        if let eye = NSImage(systemSymbolName: "eye", accessibilityDescription: nil)?
-            .withSymbolConfiguration(.init(pointSize: 11, weight: .medium)) {
-            let tinted = NSImage(size: eye.size, flipped: false) { r in
-                eye.draw(in: r); NSColor.white.set(); r.fill(using: .sourceAtop); return true
-            }
-            tinted.draw(in: CGRect(x: q.minX + 10, y: q.midY - eye.size.height / 2, width: eye.size.width, height: eye.size.height),
+        chip(q)
+        if let eye = NSImage(systemSymbolName: "eye", accessibilityDescription: L("Quick Look"))?
+            .withSymbolConfiguration(.init(pointSize: 12, weight: .medium)) {
+            let tinted = NSImage(size: eye.size, flipped: false) { r in eye.draw(in: r); ink.set(); r.fill(using: .sourceAtop); return true }
+            tinted.draw(in: CGRect(x: q.midX - eye.size.width / 2, y: q.midY - eye.size.height / 2, width: eye.size.width, height: eye.size.height),
                         from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: nil)
         }
-        let title = buttonTitle as NSString
-        let ts = title.size(withAttributes: attrs)
-        title.draw(at: CGPoint(x: q.maxX - 11 - ts.width, y: q.midY - ts.height / 2), withAttributes: attrs)
     }
 }

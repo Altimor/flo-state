@@ -270,7 +270,7 @@ final class FloLayoutFragment: NSTextLayoutFragment {
             else if box.trailing, let after = trailingX { x = after - box.width }
             let rect = CGRect(x: x, y: p.lineTop + box.yOffset, width: box.size.width, height: box.size.height)
             if let pages = box.image?.pdfPageCount {
-                PDFCard.draw(img, pages: pages, in: rect, theme: theme)
+                PDFCard.draw(img, pages: pages, in: rect, theme: theme, controls: editor?.hoveredPDF == box.widget.from)
             } else {
                 img.draw(in: rect, from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true,
                          hints: [.interpolation: NSImageInterpolation.high.rawValue])
