@@ -18,6 +18,9 @@ public final class EditorController: NSObject, NSTextViewDelegate, NSTextLayoutM
     public var onSelectionChanged: ((EditorState) -> Void)?
     /// A click on a rendered link / URL (`href`) or wiki link (`wiki` = inner text).
     public var onLinkClick: ((LinkClick) -> Void)?
+    /// Files dropped from Finder onto the text: (paths, UTF-16 offset of the drop point) → handled?
+    /// NSTextView otherwise takes file drops itself (inserting a path, or nothing) before the window sees them.
+    public var onFileDrop: (([String], Int) -> Bool)?
 
     public enum LinkClick: Equatable {
         case href(String)
@@ -768,6 +771,33 @@ public final class FloTextView: NSTextView {
     public override func acceptsPreviewPanelControl(_ panel: QLPreviewPanel!) -> Bool { QuickLook.shared.url != nil }
     public override func beginPreviewPanelControl(_ panel: QLPreviewPanel!) { panel.dataSource = QuickLook.shared; panel.delegate = QuickLook.shared }
     public override func endPreviewPanelControl(_ panel: QLPreviewPanel!) { panel.dataSource = nil; panel.delegate = nil }
+
+    // MARK: file drops (Finder): routed to `onFileDrop` instead of NSTextView's own file handling
+
+    private func droppedFilePaths(_ info: NSDraggingInfo) -> [String] {
+        (info.draggingPasteboard.readObjects(forClasses: [NSURL.self], options: [.urlReadingFileURLsOnly: true]) as? [URL] ?? []).map(\.path)
+    }
+
+    public override func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation {
+        if controller?.onFileDrop != nil, !droppedFilePaths(sender).isEmpty { _ = super.draggingEntered(sender); return .copy }
+        return super.draggingEntered(sender)
+    }
+
+    public override func draggingUpdated(_ sender: NSDraggingInfo) -> NSDragOperation {
+        if controller?.onFileDrop != nil, !droppedFilePaths(sender).isEmpty { _ = super.draggingUpdated(sender); return .copy }
+        return super.draggingUpdated(sender)
+    }
+
+    public override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
+        let paths = droppedFilePaths(sender)
+        if let drop = controller?.onFileDrop, !paths.isEmpty {
+            cleanUpAfterDragOperation()
+            let point = convert(sender.draggingLocation, from: nil)
+            let i = characterIndexForInsertion(at: point)
+            return drop(paths, i == NSNotFound ? (controller?.state.selection.main.head ?? 0) : i)
+        }
+        return super.performDragOperation(sender)
+    }
 
     public override func mouseDown(with event: NSEvent) {
         if let c = controller, event.clickCount == 1, !event.modifierFlags.contains(.shift),

@@ -172,7 +172,16 @@ final class EditorPaneView: FlippedView {
         // File drops go to the window (images → attachments, notes/folders → open),
         // not into the text as paths; text drags keep working.
         c.textView.unregisterDraggedTypes()
-        c.textView.registerForDraggedTypes([.string])
+        c.textView.registerForDraggedTypes([.string, .fileURL])
+        // Finder drops onto the text: PDFs / images embed at the drop point, anything else opens
+        c.onFileDrop = { [weak self] paths, at in
+            guard let self = self else { return false }
+            let embed = paths.filter { WorkspaceFS.isEmbeddablePath($0) }
+            let others = paths.filter { !WorkspaceFS.isEmbeddablePath($0) }
+            if !embed.isEmpty { self.insertDroppedImages(self.model.importDroppedImages(embed, into: self.path), at: at) }
+            if !others.isEmpty { self.model.openDroppedPaths(others) }
+            return true
+        }
         let panel = FrontmatterPanelView(model: model, path: path)
         panel.onHeightChange = { [weak self] in self?.layoutFrontmatter() }
         panel.focusEditor = { [weak c] in c?.textView.window?.makeFirstResponder(c?.textView) }
@@ -375,9 +384,9 @@ final class EditorPaneView: FlippedView {
     }
 
     /// Insert dropped image references at the caret.
-    func insertDroppedImages(_ snippets: [String]) {
+    func insertDroppedImages(_ snippets: [String], at offset: Int? = nil) {
         guard let c = controller, !snippets.isEmpty else { return }
-        let cursor = c.state.selection.main.head
+        let cursor = min(offset ?? c.state.selection.main.head, c.state.doc.length)
         let line = c.state.doc.lineAt(cursor)
         let insert = ShellModel.imageDropEdit(snippets: snippets, lineStart: cursor == line.from)
         c.run { t in

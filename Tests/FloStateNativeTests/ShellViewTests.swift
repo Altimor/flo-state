@@ -24,6 +24,28 @@ final class ShellViewTests: XCTestCase {
         wc = nil
     }
 
+    /// Dropping a PDF from Finder onto the text copies it into attachments/ and embeds it at the drop point.
+    /// (0.1.10 regression: the text view took file drops itself, so the window-level handler never ran.)
+    func testDroppingAPDFOnTheTextEmbedsIt() async throws {
+        await make(["a.md": "# A\n\nfirst\n"])
+        await openTab("a.md")
+        let src = f.p("dropped doc.pdf")
+        var box = CGRect(x: 0, y: 0, width: 300, height: 400)
+        let ctx = CGContext(URL(fileURLWithPath: src) as CFURL, mediaBox: &box, nil)!
+        ctx.beginPDFPage(nil); ctx.endPDFPage(); ctx.closePDF()
+        let pane = try XCTUnwrap(wc.root.area.activeFilePane)
+        let tv = try XCTUnwrap(pane.controller?.textView)
+        let pb = NSPasteboard(name: NSPasteboard.Name("flo-drop-\(UUID().uuidString)"))
+        pb.clearContents()
+        pb.writeObjects([URL(fileURLWithPath: src) as NSURL])
+        let drag = FakeDrag(pasteboard: pb, location: tv.convert(NSPoint(x: tv.bounds.midX, y: tv.bounds.maxY - 5), to: nil), window: wc.window!)
+        XCTAssertEqual(tv.draggingEntered(drag), .copy)
+        XCTAssertTrue(tv.performDragOperation(drag))
+        XCTAssertTrue(FileManager.default.fileExists(atPath: f.p("attachments/dropped doc.pdf")), "copied next to the note")
+        XCTAssertTrue(pane.controller!.text.contains("![dropped doc](<attachments/dropped doc.pdf>)") || pane.controller!.text.contains("![dropped doc](attachments/dropped%20doc.pdf)"),
+                      pane.controller!.text)
+    }
+
     /// PDFs and images open in a viewer tab: the tab stays (it used to fail decoding the bytes as text and
     /// close again), the pane shows PDFKit / an image view instead of the editor, and the file is untouched.
     func testPDFAndImageOpenInViewerTabs() async throws {
@@ -645,4 +667,28 @@ final class SidebarAnimationTests: XCTestCase {
         XCTAssertEqual(o.shadowView.frame, o.card.frame)
         XCTAssertEqual(wc.root.tabBlur.layer?.masksToBounds, true, "tab strip blur clipped to the strip")
     }
+}
+
+/// Minimal NSDraggingInfo for driving drop handlers directly.
+final class FakeDrag: NSObject, NSDraggingInfo {
+    let draggingPasteboard: NSPasteboard
+    let draggingLocation: NSPoint
+    let draggingDestinationWindow: NSWindow?
+    init(pasteboard: NSPasteboard, location: NSPoint, window: NSWindow) {
+        draggingPasteboard = pasteboard; draggingLocation = location; draggingDestinationWindow = window
+    }
+    var draggingSourceOperationMask: NSDragOperation { .copy }
+    var draggedImageLocation: NSPoint { draggingLocation }
+    var draggedImage: NSImage? { nil }
+    var draggingSource: Any? { nil }
+    var draggingSequenceNumber: Int { 1 }
+    func slideDraggedImage(to screenPoint: NSPoint) {}
+    override func namesOfPromisedFilesDropped(atDestination dropDestination: URL) -> [String]? { nil }
+    var draggingFormation: NSDraggingFormation = .default
+    var animatesToDestination = false
+    var numberOfValidItemsForDrop = 1
+    func enumerateDraggingItems(options enumOpts: NSDraggingItemEnumerationOptions = [], for view: NSView?, classes classArray: [AnyClass],
+                                searchOptions: [NSPasteboard.ReadingOptionKey: Any] = [:], using block: (NSDraggingItem, Int, UnsafeMutablePointer<ObjCBool>) -> Void) {}
+    var springLoadingHighlight: NSSpringLoadingHighlight { .none }
+    func resetSpringLoading() {}
 }
