@@ -941,3 +941,6 @@
 "Quick Look" = "त्वरित दृश्य";
 /* PDF card: page count badge */
 "%d pages" = "%d पृष्ठ";
+
+/* File menu: close every tab except the current one (Shift-Cmd-W) */
+"Close Other Tabs" = "अन्य टैब बंद करें";

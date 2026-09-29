@@ -167,30 +167,28 @@ final class ShellWatcherTests: XCTestCase {
         XCTAssertTrue(sawFont)
     }
 
-    /// Real FSEvents end to end: an external write reaches the open buffer.
+    /// Real FSEvents end to end, one watcher: our own autosave is not reloaded,
+    /// then an external write reaches the open buffer.
     func testFSEventsEndToEnd() async throws {
         let f = ShellFixture(files: ["a.md": "one"])
-        f.model.watcherEnabled = true
         let real = ShellModel(dataDir: AppDataDirectory(baseURL: URL(fileURLWithPath: f.data)), importLegacy: false)
         await real.openWorkspace(f.root, openFile: f.p("a.md"))
         try await Task.sleep(nanoseconds: 700_000_000)
+        // own write: suppressed
+        real.editor.updateContent(f.p("a.md"), "mine")
+        for _ in 0..<30 where TFS.read(f.p("a.md")) != "mine\n" { try await Task.sleep(nanoseconds: 50_000_000) }
+        XCTAssertEqual(TFS.read(f.p("a.md")), "mine\n")
+        // wait past the 2 s self-write TTL: its FSEvent has arrived (and must be ignored),
+        // and the external write below is not mistaken for ours
+        try await Task.sleep(nanoseconds: 2_300_000_000)
+        XCTAssertEqual(real.editor.file(f.p("a.md"))?.reloadVersion, 0, "own write not reloaded")
+        // external write: reloaded
         TFS.write(f.p("a.md"), "external")
         for _ in 0..<60 {
             try await Task.sleep(nanoseconds: 100_000_000)
             if real.editor.file(f.p("a.md"))?.content == "external" { break }
         }
         XCTAssertEqual(real.editor.file(f.p("a.md"))?.content, "external")
-        real.windowWillClose()
-    }
-
-    func testOwnWritesAreSuppressed() async throws {
-        let f = ShellFixture(files: ["a.md": "one"])
-        let real = ShellModel(dataDir: AppDataDirectory(baseURL: URL(fileURLWithPath: f.data)), importLegacy: false)
-        await real.openWorkspace(f.root, openFile: f.p("a.md"))
-        real.editor.updateContent(f.p("a.md"), "mine")
-        try await Task.sleep(nanoseconds: 1_200_000_000)
-        XCTAssertEqual(real.editor.file(f.p("a.md"))?.reloadVersion, 0)
-        XCTAssertEqual(TFS.read(f.p("a.md")), "mine\n")
         real.windowWillClose()
     }
 
@@ -325,6 +323,18 @@ final class ShellTabTests: XCTestCase {
         f.model.perform(.stepFile(-1)); await f.settle()
         XCTAssertEqual(f.model.editor.activeFilePath, f.p("d/e.md"), "walks into expanded folders")
         XCTAssertEqual(f.model.editor.tabs.count, 1, "steps in the current tab")
+    }
+
+    /// Shift-Cmd-W (File ▸ Close Other Tabs) keeps only the current tab.
+    func testCloseOtherTabsKeepsOnlyTheActiveOne() async throws {
+        let f = ShellFixture(files: ["a.md": "# A", "b.md": "# B", "c.md": "# C"])
+        await f.open()
+        for n in ["a.md", "b.md", "c.md"] { try await f.model.editor.openFileInNewTab(f.p(n)) }
+        try await f.model.editor.openFileInTabOrFocus(f.p("b.md"))
+        f.model.perform(.closeOtherTabs)
+        XCTAssertEqual(f.model.editor.tabs.map(\.location), [.file(f.p("b.md"))])
+        let entry = try XCTUnwrap(MainMenu.fileEntries.compactMap { $0 }.first { $0.action == .closeOtherTabs })
+        XCTAssertEqual(entry.key, "w"); XCTAssertEqual(entry.modifiers, [.command, .shift])
     }
 
     func testTabContextMenuItems() async {
@@ -700,7 +710,7 @@ final class ShellMenuAndKeyTests: XCTestCase {
         let menu = MainMenu.build(target: router)
         XCTAssertEqual(menu.items.map { $0.title }, ["Flo State", "File", "Edit", "Format", "View", "Window"])
         func items(_ i: Int) -> [String] { menu.items[i].submenu!.items.map { $0.isSeparatorItem ? "-" : $0.title } }
-        XCTAssertEqual(items(1), ["New Note", "New Tab", "Go to File…", "-", "Go to Today", "Search…", "Search in All Notes…", "-", "Close Tab"])
+        XCTAssertEqual(items(1), ["New Note", "New Tab", "Go to File…", "-", "Go to Today", "Search…", "Search in All Notes…", "-", "Close Tab", "Close Other Tabs"])
         XCTAssertEqual(items(3), ["Bold", "Italic", "Strikethrough", "Inline Code", "Insert Link", "-", "Heading 1", "Heading 2", "Heading 3", "Body Text",
                                   "-", "Bulleted List", "Numbered List", "Checkbox", "Mark as Done", "Quote", "-", "Indent", "Outdent", "Move Line Up", "Move Line Down"])
         XCTAssertEqual(items(4), ["Toggle Sidebar", "Toggle Typewriter Scrolling", "-", "Increase Font Size", "Decrease Font Size",
@@ -713,7 +723,7 @@ final class ShellMenuAndKeyTests: XCTestCase {
         XCTAssertTrue(items(0).contains("Settings…"), "macOS 13+ naming")
         XCTAssertFalse(items(0).contains("Preferences…"))
         let keys = menu.items[1].submenu!.items.filter { !$0.isSeparatorItem }.map { "\($0.keyEquivalentModifierMask.contains(.shift) ? "⇧" : "")\($0.keyEquivalent)" }
-        XCTAssertEqual(keys, ["n", "t", "o", "⇧d", "k", "⇧f", "w"])
+        XCTAssertEqual(keys, ["n", "t", "o", "⇧d", "k", "⇧f", "w", "⇧w"])
         let back = menu.items.first { $0.title == "View" }!.submenu!.items.first { $0.title == "Back" }!
         XCTAssertEqual(back.keyEquivalent, "", "Alt-←/→ stay with the editor")
     }

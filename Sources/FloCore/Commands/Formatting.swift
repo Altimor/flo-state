@@ -331,14 +331,15 @@ public enum Formatting {
         t.dispatch(TransactionSpec(changes: changes, selection: sel, userEvent: userEvent))
     }
 
+    /// Keeps the caret where it was (mapped through the prefix change): selecting the whole line, as the
+    /// web app did, made the next keystroke replace the line, bullet included.
     static func convertList(numbered: Bool, _ userEvent: String) -> Command {
-        let kind = numbered ? NUMBERED_LINE_RE : BULLET_LINE_RE
-        let isKind = { (l: String) in kind.firstMatch(in: l, range: NSRange(location: 0, length: (l as NSString).length)) != nil }
-        return lineCommand(userEvent) { line, idx, all in
-            let ns = line as NSString
-            guard let m = LIST_PREFIX_RE.firstMatch(in: line, range: NSRange(location: 0, length: ns.length)) else { return line }
-            let prefix = all.allSatisfy(isKind) ? "" : numbered ? "\(idx + 1). " : "- "
-            return ns.substring(with: m.range(at: 1)) + prefix + ns.substring(from: m.range.length)
+        return { t in
+            let lines = selectedLines(t.state)
+            let kind = numbered ? NUMBERED_LINE_RE : BULLET_LINE_RE
+            let already = lines.allSatisfy { matches(kind, $0) }
+            replaceListPrefixes(t, lines, userEvent: userEvent) { i in already ? "" : numbered ? "\(i + 1). " : "- " }
+            return true
         }
     }
 

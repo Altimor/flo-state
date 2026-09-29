@@ -156,6 +156,12 @@ public final class EditorController: NSObject, NSTextViewDelegate, NSTextLayoutM
         textView.insertionPointColor = theme.primaryColor
         textView.selectedTextAttributes = [.backgroundColor: theme.selectionColor]
         textView.textLayoutManager?.delegate = self
+        // TextKit 2 keeps only a few hundred layout fragments and drops the ones
+        // above the viewport as you scroll; keeping the document fully laid out
+        // (see refreshDocumentHeight) then re-typeset them all on every scroll
+        // step (~30ms a step in a long note). Keep every fragment.
+        let cap = NSSelectorFromString("setMaximumNumberOfCachedTextLayoutFragments:")
+        if let tlm = textView.textLayoutManager, tlm.responds(to: cap) { tlm.setValue(Int.max / 2, forKey: "maximumNumberOfCachedTextLayoutFragments") }
         textView.textStorage?.delegate = self
         textView.typingAttributes = [.font: theme.font(size: theme.baseSize, weight: 400, mono: false),
                                      .foregroundColor: theme.textColor]
@@ -186,9 +192,14 @@ public final class EditorController: NSObject, NSTextViewDelegate, NSTextLayoutM
         if state.doc.lines > 0, let ps = textView.textStorage?.length ?? 0 > 0 ? textView.textStorage?.attribute(.paragraphStyle, at: 0, effectiveRange: nil) as? NSParagraphStyle : nil {
             firstPad = ps.paragraphSpacingBefore
         }
-        textView.textContainerInset = NSSize(width: max(0, left), height: topInset + firstPad)
-        let widthChanged = textView.textContainer?.size.width != textW + applier.gutter
-        textView.textContainer?.size = NSSize(width: textW + applier.gutter, height: .greatestFiniteMagnitude)
+        // Assign only real changes: setting the same inset / container size again still makes TextKit drop
+        // the document's layout, and this runs on layout passes during scrolling (every step then re-typeset
+        // the whole note — tens of ms per step deep in long notes).
+        let inset = NSSize(width: max(0, left), height: topInset + firstPad)
+        if textView.textContainerInset != inset { textView.textContainerInset = inset }
+        let size = NSSize(width: textW + applier.gutter, height: .greatestFiniteMagnitude)
+        let widthChanged = textView.textContainer?.size.width != size.width
+        if textView.textContainer?.size != size { textView.textContainer?.size = size }
         if widthChanged { scheduleFullLayout() }
         if applier.columnWidth != textW {
             applier.columnWidth = textW
@@ -197,11 +208,12 @@ public final class EditorController: NSObject, NSTextViewDelegate, NSTextLayoutM
                 lineSigs = []; render(force: true)
             }
         }
-        textView.frame.size.width = w
-        textView.minSize = NSSize(width: w, height: scrollView.contentSize.height)
+        if textView.frame.size.width != w { textView.frame.size.width = w }
+        let minSize = NSSize(width: w, height: scrollView.contentSize.height)
+        if textView.minSize != minSize { textView.minSize = minSize }
         // bottom padding 40vh
         let bottom = 0.4 * (scrollView.window?.frame.height ?? 800)
-        textView.bottomPadding = bottom
+        if textView.bottomPadding != bottom { textView.bottomPadding = bottom }
     }
 
     /// A new container width throws TextKit 2 back onto estimated heights for

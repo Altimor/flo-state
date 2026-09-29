@@ -60,9 +60,12 @@ public struct AppDataDirectory {
     }
 }
 
-/// Write-to-temp + rename in the same directory.
+/// Write-to-temp + rename in the same directory. When `url` is a symbolic
+/// link, the file it points to is replaced and the link is kept (renaming
+/// over the link itself would turn it into a detached copy).
 enum AtomicFile {
     static func write(_ data: Data, to url: URL, tempName: String) throws {
+        let url = WorkspaceFS.symlinkTarget(url.path).map { URL(fileURLWithPath: $0) } ?? url
         let tmp = url.deletingLastPathComponent().appendingPathComponent(tempName)
         try data.write(to: tmp)
         if rename(tmp.path, url.path) != 0 {

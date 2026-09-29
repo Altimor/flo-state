@@ -5,7 +5,7 @@ import FloCore
 /// shortcuts, palette commands and buttons all route through `ShellModel.perform`.
 enum ShellAction: Equatable {
     // menu:* events (lib.rs + use-menu-events.ts)
-    case openPreferences, newNote, newTab, goToToday, search, closeTab
+    case openPreferences, newNote, newTab, goToToday, search, closeTab, closeOtherTabs
     case toggleSidebar, toggleTypewriter
     case fontSizeIncrease, fontSizeDecrease, fontSizeReset
     case collapseHeadings, expandHeadings
@@ -666,6 +666,7 @@ final class ShellModel {
         case .openFileSearch: if root != nil { palette = PaletteState(intent: .search) }
         case .searchContents: if root != nil && !isCompact { palette = PaletteState(intent: .fullText) }
         case .closeTab: if editor.activeTabId != nil && !isCompact { editor.closeActiveTab() }
+        case .closeOtherTabs: if let id = editor.activeTabId, !isCompact { editor.closeOtherTabs(id) }
         case .toggleSidebar: toggleSidebar()
         case .toggleTypewriter: typewriterScrolling.toggle(); notify(.layout)
         case .fontSizeIncrease: stepFontSize(1)
@@ -989,7 +990,9 @@ final class ShellModel {
         guard let root = root, !readOnly, watcherEnabled else { return }
         let w = WorkspaceWatcherModel(root: root, ignore: ignore, extensions: settings.supportedExtensions, index: index, startMs: scheduler.nowMs)
         watcher = w
-        fsStream = FSEventsStream(path: root) { [weak self] events in
+        // Symlinked folders and notes change at their real path: watch those too.
+        let paths = [root] + WorkspaceWatcherModel.symlinkWatchPaths(index?.symlinks ?? [], root: root)
+        fsStream = FSEventsStream(paths: paths) { [weak self] events in
             guard let self = self else { return }
             for e in events { self.handleWatcherOutputs(w.ingest(e, nowMs: self.scheduler.nowMs)) }
         }

@@ -162,6 +162,7 @@ enum MainMenu {
         Entry(title: "Search in All Notes…", key: "f", modifiers: [.command, .shift], action: .searchContents),
         nil,
         Entry(title: "Close Tab", key: "w", modifiers: [.command], action: .closeTab),
+        Entry(title: "Close Other Tabs", key: "w", modifiers: [.command, .shift], action: .closeOtherTabs),
     ]
 
     static let viewEntries: [Entry?] = [

@@ -941,3 +941,6 @@
 "Quick Look" = "النظرة السريعة";
 /* PDF card: page count badge */
 "%d pages" = "%d صفحات";
+
+/* File menu: close every tab except the current one (Shift-Cmd-W) */
+"Close Other Tabs" = "إغلاق علامات التبويب الأخرى";

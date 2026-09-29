@@ -10,6 +10,7 @@
 # 3. zips it (ditto -c -k --keepParent), EdDSA-signs the zip (Sparkle sign_update,
 #    private key "flostate" in the login keychain)
 # 4. creates the GitHub release vX.Y.Z on $GH_REPO with the zip attached
+# 4b. bumps the Homebrew cask in Altimor/homebrew-tap (warns on failure)
 # 5. prepends the release to the appcast (history kept) in the website repo
 #    ($SITE_DIR/public/flostate/appcast.xml) + release notes next to it
 # 6. commits + deploys the website (Cloudflare Pages) and purges the CDN cache, so the
@@ -94,6 +95,17 @@ fi
 # 4. GitHub release
 gh release create "$TAG" "$ZIP" --repo "$GH_REPO" --title "Flo State $VERSION" --notes-file "$GH_NOTES"
 
+# 4b. Homebrew tap (Altimor/homebrew-tap): bump version + sha256. A failure only warns.
+TAP=$(mktemp -d)/homebrew-tap
+git clone -q --depth 1 https://github.com/Altimor/homebrew-tap.git "$TAP" &&
+  sed -i '' -e "s/^  version \".*\"/  version \"$VERSION\"/" \
+    -e "s/^  sha256 \".*\"/  sha256 \"$(shasum -a 256 "$ZIP" | cut -d' ' -f1)\"/" "$TAP/Casks/flo-state.rb" &&
+  git -C "$TAP" -c user.name="Flo Crivello" -c user.email="1656495+Altimor@users.noreply.github.com" \
+    commit -qam "flo-state $VERSION" &&
+  git -C "$TAP" push -q &&
+  echo "tap: flo-state $VERSION pushed" ||
+  echo "warning: Homebrew tap update failed (Altimor/homebrew-tap Casks/flo-state.rb)" >&2
+
 # 5b. website files (deployed separately)
 mkdir -p "$SITE_DIR/public/flostate/release-notes"
 cp "$APPCAST" "$SITE_APPCAST"
@@ -112,4 +124,13 @@ source <(grep -E "^export CLOUDFLARE" ~/.zshrc)
 ZONE=$(curl -s -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" "https://api.cloudflare.com/client/v4/zones?name=flocrivello.com" | python3 -c 'import sys,json;print(json.load(sys.stdin)["result"][0]["id"])')
 curl -s -X POST -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" -H "Content-Type: application/json" \
   "https://api.cloudflare.com/client/v4/zones/$ZONE/purge_cache" -d '{"purge_everything":true}' | grep -q '"success":true' || echo "warning: cache purge failed" >&2
-curl -s "https://flocrivello.com/flostate/appcast.xml" | grep -q "<sparkle:shortVersionString>$VERSION<" && echo "live: appcast serves $VERSION" || echo "warning: live appcast doesn't show $VERSION yet" >&2
+# Pages takes a few seconds to serve a new deploy; a purge that lands before it re-caches the old appcast.
+# Poll, re-purging, until the live feed shows this version (up to ~90s).
+live=0
+for attempt in {1..9}; do
+  sleep 10
+  if curl -s "https://flocrivello.com/flostate/appcast.xml" | grep -q "<sparkle:shortVersionString>$VERSION<"; then live=1; break; fi
+  curl -s -X POST -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" -H "Content-Type: application/json" \
+    "https://api.cloudflare.com/client/v4/zones/$ZONE/purge_cache" -d '{"purge_everything":true}' >/dev/null
+done
+[[ $live == 1 ]] && echo "live: appcast serves $VERSION" || echo "warning: live appcast still doesn't show $VERSION after 90s" >&2

@@ -194,6 +194,16 @@ public enum WorkspaceFS {
     /// Recursive fallback for "does this folder contain an openable file?"
     /// (`dir_contains_markdown_recursive`).
     public static func dirContainsSupportedFile(_ path: String, ignore: WorkspaceIgnore?, extensions: SupportedExtensions) -> Bool {
+        var ancestors: Set<String> = []
+        return dirContainsSupportedFile(path, realPath: canonicalize(path), ancestors: &ancestors, ignore: ignore, extensions: extensions)
+    }
+
+    /// `ancestors`: real paths of the directories being probed, so a symlink
+    /// back to one of them is not followed again.
+    private static func dirContainsSupportedFile(_ path: String, realPath: String, ancestors: inout Set<String>,
+                                                 ignore: WorkspaceIgnore?, extensions: SupportedExtensions) -> Bool {
+        guard ancestors.insert(realPath).inserted else { return false }
+        defer { ancestors.remove(realPath) }
         guard let names = try? fm.contentsOfDirectory(atPath: path) else { return false }
         for name in names {
             let child = (path as NSString).appendingPathComponent(name)
@@ -201,8 +211,11 @@ public enum WorkspaceFS {
             if let ignore = ignore, ignore.isIgnored(child, isDir: kind == .dir) { continue }
             if kind == .file {
                 if extensions.isSupported(child) { return true }
-            } else if kind == .dir, dirContainsSupportedFile(child, ignore: ignore, extensions: extensions) {
-                return true
+            } else if kind == .dir {
+                let childReal = symlinkTarget(child) ?? (realPath as NSString).appendingPathComponent(name)
+                if dirContainsSupportedFile(child, realPath: childReal, ancestors: &ancestors, ignore: ignore, extensions: extensions) {
+                    return true
+                }
             }
         }
         return false
@@ -210,17 +223,30 @@ public enum WorkspaceFS {
 
     enum EntryKind { case file, dir, other }
 
-    /// Entry type without following symlinks (Rust `DirEntry::file_type`).
+    /// Entry type; a symbolic link counts as what it points to (a dangling or
+    /// looping link is `.other`).
     static func entryKind(_ path: String) -> EntryKind? {
         guard let type = (try? fm.attributesOfItem(atPath: path))?[.type] as? FileAttributeType else { return nil }
         switch type {
         case .typeDirectory: return .dir
         case .typeRegular: return .file
+        case .typeSymbolicLink:
+            var isDir: ObjCBool = false
+            guard fm.fileExists(atPath: path, isDirectory: &isDir) else { return .other }
+            return isDir.boolValue ? .dir : .file
         default: return .other
         }
     }
 
+    /// The fully resolved real path when `path` itself is a symbolic link, else nil
+    /// (a dangling or looping link resolves to itself).
+    static func symlinkTarget(_ path: String) -> String? {
+        guard (try? fm.attributesOfItem(atPath: path))?[.type] as? FileAttributeType == .typeSymbolicLink else { return nil }
+        return canonicalize(path)
+    }
+
     /// `read_directory_impl`: one level; dot-entries and ignored paths skipped;
+    /// symbolic links listed as what they point to;
     /// folders only when they contain an openable file somewhere below (from
     /// the index's directory set when ready, else a recursive probe); files
     /// carry their title; folders first, each group sorted by lowercased name.

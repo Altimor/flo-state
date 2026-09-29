@@ -14,7 +14,9 @@ extension EditorController {
         let p = max(0, min(pos, len))
         guard let loc = tcm.location(tcm.documentRange.location, offsetBy: p) else { return nil }
         if let frag = tlm.textLayoutFragment(for: loc) {
-            tlm.ensureLayout(for: NSTextRange(location: tcm.documentRange.location, end: frag.rangeInElement.endLocation) ?? tlm.documentRange)
+            if frag.state != .layoutAvailable {
+                tlm.ensureLayout(for: NSTextRange(location: tcm.documentRange.location, end: frag.rangeInElement.endLocation) ?? tlm.documentRange)
+            }
         } else {
             tlm.ensureLayout(for: NSTextRange(location: tcm.documentRange.location, end: loc) ?? tlm.documentRange)
         }
@@ -34,7 +36,11 @@ extension EditorController {
     func lineTop(forPosition pos: Int, in view: NSView) -> CGFloat? {
         guard let tlm = textView.textLayoutManager, let tcm = tlm.textContentManager,
               let loc = tcm.location(tcm.documentRange.location, offsetBy: max(0, min(pos, (textView.string as NSString).length))) else { return nil }
-        tlm.ensureLayout(for: NSTextRange(location: tcm.documentRange.location, end: loc) ?? tlm.documentRange)
+        // the document is normally fully laid out already: only lay out when this fragment isn't (the
+        // rail calls this for every heading on every scroll step)
+        if tlm.textLayoutFragment(for: loc)?.state != .layoutAvailable {
+            tlm.ensureLayout(for: NSTextRange(location: tcm.documentRange.location, end: loc) ?? tlm.documentRange)
+        }
         guard let frag = tlm.textLayoutFragment(for: loc) else { return nil }
         let origin = textView.textContainerOrigin
         let y = frag.layoutFragmentFrame.minY + origin.y
@@ -365,13 +371,22 @@ final class EditorPaneView: FlippedView {
     /// `computeActive`: last heading whose top is at or above scroller top + 28.
     func activeHeadingIndex(_ headings: [DocumentHeading]) -> Int? {
         guard !headings.isEmpty, let c = controller else { return nil }
-        var active: Int? = nil
-        for (i, h) in headings.enumerated() {
-            guard let y = c.lineTop(forPosition: min(h.pos, c.state.doc.length), in: self) else { break }
-            if y > 28 { break }
-            active = i
+        // The last heading at or above the rail's threshold line (28pt from the pane's top): the text position
+        // at that line, then the last heading starting at or before it. Measuring every heading's line top
+        // instead forced layout from the document start on each scroll step (slow deep in long notes).
+        let tv = c.textView
+        var probe = tv.convert(CGPoint(x: 0, y: 28), from: self)
+        probe.x = tv.bounds.midX
+        // above the first line (top of the note) AppKit answers the document end: clamp into the text
+        probe.y = min(max(probe.y, tv.textContainerOrigin.y + 1), tv.bounds.maxY - 1)
+        let at = tv.characterIndexForInsertion(at: probe)
+        guard at != NSNotFound else { return 0 }
+        var lo = 0, hi = headings.count - 1, active = 0
+        while lo <= hi {
+            let mid = (lo + hi) / 2
+            if headings[mid].pos <= at { active = mid; lo = mid + 1 } else { hi = mid - 1 }
         }
-        return active ?? 0
+        return active
     }
 
     // MARK: editor commands (menus)

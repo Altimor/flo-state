@@ -146,4 +146,89 @@ enum SelfTest {
         print(String(data: data, encoding: .utf8)!)
         exit(jumps.isEmpty ? 0 : 1)
     }
+
+    // MARK: scroll benchmark
+
+    ///   FloStateNative --selftest-scroll <workspace> <file> <dataDir>
+    /// Wheel-scrolls the note top → bottom → top → bottom in 40pt steps inside an invisible on-screen window,
+    /// timing each step's main-thread work (scroll + layout + display), and prints per-pass stats as JSON.
+    static func runScroll(_ args: [String]) {
+        guard let i = args.firstIndex(of: "--selftest-scroll"), args.count > i + 3 else { print("usage"); exit(64) }
+        let root = args[i + 1], file = args[i + 2], data = args[i + 3]
+        let app = NSApplication.shared
+        app.setActivationPolicy(.accessory)
+        let model = ShellModel(dataDir: AppDataDirectory(baseURL: URL(fileURLWithPath: data)))
+        let wc = ShellWindowController(model: model, frame: NSRect(x: 80, y: 80, width: 1400, height: 1000), offscreen: true)
+        keep = [wc, model]
+        wc.window!.alphaValue = 0
+        wc.window!.ignoresMouseEvents = true
+        wc.window!.orderFrontRegardless()
+        Task { @MainActor in
+            await model.openWorkspace(root, openFile: file, keepSession: false)
+            wc.flush()
+            try? await Task.sleep(nanoseconds: 1_500_000_000)
+            guard let c = wc.root.area.activeFilePane?.controller else { print("no editor"); exit(2) }
+            let clip = c.scrollView.contentView
+            func wheel(_ dy: Int32) -> Double {
+                let t0 = CFAbsoluteTimeGetCurrent()
+                if let w = CGEvent(scrollWheelEvent2Source: nil, units: .pixel, wheelCount: 1, wheel1: dy, wheel2: 0, wheel3: 0),
+                   let e = NSEvent(cgEvent: w) { c.scrollView.scrollWheel(with: e) }
+                wc.window!.displayIfNeeded()
+                CATransaction.flush()
+                return (CFAbsoluteTimeGetCurrent() - t0) * 1000
+            }
+            func pass(down: Bool) -> [String: Any] {
+                var times: [Double] = [], slow: [[Int]] = [], jumps: [[Int]] = []
+                var last = clip.bounds.minY, stuck = 0
+                var lastH = c.textView.frame.height, heightChanges = 0
+                var shifts = 0, maxShift = 0.0
+                func charY(_ i: Int) -> CGFloat? {
+                    guard let w = c.textView.window else { return nil }
+                    let r = c.textView.firstRect(forCharacterRange: NSRange(location: i, length: 1), actualRange: nil)
+                    return r.width > 0 ? c.textView.convert(w.convertFromScreen(r), from: nil).minY : nil
+                }
+                while stuck < 3 && times.count < 4000 {
+                    // content stability: the character near the viewport top must keep its document position
+                    let probe = CGPoint(x: c.textView.bounds.midX, y: clip.bounds.minY + 200)
+                    let anchor = c.textView.characterIndexForInsertion(at: probe)
+                    let y0 = anchor == NSNotFound ? nil : charY(anchor)
+                    let ms = wheel(down ? -40 : 40)
+                    if let y0, let y1 = charY(anchor), abs(y1 - y0) > 1 { shifts += 1; maxShift = max(maxShift, Double(abs(y1 - y0))) }
+                    times.append(ms)
+                    if ms > 16 { slow.append([Int(clip.bounds.minY), Int(ms)]) }
+                    let moved = clip.bounds.minY - last
+                    // a wheel step moves 40pt (less at the ends); anything else is a jump
+                    if abs(moved) > 41 || (down ? moved < -0.5 : moved > 0.5) { jumps.append([Int(last), Int(moved)]) }
+                    if abs(c.textView.frame.height - lastH) > 0.5 { heightChanges += 1; lastH = c.textView.frame.height }
+                    if abs(clip.bounds.minY - last) < 0.5 { stuck += 1 } else { stuck = 0 }
+                    last = clip.bounds.minY
+                    if times.count % 100 == 0 { FileHandle.standardError.write("\(down ? "down" : "up") step \(times.count) y=\(Int(last)) h=\(Int(c.textView.frame.height)) last=\(Int(ms))ms\n".data(using: .utf8)!) }
+                }
+                let s = times.sorted()
+                func pct(_ p: Double) -> Double { s.isEmpty ? 0 : s[min(s.count - 1, Int(Double(s.count) * p))] }
+                return ["steps": times.count, "p50": pct(0.5), "p95": pct(0.95), "max": s.last ?? 0,
+                        "over16ms": slow.count, "slowest": Array(slow.sorted { $0[1] > $1[1] }.prefix(8)),
+                        "jumps": jumps.count, "firstJumps": Array(jumps.prefix(6)), "heightChanges": heightChanges,
+                        "contentShifts": shifts, "maxShift": maxShift]
+            }
+            clip.scroll(to: .zero); c.scrollView.reflectScrolledClipView(clip)
+            var edits = 0
+            let obs = NotificationCenter.default.addObserver(forName: NSTextStorage.didProcessEditingNotification, object: c.textView.textStorage, queue: nil) { _ in edits += 1 }
+            func unlaid() -> Int {
+                guard let tlm = c.textView.textLayoutManager else { return -1 }
+                var n = 0
+                tlm.enumerateTextLayoutFragments(from: tlm.documentRange.location, options: []) { f in if f.state != .layoutAvailable { n += 1 }; return true }
+                return n
+            }
+            var r: [String: Any] = [:]
+            r["unlaidAtStart"] = unlaid()
+            r["down1"] = pass(down: true); r["unlaidAfterDown1"] = unlaid(); r["editsDuringDown1"] = edits; edits = 0
+            r["up"] = pass(down: false); r["unlaidAfterUp"] = unlaid(); r["editsDuringUp"] = edits
+            r["down2"] = pass(down: true)
+            NotificationCenter.default.removeObserver(obs)
+            if let d = try? JSONSerialization.data(withJSONObject: r, options: [.prettyPrinted, .sortedKeys]) { print(String(data: d, encoding: .utf8)!) }
+            exit(0)
+        }
+        app.run()
+    }
 }

@@ -941,3 +941,6 @@
 "Quick Look" = "فوری جائزہ";
 /* PDF card: page count badge */
 "%d pages" = "%d صفحات";
+
+/* File menu: close every tab except the current one (Shift-Cmd-W) */
+"Close Other Tabs" = "دوسرے ٹیب بند کریں";

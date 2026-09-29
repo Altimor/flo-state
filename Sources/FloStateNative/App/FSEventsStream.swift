@@ -7,7 +7,7 @@ final class FSEventsStream {
     private var stream: FSEventStreamRef?
     private let handler: ([RawFSEvent]) -> Void
 
-    init?(path: String, latency: CFTimeInterval = 0.05, handler: @escaping @MainActor ([RawFSEvent]) -> Void) {
+    init?(paths: [String], latency: CFTimeInterval = 0.05, handler: @escaping @MainActor ([RawFSEvent]) -> Void) {
         self.handler = { events in MainActor.assumeIsolated { handler(events) } }
         var ctx = FSEventStreamContext(version: 0, info: Unmanaged.passUnretained(self).toOpaque(), retain: nil, release: nil, copyDescription: nil)
         let flags = UInt32(kFSEventStreamCreateFlagFileEvents | kFSEventStreamCreateFlagUseCFTypes | kFSEventStreamCreateFlagNoDefer)
@@ -20,7 +20,7 @@ final class FSEventsStream {
                 out.append(FSEventsStream.map(path: arr[i], flags: flags[i]))
             }
             me.handler(out)
-        }, &ctx, [path] as CFArray, FSEventStreamEventId(kFSEventStreamEventIdSinceNow), latency, flags) else { return nil }
+        }, &ctx, paths as CFArray, FSEventStreamEventId(kFSEventStreamEventIdSinceNow), latency, flags) else { return nil }
         stream = s
         FSEventStreamSetDispatchQueue(s, DispatchQueue.main)
         FSEventStreamStart(s)

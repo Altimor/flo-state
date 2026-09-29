@@ -11,6 +11,14 @@ public struct IndexedFile: Equatable {
     }
 }
 
+/// A symbolic link the index walk followed: `link` is its path inside the
+/// workspace, `target` the real path it resolves to.
+public struct SymlinkMount: Equatable {
+    public var link: String
+    public var target: String
+    public init(link: String, target: String) { self.link = link; self.target = target }
+}
+
 /// Fuzzy-search hit (`search.rs::SearchResult`). `matchIndices` are character
 /// (Unicode scalar) offsets into `relativePath`.
 public struct SearchResult: Equatable {
@@ -80,8 +88,11 @@ public struct IgnoreWalker {
 
     /// Visits every non-ignored regular file below `root`, in a deterministic
     /// (sorted, depth-first) order. `shouldContinue` is polled per entry; return
-    /// false to stop (the cancel flag).
-    public func walkFiles(shouldContinue: () -> Bool = { true }, visit: (String) -> Void) {
+    /// false to stop (the cancel flag). Symbolic links are followed (files are
+    /// visited at their path inside the workspace) and reported to `onSymlink`;
+    /// a link back to a folder being walked is skipped.
+    public func walkFiles(shouldContinue: () -> Bool = { true }, onSymlink: (SymlinkMount) -> Void = { _ in },
+                          visit: (String) -> Void) {
         let root = self.root
         let repoRoot = IgnoreWalker.findRepoRoot(from: root)
         let inRepo = repoRoot != nil
@@ -106,10 +117,16 @@ public struct IgnoreWalker {
             base.exclude = IgnoreWalker.loadIfPresent((repo as NSString).appendingPathComponent(".git/info/exclude"))
             if let global = globalExcludes { base.global = IgnoreWalker.loadIfPresent(global.path) }
         }
-        _ = walk(dir: root, layers: base, inRepo: inRepo, shouldContinue: shouldContinue, visit: visit)
+        var walking: Set<String> = []
+        _ = walk(dir: root, realDir: WorkspaceFS.canonicalize(root), ancestors: &walking, layers: base, inRepo: inRepo,
+                 shouldContinue: shouldContinue, onSymlink: onSymlink, visit: visit)
     }
 
-    private func walk(dir: String, layers parent: Layers, inRepo: Bool, shouldContinue: () -> Bool, visit: (String) -> Void) -> Bool {
+    /// `ancestors`: real paths of the folders on the current walk path (cycle guard).
+    private func walk(dir: String, realDir: String, ancestors: inout Set<String>, layers parent: Layers, inRepo: Bool,
+                      shouldContinue: () -> Bool, onSymlink: (SymlinkMount) -> Void, visit: (String) -> Void) -> Bool {
+        guard ancestors.insert(realDir).inserted else { return true }
+        defer { ancestors.remove(realDir) }
         var layers = parent
         if let g = IgnoreWalker.loadIfPresent((dir as NSString).appendingPathComponent(".ignore")) { layers.ignoreFiles.insert(g, at: 0) }
         if inRepo, let g = IgnoreWalker.loadIfPresent((dir as NSString).appendingPathComponent(".gitignore")) { layers.gitignores.insert(g, at: 0) }
@@ -121,9 +138,13 @@ public struct IgnoreWalker {
             guard let kind = WorkspaceFS.entryKind(child) else { continue }
             let isDir = kind == .dir
             if layers.matched(child, isDir: isDir) == .ignore { continue }
+            if isDir && name == "node_modules" { continue }
+            let target = kind == .other ? nil : WorkspaceFS.symlinkTarget(child)
+            if let target = target { onSymlink(SymlinkMount(link: child, target: target)) }
             if isDir {
-                if name == "node_modules" { continue }
-                if !walk(dir: child, layers: layers, inRepo: inRepo, shouldContinue: shouldContinue, visit: visit) { return false }
+                let childReal = target ?? (realDir as NSString).appendingPathComponent(name)
+                if !walk(dir: child, realDir: childReal, ancestors: &ancestors, layers: layers, inRepo: inRepo,
+                         shouldContinue: shouldContinue, onSymlink: onSymlink, visit: visit) { return false }
             } else if kind == .file {
                 visit(child)
             }
@@ -138,6 +159,8 @@ public final class FileIndex {
     public private(set) var root: String
     public private(set) var files: [IndexedFile] = []
     public private(set) var dirsWithSupportedFiles: Set<String> = []
+    /// Symbolic links the last full build followed (the watcher also watches their targets).
+    public private(set) var symlinks: [SymlinkMount] = []
     public private(set) var isReady = false
     private var recentCache: [IndexedFile]?
 
@@ -146,27 +169,29 @@ public final class FileIndex {
     /// `index_workspace_impl`. `isCancelled` is checked per entry; a cancelled
     /// walk returns what it found so far (callers should discard it).
     public static func build(root: String, extensions: SupportedExtensions, walker: IgnoreWalker? = nil,
-                             isCancelled: () -> Bool = { false }) -> (files: [IndexedFile], dirs: Set<String>) {
+                             isCancelled: () -> Bool = { false }) -> (files: [IndexedFile], dirs: Set<String>, symlinks: [SymlinkMount]) {
         var files: [IndexedFile] = []
+        var symlinks: [SymlinkMount] = []
         let w = walker ?? IgnoreWalker(root: root)
-        if isCancelled() { return ([], []) }
-        w.walkFiles(shouldContinue: { !isCancelled() }) { path in
+        if isCancelled() { return ([], [], []) }
+        w.walkFiles(shouldContinue: { !isCancelled() }, onSymlink: { symlinks.append($0) }) { path in
             guard extensions.isSupported(path) else { return }
             files.append(IndexedFile(path: path, relativePath: FileIndex.relative(path, root: root),
                                      name: (path as NSString).lastPathComponent, modifiedAt: WorkspaceFS.modifiedTime(path)))
         }
-        return (files, rebuildDirs(files, root: root))
+        return (files, rebuildDirs(files, root: root), symlinks)
     }
 
     /// Build synchronously and mark ready.
     public func rebuild(extensions: SupportedExtensions, walker: IgnoreWalker? = nil) {
         let result = FileIndex.build(root: root, extensions: extensions, walker: walker)
-        install(files: result.files, dirs: result.dirs)
+        install(files: result.files, dirs: result.dirs, symlinks: result.symlinks)
     }
 
-    public func install(files: [IndexedFile], dirs: Set<String>) {
+    public func install(files: [IndexedFile], dirs: Set<String>, symlinks: [SymlinkMount] = []) {
         self.files = files
         self.dirsWithSupportedFiles = dirs
+        self.symlinks = symlinks
         recentCache = nil
         isReady = true
     }
@@ -175,6 +200,7 @@ public final class FileIndex {
         self.root = root
         files = []
         dirsWithSupportedFiles = []
+        symlinks = []
         recentCache = nil
         isReady = false
     }

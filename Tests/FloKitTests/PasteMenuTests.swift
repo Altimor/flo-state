@@ -203,8 +203,11 @@ final class PasteMenuTests: XCTestCase {
             let id = a["item"] as! String
             c.features.performMenuAction(Self.idMap[id] ?? id, pasteboard: pb)
             let after = a["after"] as! [String: Any]
-            let same = c.text == after["doc"] as! String && c.state.selection.main.anchor == after["anchor"] as! Int
-                && c.state.selection.main.head == after["head"] as! Int
+            // Intentional divergence: bullet / numbered list keep the caret instead of selecting the lines
+            // (typing then replaced the list marker along with the text).
+            let keepsCaret = id == "para.bullet" || id == "para.numbered"
+            let same = c.text == after["doc"] as! String && (keepsCaret || (c.state.selection.main.anchor == after["anchor"] as! Int
+                && c.state.selection.main.head == after["head"] as! Int))
             XCTAssertTrue(same, "\(id) on \((a["doc"] as! String).debugDescription): got \(c.text.debugDescription) \(c.state.selection.main) exp \(after)")
             if same { ok += 1 }
             XCTAssertEqual(r.viewText, c.text)

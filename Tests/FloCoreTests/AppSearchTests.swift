@@ -15,7 +15,8 @@ final class AppIndexAndSearchTests: XCTestCase {
     }
 
     func build() -> (files: [IndexedFile], dirs: Set<String>) {
-        FileIndex.build(root: dir, extensions: .schemaDefault, walker: isolatedWalker(dir))
+        let r = FileIndex.build(root: dir, extensions: .schemaDefault, walker: isolatedWalker(dir))
+        return (r.files, r.dirs)
     }
 
     // search.rs tests

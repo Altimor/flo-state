@@ -98,6 +98,30 @@ public final class WorkspaceWatcherModel {
 
     public func recordWrite(_ path: String, nowMs: Double) { selfWrites.recordWrite(path, nowMs: nowMs) }
 
+    /// Symlink targets to watch besides the root: outside it, deduplicated,
+    /// not below another watched target.
+    public static func symlinkWatchPaths(_ links: [SymlinkMount], root: String) -> [String] {
+        let realRoot = WorkspaceFS.canonicalize(root)
+        var out: [String] = []
+        for target in Set(links.map(\.target)).sorted() {
+            if Gitignore.stripPathPrefix(realRoot, target) != nil { continue }
+            if out.contains(where: { Gitignore.stripPathPrefix($0, target) != nil }) { continue }
+            out.append(target)
+        }
+        return out
+    }
+
+    /// FSEvents reports a change under a symlink at the link's real target:
+    /// map it to the path(s) inside the workspace. Other paths pass through.
+    func workspacePaths(_ path: String) -> [String] {
+        guard let links = index?.symlinks, !links.isEmpty else { return [path] }
+        var out = links.compactMap { link in
+            Gitignore.stripPathPrefix(link.target, path).map { $0.isEmpty ? link.link : (link.link as NSString).appendingPathComponent($0) }
+        }
+        if out.isEmpty || Gitignore.stripPathPrefix(root, path) != nil { out.insert(path, at: 0) }
+        return out
+    }
+
     /// An event arrived (the `recv` branch).
     public func ingest(_ event: RawFSEvent, nowMs: Double) -> [WatcherOutput] {
         pending.append(event)
@@ -112,7 +136,7 @@ public final class WorkspaceWatcherModel {
         var out: [WatcherOutput] = []
         var rebuildIgnore = false
         for event in batch {
-            for path in event.paths {
+            for path in event.paths.flatMap(workspacePaths) {
                 if WorkspaceWatcherModel.shouldIgnore(path, root: root) { continue }
                 if WorkspaceIgnore.isGitignorePath(path) { rebuildIgnore = true; continue }
                 let isDir = event.isFolderEvent || isDirectory(path)
