@@ -944,3 +944,9 @@
 
 /* File menu: close every tab except the current one (Shift-Cmd-W) */
 "Close Other Tabs" = "অন্য ট্যাবগুলো বন্ধ করুন";
+"Check spelling while typing" = "টাইপ করার সময় বানান পরীক্ষা করুন";
+"Underline misspelled words. Right-click one for suggestions or to add it to the dictionary" = "ভুল বানানের শব্দে নিচে দাগ দিন। পরামর্শের জন্য বা অভিধানে যোগ করতে কোনো শব্দে রাইট-ক্লিক করুন";
+"Spelling" = "বানান";
+"Learn Spelling" = "বানান শিখুন";
+"Ignore Spelling" = "বানান উপেক্ষা করুন";
+"No Guesses Found" = "কোনো পরামর্শ পাওয়া যায়নি";

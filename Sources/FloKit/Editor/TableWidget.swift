@@ -13,6 +13,7 @@ final class TableLayout {
         var baseline: CGFloat   // relative to the cell's content box top
         var range: NSRange      // in the cell's attributed string
         var bottom: CGFloat = 0 // line box bottom relative to the content box top
+        var top: CGFloat = 0    // line box top relative to the content box top
     }
     struct Cell {
         var frame: CGRect       // border box relative to the table's top-left
@@ -335,7 +336,7 @@ final class TableLayout {
                 let box = lineBox(s, r, lh: lh, strut: strut)
                 let top = y
                 y += (box.above + box.below + 0.001).rounded(.down)  // WebKit line boxes are whole pixels here
-                out.append(Line(line: line, x: 0, baseline: top + box.above, range: r, bottom: y))
+                out.append(Line(line: line, x: 0, baseline: top + box.above, range: r, bottom: y, top: top))
                 pos += n
             }
         }
@@ -382,19 +383,27 @@ final class TableLayout {
 
     private func drawLine(_ l: Line, _ s: NSAttributedString, x: CGFloat, baseline: CGFloat, theme: EditorTheme, context: CGContext) {
         guard l.range.length > 0 else { return }
+        // x of a string index: lines from the typesetter index the whole cell string, so
+        // map through the line's own string range (subtracting the line start put every
+        // pill after a cell's first line at the wrong place)
+        let base = CTLineGetStringRange(l.line).location - l.range.location
+        func offset(_ i: Int) -> CGFloat { CTLineGetOffsetForStringIndex(l.line, i + base, nil) }
         // inline code pills behind the glyphs
         s.enumerateAttribute(Self.codeFontKey, in: l.range) { v, r, _ in
             guard v != nil, let f = s.attribute(.font, at: r.location, effectiveRange: nil) as? NSFont else { return }
-            var x0 = CTLineGetOffsetForStringIndex(l.line, r.location - l.range.location, nil)
+            var x0 = offset(r.location)
             if s.attribute(Self.codePadKey, at: r.location, effectiveRange: nil) != nil, r.location > l.range.location {
                 x0 -= 0.2 * theme.rem
             }
-            var x1 = CTLineGetOffsetForStringIndex(l.line, r.location + r.length - l.range.location, nil)
+            var x1 = offset(r.location + r.length)
             if r.location + r.length == l.range.location + l.range.length {
                 x1 = CGFloat(CTLineGetTypographicBounds(l.line, nil, nil, nil))
             }
+            // padding stays inside the line box, so code on consecutive lines doesn't overlap
             let pad = 0.2 * theme.rem
-            let pill = CGRect(x: x + x0, y: baseline - f.ascender - pad, width: x1 - x0, height: f.ascender - f.descender + 2 * pad)
+            let lineTop = baseline - l.baseline + l.top, lineBottom = baseline - l.baseline + l.bottom
+            let top = max(baseline - f.ascender - pad, lineTop + 1), bottom = min(baseline - f.descender + pad, lineBottom - 1)
+            let pill = CGRect(x: x + x0, y: top, width: x1 - x0, height: max(f.ascender - f.descender, bottom - top))
             theme.codeBackground.setFill()
             NSBezierPath(roundedRect: pill, xRadius: 0.4 * theme.rem, yRadius: 0.4 * theme.rem).fill()
         }
@@ -416,8 +425,8 @@ final class TableLayout {
         s.enumerateAttributes(in: l.range) { attrs, r, _ in
             let u = attrs[.underlineStyle] != nil, st = attrs[.strikethroughStyle] != nil
             guard u || st, let f = attrs[.font] as? NSFont else { return }
-            let x0 = CTLineGetOffsetForStringIndex(l.line, r.location - l.range.location, nil)
-            let x1 = CTLineGetOffsetForStringIndex(l.line, r.location + r.length - l.range.location, nil)
+            let x0 = offset(r.location)
+            let x1 = offset(r.location + r.length)
             let color = (attrs[.foregroundColor] as? NSColor) ?? theme.textColor
             color.setFill()
             let t = max(1, f.underlineThickness.rounded())

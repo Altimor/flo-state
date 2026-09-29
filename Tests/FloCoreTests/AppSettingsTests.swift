@@ -223,7 +223,7 @@ final class AppSettingsLayerTests: XCTestCase {
 final class AppSettingsSchemaTests: XCTestCase {
     func testSchemaLoadsAllKeysWithDefaults() {
         let d = SettingsSchema.defaults
-        XCTAssertEqual(SettingsSchema.all.count, 49)
+        XCTAssertEqual(SettingsSchema.all.count, 50)
         XCTAssertEqual(d["editor.font-size"], .number(16))
         XCTAssertEqual(d["editor.line-height"], .number(1.5))
         XCTAssertEqual(d["editor.subheading-color"], .string("#3a3a3a"))

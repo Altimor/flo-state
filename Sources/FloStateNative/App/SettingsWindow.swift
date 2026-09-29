@@ -67,6 +67,7 @@ enum SettingsPanes {
             ("Text", ["editor.font-size", "editor.line-height", "editor.tab-size", "appearance.editor-width"]),
             ("Spacing", ["editor.heading-space-before", "editor.heading-space-after", "editor.paragraph-spacing", "editor.bullet-spacing"]),
             (nil, ["editor.subheading-color"]),
+            ("Spelling", ["editor.spell-check"]),
             ("Headings", ["editor.show-heading-chevrons"]),
             ("Outline", ["editor.show-outline"]),
         ]),

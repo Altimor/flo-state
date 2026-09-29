@@ -232,3 +232,67 @@ enum SelfTest {
         app.run()
     }
 }
+
+extension SelfTest {
+    /// `--selftest-sidebar <workspace> <file> <dataDir> [windowWidth]`: from the middle of the note, toggles the
+    /// sidebar a few times and reports each animation frame's cost and whether the text under the viewport moved.
+    static func runSidebar(_ args: [String]) {
+        guard let i = args.firstIndex(of: "--selftest-sidebar"), args.count > i + 3 else { print("usage"); exit(64) }
+        let root = args[i + 1], file = args[i + 2], data = args[i + 3]
+        let width = args.count > i + 4 ? Double(args[i + 4]) ?? 1400 : 1400
+        let app = NSApplication.shared
+        app.setActivationPolicy(.accessory)
+        let model = ShellModel(dataDir: AppDataDirectory(baseURL: URL(fileURLWithPath: data)))
+        let wc = ShellWindowController(model: model, frame: NSRect(x: 80, y: 80, width: width, height: 1000), offscreen: true)
+        keep = [wc, model]
+        wc.window!.alphaValue = 0
+        wc.window!.ignoresMouseEvents = true
+        wc.window!.orderFrontRegardless()
+        Task { @MainActor in
+            await model.openWorkspace(root, openFile: file, keepSession: false)
+            wc.flush()
+            try? await Task.sleep(nanoseconds: 1_500_000_000)
+            guard let c = wc.root.area.activeFilePane?.controller else { print("no editor"); exit(2) }
+            let clip = c.scrollView.contentView
+            clip.scroll(to: CGPoint(x: 0, y: c.textView.frame.height / 2))
+            c.scrollView.reflectScrolledClipView(clip)
+            wc.window!.displayIfNeeded()
+            try? await Task.sleep(nanoseconds: 500_000_000)
+            func anchorY() -> (Int, CGFloat)? {
+                let at = c.textView.characterIndexForInsertion(at: CGPoint(x: c.textView.bounds.midX, y: clip.bounds.minY + 200))
+                guard at != NSNotFound, let w = c.textView.window else { return nil }
+                let r = c.textView.firstRect(forCharacterRange: NSRange(location: at, length: 1), actualRange: nil)
+                return (at, c.textView.convert(w.convertFromScreen(r), from: nil).minY - clip.bounds.minY)
+            }
+            var toggles: [[String: Any]] = []
+            for _ in 0..<4 {
+                let before = anchorY()
+                let t0 = CFAbsoluteTimeGetCurrent()
+                model.toggleSidebar()
+                var frames: [Double] = []
+                repeat {
+                    let f0 = CFAbsoluteTimeGetCurrent()
+                    wc.root.needsLayout = true
+                    wc.root.layoutSubtreeIfNeeded()
+                    wc.window!.displayIfNeeded()
+                    CATransaction.flush()
+                    frames.append((CFAbsoluteTimeGetCurrent() - f0) * 1000)
+                } while wc.root.sidebarAnimation != nil && CFAbsoluteTimeGetCurrent() - t0 < 3
+                let total = (CFAbsoluteTimeGetCurrent() - t0) * 1000
+                try? await Task.sleep(nanoseconds: 700_000_000)   // deferred full layout
+                wc.window!.displayIfNeeded()
+                var shift: Double = -1
+                if let b = before, let w = c.textView.window {
+                    let r = c.textView.firstRect(forCharacterRange: NSRange(location: b.0, length: 1), actualRange: nil)
+                    shift = Double(c.textView.convert(w.convertFromScreen(r), from: nil).minY - clip.bounds.minY - b.1)
+                }
+                toggles.append(["frames": frames.count, "maxFrameMs": frames.max() ?? 0, "totalMs": total,
+                                "anchorShiftAfter": shift, "sidebar": model.sidebarVisible])
+            }
+            let out = try! JSONSerialization.data(withJSONObject: ["docHeight": c.textView.frame.height, "toggles": toggles], options: [.prettyPrinted, .sortedKeys])
+            print(String(data: out, encoding: .utf8)!)
+            exit(0)
+        }
+        app.run()
+    }
+}

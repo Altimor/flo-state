@@ -220,6 +220,7 @@ public struct SettingsValues {
     public var editorAutoInsertDailyHeading: Bool { bool("editor.auto-insert-daily-heading") }
     public var editorShowOutline: Bool { bool("editor.show-outline") }
     public var editorShowHeadingChevrons: Bool { bool("editor.show-heading-chevrons") }
+    public var editorSpellCheck: Bool { bool("editor.spell-check") }
     public var editorOutlineIndentPerLevel: Double { num("editor.outline-indent-per-level") }
     public var editorJumpToBottomAfterMinutes: Double { num("editor.jump-to-bottom-after-minutes") }
     public var editorHeadingSpaceBefore: Double { num("editor.heading-space-before") }

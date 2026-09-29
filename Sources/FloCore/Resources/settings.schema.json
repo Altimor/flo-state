@@ -48,6 +48,14 @@
       "default": true
     },
     {
+      "key": "editor.spell-check",
+      "label": "Check spelling while typing",
+      "description": "Underline misspelled words. Right-click one for suggestions or to add it to the dictionary",
+      "category": "Editor",
+      "type": "boolean",
+      "default": true
+    },
+    {
       "key": "editor.show-heading-chevrons",
       "label": "Show heading fold arrows",
       "description": "The arrow beside each heading for collapsing its section. Headings can still be folded from the View menu when hidden",

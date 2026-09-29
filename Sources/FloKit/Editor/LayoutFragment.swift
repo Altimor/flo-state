@@ -70,11 +70,17 @@ final class FloLayoutFragment: NSTextLayoutFragment {
         // inline code pills
         para.enumerateAttribute(.floInlineCode, in: NSRange(location: 0, length: para.length)) { v, range, _ in
             guard v != nil else { return }
-            for r in rects(for: range, origin: point) {
+            for lf in textLineFragments {
+                let lr = lf.characterRange
+                let a = max(range.location, lr.location), b = min(NSMaxRange(range), NSMaxRange(lr))
+                guard a < b, let r = rects(for: NSRange(location: a, length: b - a), origin: point).first else { continue }
                 // padding box: 0.2rem around the content area; the right padding is already the
-                // kern after the last char (inside r), the left one precedes r
+                // kern after the last char (inside r), the left one precedes r. Vertically it stays
+                // inside the line box, so code on consecutive lines doesn't overlap.
                 let pad = 0.2 * theme.rem
-                let pill = CGRect(x: r.minX - pad, y: r.minY - pad, width: r.width + pad, height: r.height + 2 * pad)
+                let lineTop = point.y + lf.typographicBounds.minY, lineBottom = lineTop + lf.typographicBounds.height
+                let top = max(r.minY - pad, lineTop + 1), bottom = min(r.maxY + pad, lineBottom - 1)
+                let pill = CGRect(x: r.minX - pad, y: top, width: r.width + pad, height: max(r.height, bottom - top))
                 theme.codeBackground.setFill()
                 NSBezierPath(roundedRect: pill, xRadius: 0.4 * theme.rem, yRadius: 0.4 * theme.rem).fill()
             }

@@ -944,3 +944,9 @@
 
 /* File menu: close every tab except the current one (Shift-Cmd-W) */
 "Close Other Tabs" = "دوسرے ٹیب بند کریں";
+"Check spelling while typing" = "ٹائپ کرتے وقت ہجے چیک کریں";
+"Underline misspelled words. Right-click one for suggestions or to add it to the dictionary" = "غلط ہجے والے الفاظ کے نیچے لکیر لگائیں۔ تجاویز کے لیے یا لغت میں شامل کرنے کے لیے کسی لفظ پر رائٹ کلک کریں";
+"Spelling" = "ہجے";
+"Learn Spelling" = "ہجے سیکھیں";
+"Ignore Spelling" = "ہجے نظر انداز کریں";
+"No Guesses Found" = "کوئی تجویز نہیں ملی";

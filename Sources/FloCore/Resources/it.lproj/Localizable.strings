@@ -944,3 +944,9 @@
 
 /* File menu: close every tab except the current one (Shift-Cmd-W) */
 "Close Other Tabs" = "Chiudi le altre schede";
+"Check spelling while typing" = "Controlla ortografia durante la digitazione";
+"Underline misspelled words. Right-click one for suggestions or to add it to the dictionary" = "Sottolinea le parole errate. Fai clic destro su una parola per i suggerimenti o per aggiungerla al dizionario";
+"Spelling" = "Ortografia";
+"Learn Spelling" = "Memorizza ortografia";
+"Ignore Spelling" = "Ignora ortografia";
+"No Guesses Found" = "Nessun suggerimento";

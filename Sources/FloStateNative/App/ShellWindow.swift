@@ -469,6 +469,7 @@ final class ShellRootView: FlippedView {
         }
         appliedWidth = w
         appliedLeft = l
+        EditorController.holdsColumnWidth = sidebarAnimation != nil
         return (w, l)
     }
 
@@ -691,6 +692,9 @@ final class ShellWindowController: NSWindowController, NSWindowDelegate {
             root.syncPalette()
         case .editorFont:
             root.area.rebuildEditorThemes()
+        case .settings:
+            root.area.reloadContent()   // panes pick up editor toggles (spell checking)
+            schedule(c)
         case .theme:
             applyTheme()
         default:

@@ -944,3 +944,9 @@
 
 /* File menu: close every tab except the current one (Shift-Cmd-W) */
 "Close Other Tabs" = "Fermer les autres onglets";
+"Check spelling while typing" = "Vérifier l’orthographe lors de la saisie";
+"Underline misspelled words. Right-click one for suggestions or to add it to the dictionary" = "Souligner les mots mal orthographiés. Clic droit sur un mot pour des suggestions ou pour l’ajouter au dictionnaire";
+"Spelling" = "Orthographe";
+"Learn Spelling" = "Mémoriser l’orthographe";
+"Ignore Spelling" = "Ignorer l’orthographe";
+"No Guesses Found" = "Aucune suggestion";

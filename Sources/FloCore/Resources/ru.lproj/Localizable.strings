@@ -944,3 +944,9 @@
 
 /* File menu: close every tab except the current one (Shift-Cmd-W) */
 "Close Other Tabs" = "Закрыть другие вкладки";
+"Check spelling while typing" = "Проверять орфографию при вводе";
+"Underline misspelled words. Right-click one for suggestions or to add it to the dictionary" = "Подчёркивать слова с ошибками. Нажмите правой кнопкой на слово, чтобы увидеть варианты или добавить его в словарь";
+"Spelling" = "Орфография";
+"Learn Spelling" = "Запомнить написание";
+"Ignore Spelling" = "Игнорировать написание";
+"No Guesses Found" = "Нет вариантов";

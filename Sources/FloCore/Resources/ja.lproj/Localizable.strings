@@ -944,3 +944,9 @@
 
 /* File menu: close every tab except the current one (Shift-Cmd-W) */
 "Close Other Tabs" = "ほかのタブを閉じる";
+"Check spelling while typing" = "入力中にスペルをチェック";
+"Underline misspelled words. Right-click one for suggestions or to add it to the dictionary" = "スペルミスの単語に下線を引きます。単語を右クリックすると候補を表示したり辞書に追加したりできます";
+"Spelling" = "スペル";
+"Learn Spelling" = "スペルを学習";
+"Ignore Spelling" = "スペルを無視";
+"No Guesses Found" = "候補が見つかりません";

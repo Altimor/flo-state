@@ -944,3 +944,9 @@
 
 /* File menu: close every tab except the current one (Shift-Cmd-W) */
 "Close Other Tabs" = "关闭其他标签页";
+"Check spelling while typing" = "键入时检查拼写";
+"Underline misspelled words. Right-click one for suggestions or to add it to the dictionary" = "为拼写错误的单词加下划线。右键点按单词可查看建议或将其添加到词典";
+"Spelling" = "拼写";
+"Learn Spelling" = "学习拼写";
+"Ignore Spelling" = "忽略拼写";
+"No Guesses Found" = "未找到建议";

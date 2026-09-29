@@ -100,6 +100,9 @@ final class EditorPaneView: FlippedView {
         }
         spinner?.removeFromSuperview()
         spinner = nil
+        if let c = controller, c.textView.checksSpelling != model.values.editorSpellCheck {
+            c.textView.checksSpelling = model.values.editorSpellCheck
+        }
         if controller == nil {
             makeController(text: f.content, caret: f.content == "# " ? 2 : min(f.cursorPos, f.content.utf16.count))
             loadedReloadVersion = f.reloadVersion
@@ -120,6 +123,7 @@ final class EditorPaneView: FlippedView {
         let c = EditorController(theme: EditorTheme.from(settings: model.values, mode: model.mode))
         c.documentPath = path
         c.workspaceRoot = model.root
+        c.textView.checksSpelling = model.values.editorSpellCheck
         c.scrollView.automaticallyAdjustsContentInsets = false
         if ShellSnapshot.active { c.scrollView.hasVerticalScroller = false }
         c.scrollView.contentInsets = NSEdgeInsets()

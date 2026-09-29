@@ -177,15 +177,23 @@ public final class EditorController: NSObject, NSTextViewDelegate, NSTextLayoutM
     /// Top of the first line: frontmatter wrapper pt 9rem + pb-6 + 12px border.
     public var topInset: CGFloat = 180
 
+    /// Set while the sidebar slides: the column keeps its wrap width and only
+    /// re-centres, since re-wrapping a long note costs ~100ms a frame. The new
+    /// width is applied once, when the slide ends.
+    public static var holdsColumnWidth = false
+
     public func layoutColumn() {
         let oldInset = textView.textContainerInset, oldW = textView.textContainer?.size.width
+        var anchor: (offset: Int, dy: CGFloat)?
         defer {
+            if let a = anchor { restoreScrollAnchor(a) }
             // the column moved or resized: images moved too; the hover box comes back on the next hover
             if imageOverlay.hit != nil, oldInset != textView.textContainerInset || oldW != textView.textContainer?.size.width { imageOverlay.show(nil) }
         }
         let w = scrollView.contentSize.width
         let sidePad = min(64, max(24, 0.04 * (scrollView.window?.frame.width ?? w)))
-        let textW = max(100, min(theme.maxTextWidth, w - 2 * sidePad))
+        var textW = max(100, min(theme.maxTextWidth, w - 2 * sidePad))
+        if Self.holdsColumnWidth, let held = oldW, held > applier.gutter { textW = held - applier.gutter }
         let left = (w - textW) / 2 - applier.gutter
         // TextKit drops paragraphSpacingBefore on the first paragraph; CSS doesn't.
         var firstPad: CGFloat = 0
@@ -199,6 +207,7 @@ public final class EditorController: NSObject, NSTextViewDelegate, NSTextLayoutM
         if textView.textContainerInset != inset { textView.textContainerInset = inset }
         let size = NSSize(width: textW + applier.gutter, height: .greatestFiniteMagnitude)
         let widthChanged = textView.textContainer?.size.width != size.width
+        if widthChanged, oldW != nil { anchor = scrollAnchor() }
         if textView.textContainer?.size != size { textView.textContainer?.size = size }
         if widthChanged { scheduleFullLayout() }
         if applier.columnWidth != textW {
@@ -214,6 +223,32 @@ public final class EditorController: NSObject, NSTextViewDelegate, NSTextLayoutM
         // bottom padding 40vh
         let bottom = 0.4 * (scrollView.window?.frame.height ?? 800)
         if textView.bottomPadding != bottom { textView.bottomPadding = bottom }
+    }
+
+    /// The paragraph at the top of the viewport and its distance from the viewport
+    /// top, so a re-wrap (new column width) keeps the reader on the same text.
+    private func scrollAnchor() -> (offset: Int, dy: CGFloat)? {
+        guard let tlm = textView.textLayoutManager, let tcm = tlm.textContentManager else { return nil }
+        let clipY = scrollView.contentView.bounds.minY
+        let origin = textView.textContainerOrigin
+        guard clipY > origin.y else { return nil }   // at the top: nothing to keep
+        guard let frag = tlm.textLayoutFragment(for: CGPoint(x: 1, y: clipY - origin.y)) else { return nil }
+        return (tcm.offset(from: tcm.documentRange.location, to: frag.rangeInElement.location), frag.layoutFragmentFrame.minY + origin.y - clipY)
+    }
+
+    private func restoreScrollAnchor(_ a: (offset: Int, dy: CGFloat)) {
+        guard let tlm = textView.textLayoutManager, let tcm = tlm.textContentManager,
+              let loc = tcm.location(tcm.documentRange.location, offsetBy: a.offset) else { return }
+        tlm.ensureLayout(for: tlm.documentRange)
+        textView.refreshDocumentHeight()
+        guard let frag = tlm.textLayoutFragment(for: loc) else { return }
+        let clip = scrollView.contentView
+        let maxY = max(0, textView.frame.height - clip.bounds.height)
+        let y = min(maxY, max(0, frag.layoutFragmentFrame.minY + textView.textContainerOrigin.y - a.dy))
+        if abs(y - clip.bounds.minY) > 0.5 {
+            clip.scroll(to: CGPoint(x: clip.bounds.minX, y: y))
+            scrollView.reflectScrolledClipView(clip)
+        }
     }
 
     /// A new container width throws TextKit 2 back onto estimated heights for
@@ -901,13 +936,91 @@ public final class FloTextView: NSTextView {
     }
 
     public override func menu(for event: NSEvent) -> NSMenu? {
-        let base = controller?.features.contextMenu(for: event) ?? super.menu(for: event)
+        var base = controller?.features.contextMenu(for: event) ?? super.menu(for: event)
+        if let spelling = spellingItems(at: convert(event.locationInWindow, from: nil)) {
+            let menu = base ?? NSMenu()
+            if !menu.items.isEmpty { menu.insertItem(.separator(), at: 0) }
+            for it in spelling.reversed() { menu.insertItem(it, at: 0) }
+            base = menu
+        }
         guard let c = controller, let hit = c.image(at: convert(event.locationInWindow, from: nil)) else { return base }
         let menu = base ?? NSMenu()
         let items = c.imageSizeMenuItems(for: hit)
         if !menu.items.isEmpty { menu.insertItem(.separator(), at: 0) }
         for it in items.reversed() { menu.insertItem(it, at: 0) }
         return menu
+    }
+
+    // MARK: spelling (the app's context menu replaces NSTextView's, which carried these)
+
+    private final class SpellingAction: NSObject {
+        let run: () -> Void
+        init(_ run: @escaping () -> Void) { self.run = run }
+        @objc func fire(_ sender: Any?) { run() }
+    }
+    private var spellingActions: [SpellingAction] = []
+
+    /// The "Check spelling while typing" setting. (NSTextView's own flag reads back false in
+    /// processes without an app bundle, e.g. tests, so the menu keys off this one.)
+    public var checksSpelling = true {
+        didSet { if isContinuousSpellCheckingEnabled != checksSpelling { isContinuousSpellCheckingEnabled = checksSpelling } }
+    }
+
+    /// Suggestions, Learn Spelling and Ignore Spelling for a misspelled word under `p`, or nil.
+    func spellingItems(at p: NSPoint) -> [NSMenuItem]? {
+        spellingItems(forCharacterAt: characterIndexForInsertion(at: p))
+    }
+
+    public func spellingItems(forCharacterAt i: Int) -> [NSMenuItem]? {
+        guard checksSpelling, let c = controller else { return nil }
+        guard i != NSNotFound, i < c.state.doc.length else { return nil }
+        let word = selectionRange(forProposedRange: NSRange(location: i, length: 0), granularity: .selectByWord)
+        guard word.length > 0 else { return nil }
+        let text = string as NSString
+        let checker = NSSpellChecker.shared
+        let bad = checker.checkSpelling(of: text.substring(with: word), startingAt: 0, language: nil, wrap: false,
+                                        inSpellDocumentWithTag: spellCheckerDocumentTag, wordCount: nil)
+        guard bad.location != NSNotFound else { return nil }
+        let range = NSRange(location: word.location + bad.location, length: bad.length)
+        let misspelled = text.substring(with: range)
+        spellingActions = []
+        func item(_ title: String, bold: Bool = false, _ run: @escaping () -> Void) -> NSMenuItem {
+            let a = SpellingAction(run)
+            spellingActions.append(a)
+            let it = NSMenuItem(title: title, action: #selector(SpellingAction.fire(_:)), keyEquivalent: "")
+            it.target = a
+            if bold { it.attributedTitle = NSAttributedString(string: title, attributes: [.font: NSFont.boldSystemFont(ofSize: NSFont.systemFontSize)]) }
+            return it
+        }
+        var items: [NSMenuItem] = []
+        let wordGuesses = checker.guesses(forWordRange: NSRange(location: 0, length: (misspelled as NSString).length), in: misspelled,
+                                          language: nil, inSpellDocumentWithTag: spellCheckerDocumentTag) ?? []
+        for g in wordGuesses.prefix(5) {
+            items.append(item(g, bold: true) { [weak self] in
+                guard let self = self else { return }
+                self.setSelectedRange(range)
+                if !(self.controller?.insertTyped(g) ?? false) { self.insertText(g, replacementRange: range) }
+            })
+        }
+        if wordGuesses.isEmpty { let none = NSMenuItem(title: L("No Guesses Found"), action: nil, keyEquivalent: ""); none.isEnabled = false; items.append(none) }
+        items.append(.separator())
+        items.append(item(L("Learn Spelling")) { [weak self] in
+            checker.learnWord(misspelled)
+            self?.recheckSpelling()
+        })
+        items.append(item(L("Ignore Spelling")) { [weak self] in
+            guard let self = self else { return }
+            checker.ignoreWord(misspelled, inSpellDocumentWithTag: self.spellCheckerDocumentTag)
+            self.recheckSpelling()
+        })
+        return items
+    }
+
+    /// Re-run continuous spell checking over the text (after learning / ignoring a word).
+    public func recheckSpelling() {
+        guard checksSpelling else { return }
+        isContinuousSpellCheckingEnabled = false
+        isContinuousSpellCheckingEnabled = true
     }
 
     /// NSTextView's own completion popup (Esc / F5) is replaced by the wiki autocomplete.
@@ -931,7 +1044,7 @@ public final class FloTextView: NSTextView {
     /// shrink NSTextView's visible rect and made scroll-to-caret jump.)
     public override func setFrameSize(_ newSize: NSSize) {
         var s = newSize
-        if bottomPadding > 0, !inHeightLayout, let tlm = textLayoutManager {
+        if bottomPadding > 0, !inHeightLayout, heightLayoutNeeded(), let tlm = textLayoutManager {
             // never size from TextKit's estimates (see refreshDocumentHeight)
             inHeightLayout = true
             tlm.ensureLayout(for: tlm.documentRange)
@@ -964,6 +1077,26 @@ public final class FloTextView: NSTextView {
     /// Re-derive the frame height from the current layout (after edits).
     public static var layoutTime: [Double] = []
     private var inHeightLayout = false
+    /// Set whenever the text storage is edited (text or attributes) or the container width changes.
+    /// Nothing else drops layout now that TextKit keeps every fragment (see the fragment cap in
+    /// EditorController), and re-walking ~thousands of laid-out fragments on every frame of a
+    /// sidebar slide cost ~20ms a frame in a long note.
+    private var heightLayoutDirty = true
+    private var storageObserver: NSObjectProtocol?
+    private var laidOutContainerWidth: CGFloat = -1
+
+    /// Whether the full-document layout must be redone; consumes the dirty flag.
+    private func heightLayoutNeeded() -> Bool {
+        if storageObserver == nil, let ts = textStorage {
+            storageObserver = NotificationCenter.default.addObserver(forName: NSTextStorage.didProcessEditingNotification, object: ts, queue: nil) { [weak self] _ in
+                self?.heightLayoutDirty = true
+            }
+        }
+        let w = textContainer?.size.width ?? 0
+        if w != laidOutContainerWidth { laidOutContainerWidth = w; heightLayoutDirty = true }
+        defer { heightLayoutDirty = false }
+        return heightLayoutDirty
+    }
     func refreshDocumentHeight() {
         guard bottomPadding > 0 else { return }
         // TextKit 2 re-estimates the height of text it hasn't (re)laid out after
@@ -972,7 +1105,7 @@ public final class FloTextView: NSTextView {
         // invalidated fragments are redone) so the height is always real.
         if let tlm = textLayoutManager {
             let t0 = CFAbsoluteTimeGetCurrent()
-            tlm.ensureLayout(for: tlm.documentRange)
+            if heightLayoutNeeded() { tlm.ensureLayout(for: tlm.documentRange) }
             FloTextView.layoutTime.append(CFAbsoluteTimeGetCurrent() - t0)
         }
         guard let h = contentHeight() else { return }

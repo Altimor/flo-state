@@ -19,6 +19,9 @@ enum FloApp {
             ShellSnapshot.runSettings(args)
             exit(0)
         }
+        if args.contains("--selftest-sidebar") {
+            SelfTest.runSidebar(args)
+        }
         if args.contains("--selftest-scroll") {
             SelfTest.runScroll(args)
         }
