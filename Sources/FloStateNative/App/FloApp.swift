@@ -1,6 +1,7 @@
 import AppKit
 import FloCore
 import FloKit
+import UniformTypeIdentifiers
 
 /// GUI entry point.
 @MainActor
@@ -132,6 +133,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         LaunchTrace.mark("didFinishLaunching")
+        claimDefaultTextHandlersOnce()
         // Follow the system light/dark switch for windows set to "system".
         appearanceObservation = NSApp.observe(\.effectiveAppearance, options: [.new]) { [weak self] _, _ in
             DispatchQueue.main.async {
@@ -301,6 +303,22 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         p.canChooseFiles = false
         guard p.runModal() == .OK, let url = p.url else { return }
         openWorkspaceWindow(url.path, file: nil, keepSession: true)
+    }
+
+    /// Once per install, from the installed app only: make Flo State the default app for Markdown and plain
+    /// text (.txt). Never repeated, so a user who switches back to another editor keeps their choice.
+    /// CSV / .log are registered (Open With) but not claimed: those usually belong to other apps.
+    private func claimDefaultTextHandlersOnce() {
+        let key = "claimedDefaultTextHandlers"
+        guard !offscreen, !UserDefaults.standard.bool(forKey: key),
+              Bundle.main.bundlePath.hasPrefix("/Applications/") else { return }
+        UserDefaults.standard.set(true, forKey: key)
+        let app = Bundle.main.bundleURL
+        for type in [UTType("net.daringfireball.markdown"), UTType.plainText].compactMap({ $0 }) {
+            NSWorkspace.shared.setDefaultApplication(at: app, toOpen: type) { error in
+                if let error { NSLog("Flo State: couldn't become default for \(type.identifier): \(error.localizedDescription)") }
+            }
+        }
     }
 
     /// Finder / `open` / dock drops (`take_pending_open` + fa649ea routing).

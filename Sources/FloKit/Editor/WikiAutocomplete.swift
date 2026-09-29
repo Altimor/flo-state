@@ -492,9 +492,7 @@ extension EditorFeatures {
     func pointerOverLink(_ event: NSEvent) -> Bool {
         guard editor.onLinkClick != nil else { return false }
         let tv = editor.textView
-        let i = tv.characterIndexForInsertion(at: tv.convert(event.locationInWindow, from: nil))
-        guard i != NSNotFound else { return false }
-        return editor.link(at: i) != nil || (i > 0 && editor.link(at: i - 1) != nil)
+        return tv.linkHit(at: tv.convert(event.locationInWindow, from: nil)) != nil
     }
 }
 

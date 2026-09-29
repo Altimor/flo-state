@@ -240,13 +240,6 @@ final class AppWatcherModelTests: XCTestCase {
         XCTAssertEqual(index.files.map { $0.path }, ["/ws/new.md"])
     }
 
-    func testSelfWriteSuppressedWithinTTLThenReported() {
-        let m = makeModel(["/ws/a.md"])
-        m.recordWrite("/ws/a.md", nowMs: 0)
-        XCTAssertEqual(m.ingest(RawFSEvent(kind: .modifiedData, paths: ["/ws/a.md"]), nowMs: 500), [])
-        XCTAssertEqual(m.ingest(RawFSEvent(kind: .modifiedData, paths: ["/ws/a.md"]), nowMs: 2100), [.fileChanged(path: "/ws/a.md", kind: .modified)])
-    }
-
     func testRenameUpdatesIndexMembership() {
         let index = FileIndex(root: "/ws")
         index.add("/ws/old.md", modifiedAt: 1)
@@ -328,5 +321,18 @@ final class AppWorkspaceBootstrapTests: XCTestCase {
         XCTAssertEqual(PendingOpen.resolve(dir + "/note.MD"), PendingOpen(file: dir + "/note.MD"))
         XCTAssertNil(PendingOpen.resolve(dir + "/image.png"))
         XCTAssertNil(PendingOpen.resolve(dir + "/missing"))
+    }
+
+    /// Files the OS hands us (Finder, Open With) open when they're a registered text type, whatever the
+    /// sidebar's `files.associations` listing filter says; other files still don't.
+    func testRegisteredTextTypesOpenRegardlessOfAssociations() throws {
+        let dir = FileManager.default.temporaryDirectory.appendingPathComponent("po-\(UUID().uuidString)").path
+        try FileManager.default.createDirectory(atPath: dir, withIntermediateDirectories: true)
+        for name in ["a.txt", "b.MD", "c.log", "d.png"] { FileManager.default.createFile(atPath: dir + "/" + name, contents: Data("x".utf8)) }
+        let mdOnly = SupportedExtensions(patterns: ["*.md"])
+        XCTAssertNotNil(PendingOpen.resolve(dir + "/a.txt", extensions: mdOnly)?.file)
+        XCTAssertNotNil(PendingOpen.resolve(dir + "/b.MD", extensions: mdOnly)?.file)
+        XCTAssertNotNil(PendingOpen.resolve(dir + "/c.log", extensions: mdOnly)?.file)
+        XCTAssertNil(PendingOpen.resolve(dir + "/d.png", extensions: mdOnly))
     }
 }

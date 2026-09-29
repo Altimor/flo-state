@@ -8,9 +8,16 @@ public struct PendingOpen: Equatable {
 
     /// `open_target.rs::resolve_path`: a directory → workspace payload; an
     /// openable file → file payload; anything else → nil. Paths canonicalized.
+    /// Plain-text files Flo State registers for with the OS (Info.plist `CFBundleDocumentTypes`): opened from
+    /// Finder / "Open With" even when `files.associations` (the sidebar's listing filter) doesn't include them.
+    public static let registeredTextExtensions: Set<String> = ["md", "mdx", "markdown", "mdown", "mkd", "mkdn", "mdwn", "txt", "text", "csv", "log"]
+
     public static func resolve(_ path: String, extensions: SupportedExtensions = .default) -> PendingOpen? {
         if WorkspaceFS.isDirectory(path) { return PendingOpen(workspace: WorkspaceFS.canonicalize(path)) }
-        if WorkspaceFS.isFile(path) && extensions.isSupported(path) { return PendingOpen(file: WorkspaceFS.canonicalize(path)) }
+        let ext = (path as NSString).pathExtension.lowercased()
+        if WorkspaceFS.isFile(path) && (extensions.isSupported(path) || registeredTextExtensions.contains(ext)) {
+            return PendingOpen(file: WorkspaceFS.canonicalize(path))
+        }
         return nil
     }
 }

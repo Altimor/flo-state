@@ -104,7 +104,7 @@ extension WidgetBox {
 enum PDFCard {
     static let defaultWidth: CGFloat = 360
     static let buttonHeight: CGFloat = 26
-    static let inset: CGFloat = 8
+    static let inset: CGFloat = 12   // clear of the resize handle at the bottom-right corner
     static var labelFont: NSFont { .systemFont(ofSize: 11.5, weight: .medium) }
 
     /// The icon-only Quick Look button, bottom-right (hit-tested with the same rect).
@@ -112,8 +112,8 @@ enum PDFCard {
         CGRect(x: card.maxX - inset - buttonHeight, y: card.maxY - inset - buttonHeight, width: buttonHeight, height: buttonHeight)
     }
 
-    /// `controls`: the page count and Quick Look button, shown while the pointer is over the card.
-    static func draw(_ img: NSImage, pages: Int, in rect: CGRect, theme: EditorTheme, controls: Bool) {
+    /// The card itself (drawn in the text); its hover controls are drawn by `ImageResizeOverlay`.
+    static func draw(_ img: NSImage, in rect: CGRect, theme: EditorTheme) {
         let card = NSBezierPath(roundedRect: rect, xRadius: 4, yRadius: 4)
         NSGraphicsContext.saveGraphicsState()
         let shadow = NSShadow()
@@ -131,8 +131,10 @@ enum PDFCard {
         NSGraphicsContext.restoreGraphicsState()
         theme.foreground.withAlphaComponent(0.14).setStroke()
         NSBezierPath(roundedRect: rect.insetBy(dx: 0.5, dy: 0.5), xRadius: 4, yRadius: 4).stroke()
-        guard controls else { return }
+    }
 
+    /// Page count (bottom-left) and the icon-only Quick Look button (bottom-right), shown on hover.
+    static func drawControls(pages: Int, in rect: CGRect) {
         let ink = NSColor(white: 0.18, alpha: 1)
         let chip = { (r: CGRect) in
             NSGraphicsContext.saveGraphicsState()

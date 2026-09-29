@@ -66,9 +66,22 @@ final class AttributeApplier {
 
     /// Signature of everything that affects one line's attributes, used to skip
     /// untouched lines on re-render.
+    /// A list item right under a line of text: it gets the gap bullets have between each other, so the text
+    /// doesn't sit tighter against the list than the items do.
+    func listFollowsText(_ plan: RenderPlan, _ index: Int) -> Bool {
+        guard index > 0, index < plan.lines.count else { return false }
+        switch plan.lines[index].kind {
+        case .listItem, .orderedItem: break
+        default: return false
+        }
+        if case .paragraph = plan.lines[index - 1].kind { return true }
+        return false
+    }
+
     func lineSignature(plan: RenderPlan, line: Line, index: Int) -> Int {
         var h = Hasher()
         h.combine(plan.lines[index])
+        h.combine(listFollowsText(plan, index))   // spacing depends on the line above
         var i = runIndex(plan, line.from)
         // positions relative to the line, so lines that merely shifted keep their signature
         while i < plan.runs.count, plan.runs[i].from <= line.to {
@@ -425,6 +438,7 @@ final class AttributeApplier {
             after = theme.headingSpaceAfter
         case .listItem, .orderedItem:
             after = theme.bulletSpacing
+            if listFollowsText(plan, index) { before = max(0, theme.bulletSpacing - theme.paragraphSpacing) }
         case .blank:
             break
         default:

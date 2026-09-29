@@ -103,6 +103,20 @@ final class ImageResizeTests: XCTestCase {
         XCTAssertEqual(c0.pdfQuickLookURL(at: NSPoint(x: q.midX, y: q.midY))?.lastPathComponent, "doc.pdf")
         XCTAssertNil(c0.pdfQuickLookURL(at: NSPoint(x: hit.rect.midX, y: hit.rect.midY)))
         XCTAssertTrue(hit.rect.contains(q))
+        // hover: the overlay paints the Quick Look chip (light) over the page's red, only while shown
+        c0.imageOverlay.show(hit)
+        XCTAssertFalse(c0.imageOverlay.isHidden)
+        XCTAssertFalse(c0.imageOverlay.handleContains(NSPoint(x: q.midX, y: q.midY)), "the button isn't under the resize handle")
+        let ov = c0.imageOverlay
+        let orep = ov.bitmapImageRepForCachingDisplay(in: ov.bounds)!
+        ov.cacheDisplay(in: ov.bounds, to: orep)
+        let local = PDFCard.quickLookRect(in: CGRect(x: ImageResizeOverlay.handle, y: ImageResizeOverlay.handle, width: hit.rect.width, height: hit.rect.height))
+        let chip = orep.colorAt(x: Int(local.midX * CGFloat(orep.pixelsWide) / ov.bounds.width),
+                                y: Int((local.minY + 3) * CGFloat(orep.pixelsHigh) / ov.bounds.height))!   // the chip's fill, above the icon
+        XCTAssertGreaterThan(chip.alphaComponent, 0.8, "Quick Look chip drawn on hover")
+        XCTAssertGreaterThan(chip.greenComponent, 0.8, "light, not dark")
+        c0.imageOverlay.show(nil)
+        XCTAssertTrue(c0.imageOverlay.isHidden, "hidden when not hovered")
     }
 
     func click(_ c: EditorController, at p: NSPoint, count: Int) {

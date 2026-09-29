@@ -24,12 +24,6 @@ final class QuickLook: NSObject, QLPreviewPanelDataSource, QLPreviewPanelDelegat
 }
 
 extension EditorController {
-    /// Redraw the PDF cards whose hover state changed (their controls show only while hovered).
-    func pdfHoverChanged(from old: Int?, to new: Int?) {
-        for f in [old, new].compactMap({ $0 }) {
-            if let hit = imageRects[f] { textView.setNeedsDisplay(hit.rect.insetBy(dx: -4, dy: -4)) }
-        }
-    }
 
     /// The PDF whose Quick Look button is under a view point.
     func pdfQuickLookURL(at point: NSPoint) -> URL? {

@@ -21,8 +21,6 @@ public final class EditorController: NSObject, NSTextViewDelegate, NSTextLayoutM
     /// Files dropped from Finder onto the text: (paths, UTF-16 offset of the drop point) → handled?
     /// NSTextView otherwise takes file drops itself (inserting a path, or nothing) before the window sees them.
     public var onFileDrop: (([String], Int) -> Bool)?
-    /// `from` of the PDF card under the pointer (its page count and Quick Look button are shown).
-    var hoveredPDF: Int? { didSet { if hoveredPDF != oldValue { pdfHoverChanged(from: oldValue, to: hoveredPDF) } } }
 
     public enum LinkClick: Equatable {
         case href(String)
@@ -715,10 +713,23 @@ public final class FloTextView: NSTextView {
 
     /// The link under the mouse: the characters on either side of the nearest insertion point.
     private func linkUnder(_ event: NSEvent) -> EditorController.LinkClick? {
-        guard let c = controller else { return nil }
-        let i = characterIndexForInsertion(at: convert(event.locationInWindow, from: nil))
+        linkHit(at: convert(event.locationInWindow, from: nil))
+    }
+
+    /// The link whose characters are under a view point. Only a point inside a link character's box counts:
+    /// the nearest insertion point alone matched clicks in the blank space after a link or beside it.
+    func linkHit(at p: NSPoint) -> EditorController.LinkClick? {
+        guard let c = controller, let w = window else { return nil }
+        let i = characterIndexForInsertion(at: p)
         guard i != NSNotFound else { return nil }
-        return c.link(at: i) ?? (i > 0 ? c.link(at: i - 1) : nil)
+        for ci in [i, i - 1] where ci >= 0 && ci < c.state.doc.length {
+            guard let link = c.link(at: ci) else { continue }
+            let screen = firstRect(forCharacterRange: NSRange(location: ci, length: 1), actualRange: nil)
+            guard screen.width > 0 else { continue }
+            let box = convert(w.convertFromScreen(screen), from: nil)
+            if box.insetBy(dx: -1, dy: -1).contains(p) { return link }
+        }
+        return nil
     }
 
     /// The foldable heading whose chevron is under the point (view coordinates).
@@ -749,7 +760,6 @@ public final class FloTextView: NSTextView {
         c.hoverChevron = chevronLine(at: p) != nil
         let img = c.image(at: p, slop: ImageResizeOverlay.handle)
         if img != c.imageOverlay.hit { c.imageOverlay.show(img) }
-        c.hoveredPDF = c.image(at: p).flatMap { $0.url?.pathExtension.lowercased() == "pdf" ? $0.from : nil }
     }
 
     public override func mouseExited(with event: NSEvent) {
@@ -757,7 +767,6 @@ public final class FloTextView: NSTextView {
         controller?.hoverLine = nil
         controller?.hoverChevron = false
         controller?.imageOverlay.show(nil)
-        controller?.hoveredPDF = nil
     }
 
     public override func updateTrackingAreas() {

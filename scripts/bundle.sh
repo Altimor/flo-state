@@ -97,14 +97,34 @@ cat > "$APP/Contents/Info.plist" <<PLIST
   <key>NSHighResolutionCapable</key><true/>
   <key>NSPrincipalClass</key><string>NSApplication</string>
   <key>NSSupportsAutomaticTermination</key><false/>
+  <key>UTImportedTypeDeclarations</key>
+  <array>
+    <dict>
+      <key>UTTypeIdentifier</key><string>net.daringfireball.markdown</string>
+      <key>UTTypeDescription</key><string>Markdown Document</string>
+      <key>UTTypeConformsTo</key><array><string>public.plain-text</string></array>
+      <key>UTTypeTagSpecification</key>
+      <dict>
+        <key>public.filename-extension</key><array><string>md</string><string>markdown</string><string>mdown</string><string>mkd</string><string>mkdn</string><string>mdwn</string><string>mdx</string></array>
+        <key>public.mime-type</key><array><string>text/markdown</string></array>
+      </dict>
+    </dict>
+  </array>
   <key>CFBundleDocumentTypes</key>
   <array>
     <dict>
       <key>CFBundleTypeName</key><string>Markdown Document</string>
       <key>CFBundleTypeRole</key><string>Editor</string>
-      <key>LSHandlerRank</key><string>Alternate</string>
-      <key>CFBundleTypeExtensions</key><array><string>md</string><string>mdx</string><string>markdown</string></array>
+      <key>LSHandlerRank</key><string>Default</string>
+      <key>CFBundleTypeExtensions</key><array><string>md</string><string>mdx</string><string>markdown</string><string>mdown</string><string>mkd</string><string>mkdn</string><string>mdwn</string></array>
       <key>LSItemContentTypes</key><array><string>net.daringfireball.markdown</string></array>
+    </dict>
+    <dict>
+      <key>CFBundleTypeName</key><string>Plain Text Document</string>
+      <key>CFBundleTypeRole</key><string>Editor</string>
+      <key>LSHandlerRank</key><string>Alternate</string>
+      <key>CFBundleTypeExtensions</key><array><string>txt</string><string>text</string><string>csv</string><string>log</string></array>
+      <key>LSItemContentTypes</key><array><string>public.plain-text</string><string>public.comma-separated-values-text</string><string>com.apple.log</string></array>
     </dict>
     <dict>
       <key>CFBundleTypeName</key><string>Folder</string>

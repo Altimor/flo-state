@@ -180,6 +180,12 @@ final class ImageResizeOverlay: NSView {
         if previewWidth != nil { outline.setLineDash([4, 3], count: 2, phase: 0) }
         accent.withAlphaComponent(previewWidth != nil ? 0.9 : 0.55).setStroke()
         outline.stroke()
+        // PDF cards: their page count and Quick Look button appear while hovered (here, not in the text:
+        // a text layout fragment isn't repainted by a hover redraw)
+        if previewWidth == nil, let url = hit?.url, url.pathExtension.lowercased() == "pdf",
+           let pages = controller?.applier.images.load(absolutePath: url.path)?.pdfPageCount {
+            PDFCard.drawControls(pages: pages, in: shown)
+        }
         let h = NSBezierPath(roundedRect: handleRect, xRadius: 3, yRadius: 3)
         NSColor.white.setFill(); h.fill()
         accent.setStroke(); h.lineWidth = 1.5; h.stroke()
