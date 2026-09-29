@@ -12,6 +12,16 @@ same app shell (sidebar, tabs, command palette, outline rail, settings,
 find/replace). Parity is measured against the real web frontend: see
 [Testing](#testing).
 
+## Install
+
+With [Homebrew](https://brew.sh):
+
+```sh
+brew install --cask altimor/tap/flo-state
+```
+
+Or download the latest `.zip` from [Releases](https://github.com/Altimor/flo-state/releases/latest). The app updates itself (Sparkle).
+
 ## Layout
 
 | Path | What |
