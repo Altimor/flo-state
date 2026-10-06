@@ -378,9 +378,26 @@ final class ShellRootView: FlippedView {
     }
 
 
+    /// Full screen with the menu bar kept visible: macOS shows the title bar (and toolbar) in a separate
+    /// window, 52pt here, parked over the top of this one, covering the tabs. It's a different window,
+    /// so `contentLayoutRect` doesn't account for it: measure the overlap with the window holding the
+    /// traffic lights instead. Hidden (menu bar set to auto-hide) means no overlap.
+    var fullScreenTopInset: CGFloat {
+        guard let w = window, w.styleMask.contains(.fullScreen) else { return 0 }
+        if let bar = w.standardWindowButton(.closeButton)?.window, bar !== w, bar.isVisible, bar.alphaValue > 0.01 {
+            let overlap = w.frame.maxY - bar.frame.minY
+            return max(0, min(120, overlap.rounded()))
+        }
+        guard let cv = w.contentView else { return 0 }
+        return max(0, (cv.frame.height - w.contentLayoutRect.maxY).rounded())
+    }
+
     override func layout() {
         super.layout()
-        let W = bounds.width, H = bounds.height
+        // shift the whole shell below the full-screen title bar strip (0 when windowed)
+        let top = fullScreenTopInset
+        if bounds.origin.y != -top { setBoundsOrigin(NSPoint(x: 0, y: -top)) }
+        let W = bounds.width, H = bounds.height - top
         effect.frame = bounds
         inactiveBase.frame = bounds
         // key state decides the backdrop (legacy darkens when inactive)
@@ -410,13 +427,13 @@ final class ShellRootView: FlippedView {
         resizeHandle.frame = CGRect(x: S - 4, y: Metrics.chromeDragHeight, width: 8, height: max(0, H - Metrics.chromeDragHeight))
         tabs.isHidden = compact
         tabs.frame = CGRect(x: left, y: 0, width: max(0, W - 12 - left), height: Metrics.chromeRowHeight)
-        paletteOverlay?.frame = bounds
+        paletteOverlay?.frame = CGRect(x: 0, y: 0, width: W, height: H)
         compactHeader.isHidden = !model.isCompact
         compactHeader.frame = CGRect(x: 0, y: 0, width: W, height: Metrics.chromeRowHeight)
         compactHeader.needsDisplay = true
         let showWelcome = model.root == nil && model.editor.tabs.isEmpty
         welcome.isHidden = !showWelcome
-        welcome.frame = bounds
+        welcome.frame = CGRect(x: 0, y: 0, width: W, height: H)
         area.isHidden = showWelcome
         tabBacking.isHidden = showWelcome
         tabBlur.isHidden = showWelcome || opaqueBase
@@ -469,7 +486,9 @@ final class ShellRootView: FlippedView {
         }
         appliedWidth = w
         appliedLeft = l
-        EditorController.holdsColumnWidth = sidebarAnimation != nil
+        // also held while the window is being resized: re-wrapping a long note on every frame of a live
+        // resize is what made dragging the window edge laggy (EditorArea re-wraps once when it ends)
+        EditorController.holdsColumnWidth = sidebarAnimation != nil || (window?.inLiveResize ?? false)
         return (w, l)
     }
 
@@ -846,7 +865,23 @@ final class ShellWindowController: NSWindowController, NSWindowDelegate {
         onClose?(self)
     }
 
-    func windowDidExitFullScreen(_ notification: Notification) { positionTrafficLights() }
+    // Full screen: AppKit moves the (empty, corner-radius-only) toolbar into its own strip across
+    // the top of the screen, which covered the tab strip with a blank band; the traffic-light
+    // positioning also kept resizing that strip. Hide the toolbar for the duration.
+    func windowWillEnterFullScreen(_ notification: Notification) {
+        window?.toolbar?.isVisible = false
+        root.needsLayout = true
+    }
+    func windowDidEnterFullScreen(_ notification: Notification) {
+        root.needsLayout = true
+        // the title bar window settles a beat after the transition: measure again
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { [weak self] in self?.root.needsLayout = true }
+    }
+    func windowDidExitFullScreen(_ notification: Notification) {
+        window?.toolbar?.isVisible = true
+        root.needsLayout = true
+        positionTrafficLights()
+    }
 
     /// Secondary windows: a random spot in the work area of the screen under the cursor.
     static func randomFrame(size: CGSize, mouse: CGPoint = NSEvent.mouseLocation, screens: [NSScreen] = NSScreen.screens) -> CGRect? {
@@ -870,7 +905,7 @@ final class ShellWindowController: NSWindowController, NSWindowDelegate {
     /// inset re-applied synchronously.
     func positionTrafficLights(x: CGFloat = 20, y: CGFloat = 29) {
         if positioningLights { queueTrafficReapply(); return }
-        guard let w = window, let close = w.standardWindowButton(.closeButton),
+        guard let w = window, !w.styleMask.contains(.fullScreen), let close = w.standardWindowButton(.closeButton),
               let mini = w.standardWindowButton(.miniaturizeButton), let zoom = w.standardWindowButton(.zoomButton),
               let titlebar = close.superview, let container = titlebar.superview else { return }
         positioningLights = true

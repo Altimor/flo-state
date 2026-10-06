@@ -269,6 +269,13 @@ public final class FileChangeReconciler {
         editor.saveEngine.cancelSave(path)
         guard let content = try? await reader(path) else { return false }
         guard let latest = editor.file(path), content.content != latest.diskContent else { return false }
+        if latest.isDirty {
+            // unsaved edits here + a new version on disk (another device): merge, never discard
+            let ours = editor.saveEngine.serializeForSave(frontmatter: latest.frontmatter, content: latest.content)
+            let merged = TextMerge.merge3(base: latest.diskContent, ours: ours, theirs: content.content)
+            editor.adoptMerged(path, merged: merged, disk: content.content)
+            return true
+        }
         editor.reloadFromDisk(path, rawContent: content.content)
         return true
     }

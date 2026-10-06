@@ -221,6 +221,7 @@ public struct SettingsValues {
     public var editorShowOutline: Bool { bool("editor.show-outline") }
     public var editorShowHeadingChevrons: Bool { bool("editor.show-heading-chevrons") }
     public var editorSpellCheck: Bool { bool("editor.spell-check") }
+    public var editorOpenAtEnd: Bool { bool("editor.open-at-end") }
     public var editorOutlineIndentPerLevel: Double { num("editor.outline-indent-per-level") }
     public var editorJumpToBottomAfterMinutes: Double { num("editor.jump-to-bottom-after-minutes") }
     public var editorHeadingSpaceBefore: Double { num("editor.heading-space-before") }

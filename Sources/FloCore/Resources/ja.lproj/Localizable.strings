@@ -318,6 +318,7 @@
 
 /* ShellMenus.swift */
 "Open in new tab" = "新規タブで開く";
+"Open in new window" = "新規ウインドウで開く";
 
 /* ShellMenus.swift */
 "Failed to open in new tab: %@" = "新規タブで開けませんでした: %@";
@@ -950,3 +951,8 @@
 "Learn Spelling" = "スペルを学習";
 "Ignore Spelling" = "スペルを無視";
 "No Guesses Found" = "候補が見つかりません";
+"Open notes at the end" = "メモを末尾で開く";
+"Opening a note puts the cursor at its end, for journals and logs you add to at the bottom" = "メモを開くとカーソルを末尾に置きます。下に書き足していく日記やログ向けです";
+"Opening notes" = "メモを開くとき";
+"Tip: ⌘. checks or unchecks the item the cursor is on" = "ヒント：⌘. でカーソル位置の項目をチェック／チェック解除できます";
+"Headings only" = "見出しのみ";

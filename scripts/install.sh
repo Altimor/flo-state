@@ -5,6 +5,15 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 # relaunch afterwards if it was running
 SRC="${SRC:-build/Flo State Native.app}"
+# Never install a stale bundle: if any source is newer than the bundled binary, rebuild it first.
+# (install.sh used to only copy build/, so running it alone silently shipped an old build.)
+if [[ "$SRC" == "build/Flo State Native.app" ]]; then
+  BIN="$SRC/Contents/MacOS/FloStateNative"
+  if [[ ! -f "$BIN" ]] || [[ -n "$(find Sources Resources Package.swift -newer "$BIN" -type f 2>/dev/null | head -1)" ]]; then
+    echo "bundle is older than the sources: rebuilding (scripts/bundle.sh)"
+    scripts/bundle.sh
+  fi
+fi
 DST="/Applications/Flo State.app"
 LEGACY="/Applications/Flo State Legacy.app"
 if [[ -d "$DST" ]] && [[ "$(/usr/libexec/PlistBuddy -c 'Print CFBundleIdentifier' "$DST/Contents/Info.plist")" == "com.writer-computer" ]]; then

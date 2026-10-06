@@ -23,7 +23,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 ROOT=$PWD
 GH_REPO=${GH_REPO:-Altimor/flo-state}
-SITE_DIR=${SITE_DIR:-$HOME/agent/2026.09.26 flocrivello-site}
+SITE_DIR=${SITE_DIR:-$HOME/agent/projects/2026.09.26 flocrivello-site}
 SPARKLE_BIN="$ROOT/.build-release/artifacts/sparkle/Sparkle/bin"
 
 if [[ $# -ge 1 ]]; then

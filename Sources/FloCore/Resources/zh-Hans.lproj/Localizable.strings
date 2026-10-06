@@ -318,6 +318,7 @@
 
 /* ShellMenus.swift */
 "Open in new tab" = "在新标签页中打开";
+"Open in new window" = "在新窗口中打开";
 
 /* ShellMenus.swift */
 "Failed to open in new tab: %@" = "无法在新标签页中打开：%@";
@@ -950,3 +951,8 @@
 "Learn Spelling" = "学习拼写";
 "Ignore Spelling" = "忽略拼写";
 "No Guesses Found" = "未找到建议";
+"Open notes at the end" = "在末尾打开笔记";
+"Opening a note puts the cursor at its end, for journals and logs you add to at the bottom" = "打开笔记时光标位于末尾，适合在底部追加内容的日志和记录";
+"Opening notes" = "打开笔记";
+"Tip: ⌘. checks or unchecks the item the cursor is on" = "提示：⌘. 可勾选或取消勾选光标所在的项目";
+"Headings only" = "仅标题";

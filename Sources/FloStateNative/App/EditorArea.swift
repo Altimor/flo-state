@@ -72,6 +72,19 @@ final class EditorPaneView: FlippedView {
     }
     required init?(coder: NSCoder) { fatalError() }
 
+    // Live window resize: the column keeps its wrap width (and just re-centres) while the edge is
+    // dragged, then re-wraps once at the end. See EditorController.holdsColumnWidth.
+    override func viewWillStartLiveResize() {
+        super.viewWillStartLiveResize()
+        EditorController.holdsColumnWidth = true
+    }
+
+    override func viewDidEndLiveResize() {
+        super.viewDidEndLiveResize()
+        EditorController.holdsColumnWidth = false
+        applyColumnLayout()
+    }
+
     /// Sync with the store: create the editor once the file is loaded, reload
     /// it after an external change (`reloadVersion` bump).
     func sync() {
@@ -106,6 +119,7 @@ final class EditorPaneView: FlippedView {
         if controller == nil {
             makeController(text: f.content, caret: f.content == "# " ? 2 : min(f.cursorPos, f.content.utf16.count))
             loadedReloadVersion = f.reloadVersion
+            if model.values.editorOpenAtEnd { DispatchQueue.main.async { [weak self] in self?.jumpToEnd() } }
         } else if f.reloadVersion != loadedReloadVersion, let c = controller {
             frontmatterPanel?.syncFromStore()
             loadedReloadVersion = f.reloadVersion
@@ -143,7 +157,9 @@ final class EditorPaneView: FlippedView {
             guard let self = self, !self.suppressUpdates else { return }
             self.model.editor.updateContent(self.path, state.doc.string)
             self.model.editor.updateCursorPos(self.path, state.selection.main.head)
-            self.typewriter(force: false)
+            // typing recentres; an edit made by clicking (a checkbox) leaves the view alone
+            let t = NSApp?.currentEvent?.type
+            if t != .leftMouseDown && t != .leftMouseUp { self.typewriter(force: false) }
         }
         c.onSelectionChanged = { [weak self] state in
             guard let self = self, !self.suppressUpdates else { return }

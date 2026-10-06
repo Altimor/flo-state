@@ -318,6 +318,7 @@
 
 /* ShellMenus.swift */
 "Open in new tab" = "Open in new tab";
+"Open in new window" = "Open in new window";
 
 /* ShellMenus.swift */
 "Failed to open in new tab: %@" = "Failed to open in new tab: %@";
@@ -950,3 +951,8 @@
 "Learn Spelling" = "Learn Spelling";
 "Ignore Spelling" = "Ignore Spelling";
 "No Guesses Found" = "No Guesses Found";
+"Open notes at the end" = "Open notes at the end";
+"Opening a note puts the cursor at its end, for journals and logs you add to at the bottom" = "Opening a note puts the cursor at its end, for journals and logs you add to at the bottom";
+"Opening notes" = "Opening notes";
+"Tip: ⌘. checks or unchecks the item the cursor is on" = "Tip: ⌘. checks or unchecks the item the cursor is on";
+"Headings only" = "Headings only";

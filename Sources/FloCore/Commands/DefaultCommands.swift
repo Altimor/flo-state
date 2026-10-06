@@ -134,8 +134,17 @@ enum CM {
                 moved = SelectionRange.cursor(block.from + space)
             }
         }
+        // List items: line start is after the (hidden) marker, "- " / "1. " / "- [ ] ".
+        if !forward {
+            let line = state.doc.lineAt(start.head)
+            if let m = listPrefixRE.exec(state.sliceDoc(line.from, min(line.from + 100, line.to))) {
+                let contentStart = line.from + m.length
+                if moved.head < contentStart && start.head >= contentStart { moved = SelectionRange.cursor(contentStart) }
+            }
+        }
         return moved
     }
+    static let listPrefixRE = JSRegex("^[ \\t]*(?:[-*+]|\\d+[.)])[ \\t]+(?:\\[[ xX]\\][ \\t]+)?")
 
     static let cursorLineBoundaryForward: Command = { t in moveSel(t) { moveByLineBoundary(t, $0, true) } }
     static let cursorLineBoundaryBackward: Command = { t in moveSel(t) { moveByLineBoundary(t, $0, false) } }

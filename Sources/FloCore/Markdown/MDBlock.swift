@@ -142,7 +142,22 @@ func mdIsHorizontalRule(_ line: MDLine, _ cx: MDBlockContext, _ breaking: Bool) 
     }
     // Setext headers take precedence
     if breaking && line.next == 45 && mdIsSetextUnderline(line) > -1 && line.depth == cx.stack.count { return -1 }
-    return count < 3 ? -1 : 1
+    if count < 3 { return -1 }
+    // Deviation from CommonMark, for typing: a bullet marker, spaces, then one unbroken run of the same
+    // character ("* **", "* ***", "- --") is a list item whose text is being typed (bold / italic markers),
+    // not a rule. Otherwise starting **bold** on a new bullet turned the line into a rule until a letter
+    // was typed. The spaced forms ("* * *") and unspaced ones ("***", "---") are still rules.
+    if line.next == 42 || line.next == 45 {
+        var p = line.pos + 1
+        if p < line.text.count && mdSpace(Int(line.text[p])) {
+            while p < line.text.count && mdSpace(Int(line.text[p])) { p += 1 }
+            var run = 0
+            while p < line.text.count && Int(line.text[p]) == line.next { run += 1; p += 1 }
+            while p < line.text.count && mdSpace(Int(line.text[p])) { p += 1 }
+            if run >= 2 && p == line.text.count { return -1 }
+        }
+    }
+    return 1
 }
 
 func mdInList(_ cx: MDBlockContext, _ type: Int) -> Bool {

@@ -318,6 +318,7 @@
 
 /* ShellMenus.swift */
 "Open in new tab" = "فتح في علامة تبويب جديدة";
+"Open in new window" = "فتح في نافذة جديدة";
 
 /* ShellMenus.swift */
 "Failed to open in new tab: %@" = "تعذر الفتح في علامة تبويب جديدة: %@";
@@ -950,3 +951,8 @@
 "Learn Spelling" = "تعلّم الإملاء";
 "Ignore Spelling" = "تجاهل الإملاء";
 "No Guesses Found" = "لم يتم العثور على اقتراحات";
+"Open notes at the end" = "فتح الملاحظات عند النهاية";
+"Opening a note puts the cursor at its end, for journals and logs you add to at the bottom" = "عند فتح ملاحظة يوضع المؤشر في نهايتها، للمذكرات والسجلات التي تُضاف إليها من الأسفل";
+"Opening notes" = "فتح الملاحظات";
+"Tip: ⌘. checks or unchecks the item the cursor is on" = "تلميح: ⌘. يحدد العنصر الذي عليه المؤشر أو يلغي تحديده";
+"Headings only" = "العناوين فقط";

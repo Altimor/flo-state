@@ -357,6 +357,15 @@ final class ShellModel {
 
     private func writeFile(_ path: String, _ content: String) throws {
         if readOnly { return }
+        var content = content
+        // Never overwrite a version written elsewhere (the phone, iCloud) since this buffer was read:
+        // merge it in, and show the merge.
+        if let f = editor.file(path), let disk = try? String(contentsOfFile: path, encoding: .utf8),
+           disk != f.diskContent, disk != content {
+            content = TextMerge.merge3(base: f.diskContent, ours: content, theirs: disk)
+            let merged = content
+            DispatchQueue.main.async { [weak self] in self?.editor.adoptMerged(path, merged: merged, disk: merged) }
+        }
         try WorkspaceFS.writeFile(path, content: content)
         watcher?.recordWrite(path, nowMs: scheduler.nowMs)
         index?.updateModifiedAt(path, WorkspaceFS.modifiedTime(path))
@@ -906,7 +915,22 @@ final class ShellModel {
             }.map { PaletteItem(kind: .file($0.path), title: ($0.title?.isEmpty == false ? $0.title! : LinkPaths.getFileStem($0.name)),
                                 subtitle: LinkPaths.getParentDir($0.path)) }
         }
-        let items = cmds + files
+        // ⌘O with nothing typed: the 5 notes opened most recently come first (not the one already open,
+        // and only this workspace's in a workspace window)
+        var recents: [PaletteItem] = []
+        if q.isEmpty && p.intent == .search {
+            let active = editor.activeFilePath
+            recents = recentFilesStore.list(limit: 30, extensions: settings.supportedExtensions)
+                // case-insensitive: the recents and the workspace can spell the same folder differently
+                .filter { $0.path != active && (root == nil || $0.path.lowercased().hasPrefix(root!.lowercased() + "/")) }
+                .prefix(5)
+                .map { f -> PaletteItem in
+                    let dir = LinkPaths.getParentDir(f.path)
+                    let rel = root.map { r in String(dir.dropFirst(r.count)).trimmingCharacters(in: CharacterSet(charactersIn: "/")) } ?? dir
+                    return PaletteItem(kind: .file(f.path), title: (f.title?.isEmpty == false ? f.title! : LinkPaths.getFileStem(f.name)), subtitle: rel)
+                }
+        }
+        let items = recents + cmds + files
         if items.isEmpty {
             return PaletteView(heading: nil, empty: isIndexing && !q.isEmpty ? L("Indexing workspace...") : L("No results found."), items: [], placeholder: L("Search..."))
         }

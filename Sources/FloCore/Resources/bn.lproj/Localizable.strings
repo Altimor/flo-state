@@ -318,6 +318,7 @@
 
 /* ShellMenus.swift */
 "Open in new tab" = "নতুন ট্যাবে খুলুন";
+"Open in new window" = "নতুন উইন্ডোতে খুলুন";
 
 /* ShellMenus.swift */
 "Failed to open in new tab: %@" = "নতুন ট্যাবে খোলা যায়নি: %@";
@@ -950,3 +951,8 @@
 "Learn Spelling" = "বানান শিখুন";
 "Ignore Spelling" = "বানান উপেক্ষা করুন";
 "No Guesses Found" = "কোনো পরামর্শ পাওয়া যায়নি";
+"Open notes at the end" = "নোট শেষে খুলুন";
+"Opening a note puts the cursor at its end, for journals and logs you add to at the bottom" = "নোট খুললে কার্সর তার শেষে থাকে, নিচে যোগ করা জার্নাল ও লগের জন্য";
+"Opening notes" = "নোট খোলা";
+"Tip: ⌘. checks or unchecks the item the cursor is on" = "টিপ: ⌘. কার্সর যে আইটেমে আছে তা চেক বা আনচেক করে";
+"Headings only" = "শুধু শিরোনাম";

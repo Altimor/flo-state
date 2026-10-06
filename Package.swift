@@ -3,7 +3,7 @@ import PackageDescription
 
 let package = Package(
     name: "FloStateNative",
-    platforms: [.macOS(.v14)],
+    platforms: [.macOS(.v14), .iOS(.v17)],
     products: [
         .executable(name: "FloStateNative", targets: ["FloStateNative"]),
         .library(name: "FloCore", targets: ["FloCore"]),

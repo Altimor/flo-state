@@ -157,6 +157,12 @@ final class KeysParityTests: XCTestCase {
             // Intentional divergence: Cmd-Shift-7/8 convert list lines (checkbox/bullet/numbered) and keep
             // the indent; the web app stacked prefixes ("1. - a") or stripped half a checkbox ("[ ] a").
             if !ok && c.keys.contains(where: { $0 == "Mod-Shift-7" || $0 == "Mod-Shift-8" }) { excluded.append("[intentional] " + detail); continue }
+            // Intentional divergence: a second Mod-B / Mod-I undoes the first (the web app stacks markers:
+            // "****hello****"); see FormatToggleTests.
+            if !ok && c.name.hasPrefix("fmt toggle twice") { excluded.append("[intentional] " + detail); continue }
+            // Intentional divergence: Mod-B / Mod-I with nothing selected (and no word at the caret) insert only the
+            // opening marker; the web app inserted the pair. Flo closes his markers himself.
+            if !ok && c.keys.contains(where: { $0 == "Mod-b" || $0 == "Mod-i" }) && c.sel.main.empty { excluded.append("[intentional] " + detail); continue }
             total += 1
             if ok { pass += 1 }
             for tag in c.tags {

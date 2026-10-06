@@ -18,13 +18,20 @@ public struct SearchMatch: Equatable {
 /// `SearchCursor(doc, query, from, to, s => s.toLowerCase())`. Text is
 /// NFKD-normalized and lowercased per code point, the query as a whole.
 public struct SearchCursor {
+    let doc: Text
     let units: [UInt16]
     let query: [UInt16]
     var pos: Int
     let end: Int
     private var partials: [(from: Int, index: Int, precise: Bool)] = []
 
-    public init(_ doc: Text, _ query: String, from: Int = 0, to: Int? = nil, caseInsensitive: Bool = true) {
+    /// Only matches on heading lines (the find bar's "Headings only" toggle).
+    let headingsOnly: Bool
+    private var headingLines: [Int: Bool] = [:]
+
+    public init(_ doc: Text, _ query: String, from: Int = 0, to: Int? = nil, caseInsensitive: Bool = true, headingsOnly: Bool = false) {
+        self.doc = doc
+        self.headingsOnly = headingsOnly
         units = doc.units
         pos = max(0, from)
         end = min(doc.length, to ?? doc.length)
@@ -61,11 +68,39 @@ public struct SearchCursor {
 
     /// `next()`: the next match, skipping matches that overlap the previous one.
     public mutating func next() -> SearchMatch? {
-        partials.removeAll()
-        return nextOverlapping()
+        while true {
+            partials.removeAll()
+            guard let m = rawNextOverlapping() else { return nil }
+            if allowed(m) { return m }
+        }
     }
 
     public mutating func nextOverlapping() -> SearchMatch? {
+        while let m = rawNextOverlapping() {
+            if allowed(m) { return m }
+        }
+        return nil
+    }
+
+    private mutating func allowed(_ m: SearchMatch) -> Bool {
+        guard headingsOnly else { return true }
+        let n = doc.lineAt(m.from).number
+        if let known = headingLines[n] { return known }
+        let h = SearchCursor.isHeadingLine(doc, n)
+        headingLines[n] = h
+        return h
+    }
+
+    /// ATX (`# Title`) or setext (a text line underlined with `===` / `---`).
+    public static func isHeadingLine(_ doc: Text, _ number: Int) -> Bool {
+        let text = doc.line(number).text
+        if text.range(of: #"^ {0,3}#{1,6}(\s|$)"#, options: .regularExpression) != nil { return true }
+        guard number < doc.lines, !text.trimmingCharacters(in: .whitespaces).isEmpty,
+              text.range(of: #"^ {0,3}([-*+>]|\d+[.)])\s"#, options: .regularExpression) == nil else { return false }
+        return doc.line(number + 1).text.range(of: #"^ {0,3}(=+|-+)[ \t]*$"#, options: .regularExpression) != nil
+    }
+
+    private mutating func rawNextOverlapping() -> SearchMatch? {
         if query.isEmpty { pos = end; return nil }
         while pos < end {
             let start = pos
@@ -119,6 +154,7 @@ public struct FindQuery: Equatable {
     public var replace: String
     public var caseSensitive = false
     public var literal = false
+    public var headingsOnly = false
     public init(search: String, replace: String = "") { self.search = search; self.replace = replace }
 
     public var valid: Bool { !search.isEmpty }
@@ -146,7 +182,7 @@ public struct FindQuery: Equatable {
     private var qlen: Int { unquoted.utf16.count }
 
     func cursor(_ doc: Text, _ from: Int, _ to: Int) -> SearchCursor {
-        SearchCursor(doc, unquoted, from: from, to: to, caseInsensitive: !caseSensitive)
+        SearchCursor(doc, unquoted, from: from, to: to, caseInsensitive: !caseSensitive, headingsOnly: headingsOnly)
     }
 
     public func nextMatch(_ doc: Text, _ curFrom: Int, _ curTo: Int) -> SearchMatch? {
@@ -249,11 +285,11 @@ public enum FindCount {
     public struct Info: Equatable { public var current: Int; public var total: Int }
 
     /// `computeMatchInfo`.
-    public static func matchInfo(_ state: EditorState, _ query: String) -> Info? {
+    public static func matchInfo(_ state: EditorState, _ query: String, headingsOnly: Bool = false) -> Info? {
         if query.isEmpty { return nil }
         let head = state.selection.main.head
         var total = 0, current = 0
-        var c = SearchCursor(state.doc, query)
+        var c = SearchCursor(state.doc, query, headingsOnly: headingsOnly)
         while let m = c.next() {
             total += 1
             if current == 0 && m.from <= head && m.to >= head { current = total }
@@ -266,12 +302,12 @@ public enum FindCount {
     public static let maxOverviewMatches = 5000
 
     /// `collectMatches`.
-    public static func collect(_ state: EditorState, _ query: String) -> (ranges: [SearchMatch], activeIndex: Int, docLength: Int)? {
+    public static func collect(_ state: EditorState, _ query: String, headingsOnly: Bool = false) -> (ranges: [SearchMatch], activeIndex: Int, docLength: Int)? {
         if query.isEmpty { return nil }
         let head = state.selection.main.head
         var ranges: [SearchMatch] = []
         var active = -1
-        var c = SearchCursor(state.doc, query)
+        var c = SearchCursor(state.doc, query, headingsOnly: headingsOnly)
         while let m = c.next() {
             let idx = ranges.count
             ranges.append(m)

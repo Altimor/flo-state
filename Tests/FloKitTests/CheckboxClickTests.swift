@@ -46,4 +46,55 @@ final class CheckboxClickTests: XCTestCase {
         XCTAssertTrue(c2.toggleCheckbox(at: boxPoint(c2, contentAt: cpos)))
         XCTAssertEqual(c2.text, "- [ ] A\n  - [x] C\n")
     }
+
+    /// Checking a box near the top while the caret is at the end of a long note doesn't scroll to the caret.
+    func testClickingTheBoxDoesNotScroll() {
+        let body = (1...200).map { "Line \($0) of filler text" }.joined(separator: "\n")
+        let c = editor("- [ ] Top task\n" + body)
+        let clip = c.scrollView.contentView
+        clip.scroll(to: .zero)
+        c.scrollView.reflectScrolledClipView(clip)
+        XCTAssertTrue(c.toggleCheckbox(at: boxPoint(c, contentAt: ("- [ ] " as NSString).length)))
+        XCTAssertTrue(c.text.hasPrefix("- [x] Top task"))
+        XCTAssertEqual(clip.bounds.minY, 0, accuracy: 1)
+    }
+
+    /// Checking a box plays a short pop over it.
+    func testCheckingPopsTheBox() {
+        let c = editor("- [ ] Task A\n")
+        c.textView.wantsLayer = true
+        // draw the box (and record where): offscreen windows only draw fragments through cacheDisplay
+        let tv = c.textView, r = tv.visibleRect
+        if let rep = tv.bitmapImageRepForCachingDisplay(in: r) { tv.cacheDisplay(in: r, to: rep) }
+        XCTAssertNotNil(c.checkboxRects[0])
+        XCTAssertTrue(c.toggleCheckbox(at: boxPoint(c, contentAt: ("- [ ] " as NSString).length)))
+        let pops = c.textView.layer?.sublayers?.filter { $0.animation(forKey: "pop") != nil } ?? []
+        XCTAssertEqual(pops.count, NSWorkspace.shared.accessibilityDisplayShouldReduceMotion ? 0 : 1)
+    }
+
+    /// Checking with the mouse mentions the shortcut, the first three times only.
+    func testShortcutTipShowsThreeTimes() {
+        let key = EditorController.checkboxTipKey
+        let saved = UserDefaults.standard.object(forKey: key)
+        defer { UserDefaults.standard.set(saved, forKey: key) }
+        UserDefaults.standard.set(0, forKey: key)
+        let c = editor("- [ ] Task A\n")
+        let p = boxPoint(c, contentAt: ("- [ ] " as NSString).length)
+        for _ in 0..<5 { XCTAssertTrue(c.toggleCheckbox(at: p)) }
+        XCTAssertEqual(UserDefaults.standard.integer(forKey: key), 3)
+        XCTAssertNotNil(c.checkboxTip)
+    }
+
+    /// Clicking quickly (the second click is a double-click) toggles every time.
+    func testQuickClicksAllToggle() {
+        let c = editor("- [ ] Task A\n")
+        let p = boxPoint(c, contentAt: ("- [ ] " as NSString).length)
+        let w = c.textView.convert(p, to: nil)
+        for n in 1...3 {
+            let e = NSEvent.mouseEvent(with: .leftMouseDown, location: w, modifierFlags: [], timestamp: 0,
+                                       windowNumber: window.windowNumber, context: nil, eventNumber: n, clickCount: n, pressure: 1)!
+            c.textView.mouseDown(with: e)
+        }
+        XCTAssertEqual(c.text, "- [x] Task A\n", "three clicks: checked, unchecked, checked")
+    }
 }

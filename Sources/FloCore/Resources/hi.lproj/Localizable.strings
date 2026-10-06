@@ -318,6 +318,7 @@
 
 /* ShellMenus.swift */
 "Open in new tab" = "नए टैब में खोलें";
+"Open in new window" = "नई विंडो में खोलें";
 
 /* ShellMenus.swift */
 "Failed to open in new tab: %@" = "नए टैब में नहीं खुल सका: %@";
@@ -950,3 +951,8 @@
 "Learn Spelling" = "वर्तनी सीखें";
 "Ignore Spelling" = "वर्तनी अनदेखा करें";
 "No Guesses Found" = "कोई सुझाव नहीं मिला";
+"Open notes at the end" = "नोट्स अंत में खोलें";
+"Opening a note puts the cursor at its end, for journals and logs you add to at the bottom" = "नोट खोलने पर कर्सर उसके अंत में रखा जाता है, नीचे जोड़ी जाने वाली डायरी और लॉग के लिए";
+"Opening notes" = "नोट्स खोलना";
+"Tip: ⌘. checks or unchecks the item the cursor is on" = "सुझाव: ⌘. कर्सर वाले आइटम को चेक या अनचेक करता है";
+"Headings only" = "केवल शीर्षक";

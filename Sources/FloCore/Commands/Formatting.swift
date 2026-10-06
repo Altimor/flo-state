@@ -32,12 +32,25 @@ public enum Formatting {
                             SelectionRange.range(max(existing.from, newFrom), max(existing.from, newTo)))
                 }
                 if range.from == range.to {
-                    if let word = state.wordAt(range.from) {
+                    let pos = range.from, docLen = state.doc.length
+                    let star = marker.utf16.first! == 42
+                    // bold / italic: the marker this shortcut just opened (and no more of it before): take it out again
+                    if star, pos >= len, state.sliceDoc(pos - len, pos) == marker,
+                       pos == len || state.sliceDoc(pos - len - 1, pos - len) != "*" {
+                        return ([Change(from: pos - len, to: pos)], SelectionRange.cursor(pos - len))
+                    }
+                    // an empty pair (the previous press): take it out again
+                    if !star, pos >= len, pos + len <= docLen,
+                       state.sliceDoc(pos - len, pos) == marker, state.sliceDoc(pos, pos + len) == marker {
+                        return ([Change(from: pos - len, to: pos + len)], SelectionRange.cursor(pos - len))
+                    }
+                    if let word = state.wordAt(pos) {
                         let text = state.sliceDoc(word.from, word.to)
                         return ([Change(from: word.from, to: word.to, insert: marker + text + marker)],
                                 SelectionRange.range(word.from + len, word.from + len + text.utf16.count))
                     }
-                    return ([Change(from: range.from, insert: marker + marker)], SelectionRange.cursor(range.from + len))
+                    // bold / italic insert only the opening marker (Flo closes it himself); the others insert a pair
+                    return ([Change(from: pos, insert: star ? marker : marker + marker)], SelectionRange.cursor(pos + len))
                 }
                 let selected = state.sliceDoc(range.from, range.to)
                 return ([Change(from: range.from, to: range.to, insert: marker + selected + marker)],
@@ -89,6 +102,20 @@ public enum Formatting {
         return m.count == 1 ? paired % 2 == 1 : paired >= m.count
     }
 
+    /// The markers right outside [from, to) (what a first press added around the selection).
+    static func hasOuterWrapper(_ state: EditorState, _ from: Int, _ to: Int, _ marker: String) -> Bool {
+        let m = marker.utf16.count, len = state.doc.length
+        let star: UInt16 = 0x2A
+        if Array(marker.utf16)[0] != star {
+            return from >= m && to + m <= len && state.sliceDoc(from - m, from) == marker && state.sliceDoc(to, to + m) == marker
+        }
+        var before = 0, after = 0
+        while from - before > 0, state.doc.char(at: from - before - 1) == star { before += 1 }
+        while to + after < len, state.doc.char(at: to + after) == star { after += 1 }
+        let paired = min(before, after)
+        return m == 1 ? paired % 2 == 1 : paired >= m
+    }
+
     static func wrapSelectionPerLine(_ marker: String, _ userEvent: String) -> Command {
         let mlen = marker.utf16.count
         return { t in
@@ -104,6 +131,9 @@ public enum Formatting {
                     if hasWrapper(text, marker) {
                         changes.append(Change(from: span.from, to: span.from + mlen))
                         changes.append(Change(from: span.to - mlen, to: span.to))
+                    } else if hasOuterWrapper(state, span.from, span.to, marker) {
+                        changes.append(Change(from: span.from - mlen, to: span.from))
+                        changes.append(Change(from: span.to, to: span.to + mlen))
                     } else {
                         changes.append(Change(from: span.from, insert: marker))
                         changes.append(Change(from: span.to, insert: marker))

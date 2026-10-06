@@ -65,6 +65,11 @@ public final class EditorFeatures {
     public internal(set) var searchPanelOpen = false
     /// Mirror of the overlay's query for the overview (`useEditorSearchStore.query`).
     var storeQuery = ""
+    /// The find bar's "Headings only" toggle; remembered across launches.
+    public static var findHeadingsOnly: Bool {
+        get { UserDefaults.standard.bool(forKey: "find.headingsOnly") }
+        set { UserDefaults.standard.set(newValue, forKey: "find.headingsOnly") }
+    }
 
     /// Where the find card goes (the editor area). Defaults to the scroll view's superview.
     public weak var findOverlayHost: NSView?

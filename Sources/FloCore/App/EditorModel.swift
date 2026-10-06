@@ -863,6 +863,22 @@ public final class EditorStore: SaveEngineHost {
         }
     }
 
+    /// The note changed on disk while this buffer had unsaved edits: take the three-way merge of both
+    /// (`merged`; `disk` is what's on disk now). Nothing from either side is dropped; the merge is saved
+    /// if it differs from the disk.
+    public func adoptMerged(_ path: String, merged: String, disk: String) {
+        guard let file = openFiles[path] else { return }
+        mutate {
+            var f = loaded(file, raw: merged)
+            f.diskContent = disk
+            f.isDirty = merged != disk
+            f.reloadVersion = file.reloadVersion + 1
+            f.isLoading = false
+            openFiles[path] = f
+        }
+        if merged != disk { saveEngine.scheduleSave(path) }
+    }
+
     public func updateScrollPos(_ path: String, _ pos: Double) {
         guard var f = openFiles[path], f.scrollPos != pos else { return }
         mutate { f.scrollPos = pos; openFiles[path] = f }

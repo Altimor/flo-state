@@ -318,6 +318,7 @@
 
 /* ShellMenus.swift */
 "Open in new tab" = "Открыть в новой вкладке";
+"Open in new window" = "Открыть в новом окне";
 
 /* ShellMenus.swift */
 "Failed to open in new tab: %@" = "Не удалось открыть в новой вкладке: %@";
@@ -950,3 +951,8 @@
 "Learn Spelling" = "Запомнить написание";
 "Ignore Spelling" = "Игнорировать написание";
 "No Guesses Found" = "Нет вариантов";
+"Open notes at the end" = "Открывать заметки в конце";
+"Opening a note puts the cursor at its end, for journals and logs you add to at the bottom" = "При открытии заметки курсор ставится в конец — для дневников и журналов, которые пополняются снизу";
+"Opening notes" = "Открытие заметок";
+"Tip: ⌘. checks or unchecks the item the cursor is on" = "Совет: ⌘. отмечает или снимает отметку с пункта под курсором";
+"Headings only" = "Только заголовки";

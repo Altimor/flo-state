@@ -626,7 +626,7 @@ final class AppFileWatchReconcilerTests: XCTestCase {
         XCTAssertEqual(r.decide(path: "/nope.md", kind: .modified), .notOpen)
         XCTAssertEqual(r.decide(path: "/a.md", kind: .deleted), .ignoredDeletion)
         XCTAssertEqual(r.decide(path: "/a.md", kind: .created), .reread)
-        // A pending (not in-flight) save is cancelled and unsaved edits are replaced.
+        // Unsaved edits + a new version on disk (another device): merged, never discarded.
         store.updateContent("/a.md", "edit 1")
         store.updateContent("/a.md", "edit 2")
         writer.resolve(0)
@@ -634,10 +634,40 @@ final class AppFileWatchReconcilerTests: XCTestCase {
         files.contents["/a.md"] = "external"
         let reloaded = await r.handleFileChanged(path: "/a.md", kind: .modified)
         XCTAssertTrue(reloaded)
-        XCTAssertEqual(store.file("/a.md")?.content, "external")
-        XCTAssertFalse(store.file("/a.md")!.isDirty)
+        let f = store.file("/a.md")!
+        XCTAssertTrue(f.content.contains("edit 2") && f.content.contains("external"), f.content)
+        XCTAssertTrue(f.isDirty, "the merge still has to be saved")
         scheduler.advance(byMs: 5000)
-        XCTAssertEqual(writer.payloads.count, 1, "cancelled save never fires")
+        XCTAssertEqual(writer.payloads.count, 2, "the merge is saved")
+    }
+
+    /// The incident: the phone saved a version without the Mac's newest lines while the Mac still had
+    /// unsaved edits of its own. Both survive.
+    func testExternalChangeWhileDirtyMergesCleanly() async {
+        let (store, files, writer, _) = await makeStore()
+        let base = (1...20).map { "line \($0)" }.joined(separator: "\n")
+        files.contents["/a.md"] = base
+        let r = FileChangeReconciler(editor: store, reader: { p in try await files.read(p) })
+        _ = await r.handleFileChanged(path: "/a.md", kind: .modified)   // buffer = base, clean
+        store.updateContent("/a.md", base + "\n")                      // a first save goes out…
+        store.updateContent("/a.md", base + "\n### Mac notes\n- mac line")   // …this edit waits behind it
+        writer.resolve(0)                                                // the first save lands
+        XCTAssertTrue(store.saveEngine.hasPendingTimer("/a.md"))
+        files.contents["/a.md"] = base.replacingOccurrences(of: "line 5", with: "line 5\nphone line")
+        _ = await r.handleFileChanged(path: "/a.md", kind: .modified)
+        let content = store.file("/a.md")!.content
+        XCTAssertTrue(content.contains("phone line"), content)
+        XCTAssertTrue(content.contains("- mac line"), content)
+    }
+
+    func testMerge3() {
+        let base = "a\nb\nc\nd\ne"
+        XCTAssertEqual(TextMerge.merge3(base: base, ours: "a\nb\nC!\nd\ne", theirs: base + "\nf"), "a\nb\nC!\nd\ne\nf")
+        XCTAssertEqual(TextMerge.merge3(base: base, ours: base + "\nphone", theirs: base + "\nmac"), base + "\nphone\nmac")
+        XCTAssertEqual(TextMerge.merge3(base: base, ours: "a\nB1\nc\nd\ne", theirs: "a\nB2\nc\nd\ne"), "a\nB1\nB2\nc\nd\ne")
+        XCTAssertEqual(TextMerge.merge3(base: base, ours: "a\nb\nc\nd\nE", theirs: "a\nc\nd\ne"), "a\nc\nd\nE")
+        XCTAssertEqual(TextMerge.merge3(base: base, ours: base, theirs: "y"), "y")
+        XCTAssertEqual(TextMerge.merge3(base: base, ours: "x", theirs: base), "x")
     }
 }
 

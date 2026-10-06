@@ -338,6 +338,8 @@ public final class EditorController: NSObject, NSTextViewDelegate, NSTextLayoutM
     /// Drop cached image sizes (an attachment changed on disk).
     /// Last drawn rect of each image widget (keyed by source position); see ImageResize.swift.
     var imageRects: [Int: ImageHit] = [:]
+    var checkboxRects: [Int: CGRect] = [:]
+    weak var checkboxTip: NSView?
     /// Double-clicking a rendered image opens its file (default: the user's image app, e.g. Preview).
     public var openImageFile: (URL) -> Void = { NSWorkspace.shared.open($0) }
     lazy var imageOverlay: ImageResizeOverlay = {
@@ -571,12 +573,12 @@ public final class EditorController: NSObject, NSTextViewDelegate, NSTextLayoutM
 
     /// Run an arbitrary command (menus, context menu).
     @discardableResult
-    public func run(_ command: @escaping Command) -> Bool {
+    public func run(scroll: Bool = true, _ command: @escaping Command) -> Bool {
         let before = state
         session.env.time = Date().timeIntervalSince1970 * 1000
         session.env.now = Date()
         let ok = session.run(command)
-        sync(from: before)
+        sync(from: before, scroll: scroll)
         return ok
     }
 
@@ -860,7 +862,8 @@ public final class FloTextView: NSTextView {
     }
 
     public override func mouseDown(with event: NSEvent) {
-        if let c = controller, event.clickCount == 1, !event.modifierFlags.contains(.shift),
+        // every click on a box toggles it: quick successive clicks arrive as double / triple clicks
+        if let c = controller, !event.modifierFlags.contains(.shift),
            c.toggleCheckbox(at: convert(event.locationInWindow, from: nil)) { return }
         if let c = controller, !event.modifierFlags.contains(.shift),
            let pdf = c.pdfQuickLookURL(at: convert(event.locationInWindow, from: nil)) {
@@ -902,7 +905,30 @@ public final class FloTextView: NSTextView {
                               affinity: r.0 > r.1 ? .upstream : .downstream, stillSelecting: false)
             return
         }
+        // NSTextView's drag-select loop only dequeues mouse events, so scroll-wheel events pile up and all
+        // land on mouse-up. Pump them during the drag: scroll right away, then re-post a drag at the pointer
+        // so the selection follows the newly visible text.
+        let pump = Timer(timeInterval: 1.0 / 120, repeats: true) { [weak self] _ in
+            MainActor.assumeIsolated { self?.pumpScrollDuringDrag() }
+        }
+        RunLoop.current.add(pump, forMode: .eventTracking)
+        defer { pump.invalidate() }
         super.mouseDown(with: event)
+    }
+
+    private func pumpScrollDuringDrag() {
+        guard let w = window, let sv = enclosingScrollView else { return }
+        var scrolled = false
+        while let e = NSApp.nextEvent(matching: .scrollWheel, until: .distantPast, inMode: .eventTracking, dequeue: true) {
+            sv.scrollWheel(with: e)
+            scrolled = true
+        }
+        guard scrolled, NSEvent.pressedMouseButtons & 1 != 0,
+              let drag = NSEvent.mouseEvent(with: .leftMouseDragged, location: w.mouseLocationOutsideOfEventStream,
+                                            modifierFlags: NSEvent.modifierFlags, timestamp: ProcessInfo.processInfo.systemUptime,
+                                            windowNumber: w.windowNumber, context: nil, eventNumber: 0, clickCount: 1, pressure: 1)
+        else { return }
+        w.postEvent(drag, atStart: false)
     }
 
     public override func mouseUp(with event: NSEvent) {

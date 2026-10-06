@@ -651,6 +651,19 @@ final class SidebarAnimationTests: XCTestCase {
         XCTAssertEqual(ShellRootView.easeOut(0.5), 0.6836, accuracy: 0.01)
     }
 
+    func testFullScreenHidesTheToolbarStrip() async {
+        let f = ShellFixture(files: ["a.md": ""])
+        let wc = ShellWindowController(model: f.model, frame: NSRect(x: -10000, y: -10000, width: 1200, height: 800), offscreen: true)
+        defer { wc.window?.close() }
+        await f.open()
+        XCTAssertEqual(wc.window?.toolbar?.isVisible, true, "windowed: the empty toolbar gives the big corner radius")
+        // in full screen AppKit turns the toolbar into a strip over the top of the screen, covering the tabs
+        wc.windowWillEnterFullScreen(Notification(name: NSWindow.willEnterFullScreenNotification))
+        XCTAssertEqual(wc.window?.toolbar?.isVisible, false)
+        wc.windowDidExitFullScreen(Notification(name: NSWindow.didExitFullScreenNotification))
+        XCTAssertEqual(wc.window?.toolbar?.isVisible, true)
+    }
+
     func testPaletteBlurIsClippedToTheCard() async {
         let f = ShellFixture(files: ["a.md": ""])
         let wc = ShellWindowController(model: f.model, frame: NSRect(x: -10000, y: -10000, width: 1200, height: 800), offscreen: true)
@@ -664,7 +677,10 @@ final class SidebarAnimationTests: XCTestCase {
         XCTAssertEqual(o.backdrop.layer?.masksToBounds, true)
         XCTAssertEqual(o.card.layer?.masksToBounds, true)
         XCTAssertTrue(o.card.layer?.backgroundFilters?.isEmpty ?? true, "no unclipped filter on the card")
-        XCTAssertEqual(o.shadowView.frame, o.card.frame)
+        // the shadow view overhangs the card so the soft shadow isn't clipped; the shadow itself is card-shaped
+        XCTAssertEqual(o.shadowView.frame, o.card.frame.insetBy(dx: -PaletteShadowView.pad, dy: -PaletteShadowView.pad))
+        o.shadowView.layoutSubtreeIfNeeded()
+        XCTAssertEqual(o.shadowView.layer?.shadowPath?.boundingBox.size, o.card.frame.size)
         XCTAssertEqual(wc.root.tabBlur.layer?.masksToBounds, true, "tab strip blur clipped to the strip")
     }
 }

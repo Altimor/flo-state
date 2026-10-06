@@ -222,6 +222,27 @@ final class FloLayoutFragment: NSTextLayoutFragment {
 
     static let bulletLift: CGFloat = 1.5
 
+    /// A task checkbox (also drawn by the check animation's overlay).
+    static func drawCheckbox(_ rect: CGRect, checked: Bool, theme: EditorTheme) {
+        let path = NSBezierPath(roundedRect: rect.insetBy(dx: 0.75, dy: 0.75), xRadius: 5, yRadius: 5)
+        path.lineWidth = 1.5
+        if checked {
+            theme.accent.setFill(); theme.accent.setStroke()
+            path.fill(); path.stroke()
+            let check = NSBezierPath()
+            // SVG path M8 12.5L10.5 15L16 9 in a 24 box drawn at 20px centred
+            let s: CGFloat = 20 / 24, ox = rect.midX - 10, oy = rect.midY - 10
+            check.move(to: CGPoint(x: ox + 8 * s, y: oy + 12.5 * s))
+            check.line(to: CGPoint(x: ox + 10.5 * s, y: oy + 15 * s))
+            check.line(to: CGPoint(x: ox + 16 * s, y: oy + 9 * s))
+            check.lineWidth = 3 * s
+            check.lineCapStyle = .round; check.lineJoinStyle = .round
+            NSColor.white.setStroke(); check.stroke()
+        } else {
+            theme.mutedColor.setStroke(); path.stroke()
+        }
+    }
+
     private func drawWidget(_ box: WidgetBox, at p: CharPos, lineLeft: CGFloat, theme: EditorTheme, trailingX: CGFloat? = nil) {
         let font = theme.font(size: theme.baseSize, weight: 400, mono: false)
         let unit = RenderPlanner.listUnitCh * theme.ch
@@ -237,23 +258,9 @@ final class FloLayoutFragment: NSTextLayoutFragment {
             // 18x18, 1.5px border, radius 5, left at markerOffset + (3ch - 28px)/2, v-centred
             let x = lineLeft + box.width + (unit - 28) / 2
             let rect = CGRect(x: x, y: p.lineTop + (p.lineHeight - 18) / 2, width: 18, height: 18)
-            let path = NSBezierPath(roundedRect: rect.insetBy(dx: 0.75, dy: 0.75), xRadius: 5, yRadius: 5)
-            path.lineWidth = 1.5
-            if checked {
-                theme.accent.setFill(); theme.accent.setStroke()
-                path.fill(); path.stroke()
-                let check = NSBezierPath()
-                // SVG path M8 12.5L10.5 15L16 9 in a 24 box drawn at 20px centred
-                let s: CGFloat = 20 / 24, ox = rect.midX - 10, oy = rect.midY - 10
-                check.move(to: CGPoint(x: ox + 8 * s, y: oy + 12.5 * s))
-                check.line(to: CGPoint(x: ox + 10.5 * s, y: oy + 15 * s))
-                check.line(to: CGPoint(x: ox + 16 * s, y: oy + 9 * s))
-                check.lineWidth = 3 * s
-                check.lineCapStyle = .round; check.lineJoinStyle = .round
-                NSColor.white.setStroke(); check.stroke()
-            } else {
-                theme.mutedColor.setStroke(); path.stroke()
-            }
+            Self.drawCheckbox(rect, checked: checked, theme: theme)
+            editor?.noteCheckboxDrawn(rect.offsetBy(dx: layoutFragmentFrame.minX - drawOrigin.x, dy: layoutFragmentFrame.minY - drawOrigin.y),
+                                      widgetFrom: box.widget.from)
         case .emoji(let e):
             let ef = theme.emojiFont(size: font.pointSize)
             let s = NSAttributedString(string: e, attributes: [.font: ef, .foregroundColor: theme.textColor])

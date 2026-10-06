@@ -318,6 +318,7 @@
 
 /* ShellMenus.swift */
 "Open in new tab" = "Ouvrir dans un nouvel onglet";
+"Open in new window" = "Ouvrir dans une nouvelle fenêtre";
 
 /* ShellMenus.swift */
 "Failed to open in new tab: %@" = "Impossible d’ouvrir dans un nouvel onglet : %@";
@@ -950,3 +951,8 @@
 "Learn Spelling" = "Mémoriser l’orthographe";
 "Ignore Spelling" = "Ignorer l’orthographe";
 "No Guesses Found" = "Aucune suggestion";
+"Open notes at the end" = "Ouvrir les notes à la fin";
+"Opening a note puts the cursor at its end, for journals and logs you add to at the bottom" = "À l’ouverture d’une note, le curseur est placé à la fin, pour les journaux et notes complétés par le bas";
+"Opening notes" = "Ouverture des notes";
+"Tip: ⌘. checks or unchecks the item the cursor is on" = "Astuce : ⌘. coche ou décoche l’élément où se trouve le curseur";
+"Headings only" = "Titres uniquement";

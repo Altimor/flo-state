@@ -104,7 +104,7 @@ final class PaletteOverlayView: FlippedView, NSTextFieldDelegate {
         let listH = min(PaletteGeometry.maxListHeight, l.content)
         card.frame = CGRect(x: base.minX, y: base.minY, width: base.width, height: 1 + PaletteGeometry.inputHeight + listH + 1)
         backdrop.frame = card.frame
-        shadowView.frame = card.frame
+        shadowView.frame = card.frame.insetBy(dx: -PaletteShadowView.pad, dy: -PaletteShadowView.pad)
         input.frame = CGRect(x: 1 + 16, y: 1 + 14 + 0.25, width: base.width - 2 - 32, height: 20)
         scroll.frame = CGRect(x: 1, y: 1 + PaletteGeometry.inputHeight, width: base.width - 2, height: listH)
         list.frame = CGRect(x: 0, y: 0, width: base.width - 2, height: l.content)
@@ -178,18 +178,28 @@ final class PaletteCardView: FlippedView {
     override var wantsUpdateLayer: Bool { false }
 }
 
-/// `box-shadow: 0 15px 35px rgba(0,0,0,.15)` under the palette card.
+/// A soft shadow under the palette card. The view is `pad` larger than the card on every side and
+/// draws the card-shaped shadow inside that margin: sized to the card, the shadow was clipped away.
 final class PaletteShadowView: FlippedView {
+    static let pad: CGFloat = 50
     override func viewDidMoveToSuperview() {
         wantsLayer = true
         layer?.cornerRadius = 16
-        layer?.backgroundColor = NSColor.black.withAlphaComponent(0.001).cgColor
+        layer?.backgroundColor = NSColor.clear.cgColor
         layer?.shadowColor = NSColor.black.cgColor
-        layer?.shadowOpacity = 0.15
-        layer?.shadowRadius = 17.5
-        layer?.shadowOffset = CGSize(width: 0, height: -15)
+        layer?.shadowOpacity = 0.18
+        layer?.shadowRadius = 20
+        layer?.shadowOffset = .zero   // the path is moved down instead (flipped geometry)
         layer?.masksToBounds = false
     }
+    // The shadow needs an explicit shape: drawn from the layer's content, a near-transparent fill
+    // gave a near-invisible shadow.
+    override func layout() {
+        super.layout()
+        let card = bounds.insetBy(dx: Self.pad, dy: Self.pad).offsetBy(dx: 0, dy: 10)
+        layer?.shadowPath = CGPath(roundedRect: card, cornerWidth: 16, cornerHeight: 16, transform: nil)
+    }
+    override var frame: NSRect { didSet { needsLayout = true } }
     override func hitTest(_ point: NSPoint) -> NSView? { nil }
 }
 

@@ -28,6 +28,7 @@ extension EditorFeatures {
     /// `applyEditorSearchQuery`: set this view's CM query and the store mirror.
     func applySearchQuery(_ query: String, _ replace: String) {
         searchQuery = FindQuery(search: query, replace: replace)
+        searchQuery.headingsOnly = Self.findHeadingsOnly
         storeQuery = query
         editor.textView.needsDisplay = true
         updateOverview()
@@ -129,7 +130,7 @@ extension EditorFeatures {
         let f = editor.scrollView.frame
         // absolute right-1 top-0 bottom-0 w-[6px]
         v.frame = NSRect(x: f.maxX - 4 - 6, y: f.minY, width: 6, height: f.height)
-        v.matches = FindCount.collect(editor.state, storeQuery)
+        v.matches = FindCount.collect(editor.state, storeQuery, headingsOnly: Self.findHeadingsOnly)
         v.isHidden = v.matches == nil || v.matches!.ranges.isEmpty
         v.needsDisplay = true
     }
@@ -300,7 +301,7 @@ public final class FindOverlayView: NSView, NSTextFieldDelegate {
     static let toggleWidth: CGFloat = 58.98, replaceButtonWidth: CGFloat = 65.08, allWidth: CGFloat = 34.73
 
     struct Layout {
-        var findInput = NSRect.zero, prev = NSRect.zero, next = NSRect.zero, toggle = NSRect.zero, close = NSRect.zero
+        var findInput = NSRect.zero, prev = NSRect.zero, next = NSRect.zero, headings = NSRect.zero, toggle = NSRect.zero, close = NSRect.zero
         var replaceInput = NSRect.zero, replaceButton = NSRect.zero, all = NSRect.zero
     }
 
@@ -311,6 +312,7 @@ public final class FindOverlayView: NSView, NSTextFieldDelegate {
         var x = w - inner
         x -= Self.control; l.close = NSRect(x: x, y: inner, width: Self.control, height: Self.control)
         x -= Self.gap + measuredToggleWidth; l.toggle = NSRect(x: x, y: inner, width: measuredToggleWidth, height: Self.control)
+        x -= Self.gap + Self.control; l.headings = NSRect(x: x, y: inner, width: Self.control, height: Self.control)
         x -= Self.gap + Self.control; l.next = NSRect(x: x, y: inner, width: Self.control, height: Self.control)
         x -= Self.gap + Self.control; l.prev = NSRect(x: x, y: inner, width: Self.control, height: Self.control)
         x -= Self.gap
@@ -428,7 +430,7 @@ public final class FindOverlayView: NSView, NSTextFieldDelegate {
 
     var matchInfo: FindCount.Info? {
         guard isOpen, let c = editor else { return nil }
-        return FindCount.matchInfo(c.state, query)
+        return FindCount.matchInfo(c.state, query, headingsOnly: EditorFeatures.findHeadingsOnly)
     }
     /// The counter text, nil when hidden.
     public var counterText: String? {
@@ -448,6 +450,15 @@ public final class FindOverlayView: NSView, NSTextFieldDelegate {
     public func doReplace() { if let c = editor, !query.isEmpty { c.features.replaceNext() } }
     public func doReplaceAll() { if let c = editor, !query.isEmpty { c.features.replaceAll() } }
     public func doClose() { close(restoreFocus: true) }
+
+    /// "Headings only": matches outside heading lines are skipped (counter, highlights, next/previous).
+    public func toggleHeadingsOnly() {
+        EditorFeatures.findHeadingsOnly.toggle()
+        editor?.features.applySearchQuery(query, replaceText)
+        cachedCounter = nil
+        refreshCounter()
+        needsDisplay = true
+    }
 
     public func toggleReplace() {
         showReplace.toggle()
@@ -516,14 +527,14 @@ public final class FindOverlayView: NSView, NSTextFieldDelegate {
 
     private func button(at p: NSPoint) -> String? {
         let l = computeLayout()
-        let list: [(String, NSRect)] = [("prev", l.prev), ("next", l.next), ("toggle", l.toggle), ("close", l.close)]
+        let list: [(String, NSRect)] = [("prev", l.prev), ("next", l.next), ("headings", l.headings), ("toggle", l.toggle), ("close", l.close)]
             + (showReplace ? [("replace", l.replaceButton), ("all", l.all)] : [])
         return list.first { $0.1.contains(p) }?.0
     }
 
     public override func mouseMoved(with event: NSEvent) {
         let h = button(at: convert(event.locationInWindow, from: nil))
-        if h != hover { hover = h; needsDisplay = true }
+        if h != hover { hover = h; needsDisplay = true; toolTip = h == "headings" ? L("Headings only") : nil }
     }
     public override func mouseExited(with event: NSEvent) { if hover != nil { hover = nil; needsDisplay = true } }
 
@@ -536,6 +547,7 @@ public final class FindOverlayView: NSView, NSTextFieldDelegate {
         switch b {
         case "prev": prev()
         case "next": next()
+        case "headings": toggleHeadingsOnly()
         case "toggle": toggleReplace()
         case "close": doClose()
         case "replace": doReplace()
@@ -578,6 +590,19 @@ public final class FindOverlayView: NSView, NSTextFieldDelegate {
         }
         iconButton("prev", l.prev, FindIcons.arrowUp)
         iconButton("next", l.next, FindIcons.arrowDown)
+        // Headings-only toggle: an "H", styled like the Replace toggle when on
+        do {
+            let r = l.headings, on = EditorFeatures.findHeadingsOnly
+            var color = t.textMuted.nsColor
+            if on {
+                t.surfaceSelected.nsColor.setFill(); NSBezierPath(roundedRect: r, xRadius: 6, yRadius: 6).fill()
+                color = t.textPrimary.nsColor
+            } else if hover == "headings" {
+                t.surfaceSubtle.nsColor.setFill(); NSBezierPath(roundedRect: r, xRadius: 6, yRadius: 6).fill()
+                color = t.textSecondary.nsColor
+            }
+            drawLabel("H", in: r, font: chrome.uiFont(13, .semibold), color: color)
+        }
         // Replace toggle
         do {
             let r = l.toggle

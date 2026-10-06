@@ -342,11 +342,11 @@ final class ShellTabTests: XCTestCase {
         try! await f.model.editor.openFileInTabOrFocus(f.p("d/e.md"))
         let tab = f.model.editor.activeTab!
         let menu = ShellMenus.tabMenu(model: f.model, tab: tab)!
-        XCTAssertEqual(menu.items.map { $0.isSeparatorItem ? "-" : $0.title }, ["Close", "Close others", "Close all", "-", "Reveal in sidebar", "Copy path"])
-        (menu.items[5] as! ClosureMenuItem).fire()
+        XCTAssertEqual(menu.items.map { $0.isSeparatorItem ? "-" : $0.title }, ["Close", "Close others", "Close all", "-", "Open in new window", "Reveal in sidebar", "Copy path"])
+        (menu.items[6] as! ClosureMenuItem).fire()
         XCTAssertEqual(f.pasteboard, "d/e.md")
         f.model.setSetting("appearance.sidebar-visible", .bool(false))
-        (menu.items[4] as! ClosureMenuItem).fire()
+        (menu.items[5] as! ClosureMenuItem).fire()
         XCTAssertTrue(f.model.isExpanded(f.p("d")))
         XCTAssertTrue(f.model.sidebarPreferenceVisible)
         XCTAssertNil(ShellMenus.tabMenu(model: f.model, tab: Tab(id: "x", location: .settings)))
@@ -559,15 +559,15 @@ final class ShellSidebarTests: XCTestCase {
                        ["New File", "New Folder", "-", "Copy relative path", "Copy absolute path", "-", "Reveal in Finder", "-", "Rename...", "Delete"])
         let x = f.model.entries(f.p("d"))[0]
         XCTAssertEqual(titles(ShellMenus.fileMenu(model: f.model, entry: x, inlineRename: true)),
-                       ["Open", "Open in new tab", "Pin", "-", "Duplicate", "-", "Copy relative path", "Copy absolute path", "-", "Reveal in Finder", "-", "Rename...", "Delete"])
+                       ["Open", "Open in new tab", "Open in new window", "Pin", "-", "Duplicate", "-", "Copy relative path", "Copy absolute path", "-", "Reveal in Finder", "-", "Rename...", "Delete"])
         f.model.togglePinned(x.path)
-        XCTAssertEqual(ShellMenus.fileMenu(model: f.model, entry: x, inlineRename: true).items[2].title, "Unpin")
+        XCTAssertEqual(ShellMenus.fileMenu(model: f.model, entry: x, inlineRename: true).items[3].title, "Unpin")
         XCTAssertEqual(titles(ShellMenus.bulkMenu(model: f.model, paths: ["/a", "/b"])), ["Copy 2 relative paths", "Copy 2 absolute paths", "-", "Delete 2 items"])
         let surface = ShellMenus.sidebarSurfaceMenu(model: f.model)
         XCTAssertEqual(surface.items.map { "\($0.title):\($0.state == .on)" }, ["Search:false", "Recents:true"])
         (surface.items[0] as! ClosureMenuItem).fire()
         XCTAssertTrue(f.model.values.appearanceSidebarShowSearch)
-        (ShellMenus.fileMenu(model: f.model, entry: x, inlineRename: true).items[6] as! ClosureMenuItem).fire()
+        (ShellMenus.fileMenu(model: f.model, entry: x, inlineRename: true).items[7] as! ClosureMenuItem).fire()
         XCTAssertEqual(f.pasteboard, "d/x.md")
         let ws = ShellMenus.workspaceMenu(model: f.model)
         XCTAssertEqual(titles(ws).suffix(2), ["Open Folder…", "Close Workspace"])
@@ -632,6 +632,19 @@ final class ShellPaletteTests: XCTestCase {
         XCTAssertEqual(f.model.paletteView()!.items.map { $0.title }, ["master-plan.md"], "spaces also match hyphens")
         f.model.setPaletteQuery("zzz")
         XCTAssertEqual(f.model.paletteView()!.empty, "No results found.")
+    }
+
+    func testEmptyQueryListsRecentNotesFirst() async {
+        let f = ShellFixture(files: ["a.md": "", "b.md": "", "notes/c.md": "", "d.md": ""])
+        await f.open()
+        for name in ["a.md", "b.md", "notes/c.md", "d.md"] { try! await f.model.editor.openFileInTabOrFocus(f.p(name)) }
+        f.model.perform(.openFileSearch)
+        let v = f.model.paletteView()!
+        // most recent first, without the note already open (d)
+        let files = v.items.filter { if case .file = $0.kind { return true }; return false }
+        XCTAssertEqual(files.map { $0.title }, ["c", "b", "a"])
+        XCTAssertEqual(files.first?.subtitle, "notes")
+        if case .file = v.items.first?.kind {} else { XCTFail("recent notes come before the commands") }
     }
 
     func testSelectionAndRunFile() async {
@@ -710,7 +723,7 @@ final class ShellMenuAndKeyTests: XCTestCase {
         let menu = MainMenu.build(target: router)
         XCTAssertEqual(menu.items.map { $0.title }, ["Flo State", "File", "Edit", "Format", "View", "Window"])
         func items(_ i: Int) -> [String] { menu.items[i].submenu!.items.map { $0.isSeparatorItem ? "-" : $0.title } }
-        XCTAssertEqual(items(1), ["New Note", "New Tab", "Go to File…", "-", "Go to Today", "Search…", "Search in All Notes…", "-", "Close Tab", "Close Other Tabs"])
+        XCTAssertEqual(items(1), ["New Note", "New Tab", "Go to File…", "Open Folder…", "-", "Go to Today", "Search…", "Search in All Notes…", "-", "Close Tab", "Close Other Tabs"])
         XCTAssertEqual(items(3), ["Bold", "Italic", "Strikethrough", "Inline Code", "Insert Link", "-", "Heading 1", "Heading 2", "Heading 3", "Body Text",
                                   "-", "Bulleted List", "Numbered List", "Checkbox", "Mark as Done", "Quote", "-", "Indent", "Outdent", "Move Line Up", "Move Line Down"])
         XCTAssertEqual(items(4), ["Toggle Sidebar", "Toggle Typewriter Scrolling", "-", "Increase Font Size", "Decrease Font Size",
@@ -723,7 +736,7 @@ final class ShellMenuAndKeyTests: XCTestCase {
         XCTAssertTrue(items(0).contains("Settings…"), "macOS 13+ naming")
         XCTAssertFalse(items(0).contains("Preferences…"))
         let keys = menu.items[1].submenu!.items.filter { !$0.isSeparatorItem }.map { "\($0.keyEquivalentModifierMask.contains(.shift) ? "⇧" : "")\($0.keyEquivalent)" }
-        XCTAssertEqual(keys, ["n", "t", "o", "⇧d", "k", "⇧f", "w", "⇧w"])
+        XCTAssertEqual(keys, ["n", "t", "o", "", "⇧d", "k", "⇧f", "w", "⇧w"])
         let back = menu.items.first { $0.title == "View" }!.submenu!.items.first { $0.title == "Back" }!
         XCTAssertEqual(back.keyEquivalent, "", "Alt-←/→ stay with the editor")
     }

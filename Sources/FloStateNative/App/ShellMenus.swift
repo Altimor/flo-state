@@ -35,6 +35,7 @@ enum ShellMenus {
                     do { try await model.editor.openFileInNewTab(entry.path) } catch { model.alert(L("Failed to open in new tab: %@", "\(error)")) }
                 }
             },
+            ClosureMenuItem(L("Open in new window")) { model.openCompactWindow(entry.path) },
             ClosureMenuItem(isPinned ? L("Unpin") : L("Pin")) { model.togglePinned(entry.path) },
             .separator(),
             ClosureMenuItem(L("Duplicate")) { Task { await model.duplicate(entry.path) } },
@@ -113,7 +114,7 @@ enum ShellMenus {
         return menu(items)
     }
 
-    /// `buildTabMenuItemsSpec`: Close, Close others, Close all | Reveal in sidebar, Copy path.
+    /// `buildTabMenuItemsSpec`: Close, Close others, Close all | Open in new window, Reveal in sidebar, Copy path.
     static func tabMenu(model: ShellModel, tab: Tab) -> NSMenu? {
         guard let path = tab.location.primaryPath else { return nil }
         return menu([
@@ -121,6 +122,7 @@ enum ShellMenus {
             ClosureMenuItem(L("Close others")) { model.editor.closeOtherTabs(tab.id) },
             ClosureMenuItem(L("Close all")) { model.editor.closeAllTabs() },
             .separator(),
+            ClosureMenuItem(L("Open in new window")) { model.openCompactWindow(path) },
             ClosureMenuItem(L("Reveal in sidebar")) { model.editor.setActiveTab(tab.id); model.revealInSidebar(path) },
             ClosureMenuItem(L("Copy path")) { model.copyToPasteboard(model.relativePath(path)) },
         ])
@@ -286,7 +288,11 @@ enum MainMenu {
         let openFolder = NSMenuItem(title: L("Open Folder…"), action: #selector(MenuRouter.menuAction(_:)), keyEquivalent: "")
         openFolder.target = target
         openFolder.representedObject = MenuRouter.Box(.openWorkspacePanel)
-        sub("File", routed(fileEntries))
+        var fileItems = routed(fileEntries)
+        if let i = fileItems.firstIndex(where: { ($0.representedObject as? MenuRouter.Box)?.action == .openFileSearch }) {
+            fileItems.insert(openFolder, at: i + 1)
+        }
+        sub("File", fileItems)
         // Edit: standard responder actions + Substitutions (text replacement).
         let redo = NSMenuItem(title: L("Redo"), action: Selector(("redo:")), keyEquivalent: "z")
         redo.keyEquivalentModifierMask = [.command, .shift]

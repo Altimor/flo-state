@@ -22,10 +22,14 @@ final class PlanCache {
     }
 
     func reset() { plan = nil; last = nil }
+    /// Why the last update re-planned the whole document (nil: it was incremental).
+    private(set) var fullReason: String?
 
     func update(_ state: EditorState) -> Update {
         defer { last = state; invalidated = false }
+        fullReason = nil
         guard !invalidated, let old = plan, let prev = last, prev.markdown == state.markdown else {
+            fullReason = "no previous plan"
             let p = RenderPlanner.plan(state)
             plan = p
             return Update(plan: p, dirtyLines: nil, lineShift: nil,
@@ -42,10 +46,10 @@ final class PlanCache {
             return c.bNew
         }
 
-        let tops = state.tree.root.children
+        let tops = Self.units(state.tree)
         var regions: [(Int, Int)] = []
         if let c = change {
-            let oldTops = prev.tree.root.children
+            let oldTops = Self.units(prev.tree)
             var k = 0
             while k < oldTops.count, k < tops.count, oldTops[k].name == tops[k].name,
                   oldTops[k].from == tops[k].from, oldTops[k].to == tops[k].to, tops[k].to < c.a { k += 1 }
@@ -61,6 +65,12 @@ final class PlanCache {
         }
         for r in prev.selection.ranges { regions.append(blockRange(doc, tops, mapPos(r.from), mapPos(r.to))) }
         for r in state.selection.ranges { regions.append(blockRange(doc, tops, r.from, r.to)) }
+        // + the line above each region: an edit can change what it is (`---` or `===` typed under a
+        // paragraph makes it a heading; a delimiter row makes the line above a table header)
+        regions = regions.map { r in
+            let l = doc.lineAt(r.0)
+            return l.from > 0 ? (doc.lineAt(l.from - 1).from, r.1) : r
+        }
         var merged = Self.merge(regions)
         // `[[...]]` wiki links may span lines (the web regex allows newlines):
         // grow regions until no link (old or new) crosses a boundary.
@@ -82,6 +92,7 @@ final class PlanCache {
         }
         // A change must sit inside one region (the splice maps old->new around it).
         if let c = change, !merged.contains(where: { $0.0 <= c.a && $0.1 >= c.bNew }) {
+            fullReason = "change outside regions \(merged) change \(c)"
             let p = RenderPlanner.plan(state)
             plan = p
             return Update(plan: p, dirtyLines: nil, lineShift: nil, change: change)
@@ -97,9 +108,13 @@ final class PlanCache {
         runs.reserveCapacity(old.runs.count + 16)
         lines.reserveCapacity(doc.lines)
         var cursor = 0 // new-doc char position covered so far
-        func keep(_ s: Int, _ e: Int) {
+        var endPlanned = false   // a re-planned region reached the end of the note (its last line included)
+        func keep(_ s: Int, _ e: Int, final: Bool = false) {
             // new [s, e) is unchanged text; old coordinates:
             guard s <= e else { return }
+            // nothing left after a region that already planned the note's last line (counting it again
+            // made the line count wrong, and every edit at the end of a note re-planned the whole note)
+            if s == e && endPlanned { return }
             let shift = (change != nil && s >= change!.bNew) ? delta : 0
             let os = s - shift, oe = e - shift
             // runs
@@ -113,7 +128,10 @@ final class PlanCache {
             // lines starting in [s, e) (e is a line start or the doc end)
             let ls = doc.lineAt(s)
             let nFirst = ls.from == s ? ls.number : ls.number + 1
-            let nLast = e >= doc.length ? doc.lines : doc.lineAt(e).number - 1
+            // lines starting in [s, e); an empty last line starting exactly at the end of the note is
+            // left to whatever comes last (a region that reaches the end, or the final keep)
+            let lastFrom = doc.line(doc.lines).from
+            let nLast = e >= doc.length ? (lastFrom < e || final ? doc.lines : doc.lines - 1) : doc.lineAt(e).number - 1
             if nFirst <= nLast {
                 let lineShift = shift != 0 || (change != nil && s >= change!.bNew) ? doc.lines - oldDoc.lines : 0
                 for n in nFirst...nLast {
@@ -133,14 +151,17 @@ final class PlanCache {
             for r in p.runs { appendRun(&runs, r) }
             let firstLine = doc.lineAt(rs).number - 1
             lines.append(contentsOf: p.lines)
-            dirty.append(firstLine..<(firstLine + p.lines.count))
+            // + the line after: its spacing depends on this region's last line (a list right under text)
+            dirty.append(firstLine..<min(doc.lines, firstLine + p.lines.count + 1))
             widgets.append(contentsOf: p.widgets)
             hashes.formUnion(p.lineNumbersWithRevealedHash)
             cursor = re
+            if re >= doc.length { endPlanned = true }
         }
-        keep(cursor, doc.length)
+        keep(cursor, doc.length, final: true)
         guard lines.count == doc.lines else {
             // should not happen; stay correct
+            fullReason = "line count \(lines.count) != \(doc.lines) regions=\(merged) change=\(String(describing: change)) oldLen=\(prev.doc.length) newLen=\(doc.length) text=\(doc.string.suffix(40).debugDescription)"
             let p = RenderPlanner.plan(state)
             plan = p
             return Update(plan: p, dirtyLines: nil, lineShift: nil, change: change)
@@ -188,6 +209,20 @@ final class PlanCache {
     }
 
     // MARK: helpers
+
+    /// The blocks an edit re-plans: top-level blocks, except that a list counts item by item. A keystroke
+    /// in a note that's one long list re-planned the whole list (hundreds of lines) every time.
+    static func units(_ tree: SyntaxTree) -> [SyntaxNode] {
+        var out: [SyntaxNode] = []
+        for n in tree.root.children {
+            if n.name == "BulletList" || n.name == "OrderedList" {
+                let items = n.children.filter { $0.name == "ListItem" }
+                if items.count == n.children.count, !items.isEmpty { out.append(contentsOf: items); continue }
+            }
+            out.append(n)
+        }
+        return out
+    }
 
     static func merge(_ regions: [(Int, Int)]) -> [(Int, Int)] {
         var out: [(Int, Int)] = []
