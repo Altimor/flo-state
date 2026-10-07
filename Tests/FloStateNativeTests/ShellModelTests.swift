@@ -337,17 +337,33 @@ final class ShellTabTests: XCTestCase {
         XCTAssertEqual(entry.key, "w"); XCTAssertEqual(entry.modifiers, [.command, .shift])
     }
 
+    func testNewNoteTakesItsNameAsHeading() async throws {
+        let f = await fixture()
+        f.model.runPaletteItem(.init(kind: .create(f.p("Plans.md")), title: "Plans"))
+        try await Task.sleep(nanoseconds: 300_000_000)
+        XCTAssertEqual(try WorkspaceFS.readFile(f.p("Plans.md")).content, "# Plans\n")
+        // sidebar New File: named afterwards, the untouched "# " takes the name
+        f.model.createFileInFolder(f.root)
+        let created = try XCTUnwrap(f.model.renamingPath)
+        let entry = try XCTUnwrap(f.model.entries(f.root).first { $0.path == created })
+        f.model.submitRename(entry, "Ideas")
+        XCTAssertEqual(try WorkspaceFS.readFile(f.p("Ideas.md")).content, "# Ideas\n")
+    }
+
     func testTabContextMenuItems() async {
         let f = await fixture()
         try! await f.model.editor.openFileInTabOrFocus(f.p("d/e.md"))
         let tab = f.model.editor.activeTab!
         let menu = ShellMenus.tabMenu(model: f.model, tab: tab)!
-        XCTAssertEqual(menu.items.map { $0.isSeparatorItem ? "-" : $0.title }, ["Close", "Close others", "Close all", "-", "Open in new window", "Reveal in sidebar", "Copy path"])
-        (menu.items[6] as! ClosureMenuItem).fire()
+        XCTAssertEqual(menu.items.map { $0.isSeparatorItem ? "-" : $0.title }, ["Close", "Close others", "Close all", "-", "Open in new window", "Pin", "Reveal in sidebar", "Copy path"])
+        (menu.items[7] as! ClosureMenuItem).fire()
         XCTAssertEqual(f.pasteboard, "d/e.md")
         f.model.setSetting("appearance.sidebar-visible", .bool(false))
-        (menu.items[5] as! ClosureMenuItem).fire()
+        (menu.items[6] as! ClosureMenuItem).fire()
         XCTAssertTrue(f.model.isExpanded(f.p("d")))
+        (menu.items[5] as! ClosureMenuItem).fire()
+        XCTAssertEqual(f.model.pinnedFiles, [f.p("d/e.md")])
+        XCTAssertEqual(ShellMenus.tabMenu(model: f.model, tab: tab)!.items[5].title, "Unpin")
         XCTAssertTrue(f.model.sidebarPreferenceVisible)
         XCTAssertNil(ShellMenus.tabMenu(model: f.model, tab: Tab(id: "x", location: .settings)))
     }
@@ -675,7 +691,7 @@ final class ShellPaletteTests: XCTestCase {
         XCTAssertEqual(v.items.map { $0.title }, ["Create: My note.md"])
         f.model.runSelectedPaletteItem()
         await f.settle()
-        XCTAssertEqual(TFS.read(f.p("My note.md")), "# ")
+        XCTAssertEqual(TFS.read(f.p("My note.md")), "# My note\n")
         XCTAssertEqual(f.model.editor.activeFilePath, f.p("My note.md"))
         XCTAssertTrue(f.model.flatTree().contains { $0.entry.name == "My note.md" })
     }

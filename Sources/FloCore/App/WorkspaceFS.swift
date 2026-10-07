@@ -337,8 +337,15 @@ public enum WorkspaceFS {
 
     /// `create_file_impl`: fails if the path exists; creates parent folders.
     @discardableResult
-    public static func createFile(_ path: String) throws -> FileContent {
+    /// The content of a new note named `title`: its name as the heading ("# " when there's no name yet).
+    public static func newFileContent(title: String?) -> String {
+        guard let t = title?.trimmingCharacters(in: .whitespacesAndNewlines), !t.isEmpty else { return newFileContent }
+        return newFileContent + t + "\n"
+    }
+
+    public static func createFile(_ path: String, title: String? = nil) throws -> FileContent {
         if exists(path) { throw AppError.alreadyExists(path) }
+        let newFileContent = newFileContent(title: title)
         let url = URL(fileURLWithPath: path)
         do {
             try fm.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)

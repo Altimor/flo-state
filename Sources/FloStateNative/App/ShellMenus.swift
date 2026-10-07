@@ -114,7 +114,7 @@ enum ShellMenus {
         return menu(items)
     }
 
-    /// `buildTabMenuItemsSpec`: Close, Close others, Close all | Open in new window, Reveal in sidebar, Copy path.
+    /// `buildTabMenuItemsSpec`: Close, Close others, Close all | Open in new window, Pin, Reveal in sidebar, Copy path.
     static func tabMenu(model: ShellModel, tab: Tab) -> NSMenu? {
         guard let path = tab.location.primaryPath else { return nil }
         return menu([
@@ -123,6 +123,7 @@ enum ShellMenus {
             ClosureMenuItem(L("Close all")) { model.editor.closeAllTabs() },
             .separator(),
             ClosureMenuItem(L("Open in new window")) { model.openCompactWindow(path) },
+            ClosureMenuItem(model.pinnedFiles.contains(path) ? L("Unpin") : L("Pin")) { model.togglePinned(path) },
             ClosureMenuItem(L("Reveal in sidebar")) { model.editor.setActiveTab(tab.id); model.revealInSidebar(path) },
             ClosureMenuItem(L("Copy path")) { model.copyToPasteboard(model.relativePath(path)) },
         ])

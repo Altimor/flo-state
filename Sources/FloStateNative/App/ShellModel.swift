@@ -517,7 +517,10 @@ final class ShellModel {
         }
         if newPath == entry.path { return }
         if WorkspaceFS.exists(newPath) { alert(conflict); return }
-        do { try applyPathChange(entry, newPath) } catch { alert(L("Failed to rename: %@", "\(error)")) }
+        do {
+            try applyPathChange(entry, newPath)
+            if !entry.isDir { titleUntouchedNote(newPath, trimmed) }
+        } catch { alert(L("Failed to rename: %@", "\(error)")) }
     }
 
     static func fileExtension(_ name: String) -> String {
@@ -526,6 +529,15 @@ final class ShellModel {
     }
 
     /// `applyPathChange` (rename or move).
+    /// A note created from the sidebar is named after it exists: once named, its still-empty "# "
+    /// heading takes the name. Only while the note is untouched and not open in the editor.
+    func titleUntouchedNote(_ path: String, _ title: String) {
+        guard editor.file(path) == nil, (try? WorkspaceFS.readFile(path).content) == WorkspaceFS.newFileContent else { return }
+        try? WorkspaceFS.writeFile(path, content: WorkspaceFS.newFileContent(title: title))
+        watcher?.recordWrite(path, nowMs: scheduler.nowMs)
+        index?.add(path, modifiedAt: WorkspaceFS.modifiedTime(path))
+    }
+
     func applyPathChange(_ entry: DirEntry, _ newPath: String) throws {
         try WorkspaceFS.renameEntry(entry.path, to: newPath)
         watcher?.recordWrite(entry.path, nowMs: scheduler.nowMs)
@@ -820,7 +832,10 @@ final class ShellModel {
     func newNoteWithoutFolder() {
         guard let path = chooseNewNotePath() else { return }
         do {
-            if !FileManager.default.fileExists(atPath: path) { try Data().write(to: URL(fileURLWithPath: path)) }
+            if !FileManager.default.fileExists(atPath: path) {
+                let title = (URL(fileURLWithPath: path).lastPathComponent as NSString).deletingPathExtension
+                try Data(WorkspaceFS.newFileContent(title: title).utf8).write(to: URL(fileURLWithPath: path))
+            }
         } catch {
             alert(L("Couldn't create the note: %@", error.localizedDescription))
             return
@@ -976,7 +991,7 @@ final class ShellModel {
             palette = nil
             Task {
                 do {
-                    _ = try WorkspaceFS.createFile(path)
+                    _ = try WorkspaceFS.createFile(path, title: LinkPaths.getFileStem(LinkPaths.getFileName(path)))
                     index?.add(path, modifiedAt: WorkspaceFS.modifiedTime(path))
                     refreshDirectory(LinkPaths.getParentDir(path))
                 } catch { /* already exists: open it */ }
