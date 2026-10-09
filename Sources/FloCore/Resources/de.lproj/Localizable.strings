@@ -956,3 +956,30 @@
 "Opening notes" = "Notizen öffnen";
 "Tip: ⌘. checks or unchecks the item the cursor is on" = "Tipp: ⌘. hakt das Element am Cursor ab oder entfernt den Haken";
 "Headings only" = "Nur Überschriften";
+
+/* Table editor */
+"Insert Row Above" = "Zeile oberhalb einfügen";
+"Insert Row Below" = "Zeile unterhalb einfügen";
+"Insert Column Left" = "Spalte links einfügen";
+"Insert Column Right" = "Spalte rechts einfügen";
+"Delete Row" = "Zeile löschen";
+"Delete Column" = "Spalte löschen";
+"Align Column" = "Spalte ausrichten";
+"Left" = "Links";
+"Center" = "Zentriert";
+"Right" = "Rechts";
+"Reset Column Widths" = "Spaltenbreiten zurücksetzen";
+"Edit as Markdown" = "Als Markdown bearbeiten";
+"Delete Table" = "Tabelle löschen";
+"Edit as Table" = "Als Tabelle bearbeiten";
+"Open in Finder" = "Im Finder öffnen";
+"Failed to copy:" = "Kopieren fehlgeschlagen:";
+
+/* PDF viewer */
+"Zoom Out" = "Verkleinern";
+"Zoom In" = "Vergrößern";
+"Fit Width" = "An Breite anpassen";
+"Previous Page" = "Vorherige Seite";
+"Next Page" = "Nächste Seite";
+"Fit" = "Anpassen";
+"Actual Size" = "Originalgröße";

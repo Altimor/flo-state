@@ -32,16 +32,12 @@ final class BlockWidgetTests: XCTestCase {
         XCTAssertEqual(first.height, expected, accuracy: 0.5)
         let second = fragmentFrame(r, containing: (doc as NSString).range(of: "|:--").location)!
         XCTAssertLessThan(second.height, 1)
-        // click in the middle of the table
-        let tv = r.controller.textView
-        let p = tv.convert(NSPoint(x: first.midX + tv.textContainerOrigin.x, y: first.midY + tv.textContainerOrigin.y), to: nil)
-        let ev = NSEvent.mouseEvent(with: .leftMouseDown, location: p, modifierFlags: [], timestamp: ProcessInfo.processInfo.systemUptime,
-                                    windowNumber: r.window.windowNumber, context: nil, eventNumber: 0, clickCount: 1, pressure: 1)!
-        tv.mouseDown(with: ev)
-        XCTAssertEqual(r.selection.main.from, from)
-        XCTAssertEqual(r.selection.main.to, to)
-        // revealed: source lines now have text height
+        _ = to
+        // the table editor stays with the caret inside; "Edit as Markdown" shows the source lines
+        r.controller.setTableMarkdownMode(from, true)
         XCTAssertGreaterThan(fragmentFrame(r, containing: (doc as NSString).range(of: "|:--").location)!.height, 20)
+        r.controller.setTableMarkdownMode(from, false)
+        XCTAssertLessThan(fragmentFrame(r, containing: (doc as NSString).range(of: "|:--").location)!.height, 1)
     }
 
     /// KaTeX math renders async; line boxes match the web (inline 28px, display merged line 100px);

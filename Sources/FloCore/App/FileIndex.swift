@@ -166,6 +166,8 @@ public final class FileIndex {
 
     public init(root: String) { self.root = root }
 
+    public func contains(_ path: String) -> Bool { files.contains { $0.path == path } }
+
     /// `index_workspace_impl`. `isCancelled` is checked per entry; a cancelled
     /// walk returns what it found so far (callers should discard it).
     public static func build(root: String, extensions: SupportedExtensions, walker: IgnoreWalker? = nil,

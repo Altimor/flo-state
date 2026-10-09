@@ -491,7 +491,7 @@ final class ShellSidebarTests: XCTestCase {
         f.model.submitRename(e2, "Renamed")
         XCTAssertEqual(f.alerts.last, "A file named \"Renamed.md\" already exists.")
         f.model.createFolderInFolder(f.p("dir"))
-        XCTAssertTrue(FileManager.default.fileExists(atPath: f.p("dir/Untitled Folder")))
+        XCTAssertTrue(FileManager.default.fileExists(atPath: f.p("dir/New Folder")))
         // move top.md into dir
         let top = f.model.entries(f.root).first { $0.name == "top.md" }!
         try! await f.model.editor.openFileInTabOrFocus(top.path)
@@ -575,15 +575,16 @@ final class ShellSidebarTests: XCTestCase {
                        ["New File", "New Folder", "-", "Copy relative path", "Copy absolute path", "-", "Reveal in Finder", "-", "Rename...", "Delete"])
         let x = f.model.entries(f.p("d"))[0]
         XCTAssertEqual(titles(ShellMenus.fileMenu(model: f.model, entry: x, inlineRename: true)),
-                       ["Open", "Open in new tab", "Open in new window", "Pin", "-", "Duplicate", "-", "Copy relative path", "Copy absolute path", "-", "Reveal in Finder", "-", "Rename...", "Delete"])
+                       ["Open", "Open in new tab", "Open in new window", "Pin", "-", "New Folder", "Duplicate", "-", "Copy relative path", "Copy absolute path", "-", "Reveal in Finder", "-", "Rename...", "Delete"])
         f.model.togglePinned(x.path)
         XCTAssertEqual(ShellMenus.fileMenu(model: f.model, entry: x, inlineRename: true).items[3].title, "Unpin")
         XCTAssertEqual(titles(ShellMenus.bulkMenu(model: f.model, paths: ["/a", "/b"])), ["Copy 2 relative paths", "Copy 2 absolute paths", "-", "Delete 2 items"])
         let surface = ShellMenus.sidebarSurfaceMenu(model: f.model)
-        XCTAssertEqual(surface.items.map { "\($0.title):\($0.state == .on)" }, ["Search:false", "Recents:true"])
-        (surface.items[0] as! ClosureMenuItem).fire()
+        XCTAssertEqual(surface.items.map { $0.isSeparatorItem ? "-" : "\($0.title):\($0.state == .on)" },
+                       ["New File:false", "New Folder:false", "Open in Finder:false", "-", "Search:false", "Recents:true"])
+        (surface.items[4] as! ClosureMenuItem).fire()
         XCTAssertTrue(f.model.values.appearanceSidebarShowSearch)
-        (ShellMenus.fileMenu(model: f.model, entry: x, inlineRename: true).items[7] as! ClosureMenuItem).fire()
+        (ShellMenus.fileMenu(model: f.model, entry: x, inlineRename: true).items[8] as! ClosureMenuItem).fire()
         XCTAssertEqual(f.pasteboard, "d/x.md")
         let ws = ShellMenus.workspaceMenu(model: f.model)
         XCTAssertEqual(titles(ws).suffix(2), ["Open Folder…", "Close Workspace"])

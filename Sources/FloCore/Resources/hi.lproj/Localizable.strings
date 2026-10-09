@@ -956,3 +956,30 @@
 "Opening notes" = "नोट्स खोलना";
 "Tip: ⌘. checks or unchecks the item the cursor is on" = "सुझाव: ⌘. कर्सर वाले आइटम को चेक या अनचेक करता है";
 "Headings only" = "केवल शीर्षक";
+
+/* Table editor */
+"Insert Row Above" = "ऊपर पंक्ति डालें";
+"Insert Row Below" = "नीचे पंक्ति डालें";
+"Insert Column Left" = "बाईं ओर कॉलम डालें";
+"Insert Column Right" = "दाईं ओर कॉलम डालें";
+"Delete Row" = "पंक्ति हटाएँ";
+"Delete Column" = "कॉलम हटाएँ";
+"Align Column" = "कॉलम संरेखित करें";
+"Left" = "बाएँ";
+"Center" = "मध्य";
+"Right" = "दाएँ";
+"Reset Column Widths" = "कॉलम की चौड़ाई रीसेट करें";
+"Edit as Markdown" = "Markdown के रूप में संपादित करें";
+"Delete Table" = "तालिका हटाएँ";
+"Edit as Table" = "तालिका के रूप में संपादित करें";
+"Open in Finder" = "Finder में खोलें";
+"Failed to copy:" = "कॉपी नहीं हो सका:";
+
+/* PDF viewer */
+"Zoom Out" = "छोटा करें";
+"Zoom In" = "बड़ा करें";
+"Fit Width" = "चौड़ाई में फ़िट करें";
+"Previous Page" = "पिछला पृष्ठ";
+"Next Page" = "अगला पृष्ठ";
+"Fit" = "फ़िट करें";
+"Actual Size" = "वास्तविक आकार";

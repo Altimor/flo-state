@@ -124,7 +124,14 @@ extension EditorFeatures {
         let tv = editor.textView
         let i = tv.characterIndexForInsertion(at: tv.convert(event.locationInWindow, from: nil))
         let href = i == NSNotFound ? nil : menuLinkHref(at: i)
-        return buildMenu(linkHref: href)
+        let menu = buildMenu(linkHref: href)
+        // a table shown as markdown: back to the table editor
+        if i != NSNotFound, let t = editor.tableNode(containing: i), editor.markdownTables.contains(t.from) {
+            let back = ClosureItem(L("Edit as Table")) { [weak editor] in editor?.setTableMarkdownMode(t.from, false) }
+            menu.insertItem(back, at: 0)
+            menu.insertItem(.separator(), at: 1)
+        }
+        return menu
     }
 
     public func buildMenu(linkHref: String?) -> NSMenu {
@@ -138,6 +145,21 @@ extension EditorFeatures {
                 case .submenu(let t, let items):
                     let it = NSMenuItem(title: L(t), action: nil, keyEquivalent: "")
                     it.submenu = make(items, title: L(t))
+                    m.addItem(it)
+                case .item("insertTable", let t, _):
+                    // hover the grid to pick the size
+                    let it = NSMenuItem(title: L(t), action: nil, keyEquivalent: "")
+                    let sub = NSMenu(title: L(t))
+                    let pickerItem = NSMenuItem()
+                    let picker = TableSizePicker()
+                    picker.onPick = { [weak self] r, c in
+                        guard let self else { return }
+                        self.editor.textView.window?.makeFirstResponder(self.editor.textView)
+                        self.editor.insertTable(rows: r, columns: c)
+                    }
+                    pickerItem.view = picker
+                    sub.addItem(pickerItem)
+                    it.submenu = sub
                     m.addItem(it)
                 case .item(let id, let t, let key):
                     let it = NSMenuItem(title: L(t), action: #selector(MenuTarget.fire(_:)), keyEquivalent: "")

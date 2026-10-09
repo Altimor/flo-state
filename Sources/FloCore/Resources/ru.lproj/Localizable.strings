@@ -956,3 +956,30 @@
 "Opening notes" = "Открытие заметок";
 "Tip: ⌘. checks or unchecks the item the cursor is on" = "Совет: ⌘. отмечает или снимает отметку с пункта под курсором";
 "Headings only" = "Только заголовки";
+
+/* Table editor */
+"Insert Row Above" = "Вставить строку выше";
+"Insert Row Below" = "Вставить строку ниже";
+"Insert Column Left" = "Вставить столбец слева";
+"Insert Column Right" = "Вставить столбец справа";
+"Delete Row" = "Удалить строку";
+"Delete Column" = "Удалить столбец";
+"Align Column" = "Выровнять столбец";
+"Left" = "По левому краю";
+"Center" = "По центру";
+"Right" = "По правому краю";
+"Reset Column Widths" = "Сбросить ширину столбцов";
+"Edit as Markdown" = "Редактировать как Markdown";
+"Delete Table" = "Удалить таблицу";
+"Edit as Table" = "Редактировать как таблицу";
+"Open in Finder" = "Открыть в Finder";
+"Failed to copy:" = "Не удалось скопировать:";
+
+/* PDF viewer */
+"Zoom Out" = "Уменьшить";
+"Zoom In" = "Увеличить";
+"Fit Width" = "По ширине";
+"Previous Page" = "Предыдущая страница";
+"Next Page" = "Следующая страница";
+"Fit" = "Вписать";
+"Actual Size" = "Реальный размер";

@@ -277,13 +277,20 @@ public final class RecentFilesStore {
 
     /// `get_recent_files_global`: entries that can't be stat'ed are hidden
     /// from the result but kept on disk.
-    public func list(limit: Int? = nil, extensions: SupportedExtensions = .schemaDefault) -> [RecentFile] {
+    /// `include` filters on the path BEFORE the file is touched: each entry is stat'ed and read for its
+    /// title, and touching a recent in ~/Downloads (say) made macOS ask for Downloads access on every ⌘O.
+    /// Stops reading once `limit` entries are found.
+    public func list(limit: Int? = nil, extensions: SupportedExtensions = .schemaDefault,
+                     include: (String) -> Bool = { _ in true }) -> [RecentFile] {
         let l = max(1, limit ?? RecentFilesStore.maxCount)
         lock.lock(); defer { lock.unlock() }
-        return Array(load().compactMap { e -> RecentFile? in
-            guard let f = WorkspaceFS.fileEntry(e.path, extensions: extensions) else { return nil }
-            return RecentFile(path: f.path, name: f.name, title: f.title, openedAt: e.openedAt)
-        }.prefix(l))
+        var out: [RecentFile] = []
+        for e in load() where include(e.path) {
+            guard let f = WorkspaceFS.fileEntry(e.path, extensions: extensions) else { continue }
+            out.append(RecentFile(path: f.path, name: f.name, title: f.title, openedAt: e.openedAt))
+            if out.count >= l { break }
+        }
+        return out
     }
 }
 

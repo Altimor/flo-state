@@ -21,7 +21,7 @@ public struct SupportedExtensions: Equatable {
 
     public static let `default` = SupportedExtensions(patterns: [])
 
-    /// Schema default (`*.md, *.mdx, *.markdown, *.csv`).
+    /// Schema default (`*.md, *.mdx, *.markdown, *.csv, *.pdf`).
     public static var schemaDefault: SupportedExtensions {
         SupportedExtensions(patterns: SettingsSchema.def("files.associations")?.defaultValue.listValue ?? [])
     }
@@ -254,7 +254,8 @@ public enum WorkspaceFS {
         _ path: String,
         ignore: WorkspaceIgnore? = nil,
         extensions: SupportedExtensions = .schemaDefault,
-        dirsWithSupportedFiles: Set<String>? = nil
+        dirsWithSupportedFiles: Set<String>? = nil,
+        alwaysShow: Set<String> = []
     ) throws -> [DirEntry] {
         guard exists(path) else { throw AppError.notFound(path) }
         let names: [String]
@@ -270,7 +271,8 @@ public enum WorkspaceFS {
             case .dir:
                 let contains = dirsWithSupportedFiles.map { $0.contains(child) }
                     ?? dirContainsSupportedFile(child, ignore: ignore, extensions: extensions)
-                if contains {
+                // `alwaysShow`: folders made in the app (New Folder) show while still empty
+                if contains || alwaysShow.contains(child) {
                     dirs.append(DirEntry(name: name, path: child, isDir: true, isMarkdown: false, modifiedAt: modifiedTime(child), title: nil))
                 }
             case .file:
@@ -403,7 +405,7 @@ public enum WorkspaceFS {
     }
 
     public static func newFolderPath(in parent: String, exists: (String) -> Bool = WorkspaceFS.exists) throws -> String {
-        try uniqueName(in: parent, base: L("Untitled Folder"), ext: "", exists: exists)
+        try uniqueName(in: parent, base: L("New Folder"), ext: "", exists: exists)
     }
 
     /// Duplicate naming (`resolveDuplicatePath`): `note copy.md`, `note copy 2.md`, ….

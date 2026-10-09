@@ -956,3 +956,30 @@
 "Opening notes" = "নোট খোলা";
 "Tip: ⌘. checks or unchecks the item the cursor is on" = "টিপ: ⌘. কার্সর যে আইটেমে আছে তা চেক বা আনচেক করে";
 "Headings only" = "শুধু শিরোনাম";
+
+/* Table editor */
+"Insert Row Above" = "উপরে সারি যোগ করুন";
+"Insert Row Below" = "নিচে সারি যোগ করুন";
+"Insert Column Left" = "বাঁয়ে কলাম যোগ করুন";
+"Insert Column Right" = "ডানে কলাম যোগ করুন";
+"Delete Row" = "সারি মুছুন";
+"Delete Column" = "কলাম মুছুন";
+"Align Column" = "কলাম সারিবদ্ধ করুন";
+"Left" = "বাম";
+"Center" = "মাঝখানে";
+"Right" = "ডান";
+"Reset Column Widths" = "কলামের প্রস্থ রিসেট করুন";
+"Edit as Markdown" = "Markdown হিসেবে সম্পাদনা করুন";
+"Delete Table" = "টেবিল মুছুন";
+"Edit as Table" = "টেবিল হিসেবে সম্পাদনা করুন";
+"Open in Finder" = "Finder-এ খুলুন";
+"Failed to copy:" = "কপি করা যায়নি:";
+
+/* PDF viewer */
+"Zoom Out" = "ছোট করুন";
+"Zoom In" = "বড় করুন";
+"Fit Width" = "প্রস্থে মানানসই";
+"Previous Page" = "আগের পৃষ্ঠা";
+"Next Page" = "পরের পৃষ্ঠা";
+"Fit" = "মানানসই";
+"Actual Size" = "প্রকৃত আকার";

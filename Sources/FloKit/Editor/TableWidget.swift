@@ -34,6 +34,9 @@ final class TableLayout {
     var tableTop: CGFloat = 0
 
     static let border: CGFloat = 1
+    /// Points per dash of a sized column (see ParsedTable.explicitWidths).
+    static func widthUnit(_ theme: EditorTheme) -> CGFloat { theme.baseSize / 2 }
+    static func minColumn(_ theme: EditorTheme) -> CGFloat { 3 * theme.baseSize }
 
     init(table: ParsedTable, theme: EditorTheme, available: CGFloat) {
         self.table = table
@@ -235,10 +238,17 @@ final class TableLayout {
         // shrink-to-fit inline-block: min(max(minPref, avail), maxPref)
         let borders = 2 * Self.border
         let sumMin = mins.reduce(0, +), sumMax = maxs.reduce(0, +)
-        let tableW = min(max(sumMin + borders, available), sumMax + borders)
+        var tableW = min(max(sumMin + borders, available), sumMax + borders)
         var widths = mins
         var remaining = tableW - borders
-        if remaining >= sumMax {
+        if let explicit = table.explicitWidths(unit: Double(Self.widthUnit(theme))) {
+            // sized columns (dash counts in the delimiter row), scaled down to fit the column
+            var ws = explicit.map { max(Self.minColumn(theme), CGFloat($0)) }
+            let sum = ws.reduce(0, +)
+            if sum + borders > available { ws = ws.map { max(Self.minColumn(theme), $0 * (available - borders) / sum) } }
+            widths = ws
+            tableW = ws.reduce(0, +) + borders
+        } else if remaining >= sumMax {
             widths = maxs
         } else {
             // AutoTableLayout::layout: auto columns take max(min, avail * max / totalAuto)
@@ -345,7 +355,8 @@ final class TableLayout {
 
     // MARK: drawing
 
-    func draw(at origin: CGPoint, theme: EditorTheme, in context: CGContext) {
+    /// `hidden`: the cell being edited in the table editor (its text isn't drawn; the field is over it).
+    func draw(at origin: CGPoint, theme: EditorTheme, in context: CGContext, hidden: (Int, Int)? = nil) {
         let rect = CGRect(origin: origin, size: size)
         let outer = NSBezierPath(roundedRect: rect.insetBy(dx: 0.5, dy: 0.5), xRadius: 7.5, yRadius: 7.5)
         let clip = NSBezierPath(roundedRect: rect.insetBy(dx: 1, dy: 1), xRadius: 7, yRadius: 7)
@@ -372,8 +383,9 @@ final class TableLayout {
         outer.stroke()
 
         let em = theme.baseSize, padX = 0.8 * em
-        for row in cells {
-            for cell in row {
+        for (r, row) in cells.enumerated() {
+            for (c, cell) in row.enumerated() {
+                if let h = hidden, h == (r, c) { continue }
                 let left = origin.x + cell.frame.minX + padX
                 let top = origin.y + cell.contentTop
                 for l in cell.lines { drawLine(l, cell.content, x: left + l.x, baseline: top + l.baseline, theme: theme, context: context) }

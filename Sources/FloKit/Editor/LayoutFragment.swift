@@ -104,11 +104,9 @@ final class FloLayoutFragment: NSTextLayoutFragment {
         }
         // heading fold chevron (heading-fold.ts): only while the line is hovered
         if para.length > 0, let folded = (para.attribute(.floFoldToggle, at: 0, effectiveRange: nil) as? NSNumber)?.boolValue,
-           let line = lineBox?.lineNumber, editor.hoverLine == line, let lf = textLineFragments.first {
-            let em = editor.headingFontSize(line)
-            let top = point.y + lf.typographicBounds.minY
-            let cy = top + lf.typographicBounds.height / 2 + 4
-            let box = CGRect(x: columnLeft - 0.55 * em - em, y: cy - em / 2, width: em, height: em)
+           let line = lineBox?.lineNumber, editor.hoverLine == line,
+           let box = chevronBox(origin: point, columnLeft: columnLeft, em: editor.headingFontSize(line), theme: theme) {
+            let em = box.width
             let w = 0.34 * em, h = 0.52 * em
             // triangle pointing right, centred in the box; rotated 90° (down) when expanded
             let tri = NSBezierPath()
@@ -141,6 +139,32 @@ final class FloLayoutFragment: NSTextLayoutFragment {
             let s = NSAttributedString(string: text, attributes: attrs)
             s.draw(at: CGPoint(x: origin.x - 0.251 * headingFont.pointSize - boxW, y: origin.textTop(font: headingFont)))
         }
+    }
+
+    /// Left edge of a heading's revealed `#` marks (drawn hanging in the margin, ending 0.25em before
+    /// the text), or nil while they're hidden.
+    func headingHashLeft(origin point: CGPoint, theme: EditorTheme) -> CGFloat? {
+        guard let para = paragraph, para.length > 0 else { return nil }
+        var left: CGFloat? = nil
+        para.enumerateAttribute(.floHeadingHash, in: NSRange(location: 0, length: para.length)) { v, range, _ in
+            guard let visible = v as? Bool, visible, let o = self.charOrigin(range.location, origin: point) else { return }
+            let font = self.headingFont(para, theme: theme)
+            let full = (para.string as NSString).substring(with: range)
+            let boxW = NSAttributedString(string: full, attributes: [.font: font]).size().width
+            left = min(left ?? .greatestFiniteMagnitude, o.x - 0.251 * font.pointSize - boxW)
+        }
+        return left
+    }
+
+    /// The heading fold chevron's box: in the gutter, and left of the revealed `#` marks (it sat on the
+    /// last `#` of an `###` heading, issue #13). Shared by drawing and hit-testing (Folding.chevronRect).
+    func chevronBox(origin point: CGPoint, columnLeft: CGFloat, em: CGFloat, theme: EditorTheme) -> CGRect? {
+        guard let lf = textLineFragments.first else { return nil }
+        let top = point.y + lf.typographicBounds.minY
+        let cy = top + lf.typographicBounds.height / 2 + 4
+        var right = columnLeft - 0.55 * em
+        if let hashes = headingHashLeft(origin: point, theme: theme) { right = min(right, hashes - 0.3 * em) }
+        return CGRect(x: right - em, y: cy - em / 2, width: em, height: em)
     }
 
     private func headingFont(_ para: NSAttributedString, theme: EditorTheme) -> NSFont {
@@ -317,7 +341,9 @@ final class FloLayoutFragment: NSTextLayoutFragment {
             }
         case .table:
             guard let t = box.table, let ctx = NSGraphicsContext.current?.cgContext else { return }
-            t.draw(at: CGPoint(x: lineLeft, y: p.lineTop + t.tableTop), theme: theme, in: ctx)
+            // the cell being edited: asked of the overlay (a resize re-lays the table out as a new object)
+            let hidden = editor.flatMap { e in MainActor.assumeIsolated { e.tableOverlay?.editingCell(tableAt: box.widget.from) } }
+            t.draw(at: CGPoint(x: lineLeft, y: p.lineTop + t.tableTop), theme: theme, in: ctx, hidden: hidden)
         case .horizontalRule:
             let y = p.lineTop + p.lineHeight / 2
             theme.foreground.withAlphaComponent(0.2).setFill()

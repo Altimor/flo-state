@@ -111,8 +111,14 @@ extension EditorController {
         guard let loc = tcm.location(tcm.documentRange.location, offsetBy: pos), let f = tlm.textLayoutFragment(for: loc),
               let lf = f.textLineFragments.first else { return nil }
         let em = headingFontSize(line)
-        let left = textView.textContainerOrigin.x + applier.gutter
-        let top = textView.textContainerOrigin.y + f.layoutFragmentFrame.minY + lf.typographicBounds.minY
+        let o = textView.textContainerOrigin
+        let left = o.x + applier.gutter
+        // same box the fragment draws (left of revealed # marks)
+        if let ff = f as? FloLayoutFragment {
+            let origin = CGPoint(x: o.x + f.layoutFragmentFrame.minX, y: o.y + f.layoutFragmentFrame.minY)
+            return ff.chevronBox(origin: origin, columnLeft: left, em: em, theme: theme)
+        }
+        let top = o.y + f.layoutFragmentFrame.minY + lf.typographicBounds.minY
         let cy = top + lf.typographicBounds.height / 2 + 4
         return CGRect(x: left - 0.55 * em - em, y: cy - em / 2, width: em, height: em)
     }

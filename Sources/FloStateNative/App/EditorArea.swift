@@ -92,7 +92,8 @@ final class EditorPaneView: FlippedView {
         if controller == nil && isHidden { return }
         if let kind = WorkspaceFS.viewerKind(path) {
             if viewer == nil {
-                let v = FileViewerView(path: path, kind: kind, background: model.palette_.bg)
+                let v = FileViewerView(path: path, kind: kind, background: model.palette_.bg, palette: model.palette_,
+                                       font: UIFonts.ui(model.values, size: 12, weight: .medium))
                 addSubview(v)
                 viewer = v
                 needsLayout = true
@@ -362,10 +363,15 @@ final class EditorPaneView: FlippedView {
         flushTypewriter()
     }
 
-    /// Scroll so the heading line lands 24px below the scroller top.
+    /// Jump to a heading (outline click, heading link): the caret goes to the end of the heading line
+    /// and the line lands 24px below the scroller top.
     func scrollToHeading(_ h: DocumentHeading) {
-        guard let c = controller, let top = c.lineTop(forPosition: h.pos, in: self) else { return }
+        guard let c = controller, h.pos <= c.state.doc.length else { return }
+        let end = c.state.doc.lineAt(h.pos).to
+        c.run { t in t.dispatch(TransactionSpec(selection: .cursor(end), scrollIntoView: false)); return true }
+        guard let top = c.lineTop(forPosition: h.pos, in: self) else { return }
         scrollBy(top - 24)
+        window?.makeFirstResponder(c.textView)
     }
 
     /// Select a text range (a full-text search hit), put it a third of the way down, and focus the editor.
@@ -637,6 +643,9 @@ final class OutlineRailView: FlippedView {
         if let pop = popover, pop.frame.contains(p) { return }
         closePopover()
     }
+    // AppKit sends the mouse-up only to a view that took the mouse-down: without this, clicks did nothing
+    override func mouseDown(with event: NSEvent) {}
+    override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
     override func mouseUp(with event: NSEvent) {
         let p = convert(event.locationInWindow, from: nil)
         if let i = tickRects.firstIndex(where: { $0.insetBy(dx: 0, dy: -3).contains(p) }) { onSelect?(headings[i]) }
@@ -746,6 +755,10 @@ final class OutlinePopoverView: FlippedView {
             for (i, h) in owner.rail.headings.enumerated() {
                 var s = owner.rowStyle
                 if i == owner.rail.activeIndex { s.color = p.accent } else if i == owner.hovered { s.color = p.textPrimary }
+                if i == owner.hovered {
+                    p.surfaceSubtle.setFill()
+                    roundedPath(CGRect(x: 8, y: 12 + CGFloat(i) * 23.5 - 2, width: bounds.width - 16, height: 23.5), 6).fill()
+                }
                 let x = 16 + CGFloat(max(0, h.level - 2)) * owner.indent
                 s.draw(h.text, x: x, lineTop: 12 + CGFloat(i) * 23.5, lineHeight: 19.5, maxWidth: bounds.width - 16 - x, in: ctx)
             }
@@ -762,8 +775,14 @@ final class OutlinePopoverView: FlippedView {
             if !RailGeometry.zone(count: rail.headings.count, areaWidth: rail.bounds.width, areaHeight: rail.bounds.height).contains(p)
                 && !owner.frame.contains(p) { rail.closePopover() }
         }
+        // AppKit sends the mouse-up only to a view that took the mouse-down: without this, clicks did nothing
+        override func mouseDown(with event: NSEvent) {}
+        override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
         override func mouseUp(with event: NSEvent) {
             if let i = owner.rowIndex(at: convert(event.locationInWindow, from: nil)) { owner.rail.onSelect?(owner.rail.headings[i]) }
+        }
+        override func resetCursorRects() {
+            for i in owner.rail.headings.indices { addCursorRect(CGRect(x: 0, y: 12 + CGFloat(i) * 23.5, width: bounds.width, height: 19.5), cursor: .pointingHand) }
         }
         override func menu(for event: NSEvent) -> NSMenu? {
             guard let i = owner.rowIndex(at: convert(event.locationInWindow, from: nil)) else { return nil }

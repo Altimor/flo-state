@@ -2,10 +2,15 @@
 # Codesign an app bundle inside-out (Sparkle's helpers first, then the app).
 # Ad-hoc by default; with DEVELOPER_ID="Developer ID Application: … (TEAMID)"
 # it signs with that identity + hardened runtime + secure timestamp (notarizable).
+# SIGN_IDENTITY (local installs, see install.sh): a plain signature with that identity, so the
+# designated requirement stays the same across builds (ad-hoc = a new app to macOS every build, which
+# forgot privacy grants like Downloads access).
 set -euo pipefail
 APP="$1"
 if [[ -n "${DEVELOPER_ID:-}" ]]; then
   SIGN=(codesign --force --sign "$DEVELOPER_ID" --options runtime --timestamp)
+elif [[ -n "${SIGN_IDENTITY:-}" ]]; then
+  SIGN=(codesign --force --sign "$SIGN_IDENTITY")
 else
   SIGN=(codesign --force --sign -)
 fi

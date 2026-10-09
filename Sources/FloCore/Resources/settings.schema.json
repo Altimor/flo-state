@@ -386,7 +386,7 @@
       "description": "File patterns to include in the workspace",
       "category": "Files",
       "type": "list",
-      "default": ["*.md", "*.mdx", "*.markdown", "*.csv"]
+      "default": ["*.md", "*.mdx", "*.markdown", "*.csv", "*.pdf"]
     },
     {
       "key": "files.default-encoding",

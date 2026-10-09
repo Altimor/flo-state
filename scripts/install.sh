@@ -29,7 +29,10 @@ rm -rf "$DST"
 cp -R "$SRC" "$DST"
 /usr/libexec/PlistBuddy -c "Set CFBundleName Flo State" "$DST/Contents/Info.plist"
 /usr/libexec/PlistBuddy -c "Set CFBundleDisplayName Flo State" "$DST/Contents/Info.plist"
-scripts/sign.sh "$DST"
+# a stable identity from the login keychain when there is one (Apple Development / Developer ID): macOS
+# keeps privacy grants (Downloads, Documents…) across rebuilds only if the signature identity is stable
+SIGN_IDENTITY="${SIGN_IDENTITY:-$(security find-identity -v -p codesigning 2>/dev/null | awk -F'"' '/Apple Development|Developer ID Application/ { print $2; exit }')}" \
+  scripts/sign.sh "$DST"
 /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -f "$DST" "$LEGACY" 2>/dev/null || true
 echo "installed: $DST (legacy: $LEGACY)"
 # RELAUNCH=0: leave it quit; RELAUNCH=bg: reopen without taking focus

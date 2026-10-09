@@ -956,3 +956,30 @@
 "Opening notes" = "打开笔记";
 "Tip: ⌘. checks or unchecks the item the cursor is on" = "提示：⌘. 可勾选或取消勾选光标所在的项目";
 "Headings only" = "仅标题";
+
+/* Table editor */
+"Insert Row Above" = "在上方插入行";
+"Insert Row Below" = "在下方插入行";
+"Insert Column Left" = "在左侧插入列";
+"Insert Column Right" = "在右侧插入列";
+"Delete Row" = "删除行";
+"Delete Column" = "删除列";
+"Align Column" = "对齐列";
+"Left" = "左对齐";
+"Center" = "居中";
+"Right" = "右对齐";
+"Reset Column Widths" = "重置列宽";
+"Edit as Markdown" = "以 Markdown 编辑";
+"Delete Table" = "删除表格";
+"Edit as Table" = "以表格编辑";
+"Open in Finder" = "在访达中打开";
+"Failed to copy:" = "拷贝失败：";
+
+/* PDF viewer */
+"Zoom Out" = "缩小";
+"Zoom In" = "放大";
+"Fit Width" = "适合宽度";
+"Previous Page" = "上一页";
+"Next Page" = "下一页";
+"Fit" = "适合";
+"Actual Size" = "实际大小";

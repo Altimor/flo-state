@@ -71,13 +71,29 @@ public enum Formatting {
         var from = max(line.from, selFrom)
         var to = min(line.to, selTo)
         if to <= from { return nil }
-        if let m = LIST_MARKER.exec(line.text) {
+        // past the bullet and its checkbox, a heading's #s, a quote's >
+        if let m = LINE_PREFIX.exec(line.text) ?? LIST_MARKER.exec(line.text) {
             let markerEnd = line.from + m.length
             if from < markerEnd { from = markerEnd }
         }
         while from < to, let c = state.doc.char(at: from), CMText.isSpaceOrTab(c) { from += 1 }
         while to > from, let c = state.doc.char(at: to - 1), CMText.isSpaceOrTab(c) { to -= 1 }
         return to > from ? (from, to) : nil
+    }
+
+    static let LINE_PREFIX = JSRegex("^[ \\t]*(?:(?:>[ \\t]?)+|#{1,6}[ \\t]+|(?:[-*+]|\\d+[.)])[ \\t]+(?:\\[[ xX]\\][ \\t]+)?)")
+
+    /// The part of a one-line selection that is the line's text: a selection made with Shift-Cmd-Left
+    /// includes the bullet / checkbox / heading / quote prefix, which a link must not swallow. nil for
+    /// selections across lines (left as they are).
+    public static func textSpan(_ state: EditorState, _ from: Int, _ to: Int) -> (from: Int, to: Int)? {
+        let line = state.doc.lineAt(from)
+        guard to <= line.to else { return nil }
+        var a = from, b = to
+        if let m = LINE_PREFIX.exec(line.text) { a = max(a, line.from + m.length) }
+        while a < b, let c = state.doc.char(at: a), CMText.isSpaceOrTab(c) { a += 1 }
+        while b > a, let c = state.doc.char(at: b - 1), CMText.isSpaceOrTab(c) { b -= 1 }
+        return b > a ? (a, b) : nil
     }
 
     static func runAtStart(_ text: [UInt16], _ ch: UInt16) -> Int {
@@ -241,9 +257,11 @@ public enum Formatting {
             if range.from == range.to {
                 return ([Change(from: range.from, insert: "[](url)")], SelectionRange.range(range.from + 3, range.from + 6))
             }
-            let selected = state.sliceDoc(range.from, range.to)
-            let urlStart = range.from + 1 + selected.utf16.count + 2
-            return ([Change(from: range.from, to: range.to, insert: "[\(selected)](url)")],
+            // a selection that took in the bullet / heading prefix links only the text after it
+            let span = textSpan(state, range.from, range.to) ?? (range.from, range.to)
+            let selected = state.sliceDoc(span.from, span.to)
+            let urlStart = span.from + 1 + selected.utf16.count + 2
+            return ([Change(from: span.from, to: span.to, insert: "[\(selected)](url)")],
                     SelectionRange.range(urlStart, urlStart + 3))
         }
         if !anyChange || spec.changeSet!.isEmpty { return false }

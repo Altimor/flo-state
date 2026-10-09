@@ -90,6 +90,8 @@ final class ShellModel {
     /// Text range to select after opening a note from full-text search.
     var pendingReveal: (path: String, offset: Int, length: Int)?
     var renamingPath: String? { didSet { notify(.sidebar) } }
+    /// Folders made with New Folder: shown in the sidebar while still empty (empty folders are hidden).
+    var createdFolders = Set<String>()
     var selectedPaths: Set<String> = [] { didSet { notify(.sidebar) } }
     var selectionAnchor: String?
     var pinnedVisibleCount = 6
@@ -103,6 +105,8 @@ final class ShellModel {
     var openWorkspaceElsewhere: (String) -> Void = { _ in }
     var openCompactWindow: (String) -> Void = { _ in }
     var editorCommand: (EditorCommandRequest) -> Void = { _ in }
+    /// The active tab shows a PDF (zoom keys go to it).
+    var activeTabIsPDF: Bool { editor.activeTab?.location.primaryPath.map { WorkspaceFS.viewerKind($0) == .pdf } ?? false }
     var revealInFinder: (String) -> Void = { NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: $0)]) }
     var copyToPasteboard: (String) -> Void = { s in
         NSPasteboard.general.clearContents()
@@ -116,7 +120,7 @@ final class ShellModel {
     var observers: [(Change) -> Void] = []
     private var notifying = false
 
-    enum EditorCommandRequest: Equatable { case goToToday, autoInsertDaily, collapseAll, expandAll, key(String) }
+    enum EditorCommandRequest: Equatable { case goToToday, autoInsertDaily, collapseAll, expandAll, key(String), viewerZoom(Int) }
 
     init(dataDir: AppDataDirectory, scheduler: AppScheduler? = nil, importLegacy: Bool = true) {
         self.dataDir = dataDir
@@ -150,7 +154,8 @@ final class ShellModel {
         box.read = { [weak self] path in
             guard let self = self else { return [] }
             return try WorkspaceFS.readDirectory(path, ignore: self.ignore, extensions: self.settings.supportedExtensions,
-                                                 dirsWithSupportedFiles: self.index?.isReady == true ? self.index?.dirsWithSupportedFiles : nil)
+                                                 dirsWithSupportedFiles: self.index?.isReady == true ? self.index?.dirsWithSupportedFiles : nil,
+                                                 alwaysShow: self.createdFolders)
         }
         sessionAutosaver = SessionAutosaver(editor: editor, store: sessionStore, scheduler: scheduler,
                                             root: { [weak self] in self?.root },
@@ -492,6 +497,7 @@ final class ShellModel {
         do {
             let p = try WorkspaceFS.newFolderPath(in: folder)
             _ = try WorkspaceFS.createDirectory(p)
+            createdFolders.insert(p)
             if tree.expandedDirs.contains(folder) || folder == root { refreshDirectory(folder) } else { ensureExpanded(folder) }
             renamingPath = p
         } catch { alert(L("Failed to create folder: %@", "\(error)")) }
@@ -509,18 +515,44 @@ final class ShellModel {
             newPath = "\(parent)/\(trimmed)"
             conflict = L("A folder named \"%@\" already exists.", trimmed)
         } else {
-            let stem = LinkPaths.getFileStem(entry.name)
-            if trimmed == stem { return }
             let ext = Self.fileExtension(entry.name)
             newPath = "\(parent)/\(trimmed)\(ext)"
             conflict = L("A file named \"%@\" already exists.", trimmed + ext)
         }
-        if newPath == entry.path { return }
+        // the sidebar shows the note's title: renaming renames that title too (its first "# " heading)
+        let shownTitle = entry.isDir ? nil : label(for: entry)
+        if newPath == entry.path {
+            if let t = shownTitle, t != trimmed { retitle(entry.path, from: t, to: trimmed) }
+            return
+        }
         if WorkspaceFS.exists(newPath) { alert(conflict); return }
         do {
             try applyPathChange(entry, newPath)
-            if !entry.isDir { titleUntouchedNote(newPath, trimmed) }
+            if !entry.isDir {
+                titleUntouchedNote(newPath, trimmed)
+                if let t = shownTitle, t != trimmed { retitle(newPath, from: t, to: trimmed) }
+            }
         } catch { alert(L("Failed to rename: %@", "\(error)")) }
+    }
+
+    /// Set the note's first `# heading` from `old` to `new` (the title the sidebar shows), on disk and in
+    /// an open tab. Left alone while the tab has unsaved edits.
+    func retitle(_ path: String, from old: String, to new: String) {
+        guard values.appearanceSidebarFileLabel != .filename else { return }
+        if let f = editor.file(path), f.isDirty { return }
+        guard let raw = try? WorkspaceFS.readFile(path).content else { return }
+        var lines = raw.components(separatedBy: "\n")
+        guard let i = lines.firstIndex(where: { l in
+            guard l.hasPrefix("# ") else { return false }
+            return l.dropFirst(2).trimmingCharacters(in: .whitespaces) == old
+        }) else { return }
+        lines[i] = "# " + new
+        let updated = lines.joined(separator: "\n")
+        guard (try? WorkspaceFS.writeFile(path, content: updated)) != nil else { return }
+        watcher?.recordWrite(path, nowMs: scheduler.nowMs)
+        if editor.file(path) != nil { editor.reloadFromDisk(path, rawContent: updated) }
+        index?.add(path, modifiedAt: WorkspaceFS.modifiedTime(path))
+        refreshDirectory(LinkPaths.getParentDir(path))
     }
 
     static func fileExtension(_ name: String) -> String {
@@ -542,6 +574,7 @@ final class ShellModel {
         try WorkspaceFS.renameEntry(entry.path, to: newPath)
         watcher?.recordWrite(entry.path, nowMs: scheduler.nowMs)
         if entry.isDir {
+            if createdFolders.remove(entry.path) != nil { createdFolders.insert(newPath) }
             editor.rewritePathPrefix(entry.path, to: newPath)
             tree.rewriteExpandedDir(entry.path, to: newPath)
             // rekeyed listings still carry the old child paths: re-read them
@@ -690,9 +723,10 @@ final class ShellModel {
         case .closeOtherTabs: if let id = editor.activeTabId, !isCompact { editor.closeOtherTabs(id) }
         case .toggleSidebar: toggleSidebar()
         case .toggleTypewriter: typewriterScrolling.toggle(); notify(.layout)
-        case .fontSizeIncrease: stepFontSize(1)
-        case .fontSizeDecrease: stepFontSize(-1)
-        case .fontSizeReset: resetSetting("editor.font-size")
+        // ⌘+ / ⌘− / ⌘0 zoom the PDF when a PDF tab is active (Preview's keys), the editor font otherwise
+        case .fontSizeIncrease: if activeTabIsPDF { editorCommand(.viewerZoom(1)) } else { stepFontSize(1) }
+        case .fontSizeDecrease: if activeTabIsPDF { editorCommand(.viewerZoom(-1)) } else { stepFontSize(-1) }
+        case .fontSizeReset: if activeTabIsPDF { editorCommand(.viewerZoom(0)) } else { resetSetting("editor.font-size") }
         case .collapseHeadings: editorCommand(.collapseAll)
         case .expandHeadings: editorCommand(.expandAll)
         case let .editorKey(chord): editorCommand(.key(chord))
@@ -935,10 +969,12 @@ final class ShellModel {
         var recents: [PaletteItem] = []
         if q.isEmpty && p.intent == .search {
             let active = editor.activeFilePath
-            recents = recentFilesStore.list(limit: 30, extensions: settings.supportedExtensions)
-                // case-insensitive: the recents and the workspace can spell the same folder differently
-                .filter { $0.path != active && (root == nil || $0.path.lowercased().hasPrefix(root!.lowercased() + "/")) }
-                .prefix(5)
+            // case-insensitive: the recents and the workspace can spell the same folder differently. Filtered
+            // on the path, before any file is touched (files outside the workspace, e.g. in ~/Downloads, trigger
+            // a macOS folder-access prompt)
+            let rootPrefix = root.map { $0.lowercased() + "/" }
+            recents = recentFilesStore.list(limit: 5, extensions: settings.supportedExtensions,
+                                            include: { $0 != active && (rootPrefix == nil || $0.lowercased().hasPrefix(rootPrefix!)) })
                 .map { f -> PaletteItem in
                     let dir = LinkPaths.getParentDir(f.path)
                     let rel = root.map { r in String(dir.dropFirst(r.count)).trimmingCharacters(in: CharacterSet(charactersIn: "/")) } ?? dir

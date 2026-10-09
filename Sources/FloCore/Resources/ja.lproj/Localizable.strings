@@ -956,3 +956,30 @@
 "Opening notes" = "メモを開くとき";
 "Tip: ⌘. checks or unchecks the item the cursor is on" = "ヒント：⌘. でカーソル位置の項目をチェック／チェック解除できます";
 "Headings only" = "見出しのみ";
+
+/* Table editor */
+"Insert Row Above" = "上に行を挿入";
+"Insert Row Below" = "下に行を挿入";
+"Insert Column Left" = "左に列を挿入";
+"Insert Column Right" = "右に列を挿入";
+"Delete Row" = "行を削除";
+"Delete Column" = "列を削除";
+"Align Column" = "列の配置";
+"Left" = "左揃え";
+"Center" = "中央揃え";
+"Right" = "右揃え";
+"Reset Column Widths" = "列幅をリセット";
+"Edit as Markdown" = "Markdownとして編集";
+"Delete Table" = "表を削除";
+"Edit as Table" = "表として編集";
+"Open in Finder" = "Finderで開く";
+"Failed to copy:" = "コピーできませんでした:";
+
+/* PDF viewer */
+"Zoom Out" = "縮小";
+"Zoom In" = "拡大";
+"Fit Width" = "幅に合わせる";
+"Previous Page" = "前のページ";
+"Next Page" = "次のページ";
+"Fit" = "合わせる";
+"Actual Size" = "実際のサイズ";

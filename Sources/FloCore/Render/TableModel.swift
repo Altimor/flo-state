@@ -7,6 +7,15 @@ public struct ParsedTable: Hashable {
     public var headers: [String]
     public var alignments: [Alignment?]
     public var rows: [[String]]
+    /// Dashes in each delimiter cell. Column widths live here (Pandoc's convention for pipe tables:
+    /// relative widths from the dash counts); all equal = automatic widths.
+    public var dashes: [Int] = []
+
+    /// Explicit column widths (`unit` points per dash), or nil for automatic layout.
+    public func explicitWidths(unit: Double) -> [Double]? {
+        guard dashes.count == headers.count, let first = dashes.first, dashes.contains(where: { $0 != first }) else { return nil }
+        return dashes.map { Double($0) * unit }
+    }
 
     /// parseMarkdownTable: nil when the delimiter row is invalid (no widget).
     public static func parse(_ text: String) -> ParsedTable? {
@@ -22,7 +31,8 @@ public struct ParsedTable: Hashable {
             if l { return .left }
             return nil
         }
-        return ParsedTable(headers: headers, alignments: aligns, rows: lines.dropFirst(2).map(parseCells))
+        return ParsedTable(headers: headers, alignments: aligns, rows: lines.dropFirst(2).map(parseCells),
+                           dashes: delim.map { c in c.filter { $0 == "-" }.count })
     }
 
     static func isEscaped(_ u: [UInt16], _ index: Int) -> Bool {

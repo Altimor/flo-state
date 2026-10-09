@@ -161,6 +161,8 @@ final class SidebarRowView: FlippedView {
     var isSelected = false { didSet { needsDisplay = true } }
     var isExpanded = false
     var isDragging = false { didSet { needsDisplay = true } }
+    /// The folder a drag would drop into.
+    var isDropTarget = false { didSet { if isDropTarget != oldValue { needsDisplay = true } } }
     var palette: ShellPalette!
     var font: NSFont = .systemFont(ofSize: 13)
     weak var sidebar: SidebarView?
@@ -204,6 +206,7 @@ final class SidebarRowView: FlippedView {
         case .showMore, .switcher:
             if hovering { bg = p.surfaceSubtle }
         }
+        if isDropTarget { bg = p.surfaceSelected }
         if let bg = bg, renameField == nil || isActive { bg.setFill(); roundedPath(bounds, 8).fill() }
         ctx.saveGState()
         if isDragging { ctx.setAlpha(0.4) }
@@ -291,6 +294,7 @@ final class SidebarView: FlippedView, NSTextFieldDelegate {
         self.model = model
         super.init(frame: .zero)
         wantsLayer = true
+        registerForDraggedTypes([.fileURL])   // files dragged in from Finder: copied into the folder under the pointer
         addSubview(toggle)
         toggle.action = { [weak model] in model?.toggleSidebar() }
         toggle.toolTipText = L("Hide sidebar")
@@ -357,9 +361,17 @@ final class SidebarView: FlippedView, NSTextFieldDelegate {
         let items = SidebarLayout.items(model: model)
         let (pl, _) = SidebarLayout.place(items)
         placed = pl
+        // a rename in progress survives the rebuild (the file watcher rebuilds right after New Folder):
+        // keep what was typed and the selection, and don't take the field's removal as "done"
+        renameDraft = nil
+        if let f = rows.compactMap({ $0.renameField as? RenameField }).first, let e = f.entry, model.renamingPath == e.path {
+            renameDraft = (e.path, f.stringValue, f.currentEditor()?.selectedRange)
+        }
+        rebuildingRows = true
         rows.forEach { $0.removeFromSuperview() }
         headers.forEach { $0.removeFromSuperview() }
         emptyLabel?.removeFromSuperview()
+        rebuildingRows = false
         rows = []; headers = []
         let active = model.editor.activeFilePath
         for item in pl {
@@ -429,8 +441,9 @@ final class SidebarView: FlippedView, NSTextFieldDelegate {
                 guard ri < rows.count else { continue }
                 rows[ri].frame = CGRect(x: 0, y: item.y, width: w, height: 32)
                 if let f = rows[ri].renameField {
-                    let x = rows[ri].labelX
-                    f.frame = CGRect(x: x, y: 7, width: w - x - 8, height: 18)
+                    let x = rows[ri].labelX - 4
+                    let h = ceil(f.intrinsicContentSize.height)
+                    f.frame = CGRect(x: x, y: ((rows[ri].frame.height - h) / 2).rounded(), width: w - x - 8, height: h)
                 }
                 ri += 1
             case .empty:
@@ -448,9 +461,14 @@ final class SidebarView: FlippedView, NSTextFieldDelegate {
 
     // MARK: rename
 
+    private var renameDraft: (path: String, text: String, selection: NSRange?)?
+    private var rebuildingRows = false
+
     private func attachRenameField(_ row: SidebarRowView, _ entry: DirEntry) {
         let f = RenameField()
-        f.stringValue = entry.isDir ? entry.name : LinkPaths.getFileStem(entry.name)
+        let draft = renameDraft?.path == entry.path ? renameDraft : nil
+        renameDraft = nil
+        f.stringValue = draft?.text ?? (entry.isDir ? entry.name : LinkPaths.getFileStem(entry.name))
         f.font = UIFonts.ui(model.values)
         f.isBordered = true
         f.bezelStyle = .roundedBezel
@@ -462,7 +480,11 @@ final class SidebarView: FlippedView, NSTextFieldDelegate {
         DispatchQueue.main.async { [weak f] in
             guard let f = f, let w = f.window else { return }
             w.makeFirstResponder(f)
-            f.currentEditor()?.selectAll(nil)
+            if let sel = draft?.selection, sel.location + sel.length <= (f.stringValue as NSString).length {
+                f.currentEditor()?.selectedRange = sel
+            } else {
+                f.currentEditor()?.selectAll(nil)
+            }
         }
     }
 
@@ -485,6 +507,8 @@ final class SidebarView: FlippedView, NSTextFieldDelegate {
 
     func controlTextDidEndEditing(_ obj: Notification) {
         guard let f = obj.object as? RenameField, let e = f.entry else { return }
+        // the sidebar is rebuilding / the field was removed with its row: the rename carries on in the new row
+        if rebuildingRows || f.superview?.window == nil { return }
         if renameCommitted { renameCommitted = false; return }
         model.submitRename(e, f.stringValue)
     }
@@ -494,7 +518,29 @@ final class SidebarView: FlippedView, NSTextFieldDelegate {
     struct DragState { var entries: [DirEntry]; var start: CGPoint; var active: Bool; var dest: String? }
     var dragState: DragState?
 
+    /// Finder's rename click: a single click on the item that's already selected (the open note, or the
+    /// folder clicked a moment ago) renames it after the double-click interval, unless a double click
+    /// or another click comes first.
+    private var lastTreeClick: (path: String, time: TimeInterval)?
+    private var armedRename: String?
+    private var pendingRename: DispatchWorkItem?
+
+    private func isRenameClick(_ e: DirEntry, _ event: NSEvent) -> Bool {
+        guard event.clickCount == 1 else { return false }
+        let now = ProcessInfo.processInfo.systemUptime
+        let last = lastTreeClick?.path == e.path ? lastTreeClick?.time : nil
+        if let t = last, now - t <= NSEvent.doubleClickInterval { return false }   // that's a double click
+        if e.isDir { return last.map { now - $0 < 5 } ?? false }
+        return e.path == model.editor.activeFilePath
+    }
+
     func rowMouseDown(_ row: SidebarRowView, _ event: NSEvent) {
+        pendingRename?.cancel(); pendingRename = nil
+        armedRename = nil
+        if case let .entry(e, .tree) = row.kind, model.selectedPaths.count <= 1,
+           event.modifierFlags.intersection([.shift, .command, .control]).isEmpty, isRenameClick(e, event) {
+            armedRename = e.path
+        }
         switch row.kind {
         case .switcher:
             showWorkspaceMenu(from: row)
@@ -527,6 +573,12 @@ final class SidebarView: FlippedView, NSTextFieldDelegate {
         let local = document.convert(p, from: nil)
         let target = rows.first { $0.frame.contains(local) && { if case .entry(_, .tree) = $0.kind { return true }; return false }($0) }?.entry
         if let root = model.root { d.dest = TreeMove.resolveDropDir(target, root: root) }
+        // highlight the folder it would land in (none for the workspace root, or a move that isn't allowed)
+        let valid = d.dest.map { dest in d.entries.contains { TreeMove.canMoveInto($0.path, isDir: $0.isDir, destDir: dest) } } ?? false
+        for r in rows {
+            guard case .entry(let e, .tree) = r.kind else { continue }
+            r.isDropTarget = valid && e.isDir && e.path == d.dest
+        }
         // auto-scroll within 28px of the edges
         let inScroll = scroll.convert(p, from: nil)
         if inScroll.y < 28 { document.scroll(CGPoint(x: 0, y: max(0, scroll.documentVisibleRect.minY - 8))) }
@@ -538,7 +590,7 @@ final class SidebarView: FlippedView, NSTextFieldDelegate {
         defer { dragState = nil }
         if let d = dragState, d.active {
             NSCursor.pop()
-            rows.forEach { $0.isDragging = false }
+            rows.forEach { $0.isDragging = false; $0.isDropTarget = false }
             if let dest = d.dest {
                 var failures: [String] = []
                 for e in d.entries where TreeMove.canMoveInto(e.path, isDir: e.isDir, destDir: dest) {
@@ -562,6 +614,17 @@ final class SidebarView: FlippedView, NSTextFieldDelegate {
             if section == .tree {
                 let mods = event.modifierFlags
                 if mods.contains(.shift) || mods.contains(.command) || mods.contains(.control) { return }
+                defer { lastTreeClick = (e.path, ProcessInfo.processInfo.systemUptime) }
+                if armedRename == e.path {
+                    armedRename = nil
+                    let work = DispatchWorkItem { [weak self] in
+                        guard let self, self.model.renamingPath == nil else { return }
+                        self.model.renamingPath = e.path
+                    }
+                    pendingRename = work
+                    DispatchQueue.main.asyncAfter(deadline: .now() + NSEvent.doubleClickInterval, execute: work)
+                    if e.isDir { return }   // the rename click doesn't fold / unfold the folder
+                }
                 model.clickTreeRow(e)
             } else {
                 // Pinned/Recents: navigate in place (openFile).
@@ -594,6 +657,70 @@ final class SidebarView: FlippedView, NSTextFieldDelegate {
     func showWorkspaceMenu(from row: SidebarRowView) {
         let menu = ShellMenus.workspaceMenu(model: model)
         menu.popUp(positioning: nil, at: CGPoint(x: 0, y: -4), in: row)
+    }
+
+    // MARK: files dropped from outside (Finder, desktop, mail…)
+
+    private func externalPaths(_ info: NSDraggingInfo) -> [String] {
+        guard info.draggingSource == nil || (info.draggingSource as AnyObject?)?.window != window else { return [] }
+        return (info.draggingPasteboard.readObjects(forClasses: [NSURL.self], options: [.urlReadingFileURLsOnly: true]) as? [URL] ?? []).map { $0.path }
+    }
+
+    /// The folder a drop at `info`'s location lands in (the folder row under it, a file's folder, else the root).
+    func dropFolder(at pointInWindow: CGPoint) -> String? {
+        guard let root = model.root else { return nil }
+        let local = document.convert(pointInWindow, from: nil)
+        let target = rows.first { $0.frame.contains(local) && { if case .entry(_, .tree) = $0.kind { return true }; return false }($0) }?.entry
+        return TreeMove.resolveDropDir(target, root: root)
+    }
+
+    private func highlightDrop(_ folder: String?) {
+        for r in rows {
+            guard case .entry(let e, .tree) = r.kind else { continue }
+            r.isDropTarget = folder != nil && e.isDir && e.path == folder
+        }
+    }
+
+    override func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation { draggingUpdated(sender) }
+
+    override func draggingUpdated(_ sender: NSDraggingInfo) -> NSDragOperation {
+        guard !externalPaths(sender).isEmpty, let dest = dropFolder(at: sender.draggingLocation) else { highlightDrop(nil); return [] }
+        highlightDrop(dest)
+        return .copy
+    }
+
+    override func draggingExited(_ sender: NSDraggingInfo?) { highlightDrop(nil) }
+
+    override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
+        defer { highlightDrop(nil) }
+        let paths = externalPaths(sender)
+        guard !paths.isEmpty, let dest = dropFolder(at: sender.draggingLocation) else { return false }
+        copyIn(paths, to: dest)
+        return true
+    }
+
+    /// Copy files / folders into `dest`; a name that's taken gets " 2", " 3"… (Finder-style).
+    func copyIn(_ paths: [String], to dest: String) {
+        var failures: [String] = []
+        for src in paths {
+            let name = (src as NSString).lastPathComponent
+            var isDir: ObjCBool = false
+            FileManager.default.fileExists(atPath: src, isDirectory: &isDir)
+            let ext = isDir.boolValue ? "" : (name as NSString).pathExtension
+            let stem = isDir.boolValue || ext.isEmpty ? name : (name as NSString).deletingPathExtension
+            do {
+                let target = FileManager.default.fileExists(atPath: dest + "/" + name)
+                    ? try WorkspaceFS.uniqueName(in: dest, base: stem, ext: ext.isEmpty ? "" : "." + ext)
+                    : dest + "/" + name
+                try FileManager.default.copyItem(atPath: src, toPath: target)
+                if isDir.boolValue { model.createdFolders.insert(target) }
+            } catch {
+                failures.append("\(name): \(error.localizedDescription)")
+            }
+        }
+        if let root = model.root, dest != root, !model.isExpanded(dest) { model.toggleDirectory(dest) }
+        model.refreshDirectory(dest)
+        if !failures.isEmpty { model.alert(L("Failed to copy:") + "\n" + failures.joined(separator: "\n")) }
     }
 
     // MARK: dump

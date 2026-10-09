@@ -228,7 +228,7 @@ final class AppSettingsSchemaTests: XCTestCase {
         XCTAssertEqual(d["editor.line-height"], .number(1.5))
         XCTAssertEqual(d["editor.subheading-color"], .string("#3a3a3a"))
         XCTAssertEqual(d["appearance.theme"], .string("system"))
-        XCTAssertEqual(d["files.associations"], .list(["*.md", "*.mdx", "*.markdown", "*.csv"]))
+        XCTAssertEqual(d["files.associations"], .list(["*.md", "*.mdx", "*.markdown", "*.csv", "*.pdf"]))
         XCTAssertEqual(d["files.insert-final-newline"], .bool(true))
         XCTAssertEqual(d["files.trim-trailing-whitespace"], .bool(false))
         XCTAssertEqual(d["theme.light.preset"], .string("Writer"))

@@ -206,7 +206,7 @@ final class AppSupportedExtensionsTests: XCTestCase {
         XCTAssertTrue(SupportedExtensions(patterns: ["nonsense"]).isSupported("a.md"))
         XCTAssertFalse(d.isSupported(".md"), "dotfile has no extension")
         XCTAssertFalse(d.isSupported("/x/README"))
-        XCTAssertEqual(SupportedExtensions.schemaDefault.extensions, ["md", "mdx", "markdown", "csv"])
+        XCTAssertEqual(SupportedExtensions.schemaDefault.extensions, ["md", "mdx", "markdown", "csv", "pdf"])
         XCTAssertTrue(SupportedExtensions(patterns: [" *.md "]).isSupported("x.md"))
     }
 }
@@ -219,8 +219,8 @@ final class AppNamingAndImageTests: XCTestCase {
         XCTAssertEqual(try WorkspaceFS.newFilePath(in: "/w", exists: existing.contains), "/w/Untitled 2.md")
         existing = ["/w/Untitled.md", "/w/Untitled 2.md", "/w/Untitled 3.md"]
         XCTAssertEqual(try WorkspaceFS.newFilePath(in: "/w", exists: existing.contains), "/w/Untitled 4.md")
-        XCTAssertEqual(try WorkspaceFS.newFolderPath(in: "/w", exists: { _ in false }), "/w/Untitled Folder")
-        XCTAssertEqual(try WorkspaceFS.newFolderPath(in: "/w", exists: { $0 == "/w/Untitled Folder" }), "/w/Untitled Folder 2")
+        XCTAssertEqual(try WorkspaceFS.newFolderPath(in: "/w", exists: { _ in false }), "/w/New Folder")
+        XCTAssertEqual(try WorkspaceFS.newFolderPath(in: "/w", exists: { $0 == "/w/New Folder" }), "/w/New Folder 2")
         XCTAssertThrowsError(try WorkspaceFS.newFilePath(in: "/w", exists: { _ in true }))
     }
 

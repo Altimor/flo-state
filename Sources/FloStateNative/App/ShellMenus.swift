@@ -38,6 +38,7 @@ enum ShellMenus {
             ClosureMenuItem(L("Open in new window")) { model.openCompactWindow(entry.path) },
             ClosureMenuItem(isPinned ? L("Unpin") : L("Pin")) { model.togglePinned(entry.path) },
             .separator(),
+            ClosureMenuItem(L("New Folder")) { model.createFolderInFolder(LinkPaths.getParentDir(entry.path)) },
             ClosureMenuItem(L("Duplicate")) { Task { await model.duplicate(entry.path) } },
             .separator(),
             ClosureMenuItem(L("Copy relative path")) { model.copyToPasteboard(model.relativePath(entry.path)) },
@@ -91,10 +92,20 @@ enum ShellMenus {
         ])
     }
 
-    /// Right-click on empty sidebar space: Search / Recents check items.
+    /// Right-click on empty sidebar space: New File / New Folder / Open in Finder (the workspace root) |
+    /// Search / Recents check items.
     static func sidebarSurfaceMenu(model: ShellModel) -> NSMenu {
         let v = model.values
-        return menu([
+        var root: [NSMenuItem] = []
+        if let r = model.root {
+            root = [
+                ClosureMenuItem(L("New File")) { model.createFileInFolder(r) },
+                ClosureMenuItem(L("New Folder")) { model.createFolderInFolder(r) },
+                ClosureMenuItem(L("Open in Finder")) { NSWorkspace.shared.open(URL(fileURLWithPath: r)) },
+                .separator(),
+            ]
+        }
+        return menu(root + [
             ClosureMenuItem(L("Search"), checked: v.appearanceSidebarShowSearch) { model.setSetting("appearance.sidebar-show-search", .bool(!v.appearanceSidebarShowSearch)) },
             ClosureMenuItem(L("Recents"), checked: v.appearanceSidebarShowRecents) { model.setSetting("appearance.sidebar-show-recents", .bool(!v.appearanceSidebarShowRecents)) },
         ])

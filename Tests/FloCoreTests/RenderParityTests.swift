@@ -132,8 +132,18 @@ final class RenderParityTests: XCTestCase {
                 if let pb = prevBottom, top - pb > 100 { continue }
                 if f <= t { for i in f..<min(t, units.count) { rendered[i] = true } }
             }
+            // Intentional divergence: tables stay rendered (the table editor) with the caret inside;
+            // the web app showed their source
+            var tableTouched = [Bool](repeating: false, count: units.count)
+            state.tree.iterate(enter: { n, _ in
+                guard n.name == "Table" else { return true }
+                if state.selection.ranges.contains(where: { $0.from <= n.to && $0.to >= n.from }) {
+                    for i in n.from..<min(n.to, units.count) { tableTouched[i] = true }
+                }
+                return false
+            })
             for (pos, raw) in chars.enumerated() {
-                if units[pos] == 10 || !rendered[pos] { continue } // newlines / offscreen / block widgets
+                if units[pos] == 10 || !rendered[pos] || tableTouched[pos] { continue } // newlines / offscreen / block widgets
                 // WebKit reports the first char after a soft wrap as a collapsed (zero-width,
                 // "invisible") rect at the end of the previous row: a measuring artifact, not a style
                 if let r = raw as? [Any], r.count > 4, (r[1] as? NSNumber)?.intValue == 0,

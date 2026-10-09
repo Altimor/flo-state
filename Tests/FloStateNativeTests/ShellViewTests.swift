@@ -122,6 +122,119 @@ final class ShellViewTests: XCTestCase {
 
     var pane: EditorPaneView? { wc.root.area.activeFilePane }
 
+    /// New Folder: the row comes up with its name field focused, and stays in rename mode when the
+    /// sidebar rebuilds (the file watcher does right after); typing then names it.
+    func testNewFolderStaysInRenameModeAcrossRebuilds() async throws {
+        await make(["a.md": "# A\n"])
+        f.model.createFolderInFolder(f.root)
+        refresh()
+        RunLoop.main.run(until: Date().addingTimeInterval(0.1))
+        func field() -> RenameField? { wc.root.sidebar.rows.compactMap { $0.renameField as? RenameField }.first }
+        let first = try XCTUnwrap(field(), "rename field shown")
+        first.stringValue = "Proj"
+        // a rebuild (file watcher, any sidebar notify) must not commit the default name
+        wc.root.sidebar.reload()
+        RunLoop.main.run(until: Date().addingTimeInterval(0.1))
+        let again = try XCTUnwrap(field(), "still renaming after a rebuild")
+        XCTAssertEqual(again.stringValue, "Proj", "what was typed is kept")
+        XCTAssertNotNil(f.model.renamingPath)
+        f.model.submitRename(again.entry!, "Projects")
+        XCTAssertTrue(FileManager.default.fileExists(atPath: f.p("Projects")))
+        refresh()
+        XCTAssertTrue(wc.root.sidebar.rows.contains { $0.label == "Projects" }, "the renamed empty folder stays in the sidebar")
+        // the next New Folder starts as "New Folder", not the name typed for the previous one
+        f.model.createFolderInFolder(f.root)
+        refresh()
+        RunLoop.main.run(until: Date().addingTimeInterval(0.1))
+        let next = try XCTUnwrap(field())
+        XCTAssertEqual(next.stringValue, "New Folder")
+        // the field is centred in its row and tall enough for the text
+        let row = try XCTUnwrap(next.superview)
+        XCTAssertEqual(next.frame.midY, row.bounds.midY, accuracy: 1)
+        XCTAssertGreaterThanOrEqual(next.frame.height, ceil(next.intrinsicContentSize.height))
+    }
+
+    /// Rename with Return (the real key path, not submitRename directly) sticks, for a note and a new folder.
+    func testRenameWithReturnSticks() async throws {
+        await make(["a.md": "# A\n", "d/b.md": "# B\n"])
+        func field() -> RenameField? { wc.root.sidebar.rows.compactMap { $0.renameField as? RenameField }.first }
+        func pressReturn(_ name: String) throws {
+            let fld = try XCTUnwrap(field(), "rename field shown")
+            fld.stringValue = name
+            _ = wc.root.sidebar.control(fld, textView: NSTextView(), doCommandBy: #selector(NSResponder.insertNewline(_:)))
+            refresh()
+            RunLoop.main.run(until: Date().addingTimeInterval(0.2))
+            refresh()
+        }
+        f.model.renamingPath = f.p("a.md")
+        refresh()
+        try pressReturn("Alpha")
+        XCTAssertTrue(FileManager.default.fileExists(atPath: f.p("Alpha.md")))
+        XCTAssertTrue(wc.root.sidebar.rows.contains { $0.label == "Alpha" }, "\(wc.root.sidebar.rows.map { $0.label })")
+        XCTAssertNil(field())
+        f.model.createFolderInFolder(f.root)
+        refresh()
+        RunLoop.main.run(until: Date().addingTimeInterval(0.1))
+        try pressReturn("Folder B")
+        XCTAssertTrue(FileManager.default.fileExists(atPath: f.p("Folder B")))
+        XCTAssertTrue(wc.root.sidebar.rows.contains { $0.label == "Folder B" }, "\(wc.root.sidebar.rows.map { $0.label })")
+        // renaming again starts from the current name, not a leftover draft
+        f.model.renamingPath = f.p("Folder B")
+        refresh()
+        RunLoop.main.run(until: Date().addingTimeInterval(0.1))
+        XCTAssertEqual(field()?.stringValue, "Folder B")
+    }
+
+    /// Files dropped from Finder onto a sidebar folder are copied into it (a taken name gets " 2").
+    func testDropFilesFromOutsideCopiesIntoTheFolder() async throws {
+        await make(["a.md": "# A\n", "d/b.md": "# B\n"])
+        let outside = FileManager.default.temporaryDirectory.appendingPathComponent("flo-drop-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: outside, withIntermediateDirectories: true)
+        let note = outside.appendingPathComponent("notes.md").path
+        try "# Notes\n".write(toFile: note, atomically: true, encoding: .utf8)
+        let sb = wc.root.sidebar
+        sb.copyIn([note], to: f.p("d"))
+        sb.copyIn([note], to: f.p("d"))
+        XCTAssertTrue(FileManager.default.fileExists(atPath: f.p("d/notes.md")))
+        XCTAssertTrue(FileManager.default.fileExists(atPath: f.p("d/notes 2.md")))
+        XCTAssertTrue(FileManager.default.fileExists(atPath: note), "copied, not moved")
+        refresh()
+        XCTAssertTrue(f.model.isExpanded(f.p("d")), "the folder opens to show what was dropped")
+        // the drop lands in the folder whose row is under the pointer
+        let row = try XCTUnwrap(sb.rows.first { $0.entry?.path == f.p("d") })
+        let p = row.convert(CGPoint(x: row.bounds.midX, y: row.bounds.midY), to: nil)
+        XCTAssertEqual(sb.dropFolder(at: p), f.p("d"))
+    }
+
+    /// Finder's rename click: clicking the already-open note again (slowly) starts renaming it; a
+    /// double click doesn't.
+    func testSlowSecondClickRenames() async throws {
+        await make(["a.md": "# A\n", "b.md": "# B\n"])
+        let sb = wc.root.sidebar
+        func row(_ path: String) -> SidebarRowView { sb.rows.first { $0.entry?.path == path }! }
+        func click(_ path: String, count: Int = 1) {
+            let r = row(path)
+            let p = r.convert(CGPoint(x: r.bounds.midX, y: r.bounds.midY), to: nil)
+            let mk = { (t: NSEvent.EventType) in NSEvent.mouseEvent(with: t, location: p, modifierFlags: [], timestamp: 0, windowNumber: r.window!.windowNumber,
+                                                                     context: nil, eventNumber: 0, clickCount: count, pressure: 1)! }
+            sb.rowMouseDown(r, mk(.leftMouseDown)); sb.rowMouseUp(r, mk(.leftMouseUp))
+        }
+        func wait(_ s: Double) async { try? await Task.sleep(nanoseconds: UInt64(s * 1e9)); refresh() }
+        click(f.p("a.md"))                   // opens it
+        await wait(0.3)
+        XCTAssertNil(f.model.renamingPath)
+        await wait(NSEvent.doubleClickInterval)
+        click(f.p("a.md"))                   // slow second click on the open note
+        await wait(NSEvent.doubleClickInterval + 0.2)
+        XCTAssertEqual(f.model.renamingPath, f.p("a.md"))
+        f.model.renamingPath = nil
+        refresh()
+        // a fast double click on another note opens it, no rename
+        click(f.p("b.md")); click(f.p("b.md"), count: 2)
+        await wait(NSEvent.doubleClickInterval + 0.2)
+        XCTAssertNil(f.model.renamingPath)
+    }
+
     func testTypingAutosavesToDisk() async {
         await make(["a.md": "# A\n\nhello"])
         await openTab("a.md")

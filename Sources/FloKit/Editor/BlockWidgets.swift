@@ -13,7 +13,7 @@ extension EditorController {
             switch w.kind {
             case .htmlBlock:
                 if w.from <= line.to && w.to >= line.from { return (w.to, w.from) }
-            case .table, .mermaid, .math(_, true):
+            case .mermaid, .math(_, true):   // tables: the table editor handles its own clicks
                 if w.from <= line.to && w.to >= line.from { return (w.from, w.to) }
             default: break
             }

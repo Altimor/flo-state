@@ -155,9 +155,17 @@ public final class WorkspaceWatcherModel {
                     }
                     out.append(.fileChanged(path: path, kind: kind))
                 }
-                guard event.isMembershipChange else { continue }
                 let supported = extensions.isSupported(path)
                 let pathExists = exists(path)
+                // Finder copies arrive as created+modified in one coalesced event, which reads as a plain
+                // modification: a supported file (or folder) the index doesn't know yet is new all the same,
+                // or copied-in notes stayed out of the index and their folder stayed hidden in the sidebar
+                var membership = event.isMembershipChange
+                if !membership, pathExists, let index = index {
+                    if !isDir { membership = supported && !index.contains(path) }
+                    else { membership = !index.dirsWithSupportedFiles.contains(path) }
+                }
+                guard membership else { continue }
                 if let index = index {
                     if supported {
                         if pathExists { index.add(path, modifiedAt: modifiedTime(path)) } else { index.remove(path) }

@@ -149,6 +149,8 @@ final class PasteMenuTests: XCTestCase {
         var out: [[String?]] = []
         for it in m.items {
             if it.isSeparatorItem { out.append(["Predefined", "Separator", nil, nil]); continue }
+            // Intentional divergence: Insert ▸ Table is a size picker (the web app inserted a 3×3 table)
+            if it.submenu?.items.first?.view is TableSizePicker { continue }
             if let sub = it.submenu { out += flatten(sub); continue }
             var acc: String? = nil
             if !it.keyEquivalent.isEmpty {
@@ -184,6 +186,7 @@ final class PasteMenuTests: XCTestCase {
             let menu = c.features.buildMenu(linkHref: href)
             // web: children are created before their submenu; compare the items in order
             let web = (m["items"] as! [[Any]]).filter { ($0[0] as! String) == "MenuItem" || ($0[0] as! String) == "Predefined" }
+                .filter { ($0[1] as? String) != "ins.table" }
                 .map { e -> [String?] in [e[0] as? String, (e[1] as? String).map { Self.idMap[$0] ?? $0 }, e[2] as? String, e[3] as? String] }
             XCTAssertEqual(flatten(menu).map { $0.map { $0 ?? "-" } }, web.map { $0.map { $0 ?? "-" } }, label)
             XCTAssertEqual(menu.items.compactMap { $0.submenu?.title }, ["Format", "Paragraph", "Insert"])
@@ -286,5 +289,40 @@ final class PasteMenuTests: XCTestCase {
         XCTAssertEqual(c.features.findOverlay!.counterText, "1/2")
         c.load("aa aa aa", selection: .cursor(0))
         XCTAssertEqual(c.features.findOverlay!.counterText, "1/3")
+    }
+}
+
+@MainActor
+final class PasteLinkTests: XCTestCase {
+    func run(_ doc: String, select: String, paste: String) -> String {
+        let r = KeyReplayer()
+        let ns = doc as NSString
+        let range = ns.range(of: select)
+        r.load(doc, selection: range.location == NSNotFound ? .cursor(0) : .single(range.location, range.location + range.length))
+        r.controller.features.paste(PastePayload(plain: paste))
+        return r.doc
+    }
+
+    func testPastingAURLOverSelectedTextLinksIt() {
+        XCTAssertEqual(run("read the docs today", select: "the docs", paste: "https://example.com/a?b=1"),
+                       "read [the docs](https://example.com/a?b=1) today")
+        XCTAssertEqual(run("mail me", select: "me", paste: " mailto:someone@example.com \n"), "mail [me](mailto:someone@example.com)")
+    }
+
+    func testOtherPastesStayPlain() {
+        XCTAssertEqual(run("read the docs", select: "the docs", paste: "not a link"), "read not a link")
+        XCTAssertEqual(run("go https://old.example", select: "https://old.example", paste: "https://new.example"), "go https://new.example")
+        XCTAssertEqual(run("abc", select: "zzz", paste: "https://example.com"), "https://example.comabc", "no selection: plain paste")
+        XCTAssertEqual(run("two\nlines", select: "two\nlines", paste: "https://example.com"), "https://example.com")
+    }
+}
+
+@MainActor
+final class PasteLinkBulletTests: XCTestCase {
+    func testPasteLinkOverWholeBulletLine() {
+        let r = KeyReplayer()
+        r.load("- item text", selection: .single(0, 11))
+        r.controller.features.paste(PastePayload(plain: "https://example.com"))
+        XCTAssertEqual(r.doc, "- [item text](https://example.com)")
     }
 }

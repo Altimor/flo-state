@@ -14,8 +14,11 @@ public enum RenderPlanner {
     /// Width of one list indent step in `ch` (LIST_UNIT_CH in list/index.ts).
     public static let listUnitCh: Double = 3
 
-    public static func plan(_ state: EditorState) -> RenderPlan {
+    /// `markdownTables`: start offsets of tables shown as markdown source; every other table is
+    /// the table editor (rendered whatever the selection).
+    public static func plan(_ state: EditorState, markdownTables: Set<Int> = []) -> RenderPlan {
         var p = Planner(state: state, from: 0, to: state.doc.length)
+        p.markdownTables = markdownTables
         p.run()
         return p.finish()
     }
@@ -23,8 +26,9 @@ public enum RenderPlanner {
     /// Plan only [from, to) — both at line starts (or doc end) on top-level
     /// block boundaries, where planning is independent of the rest. Runs and
     /// widgets use document positions; `lines` holds the region's lines only.
-    public static func plan(_ state: EditorState, from: Int, to: Int) -> RenderPlan {
+    public static func plan(_ state: EditorState, from: Int, to: Int, markdownTables: Set<Int> = []) -> RenderPlan {
         var p = Planner(state: state, from: from, to: to)
+        p.markdownTables = markdownTables
         p.run()
         return p.finish()
     }
@@ -53,6 +57,7 @@ struct Planner {
     let base: Int, end: Int
     let firstLine: Int, lastLine: Int
     var widgets: [Widget] = []
+    var markdownTables = Set<Int>()
     var revealedHashLines = Set<Int>()
     /// Line numbers touched by any selection range.
     let selectionLines: [(Int, Int)]
@@ -427,7 +432,8 @@ struct Planner {
                 // parseMarkdownTable failing (bad delimiter row) → no decoration at all
                 let source = doc.slice(n.from, n.to)
                 guard ParsedTable.parse(source) != nil else { return true }
-                if touched {
+                // the table editor unless this table was switched to markdown
+                if markdownTables.contains(n.from) {
                     for l in first...last { lines[l - 1].kind = .tableSource(first: l == first, last: l == last) }
                     apply(doc.line(first).from, doc.line(last).to) { $0.mono = true }
                 } else {

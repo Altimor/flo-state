@@ -61,9 +61,39 @@ extension EditorFeatures {
     /// The paste handler chain.
     public func paste(_ p: PastePayload) {
         if pasteFrontmatter(p) { return }
+        if pasteLinkOverSelection(p) { return }
         if let img = p.image { pasteImage(img.data, format: img.format, name: img.name); return }
         if pasteRichText(p) { return }
         pastePlain(p.plain ?? "")
+    }
+
+    /// A URL pasted over selected text links the text: `[selection](url)`. Single-line selections only,
+    /// and not when the selection is itself a URL (then the paste just replaces it).
+    func pasteLinkOverSelection(_ p: PastePayload) -> Bool {
+        guard let raw = p.plain?.trimmingCharacters(in: .whitespacesAndNewlines), let url = Self.pastedURL(raw) else { return false }
+        let st = editor.state
+        let sel = st.selection.main
+        guard st.selection.ranges.count == 1, !sel.empty else { return false }
+        // only the line's text: a Shift-Cmd-Left selection includes the bullet / heading prefix
+        guard let span = Formatting.textSpan(st, sel.from, sel.to) else { return false }
+        let text = st.sliceDoc(span.from, span.to)
+        guard Self.pastedURL(text) == nil else { return false }
+        let md = "[\(text)](\(LinkPaths.formatMarkdownDestination(url)))"
+        editor.run { t in
+            t.dispatch(TransactionSpec(changes: [Change(from: span.from, to: span.to, insert: md)],
+                                       selection: .cursor(span.from + md.utf16.count), userEvent: "input.paste"))
+            return true
+        }
+        return true
+    }
+
+    /// A pasted string that is exactly one web / mail URL.
+    static func pastedURL(_ s: String) -> String? {
+        guard !s.isEmpty, !s.contains(where: { $0.isWhitespace }) else { return nil }
+        let lower = s.lowercased()
+        guard lower.hasPrefix("http://") || lower.hasPrefix("https://") || lower.hasPrefix("mailto:"),
+              let u = URL(string: s), u.scheme != nil, lower.hasPrefix("mailto:") || u.host != nil else { return nil }
+        return s
     }
 
     /// `handleFrontmatterPaste`.

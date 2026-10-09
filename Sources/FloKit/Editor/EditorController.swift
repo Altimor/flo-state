@@ -115,6 +115,8 @@ public final class EditorController: NSObject, NSTextViewDelegate, NSTextLayoutM
     private var editedLines: ClosedRange<Int>?
     private var suppressSync = false
     private var pendingEdit: (range: NSRange, delta: Int)?
+    /// Caret before the last render (which way it was moving, to step over rendered tables).
+    var tableEscapeLastHead = 0
     public var renderCount = 0
     static let trace = ProcessInfo.processInfo.environment["PERF_TRACE"] != nil
     /// (parse, plan, signatures, apply) seconds per render when PERF_TRACE is set
@@ -446,6 +448,7 @@ public final class EditorController: NSObject, NSTextViewDelegate, NSTextLayoutM
         lineSigs = newSigs
         plan = newPlan
         renderCount += 1
+        afterRenderTables()
     }
 
     // MARK: state <-> text storage
@@ -466,14 +469,22 @@ public final class EditorController: NSObject, NSTextViewDelegate, NSTextLayoutM
     public func textDidChange(_ notification: Notification) {
         guard !suppressSync, let edit = pendingEdit, let storage = textView.textStorage else { return }
         pendingEdit = nil
-        let insert = (storage.string as NSString).substring(with: edit.range)
-        let oldTo = edit.range.location + edit.range.length - edit.delta
+        // whole characters only: a range cutting an emoji in half becomes U+FFFD as a Swift String
+        let ns = storage.string as NSString
+        var range = edit.range
+        if range.location > 0, range.location < ns.length, (0xDC00...0xDFFF).contains(ns.character(at: range.location)) {
+            range.location -= 1; range.length += 1
+        }
+        let end = range.location + range.length
+        if end > 0, end < ns.length, (0xD800...0xDBFF).contains(ns.character(at: end - 1)) { range.length += 1 }
+        let insert = ns.substring(with: range)
+        let oldTo = range.location + range.length - edit.delta
         let sel = nativeSelection()
         session.env.time = Date().timeIntervalSince1970 * 1000
-        session.dispatch(TransactionSpec(changes: [Change(from: edit.range.location, to: oldTo, insert: insert)],
+        session.dispatch(TransactionSpec(changes: [Change(from: range.location, to: oldTo, insert: insert)],
                                          selection: sel, userEvent: nativeUserEvent))
         nativeUserEvent = "input"
-        markEdited(from: edit.range.location, to: edit.range.location + edit.range.length, in: session.state.doc)
+        markEdited(from: range.location, to: range.location + range.length, in: session.state.doc)
         if session.state.doc.length != storage.length {
             // a filter rejected the edit: put the text view back in sync
             resyncStorage()
@@ -629,6 +640,10 @@ public final class EditorController: NSObject, NSTextViewDelegate, NSTextLayoutM
             var suffix = 0
             while suffix < old.count - prefix, suffix < new.count - prefix,
                   old[old.count - 1 - suffix] == new[new.count - 1 - suffix] { suffix += 1 }
+            // never cut a surrogate pair: emoji that share a high surrogate (🟢 D83D DFE2 → 🔴 D83D DD34)
+            // left a lone low surrogate as the insert, which the text view stored as U+FFFD ("��")
+            if prefix > 0, (0xD800...0xDBFF).contains(new[prefix - 1]) { prefix -= 1 }
+            if suffix > 0, (0xDC00...0xDFFF).contains(new[new.count - suffix]) { suffix -= 1 }
             let range = NSRange(location: prefix, length: old.count - prefix - suffix)
             let insert = String(utf16CodeUnits: Array(new[prefix..<(new.count - suffix)]), count: new.count - suffix - prefix)
             markEdited(from: prefix, to: new.count - suffix, in: next.doc)

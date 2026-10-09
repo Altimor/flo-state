@@ -956,3 +956,30 @@
 "Opening notes" = "فتح الملاحظات";
 "Tip: ⌘. checks or unchecks the item the cursor is on" = "تلميح: ⌘. يحدد العنصر الذي عليه المؤشر أو يلغي تحديده";
 "Headings only" = "العناوين فقط";
+
+/* Table editor */
+"Insert Row Above" = "إدراج صف أعلى";
+"Insert Row Below" = "إدراج صف أسفل";
+"Insert Column Left" = "إدراج عمود إلى اليسار";
+"Insert Column Right" = "إدراج عمود إلى اليمين";
+"Delete Row" = "حذف الصف";
+"Delete Column" = "حذف العمود";
+"Align Column" = "محاذاة العمود";
+"Left" = "يسار";
+"Center" = "وسط";
+"Right" = "يمين";
+"Reset Column Widths" = "إعادة تعيين عرض الأعمدة";
+"Edit as Markdown" = "تحرير كـ Markdown";
+"Delete Table" = "حذف الجدول";
+"Edit as Table" = "تحرير كجدول";
+"Open in Finder" = "فتح في Finder";
+"Failed to copy:" = "تعذر النسخ:";
+
+/* PDF viewer */
+"Zoom Out" = "تصغير";
+"Zoom In" = "تكبير";
+"Fit Width" = "ملاءمة العرض";
+"Previous Page" = "الصفحة السابقة";
+"Next Page" = "الصفحة التالية";
+"Fit" = "ملاءمة";
+"Actual Size" = "الحجم الفعلي";

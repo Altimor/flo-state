@@ -22,15 +22,21 @@ final class PlanCache {
     }
 
     func reset() { plan = nil; last = nil }
+    /// Start offsets of the tables shown as markdown (the rest are table editors). Mapped through
+    /// edits in `update`; changing it needs a full re-plan (`invalidated`).
+    var markdownTables = Set<Int>()
     /// Why the last update re-planned the whole document (nil: it was incremental).
     private(set) var fullReason: String?
 
     func update(_ state: EditorState) -> Update {
         defer { last = state; invalidated = false }
+        if !markdownTables.isEmpty, let prev = last, let ch = Self.diff(prev.doc.units, state.doc.units) {
+            markdownTables = Set(markdownTables.map { $0 < ch.a ? $0 : $0 >= ch.bOld ? $0 + ch.bNew - ch.bOld : ch.a })
+        }
         fullReason = nil
         guard !invalidated, let old = plan, let prev = last, prev.markdown == state.markdown else {
             fullReason = "no previous plan"
-            let p = RenderPlanner.plan(state)
+            let p = RenderPlanner.plan(state, markdownTables: markdownTables)
             plan = p
             return Update(plan: p, dirtyLines: nil, lineShift: nil,
                           change: last.flatMap { Self.diff($0.doc.units, state.doc.units) })
@@ -93,7 +99,7 @@ final class PlanCache {
         // A change must sit inside one region (the splice maps old->new around it).
         if let c = change, !merged.contains(where: { $0.0 <= c.a && $0.1 >= c.bNew }) {
             fullReason = "change outside regions \(merged) change \(c)"
-            let p = RenderPlanner.plan(state)
+            let p = RenderPlanner.plan(state, markdownTables: markdownTables)
             plan = p
             return Update(plan: p, dirtyLines: nil, lineShift: nil, change: change)
         }
@@ -147,7 +153,7 @@ final class PlanCache {
         }
         for (rs, re) in merged {
             keep(cursor, rs)
-            let p = RenderPlanner.plan(state, from: rs, to: re)
+            let p = RenderPlanner.plan(state, from: rs, to: re, markdownTables: markdownTables)
             for r in p.runs { appendRun(&runs, r) }
             let firstLine = doc.lineAt(rs).number - 1
             lines.append(contentsOf: p.lines)
@@ -162,13 +168,13 @@ final class PlanCache {
         guard lines.count == doc.lines else {
             // should not happen; stay correct
             fullReason = "line count \(lines.count) != \(doc.lines) regions=\(merged) change=\(String(describing: change)) oldLen=\(prev.doc.length) newLen=\(doc.length) text=\(doc.string.suffix(40).debugDescription)"
-            let p = RenderPlanner.plan(state)
+            let p = RenderPlanner.plan(state, markdownTables: markdownTables)
             plan = p
             return Update(plan: p, dirtyLines: nil, lineShift: nil, change: change)
         }
         let p = RenderPlan(runs: runs, lines: lines, widgets: widgets, lineNumbersWithRevealedHash: hashes)
         plan = p
-        if Self.verify { Self.check(p, against: RenderPlanner.plan(state), state: state, regions: merged) }
+        if Self.verify { Self.check(p, against: RenderPlanner.plan(state, markdownTables: markdownTables), state: state, regions: merged) }
         var shiftInfo: (Int, Int, Int, Int, Int)? = nil
         if let c = change {
             let oldFirst = oldDoc.lineAt(c.a).number - 1
