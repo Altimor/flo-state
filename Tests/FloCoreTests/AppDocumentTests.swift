@@ -456,3 +456,87 @@ final class AppJSONTests: XCTestCase {
         XCTAssertThrowsError(try JSON.parse("[1,]"))
     }
 }
+
+final class HTMLListPasteTests: XCTestCase {
+    func testListOnlySelectionDropsClippedAncestor() {
+        XCTAssertEqual(HTMLToMarkdown.convert("""
+        <meta charset='utf-8'><li><ul><li>Example 1</li>
+        <ul><li>Child</li><ul><li>Grandchild</li></ul></ul>
+        <li>Example 2</li><ul><li>Another child</li></ul></ul></li>
+        """), "- Example 1\n  - Child\n    - Grandchild\n- Example 2\n  - Another child")
+        XCTAssertEqual(HTMLToMarkdown.convert("<li> <ol start='3'><li>Three</li><li>Four</li></ol> </li>"),
+                       "3. Three\n4. Four")
+    }
+
+    func testEmptyItemsInRealListsStayIntact() {
+        XCTAssertEqual(HTMLToMarkdown.convert("<ul><li><ul><li>Child</li></ul></li></ul>"),
+                       "-\n  - Child")
+    }
+
+    func testMixedListsKeepNumberingAndFormatting() {
+        XCTAssertEqual(HTMLToMarkdown.convert("""
+        <ol start="9"><li><b>Nine</b></li>
+        <ul><li><a href="https://example.com">Child</a></li></ul>
+        <li>Ten<ol start="3"><li>Inside</li></ol></li>
+        <ol><li>Beside</li></ol><li>Eleven</li></ol>
+        """), """
+        9. **Nine**
+          - [Child](https://example.com)
+        10. Ten
+          3. Inside
+          1. Beside
+        11. Eleven
+        """)
+    }
+
+    func testStandardNestedListsStillWork() {
+        XCTAssertEqual(HTMLToMarkdown.convert(
+            "<ul><li>Parent<ul><li>Child<ul><li>Grandchild</li></ul></li></ul></li><li>Next</li></ul>"),
+            "- Parent\n  - Child\n    - Grandchild\n- Next")
+    }
+
+    func testPartialEmailListWithoutOuterContainer() {
+        // Exact HTML captured from the partial selection reported in issue #17.
+        let html = """
+        <meta charset='utf-8'><li><li>Example 2: This could be a single line.</li><ul><li>Let's see how much of this is kept when we copy/paste into Flo State</li><ul><li>My thoughts are that this bullet won't make it</li></ul></ul></li>
+        """
+        XCTAssertEqual(HTMLToMarkdown.convert(html), """
+        - Example 2: This could be a single line.
+          - Let's see how much of this is kept when we copy/paste into Flo State
+            - My thoughts are that this bullet won't make it
+        """)
+    }
+
+    func testOrphanItemsKeepListsSeparateFromParagraphs() {
+        XCTAssertEqual(HTMLToMarkdown.convert("<p>Before</p><li>Parent</li> <ol start='3'><li>Child</li></ol><li>Next</li><p>After</p>"),
+                       "Before\n\n- Parent\n  3. Child\n- Next\n\nAfter")
+    }
+
+    func testEmailListsBetweenItemsKeepAllLevels() {
+        // Email editors can place a nested list beside its preceding LI.
+        let html = """
+        <p>Before</p><ul>
+          <li>Example 1</li>
+          <ul><li>First sub-bullet</li>
+            <ul><li>Case A</li><li>Case B</li></ul>
+            <li>Second sub-bullet</li>
+          </ul>
+          <li>Example 2</li>
+          <ul><li>Another sub-bullet</li></ul>
+        </ul><p>After</p>
+        """
+        XCTAssertEqual(HTMLToMarkdown.convert(html), """
+        Before
+
+        - Example 1
+          - First sub-bullet
+            - Case A
+            - Case B
+          - Second sub-bullet
+        - Example 2
+          - Another sub-bullet
+
+        After
+        """)
+    }
+}
