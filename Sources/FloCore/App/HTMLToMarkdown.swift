@@ -327,17 +327,66 @@ public enum HTMLToMarkdown {
         AppRegex.trim(AppRegex.replace(renderChildren(node, nil), "\(AppRegex.ws)*\n+\(AppRegex.ws)*", " "))
     }
 
+    /// A clipped ancestor can wrap the selected list without carrying a label.
+    static func isListOnlyItem(_ node: HTMLNode) -> Bool {
+        node.tagName == "LI" && node.children.contains { $0.tagName == "UL" || $0.tagName == "OL" }
+            && node.children.allSatisfy {
+                $0.tagName == "UL" || $0.tagName == "OL" || ($0.kind == .text && AppRegex.trim($0.text).isEmpty)
+            }
+    }
+
     static func renderChildren(_ node: HTMLNode, _ list: ListContext?) -> String {
-        node.children.map { renderNode($0, list) }.joined()
+        var result = ""
+        var i = 0
+        while i < node.children.count {
+            let child = node.children[i]
+            // Partial clipboard selections may omit the outer list container.
+            // Group orphan items and their following sublists before rendering.
+            if child.tagName == "LI", node.tagName != "UL", node.tagName != "OL" {
+                if isListOnlyItem(child) {
+                    result += renderChildren(child, list)
+                    i += 1
+                    continue
+                }
+                let fragment = HTMLNode(element: "UL")
+                while i < node.children.count {
+                    let item = node.children[i]
+                    if item.tagName == "LI" {
+                        if isListOnlyItem(item) { break }
+                        // A clipped ancestor can leave an empty LI placeholder.
+                        if !item.children.isEmpty { fragment.children.append(item) }
+                    } else if item.tagName == "UL" || item.tagName == "OL" {
+                        fragment.children.append(item)
+                    } else if item.kind != .text || !AppRegex.trim(item.text).isEmpty {
+                        break
+                    }
+                    i += 1
+                }
+                result += "\n\n\(renderList(fragment, list))\n\n"
+            } else {
+                result += renderNode(child, list)
+                i += 1
+            }
+        }
+        return result
     }
 
     static func renderList(_ el: HTMLNode, _ parent: ListContext?) -> String {
         let ordered = el.tagName == "OL"
         let depth = parent.map { $0.depth + 1 } ?? 0
         let start = JSNumber.parse(el.attr("start") ?? "1")
-        let items = el.elementChildren.filter { $0.tagName == "LI" }
-        let lines: [String] = items.enumerated().map { i, li in
-            let ctx = ListContext(ordered: ordered, index: start + Double(i), depth: depth)
+        var lines: [String] = []
+        var index = start
+        for li in el.elementChildren {
+            // Some email editors put sublists beside the preceding LI instead
+            // of inside it. Keep them in document order at the next depth.
+            if li.tagName == "UL" || li.tagName == "OL" {
+                lines.append(renderList(li, ListContext(ordered: ordered, index: index, depth: depth)))
+                continue
+            }
+            guard li.tagName == "LI" else { continue }
+            let ctx = ListContext(ordered: ordered, index: index, depth: depth)
+            index += 1
             let marker = ordered ? "\(JSNumber.toString(ctx.index)). " : "- "
             let ind = String(repeating: indent, count: depth)
             var nested: [String] = []
@@ -353,7 +402,7 @@ public enum HTMLToMarkdown {
             let task = checkbox.map { $0.attr("checked") != nil ? "[x] " : "[ ] " } ?? ""
             let label = AppRegex.trim(AppRegex.replace(own, "\(AppRegex.ws)*\n+\(AppRegex.ws)*", " "))
             let head = "\(ind)\(marker)\(task)\(label)"
-            return nested.isEmpty ? head : ([head] + nested).joined(separator: "\n")
+            lines.append(nested.isEmpty ? head : ([head] + nested).joined(separator: "\n"))
         }
         return lines.joined(separator: "\n")
     }

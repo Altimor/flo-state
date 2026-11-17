@@ -108,6 +108,37 @@ final class PasteMenuTests: XCTestCase {
         XCTAssertEqual(c.text, "ab")
     }
 
+    func testEmailSublistPasteIsOneUndoStep() {
+        let pb = NSPasteboard(name: NSPasteboard.Name("flo-test-\(UUID().uuidString)"))
+        defer { pb.releaseGlobally() }
+        pb.clearContents()
+        pb.setString("Parent Child Grandchild Next", forType: .string)
+        pb.setString("<ul><li>Parent</li><ul><li>Child</li><ul><li>Grandchild</li></ul></ul><li>Next</li></ul>", forType: .html)
+        let r = replayer()
+        r.load("Before\n", selection: .cursor(7))
+        XCTAssertTrue(r.controller.features.paste(pb, plain: false))
+        let expected = "Before\n- Parent\n  - Child\n    - Grandchild\n- Next"
+        XCTAssertEqual(r.controller.text, expected)
+        XCTAssertEqual(r.controller.state.selection.main.head, expected.utf16.count)
+        XCTAssertEqual(r.viewText, expected)
+        _ = r.controller.handleKey("Mod-z")
+        XCTAssertEqual(r.controller.text, "Before\n")
+    }
+
+    func testPartialEmailListPasteKeepsNesting() {
+        let pb = NSPasteboard(name: NSPasteboard.Name("flo-test-\(UUID().uuidString)"))
+        defer { pb.releaseGlobally() }
+        pb.clearContents()
+        pb.setString("<li><li>Parent</li><ul><li>Child</li><ul><li>Grandchild</li></ul></ul></li>", forType: .html)
+        let r = replayer()
+        r.load("", selection: .cursor(0))
+        XCTAssertTrue(r.controller.features.paste(pb, plain: false))
+        XCTAssertEqual(r.controller.text, "- Parent\n  - Child\n    - Grandchild")
+        XCTAssertEqual(r.viewText, r.controller.text)
+        _ = r.controller.handleKey("Mod-z")
+        XCTAssertEqual(r.controller.text, "")
+    }
+
     func testPasteboardReading() {
         let pb = NSPasteboard(name: NSPasteboard.Name("flo-test-\(UUID().uuidString)"))
         defer { pb.releaseGlobally() }
